@@ -31,19 +31,19 @@ How to compile the static library?
  $ cmake ../cppgram-build
  ~~~
 
- *You may want to use another compiler, then, you have two options:
+ *You may want to use another compiler, then, you have two options:*
 
  ~~~
  $ CXX=/usr/bin/clang++ cmake ../cppgram-build
  ~~~
 
- or
+ *or*
  
  ~~~
  $ cmake ../cppgram-build -DCMAKE_CXX_COMPILER=/usr/bin/clang++
- ~~~*
+ ~~~
  
- Clang is just an example!
+ *Clang is just an example!*
 
  * After running CMake, you have to run make in order to compile the library and its dependencies
  ~~~
