@@ -1,0 +1,7 @@
+.idea/
+include/cpr/
+include/json/
+*.a
+*.so
+*.o
+Makefile
