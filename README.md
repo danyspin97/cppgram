@@ -47,6 +47,7 @@ How to compile the static library?
 
 
  * After running CMake, you have to run make in order to compile the library and its dependencies
+ 
  ~~~
  $ make 
  ~~~
