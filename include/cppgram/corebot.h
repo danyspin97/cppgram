@@ -5,18 +5,19 @@
 
 namespace cppgram
 {
+    //TODO
     typedef union {
         struct msg {
-            long message_id;
-            //...
+            unsigned long messageId, lastUpdateId, userId, chatId;
+            std::string username, date, type, text;
         } message;
 
         struct cbquery {
             //...
-            union chat_id {
-
-            } chatId;
         } callbackQuery;
+
+        //inlineQueries
+
     } update_t ;
 
     typedef struct update_t::msg update_msg_t;
