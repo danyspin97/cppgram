@@ -12,6 +12,8 @@ Required libraries
  CMake will get these libraries and will configure them (once)
  
  Git is required in order to get the libraries
+ 
+ libcurl is required in order to use libcpr 
 
 How to compile the static library?
 ===
@@ -55,6 +57,22 @@ How to compile the static library?
  This will download required dependencies and configure them in order to compile our library.
 
  * You will find out all the static libraries in ../CppGram/lib
+
+Other make rules
+===
+ 
+ * In the build directory to clean (then you need to rebuild the libraries)
+ 
+ ~~~
+ $ make clean
+ $ make clean_gitrepo
+ ~~~
+
+ * In the source directory to remove useless headers (after building)
+ 
+ ~~~
+ $ ./clean.sh
+ ~~~
 
 How do I link to my own bot?
 ===
