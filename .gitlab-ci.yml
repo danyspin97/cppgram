@@ -1,0 +1,10 @@
+before_script:
+   - mkdir ../cppgram-build && cd ../cppgram-build
+   - which cmake
+   - which make
+   - which g++
+   - cmake ../CppGram -DCMAKE_CXX_COMPILER="g++"
+
+rspec:
+   script:
+      - make --jobs=5
