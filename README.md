@@ -13,7 +13,7 @@ Required libraries
  
  Git is required in order to get the libraries
  
- libcurl is required in order to use libcpr 
+ libcurl is required in order to use libcpr (RUNTIME!)
 
 How to compile the static library?
 ===
