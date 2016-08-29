@@ -1,8 +1,8 @@
 before_script:
    - mkdir ../cppgram-build && cd ../cppgram-build
-   - which cmake
+   - which cmake || apt-get update apt-get -y install cmake 
    - which make
-   - which g++
+   - which g++ || apt-get update apt-get -y install g++ 
    - cmake ../CppGram -DCMAKE_CXX_COMPILER="g++"
 
 rspec:
