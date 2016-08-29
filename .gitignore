@@ -1,6 +1,6 @@
 .idea/
-include/cpr/
-include/json/
+cpr/
+json/
 *.a
 *.so
 *.o

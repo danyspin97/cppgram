@@ -26,13 +26,13 @@ namespace cppgram
     class CoreBot : public Logger
     {
     public:
-        CoreBot(const std::string& api_token,
-                const std::ofstream& output);
-        void runLoop() const;
+        CoreBot(const char* api_token,
+                std::ostream& output);
+        void run() const;
     protected:
         virtual void processMessage(const update_msg_t& data) const;
         virtual void processInlineQuery(const update_cbquery_t& data) const;
-        void sendMessage(const std::string& msg) const;
+        void sendMessage(const char* msg) const;
         //editMessage
     private:
         const std::string botok;

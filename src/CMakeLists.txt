@@ -1,4 +1,4 @@
-set(COMPILER_WARNINGS "-W -Wall -Wextra -Wshadow") #brutal
+set(COMPILER_WARNINGS "-W -Wall -Wextra") #brutal
 set(JSONCPP_STATICLIB "${CMAKE_SOURCE_DIR}/lib/libjsoncpp.a")
 set(CPR_STATICLIB "${CMAKE_SOURCE_DIR}/lib/libcpr.a")
 
