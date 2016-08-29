@@ -3,6 +3,8 @@ CppGram
 
 Easy C++ wrapper for Telegram Bot API
 
+![CppGram build](https://gitlab.com/WiseDragonStd/CppGram/badges/master/build.svg)
+
 Required libraries
 ===
  
