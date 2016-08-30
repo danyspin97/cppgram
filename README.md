@@ -1,9 +1,9 @@
-#CppGram
+# CppGram
 ![CppGram build](https://gitlab.com/WiseDragonStd/CppGram/badges/master/build.svg)
 
 Easy C++ wrapper for Telegram Bot API
 
-##Required libraries
+## Required libraries
 
  * jsoncpp
  * cpr
@@ -14,7 +14,7 @@ Easy C++ wrapper for Telegram Bot API
 
  libcurl is required in order to use libcpr (RUNTIME!)
 
-##How to compile the static library?
+## How to compile the static library?
 
  * Make a new directory OUTSIDE the source directory
  ~~~
@@ -56,7 +56,7 @@ Easy C++ wrapper for Telegram Bot API
 
  * You will find out all the static libraries in ../CppGram/lib
 
-##Other make rules
+## Other make rules
 
  * In the build directory to clean (then you need to rebuild the libraries)
 
@@ -71,7 +71,7 @@ Easy C++ wrapper for Telegram Bot API
  $ ./clean.sh
  ~~~
 
-##How do I link to my own bot?
+## How do I link to my own bot?
 
  *assuming you are using g++ or clang++*
 
