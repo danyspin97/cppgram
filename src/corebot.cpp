@@ -2,9 +2,10 @@
 #include "json/json.h"
 #include "cppgram/corebot.h"
 #include "cppgram/exceptions.h"
+#include "cppgram/structures.h"
 
 cppgram::CoreBot::CoreBot(const char* api_token, std::ostream& output)
-        : Logger(output), botok(api_token)
+        : Logger(output), bot_token(api_token)
 {
 
 }
@@ -14,7 +15,7 @@ void cppgram::CoreBot::run() const
     getUpdates();
 }
 
-void cppgram::CoreBot::sendMessage(const char* msg) const
+void cppgram::CoreBot::sendMessage(const char* text,  void* reply_markup, id_32 reply_to_message_id, const char* parse_mode, bool disable_web_page_preview, bool disable_notification) const
 {
 
 }
@@ -23,7 +24,6 @@ void cppgram::CoreBot::getUpdates() const
 {
     while(1) {
         char fmt[256];
-        std::string telegramAPI = "https://api.telegram.org/bot";
         auto response = cpr::Get(cpr::Url{telegramAPI
                                                   .append(botok)
                                                   .append("/getUpdates?timeout=60")});

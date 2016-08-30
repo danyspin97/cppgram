@@ -1,31 +1,27 @@
-CppGram
-===
+#CppGram
+![CppGram build](https://gitlab.com/WiseDragonStd/CppGram/badges/master/build.svg)
 
 Easy C++ wrapper for Telegram Bot API
 
-![CppGram build](https://gitlab.com/WiseDragonStd/CppGram/badges/master/build.svg)
+##Required libraries
 
-Required libraries
-===
- 
  * jsoncpp
- * cpr 
+ * cpr
 
  CMake will get these libraries and will configure them (once)
- 
+
  Git is required in order to get the libraries
- 
+
  libcurl is required in order to use libcpr (RUNTIME!)
 
-How to compile the static library?
-===
+##How to compile the static library?
 
  * Make a new directory OUTSIDE the source directory
  ~~~
- $ mkdir ../cppgram-build 
+ $ mkdir ../cppgram-build
  ~~~
 
- * cd to the new directory 
+ * cd to the new directory
  ~~~
  $ cd ../cppgram-build
  ~~~
@@ -42,42 +38,40 @@ How to compile the static library?
   ~~~
 
   *or*
- 
+
   ~~~
   $ cmake ../cppgram-build -DCMAKE_CXX_COMPILER=/usr/bin/clang++
   ~~~
- 
+
   *Clang is just an example!*
 
 
  * After running CMake, you have to run make in order to compile the library and its dependencies
- 
+
  ~~~
- $ make 
+ $ make
  ~~~
 
  This will download required dependencies and configure them in order to compile our library.
 
  * You will find out all the static libraries in ../CppGram/lib
 
-Other make rules
-===
- 
+##Other make rules
+
  * In the build directory to clean (then you need to rebuild the libraries)
- 
+
  ~~~
  $ make clean
  $ make clean_gitrepo
  ~~~
 
  * In the source directory to remove useless headers (after building)
- 
+
  ~~~
  $ ./clean.sh
  ~~~
 
-How do I link to my own bot?
-===
+##How do I link to my own bot?
 
  *assuming you are using g++ or clang++*
 
