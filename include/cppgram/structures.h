@@ -1,10 +1,12 @@
-#include <string>
+#ifndef CPPGRAM_STRUCTURES_H
+#define CPPGRAM_STRUCTURES_H
 
 namespace cppgram
 {
     typedef long id_32;
     typedef long long id_64;
     typedef unsigned long date_unix;
+
     enum chat_type
     {
         type_private,
@@ -21,7 +23,7 @@ namespace cppgram
         username,
         first_name,
         last_name;
-    } chat;
+    };
 
     struct user
     {
@@ -29,7 +31,7 @@ namespace cppgram
         char* first_name,
         last_name,
         username;
-    } user;
+    };
 
     struct messageEntity
     {
@@ -38,12 +40,12 @@ namespace cppgram
         int lenght;
         char* url;
         struct user* user;
-    } messageEntity;
+    };
 
     struct message
     {
         id_32 message_id;
-        struct user* from;
+        user* from;
         date_unix date;
         struct chat* chat;
         struct user* forward_from;
@@ -52,15 +54,19 @@ namespace cppgram
         struct message* reply_to_message;
         date_unix edit_date;
         char* text;
-        struct messageEntity* (entities[]);
+        messageEntity* (entities[]);
         //struct attachment* message_data;
-    } message;
+    };
 
-    typedef union update_t {
-        struct message* message;
-        struct callbackQuery* callbackQuery;
+    struct callbackQuery
+    {
+        //TODO
+    };
 
-        //inlineQueries
-
-    } update_t ;
+    typedef union {
+        message* msg;
+        callbackQuery* cbquery;
+    } update_t;
 }
+
+#endif

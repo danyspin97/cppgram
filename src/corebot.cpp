@@ -2,7 +2,6 @@
 #include "json/json.h"
 #include "cppgram/corebot.h"
 #include "cppgram/exceptions.h"
-#include "cppgram/structures.h"
 
 cppgram::CoreBot::CoreBot(const char* api_token, std::ostream& output)
         : Logger(output), bot_token(api_token)
@@ -15,17 +14,23 @@ void cppgram::CoreBot::run() const
     getUpdates();
 }
 
-void cppgram::CoreBot::sendMessage(const char* text,  void* reply_markup, id_32 reply_to_message_id, const char* parse_mode, bool disable_web_page_preview, bool disable_notification) const
+void cppgram::CoreBot::sendMessage(const char* text,
+                                   void* reply_markup,
+                                   id_32 reply_to_message_id,
+                                   const char* parse_mode,
+                                   bool disable_web_page_preview,
+                                   bool disable_notification) const
 {
 
 }
 
 void cppgram::CoreBot::getUpdates() const
 {
-    while(1) {
+     while(1) {
         char fmt[256];
-        auto response = cpr::Get(cpr::Url{telegramAPI
-                                                  .append(botok)
+         //TODO
+        auto response = cpr::Get(cpr::Url{std::string(TELEGRAMAPI)
+                                                  .append(bot_token)
                                                   .append("/getUpdates?timeout=60")});
 
         if(response.status_code != 200) {
@@ -53,12 +58,13 @@ void cppgram::CoreBot::getUpdates() const
     }
 }
 
-void cppgram::CoreBot::processMessage(const update_msg_t& data) const
+void cppgram::CoreBot::processMessage(const update_t &data) const
 {
     //log_event(...);
 }
 
-void cppgram::CoreBot::processInlineQuery(const update_cbquery_t& data) const
+
+void cppgram::CoreBot::processInlineQuery(const update_t& data) const
 {
     //log_event(...);
 }

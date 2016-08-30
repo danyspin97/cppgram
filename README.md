@@ -15,6 +15,17 @@ Easy C++ wrapper for Telegram Bot API
  libcurl is required in order to use libcpr (RUNTIME!)
 
 ## How to compile the static library?
+ 
+ *TWO OPTIONS*:
+
+ Run build.sh
+ ~~~
+ $ chmod +x build.sh && ./build.sh
+ ~~~
+
+ OR
+
+ Do it manually! Enjoy
 
  * Make a new directory OUTSIDE the source directory
  ~~~
