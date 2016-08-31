@@ -139,7 +139,7 @@ Easy C++ wrapper for Telegram Bot API
  class MyBackgroundBot : public CoreBot
  {
  public:
-	MyBackgroundBot() : CoreBot("apitoken",true,"/home/user/bot_log.log");
+	MyBackgroundBot() : CoreBot("apitoken",true,"/home/user/bot_log.log"){}
  };
 
  int main()
@@ -151,7 +151,12 @@ Easy C++ wrapper for Telegram Bot API
  }
  ~~~
 
- This is the default CoreBot constructor:
+ ##### More exaples on the way! :)
+
+ ---
+
+ *This is the default cppgram::CoreBot constructor*
+ *look at this if need to change parameters defaults and/or use them*
  
  ~~~
  public:
