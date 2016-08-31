@@ -151,7 +151,7 @@ Easy C++ wrapper for Telegram Bot API
  }
  ~~~
 
- ##### More exaples on the way! :)
+ #### More exaples on the way! :)
 
  ---
 
