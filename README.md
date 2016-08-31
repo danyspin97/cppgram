@@ -156,6 +156,7 @@ Easy C++ wrapper for Telegram Bot API
  ---
 
  *This is the default cppgram::CoreBot constructor*
+ 
  *look at this if need to change parameters defaults and/or use them*
  
  ```c++
