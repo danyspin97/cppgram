@@ -11,8 +11,14 @@ int cppgram::osutil::backgroundProcess()
     pid_t procid;
 
     procid=fork();
-    if(procid == -1) return OSUTIL_NEWPROC_FAILED;
-    exit(0);
+	 switch(procid) {
+		 case -1:
+			 return OSUTIL_NEWPROC_FAILED;
+		 case 0:
+			 break;
+		 default:
+			 exit(0);
+	 }
 
     if(setsid() < 0) return OSUTIL_NEWPROC_FAILED;
 
