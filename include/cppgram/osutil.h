@@ -3,6 +3,7 @@
 
 #define OSUTIL_NEWPROC_NOTSUPPORTED -1
 #define OSUTIL_NEWPROC_SUCCESS 0
+#define OSUTIL_NEWPROC_FAILED 1
 
 namespace cppgram
 {

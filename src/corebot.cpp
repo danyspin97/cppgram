@@ -2,11 +2,22 @@
 #include "json/json.h"
 #include "cppgram/corebot.h"
 #include "cppgram/exceptions.h"
+#include "cppgram/osutil.h"
 
-cppgram::CoreBot::CoreBot(const char* api_token, std::ostream& output)
+cppgram::CoreBot::CoreBot(const char* api_token, std::ostream& output, bool background)
         : Logger(output), bot_token(api_token)
 {
-
+    if(background) {
+        int bg=osutil::backgroundProcess();
+        if (bg == OSUTIL_NEWPROC_NOTSUPPORTED) {
+            log_error("Your operating system is not supported (not yet) for background process");
+            throw new BgProcessOSNotSupported;
+        } else if(bg == OSUTIL_NEWPROC_FAILED) {
+            log_error("Error while creating background process");
+            throw new BgProcessFailed;
+        } else if(bg == OSUTIL_NEWPROC_SUCCESS)
+            log_event("New background process created!!");
+    }
 }
 
 void cppgram::CoreBot::run() const

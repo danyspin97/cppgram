@@ -14,7 +14,8 @@ namespace cppgram
     {
     public:
         CoreBot(const char* api_token,
-                std::ostream& output);
+                std::ostream& output,
+                bool background = false);
         void run() const;
     protected:
         //TODO

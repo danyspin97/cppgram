@@ -22,6 +22,18 @@ namespace cppgram
     public:
         virtual const char* what() const throw();
     };
+
+    class BgProcessOSNotSupported : public std::exception
+    {
+    public:
+        virtual const char* what() const throw();
+    };
+
+    class BgProcessFailed : public std::exception
+    {
+    public:
+        virtual const char* what() const throw();
+    };
 }
 
 #endif
