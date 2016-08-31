@@ -96,7 +96,7 @@ Easy C++ wrapper for Telegram Bot API
 
  *mybot.cpp*
  
- ~~~
+ ```c++
  #include <cppgram/corebot.h>
 
  using cppgram::CoreBot;
@@ -114,7 +114,7 @@ Easy C++ wrapper for Telegram Bot API
 
 	 return 0;
  }
- ~~~
+ ```
 
  You will find out log in ./tgbot.log, so you can use 
 
@@ -131,7 +131,7 @@ Easy C++ wrapper for Telegram Bot API
 
  *mybot.cpp*
 
- ~~~
+ ```c++
  #include<cppgram/corebot.h>
 
  using cppgram::CoreBot;
@@ -149,10 +149,10 @@ Easy C++ wrapper for Telegram Bot API
 
 	 return 0;
  }
- ~~~
+ ```
 
- #### More exaples on the way! :)
-
+ More examples on the way :)
+  
  ---
 
  *This is the default cppgram::CoreBot constructor*
