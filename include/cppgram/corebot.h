@@ -2,9 +2,11 @@
 #define __CPPGRAM_COREBOT_H
 
 #include "cppgram/logger.h"
-#include "cppgram/structures.h"
 
 #define TELEGRAMAPI "https://api.telegram.org/bot"
+
+typedef long int id_32;
+union update_t;
 
 namespace cppgram
 {

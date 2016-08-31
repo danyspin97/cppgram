@@ -23,7 +23,7 @@ namespace cppgram
         username,
         first_name,
         last_name;
-    };
+    } chat;
 
     struct user
     {
@@ -31,7 +31,7 @@ namespace cppgram
         char* first_name,
         last_name,
         username;
-    };
+    } user;
 
     struct messageEntity
     {
@@ -40,12 +40,12 @@ namespace cppgram
         int lenght;
         char* url;
         struct user* user;
-    };
+    } messageEntity;
 
     struct message
     {
         id_32 message_id;
-        user* from;
+        struct user* from;
         date_unix date;
         struct chat* chat;
         struct user* forward_from;
@@ -54,8 +54,22 @@ namespace cppgram
         struct message* reply_to_message;
         date_unix edit_date;
         char* text;
-        messageEntity* (entities[]);
+        struct messageEntity* (entities[]);
         //struct attachment* message_data;
+    } message;
+
+    enum inline_keyboard_button_type
+    {
+        url,
+        callback_data,
+        switch_inline_query
+    } inline_keyboard_button_type;
+
+    struct inline_keyboard_button
+    {
+        char* text,
+        data;
+        enum inline_keyboard_button_type button_type;
     };
 
     struct callbackQuery
@@ -64,7 +78,7 @@ namespace cppgram
     };
 
     typedef union {
-        message* msg;
+        struct message* msg;
         callbackQuery* cbquery;
     } update_t;
 }
