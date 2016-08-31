@@ -4,9 +4,9 @@
 #include "cppgram/exceptions.h"
 #include "cppgram/osutil.h"
 
-cppgram::CoreBot::CoreBot(const char* api_token, std::ostream &output,
-                          int timeout, int message_limit,bool background)
-        : Logger(output), bot_token(api_token), lastUpdateId(0), timeout(timeout), msg_limit(message_limit)
+cppgram::CoreBot::CoreBot(const char* api_token, bool background,
+                const char* filename,int timeout, int message_limit)
+        : Logger(filename), bot_token(api_token), lastUpdateId(0), timeout(timeout), msg_limit(message_limit)
 {
     if(background) {
         int bg=osutil::backgroundProcess();

@@ -5,3 +5,4 @@ json/
 *.so
 *.o
 Makefile
+tgbot.log

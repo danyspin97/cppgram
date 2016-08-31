@@ -14,10 +14,11 @@ namespace cppgram
     {
     public:
         CoreBot(const char* api_token,
-                std::ostream &output,
+                bool background = false,
+                const char* filename="tgbot.log",
                 int message_limit = 100,
-                int timeout = 60,
-                bool background = false);
+                int timeout = 60
+                );
         void run();
     protected:
         //TODO

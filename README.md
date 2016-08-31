@@ -90,3 +90,76 @@ Easy C++ wrapper for Telegram Bot API
  $ g++ mysrc.cpp -o mybot libcpr.a libjsoncpp.a libcppgram.a -lcurl
  ~~~
 
+### Examples
+
+ Simple update listener bot
+
+ *mybot.cpp*
+ 
+ ~~~
+ #include <cppgram/corebot.h>
+
+ using cppgram::CoreBot;
+
+ class MyBot : public CoreBot
+ {
+ public:
+   MyBot() : CoreBot("apitoken") {}
+ };
+
+ int main()
+ {
+	 MyBot bot;
+	 bot.run();
+
+	 return 0;
+ }
+ ~~~
+
+ You will find out log in ./tgbot.log, so you can use 
+
+ ~~~
+ $ tail -f ./tgbot.log
+ ~~~
+
+ to see logs in realtime!
+
+
+ ---
+
+ Simple update listener bot in background process and custom filename (only with GNU/Linux for now)
+
+ *mybot.cpp*
+
+ ~~~
+ #include<cppgram/corebot.h>
+
+ using cppgram::CoreBot;
+
+ class MyBackgroundBot : public CoreBot
+ {
+ public:
+	MyBackgroundBot() : CoreBot("apitoken",true,"/home/user/bot_log.log");
+ };
+
+ int main()
+ {
+	 MyBackgroundBot bbot;
+	 bbot.run();
+
+	 return 0;
+ }
+ ~~~
+
+ This is the default CoreBot constructor:
+ 
+ ~~~
+ public:
+        CoreBot(const char* api_token,
+                bool background = false,
+                const char* filename="tgbot.log",
+                int message_limit = 100,
+                int timeout = 60
+                );
+ ~~~
+

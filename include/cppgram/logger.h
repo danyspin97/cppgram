@@ -1,19 +1,19 @@
 #ifndef __CPPGRAM_LOGGER_H
 #define __CPPGRAM_LOGGER_H
 
-#include <fstream>
+#include <string>
 
 namespace cppgram
 {
     class Logger
     {
     public:
-        Logger(std::ostream& data_stream);
+        Logger(const char* filename);
         void log_event(const char* message) const;
         void log_error(const char* message) const;
         void log_warn(const char* message) const;
     private:
-        std::ostream *stream;
+        const char* fname;
         std::string __getTime() const;
     };
 }
