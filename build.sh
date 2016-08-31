@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 if ! which cmake 2>/dev/null >>/dev/null;
 then
 	echo "CANNOT FIND CMAKE!!!"
