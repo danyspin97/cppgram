@@ -1,7 +1,7 @@
 #ifndef __CPPGRAM_COREBOT_H
 #define __CPPGRAM_COREBOT_H
 
-#include "cppgram/logger.h"
+#include "logger.h"
 
 #define TELEGRAMAPI "https://api.telegram.org/bot"
 
@@ -14,9 +14,11 @@ namespace cppgram
     {
     public:
         CoreBot(const char* api_token,
-                std::ostream& output,
+                std::ostream &output,
+                int message_limit = 100,
+                int timeout = 60,
                 bool background = false);
-        void run() const;
+        void run();
     protected:
         //TODO
         virtual void processMessage(const update_t& data) const;
@@ -31,7 +33,8 @@ namespace cppgram
     private:
         const char* bot_token;
         unsigned long lastUpdateId;
-        void getUpdates() const;
+        int timeout,msg_limit;
+        void getUpdates();
     };
 }
 

@@ -2,7 +2,7 @@
 
 #include "cppgram/logger.h"
 
-cppgram::Logger::Logger(std::ostream &data_stream)
+cppgram::Logger::Logger(std::ostream& data_stream)
     : stream(&data_stream)
 {
 
@@ -14,6 +14,7 @@ void cppgram::Logger::log_error(const char* message) const
     fmtStr.append(__getTime());
     fmtStr.append("] ");
     fmtStr.append(message);
+    fmtStr.append("\n");
 
     (*stream) << fmtStr;
 }
@@ -24,6 +25,7 @@ void cppgram::Logger::log_event(const char* message) const
     fmtStr.append(__getTime());
     fmtStr.append("] ");
     fmtStr.append(message);
+    fmtStr.append("\n");
 
     (*stream) << fmtStr;
 }
@@ -34,6 +36,8 @@ void cppgram::Logger::log_warn(const char* message) const
     fmtStr.append(__getTime());
     fmtStr.append("] ");
     fmtStr.append(message);
+    fmtStr.append("\n");
+
 
     (*stream) << fmtStr;
 }
@@ -46,5 +50,7 @@ std::string cppgram::Logger::__getTime() const
     time(&raw);
     tinfo = localtime(&raw);
 
-    return std::string(asctime(tinfo));
+    std::string fmtTime = asctime(tinfo);
+    fmtTime.erase(fmtTime.size()-1);
+    return fmtTime;
 }

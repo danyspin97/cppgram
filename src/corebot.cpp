@@ -4,8 +4,9 @@
 #include "cppgram/exceptions.h"
 #include "cppgram/osutil.h"
 
-cppgram::CoreBot::CoreBot(const char* api_token, std::ostream& output, bool background)
-        : Logger(output), bot_token(api_token)
+cppgram::CoreBot::CoreBot(const char* api_token, std::ostream &output,
+                          int timeout, int message_limit,bool background)
+        : Logger(output), bot_token(api_token), lastUpdateId(0), timeout(timeout), msg_limit(message_limit)
 {
     if(background) {
         int bg=osutil::backgroundProcess();
@@ -20,7 +21,7 @@ cppgram::CoreBot::CoreBot(const char* api_token, std::ostream& output, bool back
     }
 }
 
-void cppgram::CoreBot::run() const
+void cppgram::CoreBot::run()
 {
     getUpdates();
 }
@@ -35,14 +36,20 @@ void cppgram::CoreBot::sendMessage(const char* text,
 
 }
 
-void cppgram::CoreBot::getUpdates() const
+void cppgram::CoreBot::getUpdates()
 {
      while(1) {
         char fmt[256];
          //TODO
         auto response = cpr::Get(cpr::Url{std::string(TELEGRAMAPI)
                                                   .append(bot_token)
-                                                  .append("/getUpdates?timeout=60")});
+                                                  .append("/getUpdates?timeout=")
+                                                  .append(std::to_string(timeout))
+                                                  .append("&limit=")
+                                                  .append(std::to_string(msg_limit))
+                                                  .append("&offset=")
+                                                  .append(std::to_string(lastUpdateId+1))
+        });
 
         if(response.status_code != 200) {
             sprintf(fmt, "HTTP Response status code is not 200: %d", response.status_code);
@@ -62,8 +69,13 @@ void cppgram::CoreBot::getUpdates() const
                 throw new NotOkTelegramAPI;
             }
 
-            if (valroot["ok"].asBool() && valroot["result"].empty()) {
-                continue;
+            if (valroot["ok"].asBool() && valroot["result"].empty()) continue;
+
+            for(Json::Value val: valroot["result"]) {
+                log_event("Got updates!");
+                //parse json
+                lastUpdateId=val["update_id"].asLargestUInt();
+                log_event(std::to_string(lastUpdateId).c_str());
             }
         }
     }
