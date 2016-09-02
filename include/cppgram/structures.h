@@ -12,30 +12,27 @@ namespace cppgram
     typedef struct message message_t;
     typedef struct callbackQuery cbquery_t;
 
-    enum chat_type
+    enum CHAT_TYPE
     {
-        type_private,
-        type_group,
-        type_supergroup,
-        type_channel
+        TYPE_PRIVATE,
+        TYPE_GROUP,
+        TYPE_SUPERGROUP,
+        TYPE_CHANNEL
     };
 
     struct chat
     {
         uid_64 chat_id;
-        chat_type type;
-        char* title,
-        username,
-        first_name,
-        last_name;
+        CHAT_TYPE type;
+        const char* title, *username,
+                *first_name, *last_name;
     };
 
     struct user
     {
         uid_32 user_id;
-        char* first_name,
-        last_name,
-        username;
+        const char* first_name, *last_name,
+        *username;
     };
 
     struct messageEntity
@@ -43,7 +40,7 @@ namespace cppgram
         //messageEntity_type type;
         int offset;
         int lenght;
-        char* url;
+        const char* url;
         struct user* user;
     };
 
@@ -58,7 +55,7 @@ namespace cppgram
         date_unix forward_date;
         struct message* reply_to_message;
         date_unix edit_date;
-        char* text;
+        const char* text;
         struct messageEntity* (entities[]);
         //struct attachment* message_data;
     };
@@ -68,11 +65,11 @@ namespace cppgram
         url,
         callback_data,
         switch_inline_query
-    } inline_keyboard_button_type;
+    };
 
     struct inline_keyboard_button
     {
-        char* text, data;
+        const char* text, data;
         enum inline_keyboard_button_type button_type;
     };
 

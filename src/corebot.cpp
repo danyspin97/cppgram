@@ -4,7 +4,6 @@
 #include "cppgram/corebot.h"
 #include "cppgram/exceptions.h"
 #include "cppgram/osutil.h"
-#include "cppgram/structures.h"
 
 cppgram::CoreBot::CoreBot(const char* api_token, bool background,
                 const char* filename,int timeout, int message_limit)
@@ -152,6 +151,39 @@ void cppgram::CoreBot::getUpdates()
                                       .append(" ,message id: ").append(std::to_string(messageId))
                                       .append(" ,chat type: ").append(chat_type)
                                       .c_str());
+
+                    CHAT_TYPE eChat_type;
+
+                    if(chat_type == "private")
+                        eChat_type=CHAT_TYPE::TYPE_PRIVATE;
+
+                    struct user* _user = new struct user;
+                    _user->first_name=from_firstName.c_str();
+                    _user->user_id=from_userId;
+                    _user->username=from_userName.c_str();
+                    _user->last_name=NULL; //to parse
+
+                    struct chat* _chat = new struct chat;
+                    _chat->last_name=NULL; //to parse
+                    _chat->username=chat_userName.c_str();
+                    _chat->first_name=chat_firstName.c_str();
+                    _chat->chat_id=chat_chatId;
+                    _chat->title=NULL; //to parse
+                    _chat->type=eChat_type;
+
+
+                    message_t transaction;
+                    transaction.text=text.c_str();
+                    transaction.message_id=messageId;
+                    transaction.chat=_chat;
+                    transaction.from=_user;
+
+                    //call virtual function
+                    processMessage(transaction);
+
+                    //cleanup
+                    delete _chat;
+                    delete _user;
                 } else
                     throwMalformedJson();
 
