@@ -1,4 +1,4 @@
-#include <cppgram/structures.h>
+#include "cppgram/structures.h"
 #include "cpr/cpr.h"
 #include "json/json.h"
 #include "cppgram/corebot.h"
@@ -7,7 +7,8 @@
 
 cppgram::CoreBot::CoreBot(const char* api_token, bool background,
                 const char* filename,int timeout, int message_limit)
-        : Logger(filename), bot_token(api_token), lastUpdateId(0), timeout(timeout), msg_limit(message_limit)
+        : Logger(filename), bot_token(api_token), lastUpdateId(0),lastChatId(0),
+          timeout(timeout), msg_limit(message_limit)
 {
     if(background) {
         int bg=osutil::backgroundProcess();
@@ -28,13 +29,53 @@ void cppgram::CoreBot::run()
 }
 
 void cppgram::CoreBot::sendMessage(const char* text,
-                                   void* reply_markup,
-                                   id_32 reply_to_message_id,
-                                   const char* parse_mode,
+                                   PARSE_MODE pmode,
                                    bool disable_web_page_preview,
-                                   bool disable_notification) const
+                                   bool disable_notification,
+                                   uid_32 reply_to_message_id,
+                                   void* reply_markup ) const
 {
- //TODO HERE
+    char fmt[256];
+    std::string parseMode;
+    if(pmode == PARSE_MODE::MODE_HTML)
+        parseMode="HTML";
+    else if(pmode == PARSE_MODE::MODE_MARKDOWN)
+        parseMode="Markdown";
+
+    std::string fullURL = std::string(TELEGRAMAPI).append(bot_token)
+            .append("/sendMessage?text=")
+            .append(text).append("&chat_id=")
+            .append(std::to_string(lastChatId))
+            .append("&parse_mode=")
+            .append(parseMode)
+            .append("&disable_notification=")
+            .append(std::to_string(disable_notification))
+            .append("&disable_web_page_preview=")
+            .append(std::to_string(disable_web_page_preview));
+
+    if(reply_to_message_id != 0 && reply_to_message_id > 0)
+        fullURL.append("&reply_to_message_id=").append(std::to_string(reply_to_message_id));
+
+    cpr::Response response = cpr::Get(cpr::Url{fullURL});
+    if(response.status_code != 200) {
+        sprintf(fmt, "(sendMessage) HTTP Response status code is not 200: %d", response.status_code);
+        log_warn(fmt);
+        throw new NoHTTPOKResponse;
+    } else {
+        std::string json_doc = response.text;
+        Json::Value valroot;
+        Json::Reader reader;
+
+        if(!reader.parse(json_doc.c_str(),valroot)) {
+            log_error("(sendMessage) Error while parsing JSON document!");
+            throw new JsonParseError;
+        }
+
+        if (!valroot["ok"].asBool()) {
+            log_warn("(sendMessage) \"ok\" is not true!");
+            throw new NotOkTelegramAPI;
+        }
+    }
 }
 
 void cppgram::CoreBot::getUpdates()
@@ -42,7 +83,7 @@ void cppgram::CoreBot::getUpdates()
      while(1) {
         char fmt[256];
          //TODO
-        auto response = cpr::Get(cpr::Url{std::string(TELEGRAMAPI)
+         cpr::Response response = cpr::Get(cpr::Url{std::string(TELEGRAMAPI)
                                                   .append(bot_token)
                                                   .append("/getUpdates?timeout=")
                                                   .append(std::to_string(timeout))
@@ -121,8 +162,10 @@ void cppgram::CoreBot::getUpdates()
                             throwMalformedJson();
 
                         if (!val["message"]["chat"]["id"].isNull() &&
-                                val["message"]["chat"]["id"].isIntegral())
+                                val["message"]["chat"]["id"].isIntegral()) {
                             chat_chatId = val["message"]["chat"]["id"].asLargestUInt();
+                            lastChatId = val["message"]["chat"]["id"].asLargestUInt();
+                        }
                         else
                             throwMalformedJson();
                     } else

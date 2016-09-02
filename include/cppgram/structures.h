@@ -20,6 +20,12 @@ namespace cppgram
         TYPE_CHANNEL
     };
 
+    enum PARSE_MODE
+    {
+        MODE_HTML,
+        MODE_MARKDOWN
+    };
+
     struct chat
     {
         uid_64 chat_id;

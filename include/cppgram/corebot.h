@@ -23,11 +23,11 @@ namespace cppgram
         virtual void processMessage(const message_t &data) const;
         virtual void processInlineQuery(const cbquery_t &data) const;
         void sendMessage(const char* text,
-                         void* reply_markup = nullptr,
-                         id_32 reply_to_message_id = 0,
-                         const char* parse_mode = "HTML",
+                         PARSE_MODE pmode = PARSE_MODE::MODE_HTML,
                          bool disable_web_page_preview = true,
-                         bool disable_notification = false) const;
+                         bool disable_notification = false,
+                         uid_32 reply_to_message_id = 0,
+                         void* reply_markup = nullptr) const;
         //editMessage
     private:
         const char* bot_token;
