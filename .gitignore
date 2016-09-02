@@ -6,3 +6,5 @@ json/
 *.o
 Makefile
 tgbot.log
+bot.cpp
+bot

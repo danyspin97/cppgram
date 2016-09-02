@@ -1,11 +1,16 @@
 #ifndef CPPGRAM_STRUCTURES_H
 #define CPPGRAM_STRUCTURES_H
 
+
 namespace cppgram
 {
+    typedef unsigned long uid_32;
+    typedef unsigned long long uid_64;
     typedef long id_32;
     typedef long long id_64;
     typedef unsigned long date_unix;
+    typedef struct message message_t;
+    typedef struct callbackQuery cbquery_t;
 
     enum chat_type
     {
@@ -17,21 +22,21 @@ namespace cppgram
 
     struct chat
     {
-        id_64 chat_id;
+        uid_64 chat_id;
         chat_type type;
         char* title,
         username,
         first_name,
         last_name;
-    } chat;
+    };
 
     struct user
     {
-        id_32 user_id;
+        uid_32 user_id;
         char* first_name,
         last_name,
         username;
-    } user;
+    };
 
     struct messageEntity
     {
@@ -40,11 +45,11 @@ namespace cppgram
         int lenght;
         char* url;
         struct user* user;
-    } messageEntity;
+    };
 
     struct message
     {
-        id_32 message_id;
+        uid_32 message_id;
         struct user* from;
         date_unix date;
         struct chat* chat;
@@ -56,7 +61,7 @@ namespace cppgram
         char* text;
         struct messageEntity* (entities[]);
         //struct attachment* message_data;
-    } message;
+    };
 
     enum inline_keyboard_button_type
     {
@@ -67,8 +72,7 @@ namespace cppgram
 
     struct inline_keyboard_button
     {
-        char* text,
-        data;
+        char* text, data;
         enum inline_keyboard_button_type button_type;
     };
 
@@ -77,10 +81,10 @@ namespace cppgram
         //TODO
     };
 
-    typedef union {
-        struct message* msg;
-        callbackQuery* cbquery;
-    } update_t;
+    //typedef union {
+    //    struct message* msg;
+    //    struct callbackQuery* cbquery;
+    //} update_t;
 }
 
 #endif

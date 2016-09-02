@@ -1,8 +1,10 @@
+#include <cppgram/structures.h>
 #include "cpr/cpr.h"
 #include "json/json.h"
 #include "cppgram/corebot.h"
 #include "cppgram/exceptions.h"
 #include "cppgram/osutil.h"
+#include "cppgram/structures.h"
 
 cppgram::CoreBot::CoreBot(const char* api_token, bool background,
                 const char* filename,int timeout, int message_limit)
@@ -72,22 +74,103 @@ void cppgram::CoreBot::getUpdates()
             if (valroot["ok"].asBool() && valroot["result"].empty()) continue;
 
             for(Json::Value val: valroot["result"]) {
-                log_event("Got updates!");
-                //parse json
-                lastUpdateId=val["update_id"].asLargestUInt();
-                log_event(std::to_string(lastUpdateId).c_str());
+                if (!val["message"].isNull() && val["message"].isObject()) {
+                    uid_32 messageId, from_userId;
+                    uid_64 chat_chatId;
+                    std::string text, from_firstName, from_userName;
+                    std::string chat_firstName, chat_userName, chat_type;
+                    //struct eventDate //parsedDate
+
+                    if(!val["message"]["from"].isNull() && val["message"]["from"].isObject()) {
+                        if (!val["message"]["from"]["id"].isNull() &&
+                                val["message"]["from"]["id"].isIntegral())
+                            from_userId = val["message"]["from"]["id"].asLargestUInt();
+                        else
+                            throwMalformedJson();
+
+                        if (!val["message"]["from"]["first_name"].isNull() &&
+                                val["message"]["from"]["first_name"].isString())
+                            from_firstName = val["message"]["from"]["first_name"].asString();
+                        else
+                            throwMalformedJson();
+
+                        if (!val["message"]["from"]["username"].isNull() &&
+                                val["message"]["from"]["username"].isString())
+                            from_userName = val["message"]["from"]["username"].asString();
+                        else
+                            throwMalformedJson();
+                    } else
+                        throwMalformedJson();
+
+                    if(!val["message"]["chat"].isNull() && val["message"]["chat"].isObject()) {
+                        if (!val["message"]["chat"]["type"].isNull() &&
+                                val["message"]["chat"]["type"].isString())
+                            chat_type = val["message"]["chat"]["type"].asString();
+                        else
+                            throwMalformedJson();
+
+                        if (!val["message"]["chat"]["first_name"].isNull() &&
+                                val["message"]["chat"]["first_name"].isString())
+                            chat_firstName = val["message"]["chat"]["first_name"].asString();
+                        else
+                            throwMalformedJson();
+
+                        if (!val["message"]["chat"]["username"].isNull() &&
+                                val["message"]["chat"]["username"].isString())
+                            chat_userName = val["message"]["chat"]["username"].asString();
+                        else
+                            throwMalformedJson();
+
+                        if (!val["message"]["chat"]["id"].isNull() &&
+                                val["message"]["chat"]["id"].isIntegral())
+                            chat_chatId = val["message"]["chat"]["id"].asLargestUInt();
+                        else
+                            throwMalformedJson();
+                    } else
+                        throwMalformedJson();
+
+                    if(!val["message"]["text"].isNull() &&
+                            val["message"]["text"].isString())
+                        text = val["message"]["text"].asString();
+                    else
+                        throwMalformedJson();
+
+                    if(!val["message"]["date"].isNull() &&
+                            val["message"]["date"].isIntegral())
+                        std::string unparsedDate = val["message"]["date"].asString();
+                    else
+                        throwMalformedJson();
+
+                    if (!val["message"]["message_id"].isNull() &&
+                            val["message"]["message_id"].isIntegral())
+                        messageId = val["message"]["message_id"].asLargestUInt();
+                    else
+                        throwMalformedJson();
+
+                    log_event(std::string("Got Message: ").append(text).append(" ,from: ").append(from_userName).append(" ,chatId: ")
+                                      .append(std::to_string(chat_chatId)).append(" ,user id: ").append(std::to_string(from_userId))
+                                      .append(" ,message id: ").append(std::to_string(messageId))
+                                      .append(" ,chat type: ").append(chat_type)
+                                      .c_str());
+                } else
+                    throwMalformedJson();
+
+                lastUpdateId = val["update_id"].asLargestUInt();
+                log_event(std::string("Last Update ID: ")
+                                  .append(std::to_string(lastUpdateId))
+                                  .c_str());
             }
         }
     }
 }
 
-void cppgram::CoreBot::processMessage(const update_t &data) const
-{
-    //log_event(...);
-}
+//virtual functions
+void cppgram::CoreBot::processMessage(const message_t &data) const {}
+void cppgram::CoreBot::processInlineQuery(const cbquery_t &data) const {}
+//
 
-
-void cppgram::CoreBot::processInlineQuery(const update_t& data) const
+void cppgram::CoreBot::throwMalformedJson() const
 {
-    //log_event(...);
+    log_error("Malformed JSON document!!");
+    throw new MalformedJsonDocument;
 }

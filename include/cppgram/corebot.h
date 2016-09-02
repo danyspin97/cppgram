@@ -5,8 +5,9 @@
 
 #define TELEGRAMAPI "https://api.telegram.org/bot"
 
-typedef long int id_32;
-union update_t;
+typedef long id_32;
+struct message_t;
+struct cbquery_t;
 
 namespace cppgram
 {
@@ -22,8 +23,8 @@ namespace cppgram
         void run();
     protected:
         //TODO
-        virtual void processMessage(const update_t& data) const;
-        virtual void processInlineQuery(const update_t& data) const;
+        virtual void processMessage(const message_t &data) const;
+        virtual void processInlineQuery(const cbquery_t &data) const;
         void sendMessage(const char* text,
                          void* reply_markup = nullptr,
                          id_32 reply_to_message_id = 0,
@@ -36,6 +37,7 @@ namespace cppgram
         unsigned long lastUpdateId;
         int timeout,msg_limit;
         void getUpdates();
+        void throwMalformedJson() const;
     };
 }
 

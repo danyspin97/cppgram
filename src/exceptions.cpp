@@ -24,3 +24,8 @@ const char* cppgram::BgProcessFailed::what() const throw()
 {
     return "Error while creating new process";
 }
+
+const char* cppgram::MalformedJsonDocument::what() const throw()
+{
+    return "The fetched JSON document is malformed. Cannot continue, try again!";
+}
