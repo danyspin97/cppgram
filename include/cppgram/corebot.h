@@ -31,7 +31,7 @@ namespace cppgram
         //editMessage
     private:
         const char* bot_token;
-        unsigned long lastUpdateId;
+        uid_32 lastUpdateId, lastChatId;
         int timeout,msg_limit;
         void getUpdates();
         void throwMalformedJson() const;

@@ -34,7 +34,7 @@ void cppgram::CoreBot::sendMessage(const char* text,
                                    bool disable_web_page_preview,
                                    bool disable_notification) const
 {
-
+ //TODO HERE
 }
 
 void cppgram::CoreBot::getUpdates()
