@@ -100,11 +100,25 @@ Easy C++ wrapper for Telegram Bot API
  #include <cppgram/corebot.h>
 
  using cppgram::CoreBot;
+ using cppgram::message_t;
+ using cppgram::cbquery_t;
+
 
  class MyBot : public CoreBot
  {
  public:
    MyBot() : CoreBot("apitoken") {}
+   
+   void processMessage(const message_t &data) const 
+   {
+                
+   }
+   
+   void processInlineQuery(const cbquery_t &data) const
+   {
+
+   }
+
  };
 
  int main()
@@ -135,11 +149,24 @@ Easy C++ wrapper for Telegram Bot API
  #include<cppgram/corebot.h>
 
  using cppgram::CoreBot;
+ using cppgram::message_t;
+ using cppgram::cbquery_t;
+
 
  class MyBackgroundBot : public CoreBot
  {
  public:
 	MyBackgroundBot() : CoreBot("apitoken",true,"/home/user/bot_log.log"){}
+	
+	void processMessage(const message_t &data) const 
+	{
+               
+    }
+	void processInlineQuery(const cbquery_t &data) const
+    {
+
+    }
+
  };
 
  int main()
@@ -150,7 +177,85 @@ Easy C++ wrapper for Telegram Bot API
 	 return 0;
  }
  ```
+ ---
+ 
+ Simple answer me bot :)
+ 
+ ```c++
+  #include <cppgram/corebot.h>
 
+ using cppgram::CoreBot;
+ using cppgram::message_t;
+ using cppgram::cbquery_t;
+
+
+ class MyBot : public CoreBot
+ {
+ public:
+   MyBot() : CoreBot("apitoken") {}
+   
+   void processMessage(const message_t &data) const 
+   {
+        sendMessage(std::string("Hello My Friend, ").append(data.from->username).c_str());
+   }
+   
+   void processInlineQuery(const cbquery_t &data) const
+   {
+
+   }
+
+ };
+
+ int main()
+ {
+	 MyBot bot;
+	 bot.run();
+
+	 return 0;
+ }
+ ```
+ 
+ ---
+ 
+ Markup-styled messages!
+ 
+ (By default is set on HTML , MODE_HTML)
+ 
+  ```c++
+  #include <cppgram/corebot.h>
+
+ using cppgram::CoreBot;
+ using cppgram::message_t;
+ using cppgram::cbquery_t;
+ using cppgram::PARSE_MODE;
+
+ class MyBot : public CoreBot
+ {
+ public:
+   MyBot() : CoreBot("apitoken") {}
+   
+   void processMessage(const message_t &data) const 
+   {
+        sendMessage(std::string("*Hello* _My Friend_, ").append(data.from->username).c_str(),PARSE_MODE::MODE_MARKDOWN);
+        sendMessage("<b>BOLD TEXT</b><i>Italic</i>");
+   }
+   
+   void processInlineQuery(const cbquery_t &data) const
+   {
+
+   }
+
+ };
+
+ int main()
+ {
+	 MyBot bot;
+	 bot.run();
+
+	 return 0;
+ }
+ ```
+ 
  More examples on the way :)
   
  ---
