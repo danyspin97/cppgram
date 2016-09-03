@@ -50,6 +50,13 @@ namespace cppgram
         struct user* user;
     };
 
+    struct text
+    {
+        const char* full,
+                *command,
+                *arguments;
+    };
+
     struct message
     {
         uid_32 message_id;

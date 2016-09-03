@@ -19,7 +19,6 @@ namespace cppgram
                 );
         void run();
     protected:
-        //TODO
         virtual void processMessage(const message_t &data) const;
         virtual void processInlineQuery(const cbquery_t &data) const;
         void sendMessage(const char* text,
@@ -34,6 +33,7 @@ namespace cppgram
         uid_32 lastUpdateId, lastChatId;
         int timeout,msg_limit;
         void getUpdates();
+        void parseAssignExecuteUpdate(Json::Value &val);
         void throwMalformedJson() const;
     };
 }

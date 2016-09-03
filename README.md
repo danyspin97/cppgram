@@ -97,6 +97,7 @@ Easy C++ wrapper for Telegram Bot API
  *mybot.cpp*
  
  ```c++
+ #include <json/json.h>
  #include <cppgram/corebot.h>
 
  using cppgram::CoreBot;
@@ -146,6 +147,7 @@ Easy C++ wrapper for Telegram Bot API
  *mybot.cpp*
 
  ```c++
+ #include<json/json.h>
  #include<cppgram/corebot.h>
 
  using cppgram::CoreBot;
@@ -182,7 +184,8 @@ Easy C++ wrapper for Telegram Bot API
  Simple answer me bot :)
  
  ```c++
-  #include <cppgram/corebot.h>
+ #include <json/json.h>
+ #include <cppgram/corebot.h>
 
  using cppgram::CoreBot;
  using cppgram::message_t;
@@ -222,7 +225,8 @@ Easy C++ wrapper for Telegram Bot API
  (By default is set on HTML , MODE_HTML)
  
   ```c++
-  #include <cppgram/corebot.h>
+ #include <json/json.h>
+ #include <cppgram/corebot.h>
 
  using cppgram::CoreBot;
  using cppgram::message_t;
