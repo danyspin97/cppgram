@@ -8,4 +8,5 @@ Latest todos
  * Do editMessage
  * try to use forward-declaration for better compilation time 
  * general code fixes
+ * CMakeLists.txt --> add option '-DNOGET_DEPS="yes"'
  * switch to 'dev' branch
