@@ -20,7 +20,7 @@ namespace cppgram
         TYPE_CHANNEL
     };
 
-    enum PARSE_MODE
+    enum PARSE_MODE : short
     {
         MODE_HTML,
         MODE_MARKDOWN
@@ -69,8 +69,8 @@ namespace cppgram
         struct message* reply_to_message;
         date_unix edit_date;
         const char* text;
-        struct messageEntity* (entities[]);
-        //struct attachment* message_data;
+        struct messageEntity (*entities)[];
+        struct attachment* message_data;
     };
 
     enum inline_keyboard_button_type
@@ -86,15 +86,50 @@ namespace cppgram
         enum inline_keyboard_button_type button_type;
     };
 
-    struct callbackQuery
+    struct location
     {
-        //TODO
+        float longitude,
+              latidute;
     };
 
-    //typedef union {
-    //    struct message* msg;
-    //    struct callbackQuery* cbquery;
-    //} update_t;
+    struct inlineQuery
+    {
+        uid_32 id;
+        struct user* from;
+        struct location* location;
+        const char* query;
+        uid_32 offset;
+    };
+
+    struct choosenInlineResult
+    {
+        uid_32 result_id;
+        struct user* from;
+        struct location* location;
+        uid_32 inline_message_id;
+        const char* query;
+    };
+
+    struct callbackQuery
+    {
+        uid_32 id;
+        struct user* from;
+        struct message* message;
+        uid_32 inline_message_id;
+        const char* data;
+    };
+
+    struct update
+    {
+        uid_32 update_id;
+        union {
+            struct message* message;
+            struct message* editedMessage;
+            struct inlineQuery* inlineQuery;
+            struct choosenInlineResult* choosenInlineResult;
+            struct callbackQuery* callbackQuery;
+        };
+    };
 }
 
 #endif

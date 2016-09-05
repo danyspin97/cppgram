@@ -3,6 +3,8 @@
 #include "cppgram/corebot.h"
 #include "cppgram/exceptions.h"
 #include "cppgram/osutil.h"
+#include "cppgram/structures.h"
+#include "cppgram/parser.h"
 
 cppgram::CoreBot::CoreBot(const char* api_token, bool background,
                 const char* filename,int timeout, int message_limit)
@@ -28,11 +30,11 @@ void cppgram::CoreBot::run()
 }
 
 void cppgram::CoreBot::sendMessage(const char* text,
-                                   PARSE_MODE pmode,
-                                   bool disable_web_page_preview,
-                                   bool disable_notification,
-                                   uid_32 reply_to_message_id,
-                                   void* reply_markup ) const
+                                   PARSE_MODE pmode = PARSE_MODE::MODE_HTML,
+                                   bool disable_web_page_preview = true,
+                                   bool disable_notification = false,
+                                   uid_32 reply_to_message_id = 0,
+                                   void* reply_markup = nullptr) const
 {
     char fmt[256];
     std::string parseMode;
@@ -80,7 +82,7 @@ void cppgram::CoreBot::sendMessage(const char* text,
     }
 }
 
-void cppgram::CoreBot::parseAssignExecuteUpdate(Json::Value &val)
+/*void cppgram::CoreBot::parseAssignExecuteUpdate(Json::Value &val)
 {
     //TODO FINISH
     uid_32 messageId, from_userId;
@@ -195,7 +197,7 @@ void cppgram::CoreBot::parseAssignExecuteUpdate(Json::Value &val)
     //cleanup
     delete _chat;
     delete _user;
-}
+} */
 
 void cppgram::CoreBot::getUpdates()
 {
@@ -240,8 +242,9 @@ void cppgram::CoreBot::getUpdates()
             if (valroot["ok"].asBool() && valroot["result"].empty()) continue;
 
             for(Json::Value val: valroot["result"]) {
-                parseAssignExecuteUpdate(val);
+                //parseAssignExecuteUpdate(val);
 
+                processUpdate(*cppgram::Parser::parseUpdate(val));
                 lastUpdateId = val["update_id"].asLargestUInt();
                 log_event(std::string("Last Update ID: ")
                                   .append(std::to_string(lastUpdateId))
@@ -251,9 +254,26 @@ void cppgram::CoreBot::getUpdates()
     }
 }
 
+void cppgram::CoreBot::processUpdate(struct update &update)
+{
+    if (update.message)
+        processMessage(*update.message);
+    else if (update.editedMessage)
+        processEditedMessage(*update.editedMessage);
+    else if (update.inlineQuery)
+        processInlineQuery(*update.inlineQuery);
+    else if (update.choosenInlineResult)
+        processChosenInlineResult(*update.choosenInlineResult);
+    else if (update.callbackQuery)
+        processCallbackQuery(*update.callbackQuery);
+}
+
 //virtual functions
-void cppgram::CoreBot::processMessage(const message_t &data) const {}
-void cppgram::CoreBot::processInlineQuery(const cbquery_t &data) const {}
+void cppgram::CoreBot::processMessage(struct message &message) {}
+void cppgram::CoreBot::processEditedMessage(struct message &editedMessage) {}
+void cppgram::CoreBot::processInlineQuery(struct inlineQuery &inlineQuery) {}
+void cppgram::CoreBot::processChosenInlineResult(struct choosenInlineResult &choosenInlineResult) {}
+void cppgram::CoreBot::processCallbackQuery(struct callbackQuery &callbackQuery) {}
 //
 
 void cppgram::CoreBot::throwMalformedJson() const
