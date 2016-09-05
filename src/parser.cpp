@@ -1,9 +1,10 @@
 #include "json/json.h"
-#include "cppgram/structres.h"
+#include "cppgram/structures.h"
+#include "cppgram/parser.h"
 
 using namespace cppgram;
 
-*(*update[]) Parser::parseUpdates(Json::value &val, unsigned short limit)
+void* Parser::parseUpdates(Json::Value &val, unsigned short limit)
 {
     update *updates[100];
     if (val.empty())
@@ -14,7 +15,7 @@ using namespace cppgram;
     {
         if (!val[i].isNull() && val[i].isObject())
         {
-            updates[i] = parseUpdate(val.get(i, null));
+            updates[i] = parseUpdate(val[i]);
         }
         else
         {
@@ -24,53 +25,53 @@ using namespace cppgram;
     return &updates;
 }
 
-update* Parser::parseUpdate(Json::value &val)
+update* Parser::parseUpdate(Json::Value &val)
 {
-    Update update;
+    update update;
     if (val["update_id"].isNumeric())
     {
-        update.update_id = val["update_id"].asLargestUInt();
+        update.update_id = val["update_id"].asUInt();
     }
     if (!val["message"].isNull() && val["message"].isObject())
     {
-        update.message = parseMessage(val.get("message", nullptr));
+        update.message = parseMessage(val["message"]);
     }
     else if (!val["edited_message"].isNull() && val["edited_mesaage"].isObject())
     {
-        update.editedMessage = parseMessage(val.get("edited_message", nullptr));
+        update.editedMessage = parseMessage(val["edited_message"]);
     }
     else if (!val["inline_query"].isNull() && val["inline_query"].isObject())
     {
-        update.inlineQuery = parseInlineQuery(val.get("inline_query", nullptr));
+        update.inlineQuery = parseInlineQuery(val["inline_query"]);
     }
     else if (!val["choosen_inline_result"].isNull() && val["choosen_inline_result"].isObject())
     {
-        update.choosenInlineResult = parseChoosenInlineResult(val.get("choosen_inline_result", nullptr));
+        update.choosenInlineResult = parseChoosenInlineResult(val["choosen_inline_result"]);
     }
     else if (!val["callback_query"].isNull() && val["callback_query"].isObject())
     {
-        update.callbackQuery = parseCallbackQuery(val.get("callback_query", nullptr));
+        update.callbackQuery = parseCallbackQuery(val["callback_query"]);
     }
 
     return &update;
 }
 
-message* Parser::parseMessage(Json::value &val)
+message* Parser::parseMessage(Json::Value &val)
 {
     message message;
-    message.message_id = val["message_id"].asLargestUInt();
-    message.from = parseUser(val.get("from", nullptr));
-    message.date = val["date"].asLargestUInt();
-    message.chat = parseChat(val.get("chat", nullptr));
+    message.message_id = val["message_id"].asUInt();
+    message.from = parseUser(val["from"]);
+    message.date = val["date"].asUInt();
+    message.chat = parseChat(val["chat"]);
     if (!val["forward_from"].isNull() && val["forward_from"].isObject())
     {
-        message.forward_from = parseUser(val.get("forward_from", nullptr));
-        message.forward_from_chat = parseChat(val.get("forward_from_chat", nullptr));
-        message.forward_date = val["forward_date"].asLargestUInt();
+        message.forward_from = parseUser(val["forward_from"]);
+        message.forward_from_chat = parseChat(val["forward_from_chat"]);
+        message.forward_date = val["forward_date"].asUInt();
     }
     if (!val["reply_to_message"].isNull() && val["reply_to_message"].isObject())
     {
-        message.reply_to_message = parseMessage(val.get("reply_to_message", nullptr));
+        message.reply_to_message = parseMessage(val["reply_to_message"]);
     }
     if (!val["edit_date"].isNull())
     {
@@ -90,7 +91,7 @@ message* Parser::parseMessage(Json::value &val)
     }
     if (!val["entities"].isNull() && val["entities"].isArray())
     {
-        message.entities = parseMessageEntities(val.get("entites", nullptr));
+        //message.entities = parseMessageEntities(val["entites"]);
     }
     else
     {
@@ -100,10 +101,10 @@ message* Parser::parseMessage(Json::value &val)
     return &message;
 }
 
-user* Parser::parseUser(Json::value &value)
+user* Parser::parseUser(Json::Value &val)
 {
     user user;
-    user.id = val["id"].asLargestUInt();
+    user.id = val["id"].asUInt();
     user.first_name = val["first_name"].asCString();
     if (!val["last_name"].isNull())
     {
@@ -124,11 +125,11 @@ user* Parser::parseUser(Json::value &value)
     }
 }
 
-chat* Parser::parseChat(Json::value &value)
+chat* Parser::parseChat(Json::Value &val)
 {
     chat chat;
-    chat.id = val["id"].asLargestUInt64();
-    chat.type = static_cast<CHAT_TYPE>(val["id"].asCString());
+    chat.id = val["id"].asUInt64();
+    //chat.type = static_cast<CHAT_TYPE>(val["type"].asString());
     if (!val["title"].isNull())
     {
         chat.title = val["title"].asCString();
@@ -166,10 +167,4 @@ chat* Parser::parseChat(Json::value &value)
     }
 
     return &chat;
-}
-
-*(*messageEntity[]) Parser::parseMessageEntities(Json::value &val)
-{
-    messageEntity *messageEntity[];
-    return &MessageEntity;
 }

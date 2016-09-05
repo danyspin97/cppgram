@@ -22,6 +22,6 @@ namespace cppgram
 
         static struct callbackQuery* parseCallbackQuery(Json::Value &val);
 
-        static void* parseMessageEntities();
+        //static void* parseMessageEntities();
     };
 }

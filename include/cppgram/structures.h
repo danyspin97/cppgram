@@ -28,7 +28,7 @@ namespace cppgram
 
     struct chat
     {
-        uid_64 chat_id;
+        uid_64 id;
         CHAT_TYPE type;
         const char* title, *username,
                 *first_name, *last_name;
@@ -36,7 +36,7 @@ namespace cppgram
 
     struct user
     {
-        uid_32 user_id;
+        uid_32 id;
         const char* first_name, *last_name,
         *username;
     };
