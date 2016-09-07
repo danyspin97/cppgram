@@ -5,7 +5,8 @@ using namespace cppgram;
 
 const message* Parser::parseMessage(Json::Value &val)
 {
-    message message;
+    message* pmessage = new message;
+    message message = *pmessage;
     message.message_id = val["message_id"].asUInt();
     message.from = parseUser(val["from"]);
     message.date = val["date"].asUInt();
@@ -45,12 +46,13 @@ const message* Parser::parseMessage(Json::Value &val)
         message.entities = nullptr;
     }
 
-    return &message;
+    return pmessage;
 }
 
 const user* Parser::parseUser(Json::Value &val)
 {
-    user user;
+    user* puser = new user;
+    user user = *puser;
     user.id = val["id"].asUInt();
     user.first_name = val["first_name"].asCString();
     if (!val["last_name"].isNull())
@@ -71,12 +73,13 @@ const user* Parser::parseUser(Json::Value &val)
         user.username = nullptr;
     }
 
-    return &user;
+    return puser;
 }
 
 const chat* Parser::parseChat(Json::Value &val)
 {
-    chat chat;
+    chat* pchat = new chat;
+    chat chat = *pchat;
     chat.id = val["id"].asUInt64();
     //chat.type = static_cast<CHAT_TYPE>(val["type"].asString());
     if (!val["title"].isNull())
@@ -115,5 +118,5 @@ const chat* Parser::parseChat(Json::Value &val)
         chat.last_name = nullptr;
     }
 
-    return &chat;
+    return pchat;
 }
