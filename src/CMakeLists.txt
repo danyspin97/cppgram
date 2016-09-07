@@ -4,11 +4,11 @@ set(CPR_STATICLIB ../lib/libcpr.a)
 
 include_directories(../include)
 
-file(GLOB_RECURSE SRCS *.cpp)
+file(GLOB_RECURSE SOURCES *.cpp)
 
-if(NOT SRCS)
+if(NOT SOURCES)
 	message(FATAL_ERROR "Cannot find sources! Aborting...")
-endif(NOT SRCS)
+endif(NOT SOURCES)
 
 if(NATIVE STREQUAL "no" OR NOT NATIVE)
 	set(NATIVE "")
@@ -27,8 +27,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
 message("Note: you are building static library, you have to link your executable manually with this and other static libraries (libcppgram.a , libcpr.a , libjsoncpp.a)")
-add_library(cppgram 
-		STATIC ${SRCS})
+add_library(cppgram STATIC ${SOURCES})
 
 install(TARGETS cppgram
 	ARCHIVE DESTINATION lib
@@ -36,4 +35,4 @@ install(TARGETS cppgram
 	COMPONENT library)
 
 add_dependencies(cppgram jsoncpp cpr)
-target_link_libraries(cppgram ${JSONCPP_STATICLIB} ${CPR_STATICLIB})
+target_link_libraries(cppgram ${CMAKE_SOURCE_DIR}/lib/${JSONCPP_STATICLIB} ${CMAKE_SOURCE_DIR}/lib/${CPR_STATICLIB})
