@@ -35,7 +35,5 @@ install(TARGETS cppgram
 	LIBRARY DESTINATION lib
 	COMPONENT library)
 
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/cppgram
-	DESTINATION /usr/include)
 add_dependencies(cppgram jsoncpp cpr)
 target_link_libraries(cppgram ${JSONCPP_STATICLIB} ${CPR_STATICLIB})

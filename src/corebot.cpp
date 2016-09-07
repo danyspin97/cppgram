@@ -1,12 +1,10 @@
 #include "cpr/cpr.h"
 #include "json/json.h"
-#include "cppgram/corebot.h"
-#include "cppgram/exceptions.h"
-#include "cppgram/osutil.h"
-#include "cppgram/structures.h"
-#include "cppgram/parser.h"
+#include "cppgram/cppgram.h"
 
-cppgram::CoreBot::CoreBot(const char* api_token, bool background,
+using namespace cppgram;
+
+CoreBot::CoreBot(const char* api_token, bool background,
                 const char* filename,int timeout, int message_limit)
         : Logger(filename), bot_token(api_token), lastUpdateId(0),lastChatId(0),
           timeout(timeout), msg_limit(message_limit)
@@ -24,12 +22,12 @@ cppgram::CoreBot::CoreBot(const char* api_token, bool background,
     }
 }
 
-void cppgram::CoreBot::run()
+void CoreBot::run()
 {
     getUpdates();
 }
 
-void cppgram::CoreBot::sendMessage(const char* text,
+void CoreBot::sendMessage(const char* text,
                                    PARSE_MODE pmode = PARSE_MODE::MODE_HTML,
                                    bool disable_web_page_preview = true,
                                    bool disable_notification = false,
@@ -82,124 +80,7 @@ void cppgram::CoreBot::sendMessage(const char* text,
     }
 }
 
-/*void cppgram::CoreBot::parseAssignExecuteUpdate(Json::Value &val)
-{
-    //TODO FINISH
-    uid_32 messageId, from_userId;
-    uid_64 chat_chatId;
-    std::string text, from_firstName, from_userName;
-    std::string chat_firstName, chat_userName, chat_type;
-    //struct eventDate //parsedDate
-    if (!val["message"].isNull() && val["message"].isObject()) {
-
-        if (!val["message"]["from"].isNull() && val["message"]["from"].isObject()) {
-            if (!val["message"]["from"]["id"].isNull() &&
-                val["message"]["from"]["id"].isIntegral())
-                from_userId = val["message"]["from"]["id"].asLargestUInt();
-            else
-                throwMalformedJson();
-
-            if (!val["message"]["from"]["first_name"].isNull() &&
-                val["message"]["from"]["first_name"].isString())
-                from_firstName = val["message"]["from"]["first_name"].asString();
-            else
-                throwMalformedJson();
-
-            if (!val["message"]["from"]["username"].isNull() &&
-                val["message"]["from"]["username"].isString())
-                from_userName = val["message"]["from"]["username"].asString();
-            else
-                throwMalformedJson();
-        } else
-            throwMalformedJson();
-
-        if (!val["message"]["chat"].isNull() && val["message"]["chat"].isObject()) {
-            if (!val["message"]["chat"]["type"].isNull() &&
-                val["message"]["chat"]["type"].isString())
-                chat_type = val["message"]["chat"]["type"].asString();
-            else
-                throwMalformedJson();
-
-            if (!val["message"]["chat"]["first_name"].isNull() &&
-                val["message"]["chat"]["first_name"].isString())
-                chat_firstName = val["message"]["chat"]["first_name"].asString();
-            else
-                throwMalformedJson();
-
-            if (!val["message"]["chat"]["username"].isNull() &&
-                val["message"]["chat"]["username"].isString())
-                chat_userName = val["message"]["chat"]["username"].asString();
-            else
-                throwMalformedJson();
-
-            if (!val["message"]["chat"]["id"].isNull() &&
-                val["message"]["chat"]["id"].isIntegral()) {
-                chat_chatId = val["message"]["chat"]["id"].asLargestUInt();
-                lastChatId = val["message"]["chat"]["id"].asLargestUInt();
-            } else
-                throwMalformedJson();
-        } else
-            throwMalformedJson();
-
-        if (!val["message"]["text"].isNull() &&
-            val["message"]["text"].isString())
-            text = val["message"]["text"].asString();
-        else
-            throwMalformedJson();
-
-        if (!val["message"]["date"].isNull() &&
-            val["message"]["date"].isIntegral())
-            std::string unparsedDate = val["message"]["date"].asString();
-        else
-            throwMalformedJson();
-
-        if (!val["message"]["message_id"].isNull() &&
-            val["message"]["message_id"].isIntegral())
-            messageId = val["message"]["message_id"].asLargestUInt();
-        else
-            throwMalformedJson();
-    } else
-        throwMalformedJson();
-
-    CHAT_TYPE eChat_type;
-
-    if(chat_type == "private")
-        eChat_type=CHAT_TYPE::TYPE_PRIVATE;
-
-    struct user* _user = new struct user;
-    _user->first_name=from_firstName.c_str();
-    _user->user_id=from_userId;
-    _user->username=from_userName.c_str();
-    _user->last_name=NULL; //to parse
-
-    struct chat* _chat = new struct chat;
-    _chat->last_name=NULL; //to parse
-    _chat->username=chat_userName.c_str();
-    _chat->first_name=chat_firstName.c_str();
-    _chat->chat_id=chat_chatId;
-    _chat->title=NULL; //to parse
-    _chat->type=eChat_type;
-
-
-    message_t transaction;
-    transaction.text=text.c_str();
-    transaction.message_id=messageId;
-    transaction.chat=_chat;
-    transaction.from=_user;
-    log_event(std::string("Got Message: ").append(text).append(" ,from: ").append(from_userName).append(" ,chatId: ")
-                      .append(std::to_string(chat_chatId)).append(" ,user id: ").append(std::to_string(from_userId))
-                      .append(" ,message id: ").append(std::to_string(messageId))
-                      .append(" ,chat type: ").append(chat_type)
-                      .c_str());
-    //call virtual function
-    processMessage(transaction);
-
-    //cleanup
-    delete _chat;
-    delete _user;
-} */
-
-void cppgram::CoreBot::getUpdates()
+void CoreBot::getUpdates()
 {
      while(1) {
         char fmt[256];
@@ -244,7 +125,7 @@ void cppgram::CoreBot::getUpdates()
             for(Json::Value val: valroot["result"]) {
                 //parseAssignExecuteUpdate(val);
 
-                processUpdate(*cppgram::Parser::parseUpdate(val));
+                processUpdate(val);
                 lastUpdateId = val["update_id"].asLargestUInt();
                 log_event(std::string("Last Update ID: ")
                                   .append(std::to_string(lastUpdateId))
@@ -254,29 +135,29 @@ void cppgram::CoreBot::getUpdates()
     }
 }
 
-void cppgram::CoreBot::processUpdate(struct update &update)
+void CoreBot::processUpdate(Json::Value &val)
 {
-    if (update.message)
-        processMessage(*update.message);
-    else if (update.editedMessage)
-        processEditedMessage(*update.editedMessage);
-    else if (update.inlineQuery)
-        processInlineQuery(*update.inlineQuery);
-    else if (update.choosenInlineResult)
-        processChosenInlineResult(*update.choosenInlineResult);
-    else if (update.callbackQuery)
-        processCallbackQuery(*update.callbackQuery);
+    if (!val["message"].isNull())
+        processMessage(Parser::parseMessage(val["message"]));
+    else if (!val["edited_message"].isNull())
+        processEditedMessage(Parser::parseMessage(val["edited_message"]));
+    else if (!val["inline_query"].isNull())
+        processInlineQuery(Parser::parseInlineQuery(val["inline_query"]));
+    else if (!val["choosen_inline_result"].isNull())
+        processChosenInlineResult(Parser::parseChoosenInlineResult(val["choosen_inline_result"]));
+    else if (!val["callback_query"].isNull())
+        processCallbackQuery(Parser::parseCallbackQuery(val["callback_query"]));
 }
 
 //virtual functions
-void cppgram::CoreBot::processMessage(struct message &message) {}
-void cppgram::CoreBot::processEditedMessage(struct message &editedMessage) {}
-void cppgram::CoreBot::processInlineQuery(struct inlineQuery &inlineQuery) {}
-void cppgram::CoreBot::processChosenInlineResult(struct choosenInlineResult &choosenInlineResult) {}
-void cppgram::CoreBot::processCallbackQuery(struct callbackQuery &callbackQuery) {}
+void CoreBot::processMessage(const struct message* message) {}
+void CoreBot::processEditedMessage(const struct message* editedMessage) {}
+void CoreBot::processInlineQuery(const struct inlineQuery* inlineQuery) {}
+void CoreBot::processChosenInlineResult(const struct choosenInlineResult* choosenInlineResult) {}
+void CoreBot::processCallbackQuery(const struct callbackQuery* callbackQuery) {}
 //
 
-void cppgram::CoreBot::throwMalformedJson() const
+void CoreBot::throwMalformedJson() const
 {
     log_error("Malformed JSON document!!");
     throw new MalformedJsonDocument;

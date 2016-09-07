@@ -2,8 +2,10 @@
 #define __CPPGRAM_COREBOT_H
 
 #include "logger.h"
+#include "json/forwards.h"
 
 #define TELEGRAMAPI "https://api.telegram.org/bot"
+
 
 namespace cppgram
 {
@@ -22,12 +24,12 @@ namespace cppgram
                 );
         void run();
     protected:
-        void processUpdate(struct update &update);
-        virtual void processMessage(struct message &message);
-        virtual void processEditedMessage(struct message &editedMessage);
-        virtual void processInlineQuery(struct inlineQuery &inlineQuery);
-        virtual void processChosenInlineResult(struct choosenInlineResult &choosenInlineResult);
-        virtual void processCallbackQuery(struct callbackQuery &callbackQuery);
+        void processUpdate(Json::Value &val);
+        virtual void processMessage(const struct message* message);
+        virtual void processEditedMessage(const struct message* editedMessage);
+        virtual void processInlineQuery(const struct inlineQuery* inlineQuery);
+        virtual void processChosenInlineResult(const struct choosenInlineResult* choosenInlineResult);
+        virtual void processCallbackQuery(const struct callbackQuery* callbackQuery);
         void sendMessage(const char* text,
                          PARSE_MODE pmode,
                          bool disable_web_page_preview,

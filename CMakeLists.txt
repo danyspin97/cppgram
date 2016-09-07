@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(cppgram CXX)
+project(cppgram)
 
 if(NOT UNIX)
 	message(WARN "You must get dependencies your own, put headers in ${CMAKE_SOURCE_DIR}/include and the static lib in  ${CMAKE_SOURCE_DIR}")
@@ -32,5 +32,3 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
 
 add_subdirectory(src)
-
-

@@ -6,21 +6,17 @@ namespace cppgram
     class Parser
     {
         public:
-        static void* parseUpdates(Json::Value &val, unsigned short limit = 100);
+        static const struct user* parseUser(Json::Value &val);
 
-        static struct update* parseUpdate(Json::Value &val);
+        static const struct chat* parseChat(Json::Value &val);
 
-        static struct user* parseUser(Json::Value &val);
+        static const struct message* parseMessage(Json::Value &val);
 
-        static struct chat* parseChat(Json::Value &val);
+        static const struct inlineQuery* parseInlineQuery(Json::Value &val);
 
-        static struct message* parseMessage(Json::Value &val);
+        static const struct choosenInlineResult* parseChoosenInlineResult(Json::Value &val);
 
-        static struct inlineQuery* parseInlineQuery(Json::Value &val);
-
-        static struct choosenInlineResult* parseChoosenInlineResult(Json::Value &val);
-
-        static struct callbackQuery* parseCallbackQuery(Json::Value &val);
+        static const struct callbackQuery* parseCallbackQuery(Json::Value &val);
 
         //static void* parseMessageEntities();
     };

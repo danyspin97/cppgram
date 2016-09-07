@@ -9,8 +9,6 @@ namespace cppgram
     typedef long id_32;
     typedef long long id_64;
     typedef unsigned long date_unix;
-    typedef struct message message_t;
-    typedef struct callbackQuery cbquery_t;
 
     enum CHAT_TYPE
     {
@@ -60,13 +58,13 @@ namespace cppgram
     struct message
     {
         uid_32 message_id;
-        struct user* from;
+        const struct user* from;
         date_unix date;
-        struct chat* chat;
-        struct user* forward_from;
-        struct chat* forward_from_chat;
+        const struct chat* chat;
+        const struct user* forward_from;
+        const struct chat* forward_from_chat;
         date_unix forward_date;
-        struct message* reply_to_message;
+        const struct message* reply_to_message;
         date_unix edit_date;
         const char* text;
         struct messageEntity (*entities)[];
@@ -95,8 +93,8 @@ namespace cppgram
     struct inlineQuery
     {
         uid_32 id;
-        struct user* from;
-        struct location* location;
+        const struct user* from;
+        const struct location* location;
         const char* query;
         uid_32 offset;
     };
@@ -104,8 +102,8 @@ namespace cppgram
     struct choosenInlineResult
     {
         uid_32 result_id;
-        struct user* from;
-        struct location* location;
+        const struct user* from;
+        const struct location* location;
         uid_32 inline_message_id;
         const char* query;
     };
@@ -113,22 +111,10 @@ namespace cppgram
     struct callbackQuery
     {
         uid_32 id;
-        struct user* from;
-        struct message* message;
+        const struct user* from;
+        const struct message* message;
         uid_32 inline_message_id;
         const char* data;
-    };
-
-    struct update
-    {
-        uid_32 update_id;
-        union {
-            struct message* message;
-            struct message* editedMessage;
-            struct inlineQuery* inlineQuery;
-            struct choosenInlineResult* choosenInlineResult;
-            struct callbackQuery* callbackQuery;
-        };
     };
 }
 

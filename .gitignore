@@ -1,9 +1,11 @@
-.idea/
 cpr/
 json/
+extdep/
+*.txt
 *.a
 *.so
 *.o
+*.cmake
 Makefile
 tgbot.log
 bot.cpp

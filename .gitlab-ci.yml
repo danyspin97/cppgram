@@ -1,10 +1,10 @@
 before_script:
    - apt-get update
-   - mkdir ../cppgram-build && cd ../cppgram-build
+   - mkdir build && cd build
    - which cmake || apt-get -y install cmake 
    - which make
    - which g++ || apt-get -y install g++
-   - cmake ../CppGram -DCMAKE_CXX_COMPILER="g++"
+   - cmake .. -DCMAKE_CXX_COMPILER="g++"
 
 rspec:
    script:

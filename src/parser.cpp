@@ -1,62 +1,9 @@
 #include "json/json.h"
-#include "cppgram/structures.h"
-#include "cppgram/parser.h"
+#include "cppgram/cppgram.h"
 
 using namespace cppgram;
 
-void* Parser::parseUpdates(Json::Value &val, unsigned short limit)
-{
-    update *updates[100];
-    if (val.empty())
-    {
-        return nullptr;
-    }
-    for (int i = 0; i < limit; i++)
-    {
-        if (!val[i].isNull() && val[i].isObject())
-        {
-            updates[i] = parseUpdate(val[i]);
-        }
-        else
-        {
-            break;
-        }
-    }
-    return &updates;
-}
-
-update* Parser::parseUpdate(Json::Value &val)
-{
-    update update;
-    if (val["update_id"].isNumeric())
-    {
-        update.update_id = val["update_id"].asUInt();
-    }
-    if (!val["message"].isNull() && val["message"].isObject())
-    {
-        update.message = parseMessage(val["message"]);
-    }
-    else if (!val["edited_message"].isNull() && val["edited_mesaage"].isObject())
-    {
-        update.editedMessage = parseMessage(val["edited_message"]);
-    }
-    else if (!val["inline_query"].isNull() && val["inline_query"].isObject())
-    {
-        update.inlineQuery = parseInlineQuery(val["inline_query"]);
-    }
-    else if (!val["choosen_inline_result"].isNull() && val["choosen_inline_result"].isObject())
-    {
-        update.choosenInlineResult = parseChoosenInlineResult(val["choosen_inline_result"]);
-    }
-    else if (!val["callback_query"].isNull() && val["callback_query"].isObject())
-    {
-        update.callbackQuery = parseCallbackQuery(val["callback_query"]);
-    }
-
-    return &update;
-}
-
-message* Parser::parseMessage(Json::Value &val)
+const message* Parser::parseMessage(Json::Value &val)
 {
     message message;
     message.message_id = val["message_id"].asUInt();
@@ -101,7 +48,7 @@ message* Parser::parseMessage(Json::Value &val)
     return &message;
 }
 
-user* Parser::parseUser(Json::Value &val)
+const user* Parser::parseUser(Json::Value &val)
 {
     user user;
     user.id = val["id"].asUInt();
@@ -123,9 +70,11 @@ user* Parser::parseUser(Json::Value &val)
     {
         user.username = nullptr;
     }
+
+    return &user;
 }
 
-chat* Parser::parseChat(Json::Value &val)
+const chat* Parser::parseChat(Json::Value &val)
 {
     chat chat;
     chat.id = val["id"].asUInt64();
