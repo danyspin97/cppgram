@@ -4,7 +4,7 @@ before_script:
    - which cmake || apt-get -y install cmake 
    - which make
    - which g++ || apt-get -y install g++
-   - cmake ../build -DCMAKE_CXX_COMPILER="g++"
+   - cmake ../CppGram -DCMAKE_CXX_COMPILER="g++"
 
 rspec:
    script:
