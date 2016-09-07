@@ -1,6 +1,6 @@
 set(COMPILER_WARNINGS "-W -Wall -Wextra") #brutal
-set(JSONCPP_STATICLIB ../lib/libjsoncpp.a)
-set(CPR_STATICLIB ../lib/libcpr.a)
+set(JSONCPP_STATICLIB libjsoncpp.a)
+set(CPR_STATICLIB libcpr.a)
 
 include_directories(../include)
 
@@ -26,13 +26,15 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 	set(CMAKE_CXX_FLAGS "-O2 -std=c++11 ${NATIVE} ${ARCH} ${COMPILER_WARNINGS}")
 endif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
+LINK_DIRECTORIES(/usr/local/lib)
+
 message("Note: you are building static library, you have to link your executable manually with this and other static libraries (libcppgram.a , libcpr.a , libjsoncpp.a)")
 add_library(cppgram STATIC ${SOURCES})
 
 install(TARGETS cppgram
-	ARCHIVE DESTINATION lib
-	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION /usr/local/lib
+	LIBRARY DESTINATION /usr/local/lib
 	COMPONENT library)
 
-add_dependencies(cppgram jsoncpp cpr)
-target_link_libraries(cppgram ${CMAKE_SOURCE_DIR}/lib/${JSONCPP_STATICLIB} ${CMAKE_SOURCE_DIR}/lib/${CPR_STATICLIB})
+target_link_libraries(cppgram /usr/local/lib/${JSONCPP_STATICLIB} /usr/local/lib/${CPR_STATICLIB})
+target_include_directories (cppgram PUBLIC ${CMAKE_SOURCE_DIR})
