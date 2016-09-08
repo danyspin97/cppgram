@@ -26,8 +26,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 	set(CMAKE_CXX_FLAGS "-O2 -std=c++11 ${NATIVE} ${ARCH} ${COMPILER_WARNINGS}")
 endif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
-LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib)
-
 message("Note: you are building static library, you have to link your executable manually with this and other static libraries (libcppgram.a , libcpr.a , libjsoncpp.a)")
 add_library(cppgram STATIC ${SOURCES})
 
@@ -37,5 +35,3 @@ install(TARGETS cppgram
 	COMPONENT library)
 
 add_dependencies(cppgram cpr jsoncpp)
-target_link_libraries(cppgram ${CMAKE_SOURCE_DIR}/${JSONCPP_STATICLIB} ${CMAKE_SOURCE_DIR}/${CPR_STATICLIB})
-target_include_directories (cppgram PUBLIC ${CMAKE_SOURCE_DIR})
