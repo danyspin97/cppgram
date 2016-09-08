@@ -14,13 +14,13 @@ else()
 		PREFIX ${DEPENDENCIES_PREFIX}
 		DOWNLOAD_COMMAND git clone ${CPR_GITHUB_URL}
 		CMAKE_ARGS -DUSE_SYSTEM_CURL=ON -DBUILD_CPR_TESTS=OFF
-		INSTALL_COMMAND cp ../cpr/include/cpr/ ${CMAKE_SOURCE_DIR}/include -rv && cp lib/libcpr.a /usr/local/lib -v
+		INSTALL_COMMAND cp ../cpr/include/cpr/ ${CMAKE_SOURCE_DIR}/include -rv && cp lib/libcpr.a ${CMAKE_SOURCE_DIR}/lib -v
 	)
 
 	ExternalProject_Add(jsoncpp
 		PREFIX ${DEPENDENCIES_PREFIX}
 		DOWNLOAD_COMMAND git clone ${JSONCPP_GITHUB_URL}
-		INSTALL_COMMAND cp src/lib_json/libjsoncpp.a /usr/local/lib -v && cp ../jsoncpp/include/json/ ${CMAKE_SOURCE_DIR}/include -vr
+		INSTALL_COMMAND cp src/lib_json/libjsoncpp.a ${CMAKE_SOURCE_DIR}/lib -v && cp ../jsoncpp/include/json/ ${CMAKE_SOURCE_DIR}/include -vr
 	)
 
 	add_custom_target(clean_gitrepo
@@ -28,7 +28,7 @@ else()
 		)
 endif(NOT UNIX)
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "/usr/local/lib")
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "/usr/local/lib")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
 
 add_subdirectory(src)
