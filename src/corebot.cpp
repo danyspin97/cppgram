@@ -28,17 +28,17 @@ void CoreBot::run()
 }
 
 void CoreBot::sendMessage(const char* text,
-                                   PARSE_MODE pmode = PARSE_MODE::MODE_HTML,
-                                   bool disable_web_page_preview = true,
-                                   bool disable_notification = false,
-                                   uid_32 reply_to_message_id = 0,
-                                   void* reply_markup = nullptr) const
+                                   ParseMode pmode,
+                                   bool disable_web_page_preview,
+                                   bool disable_notification,
+                                   uid_32 reply_to_message_id,
+                                   void* reply_markup) const
 {
     char fmt[256];
     std::string parseMode;
-    if(pmode == PARSE_MODE::MODE_HTML)
+    if(pmode == ParseMode::HTML)
         parseMode="HTML";
-    else if(pmode == PARSE_MODE::MODE_MARKDOWN)
+    else if(pmode == ParseMode::Markdown)
         parseMode="Markdown";
 
     std::string fullURL = std::string(TELEGRAMAPI).append(bot_token)
@@ -138,23 +138,23 @@ void CoreBot::getUpdates()
 void CoreBot::processUpdate(Json::Value &val)
 {
     if (!val["message"].isNull())
-        processMessage(Parser::parseMessage(val["message"]));
+        processMessage(message(val["message"]));
     else if (!val["edited_message"].isNull())
-        processEditedMessage(Parser::parseMessage(val["edited_message"]));
+        processEditedMessage(message(val["edited_message"]));
     else if (!val["inline_query"].isNull())
-        processInlineQuery(Parser::parseInlineQuery(val["inline_query"]));
+        processInlineQuery(inlineQuery(val["inline_query"]));
     else if (!val["choosen_inline_result"].isNull())
-        processChosenInlineResult(Parser::parseChoosenInlineResult(val["choosen_inline_result"]));
+        processChosenInlineResult(choosenInlineResult(val["choosen_inline_result"]));
     else if (!val["callback_query"].isNull())
-        processCallbackQuery(Parser::parseCallbackQuery(val["callback_query"]));
+        processCallbackQuery(callbackQuery(val["callback_query"]));
 }
 
 //virtual functions
-void CoreBot::processMessage(const struct message* message) {}
-void CoreBot::processEditedMessage(const struct message* editedMessage) {}
-void CoreBot::processInlineQuery(const struct inlineQuery* inlineQuery) {}
-void CoreBot::processChosenInlineResult(const struct choosenInlineResult* choosenInlineResult) {}
-void CoreBot::processCallbackQuery(const struct callbackQuery* callbackQuery) {}
+void CoreBot::processMessage(const struct message& message) {}
+void CoreBot::processEditedMessage(const struct message& editedMessage) {}
+void CoreBot::processInlineQuery(const struct inlineQuery& inlineQuery) {}
+void CoreBot::processChosenInlineResult(const struct choosenInlineResult& choosenInlineResult) {}
+void CoreBot::processCallbackQuery(const struct callbackQuery& callbackQuery) {}
 //
 
 void CoreBot::throwMalformedJson() const

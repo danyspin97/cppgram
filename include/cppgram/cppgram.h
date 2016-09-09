@@ -6,7 +6,6 @@
 #define CPPGRAM_CPPGRAM_H
 
 #include "corebot.h"
-#include "parser.h"
 #include "osutil.h"
 #include "inlinekeyboard.h"
 #include "structures.h"
