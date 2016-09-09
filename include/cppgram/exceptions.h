@@ -11,12 +11,6 @@ namespace cppgram
         virtual const char* what() const throw();
     };
 
-    class NoHTTPOKResponse : public std::exception
-    {
-    public:
-        virtual const char* what() const throw();
-    };
-
     class NotOkTelegramAPI : public std::exception
     {
     public:
@@ -30,12 +24,6 @@ namespace cppgram
     };
 
     class BgProcessFailed : public std::exception
-    {
-    public:
-        virtual const char* what() const throw();
-    };
-
-    class MalformedJsonDocument : public std::exception
     {
     public:
         virtual const char* what() const throw();

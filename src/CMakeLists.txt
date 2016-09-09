@@ -12,7 +12,7 @@ endif(NOT SOURCES)
 
 if(NATIVE STREQUAL "no" OR NOT NATIVE)
 	set(NATIVE "")
-	message("Note: You can build an optimized executable -DNATIVE=\"yes\"")
+	message("Note: You can build an optimized static library -DNATIVE=\"yes\"")
 elseif(NATIVE STREQUAL "yes")
 	set(NATIVE "-march=native -mtune=native")
 endif(NATIVE STREQUAL "no" OR NOT NATIVE)
@@ -34,4 +34,9 @@ install(TARGETS cppgram
 	LIBRARY DESTINATION lib
 	COMPONENT library)
 
-add_dependencies(cppgram cpr jsoncpp)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/cppgram
+	DESTINATION /usr/include)
+
+if(NOGET_DEPS STREQUAL "no")
+	add_dependencies(cppgram cpr jsoncpp)
+endif()

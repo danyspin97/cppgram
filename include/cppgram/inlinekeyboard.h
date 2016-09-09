@@ -1,3 +1,6 @@
+#ifndef INLINE_KEYBOARD_CPPGRAM_H
+#define INLINE_KEYBOARD_CPPGRAM_H
+
 struct inline_keyboard;
 
 namespace cppgram
@@ -7,3 +10,5 @@ namespace cppgram
 
     };
 }
+
+#endif

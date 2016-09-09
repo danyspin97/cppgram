@@ -8,12 +8,12 @@ namespace cppgram
     class Logger
     {
     public:
-        Logger(const char* filename);
-        void log_event(const char* message) const;
-        void log_error(const char* message) const;
-        void log_warn(const char* message) const;
+        Logger(const std::string& filename);
+        void log_event(const std::string& message) const;
+        void log_error(const std::string& message) const;
+        void log_warn(const std::string& message) const;
     private:
-        const char* fname;
+        const std::string fname;
         std::string __getTime() const;
     };
 }

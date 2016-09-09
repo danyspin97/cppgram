@@ -1,0 +1,91 @@
+#include <json/json.h>
+#include "cppgram/structures.h"
+
+using namespace cppgram;
+
+chat::chat(Json::Value &val)
+{
+    id = val["id"].asUInt64();
+    //chat.type = static_cast<CHAT_TYPE>(val["type"].asString());
+
+    if (!val["title"].isNull())
+        title = val["title"].asString();
+
+    if (!val["username"].isNull())
+        username = val["username"].asString();
+
+    if (!val["first_name"])
+        first_name = val["first_name"].asString();
+
+    if (!val["last_name"])
+        last_name = val["last_name"].asString();
+}
+
+message::message(Json::Value &val)
+{
+    message_id = val["message_id"].asUInt();
+    from = new struct user(val["from"]);
+    date = val["date"].asUInt();
+    chat = new struct chat(val["chat"]);
+
+    if (!val["forward_from"].isNull() && val["forward_from"].isObject()) {
+        forward_from = new struct user(val["forward_from"]);
+        forward_from_chat = new struct chat(val["forward_from_chat"]);
+        forward_date = val["forward_date"].asUInt();
+    }
+
+    if (!val["reply_to_message"].isNull() && val["reply_to_message"].isObject())
+        reply_to_message = new struct message(val["reply_to_message"]);
+
+    if (!val["edit_date"].isNull())
+        edit_date = val["edit_date"].asUInt();
+
+    if (!val["text"].isNull())
+        text = val["text"].asString();
+
+    if (!val["entities"].isNull() && val["entities"].isArray()) {
+        //new_message.entities = parseMessageEntities(val["entites"]);
+    } else {
+        //new_message.entities = nullptr;
+    }
+}
+
+user::user(Json::Value &val)
+{
+    id = val["id"].asUInt();
+    first_name = val["first_name"].asString();
+    if (!val["last_name"].isNull())
+        last_name = val["last_name"].asString();
+
+    if (!val["username"].isNull())
+        username = val["username"].asString();
+}
+
+inlineQuery::inlineQuery(Json::Value &val)
+{
+    id = val["id"].asUInt();
+    from = new struct user(val["from"]);
+    if (!val["location"].isNull()) {
+        // TODO parseLocation
+        //new_inlineQuery.location = parseLocation(val["location"]);
+    }
+    query = val["query"].asString();
+    offset = val["offset"].asUInt();
+}
+
+callbackQuery::callbackQuery(Json::Value &val)
+{
+    id = val["id"].asUInt();
+    from = new struct user(val["from"]);
+    message = new struct message(val["message"]);
+    inline_message_id = val ["inline_message_id"].asUInt();
+    data = val["data"].asString();
+}
+
+choosenInlineResult::choosenInlineResult(Json::Value &val)
+{
+    result_id = val["result_id"].asUInt();
+    from = new struct user(val["from"]);
+    inline_message_id = val["inline_message_id"].asUInt();
+    query = val["query"].asString();
+}
