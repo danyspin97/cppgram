@@ -1,11 +1,12 @@
 #include <cpr/cpr.h>
 #include <json/json.h>
+
 #include "cppgram/osutil.h"
 #include "cppgram/cppgram.h"
 
 using namespace cppgram;
-CoreBot::CoreBot(const std::string api_token, bool background,
-                const std::string filename,int timeout, int message_limit)
+CoreBot::CoreBot(const std::string &api_token, bool background,
+                const std::string &filename,int timeout, int message_limit)
         : Logger(filename), bot_token(api_token), lastUpdateId(0),lastChatId(0),
           timeout(timeout), msg_limit(message_limit)
 {
@@ -27,12 +28,7 @@ void CoreBot::run()
     getUpdates();
 }
 
-void CoreBot::sendMessage(const std::string& text,
-                                   ParseMode pmode,
-                                   bool disable_web_page_preview,
-                                   bool disable_notification,
-                                   uid_32 reply_to_message_id,
-                                   void* reply_markup) const
+void cppgram::CoreBot::sendMessage(const std::string& text, ParseMode pmode, bool disable_web_page_preview, bool disable_notification, cppgram::uid_32 reply_to_message_id, void* reply_markup) const
 {
     char fmt[256];
     std::string parseMode;

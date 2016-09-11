@@ -17,16 +17,23 @@ typedef unsigned long date_unix;
 
 enum ChatType : short
 {
-    chatPrivate,
-    chatGroup,
-    chatSupergroup,
-    chatChannel
+    Private = 0,
+    Group = 1,
+    Supergroup = 2,
+    Channel = 3
 };
 
 enum ParseMode : short
 {
     HTML = 0,
     Markdown = 1
+};
+
+enum InlineKeyboardButtonType : short
+{
+    URL = 0,
+    CallbackData = 1,
+    SwitchInlineQuery = 2
 };
 
 struct chat
@@ -48,82 +55,82 @@ struct user
 
 struct messageEntity
 {
+    // TODO
     //messageEntity_type type;
-    int offset;
-    int lenght;
+    int offset,
+        lenght;
     std::string url;
-    struct user* user;
+    const struct user* user;
 };
 
 struct message
 {
-	 uid_32 message_id;
-	 const user* from;
+    uid_32 message_id;
+    const struct user* from;
     date_unix date;
-	 const struct chat* chat;
-	 const struct user* forward_from;
-	 const struct chat* forward_from_chat;
-	 date_unix forward_date;
-	 const struct message* reply_to_message;
-	 date_unix edit_date;
-	 std::string text;
-	 //struct messageEntity (*entities)[];
-	 ////struct attachment* message_data;
-
-	 message(Json::Value &val);
+    const struct chat* chat;
+    const struct user* forward_from;
+    const struct chat* forward_from_chat;
+    date_unix forward_date;
+    const struct message* reply_to_message;
+    date_unix edit_date;
+    std::string text;
+    //struct messageEntity (*entities)[];
+    //struct attachment* message_data;
+                                                        
+    message(Json::Value &val);
+    ~message();
 };
 
-    enum inline_keyboard_button_type
-    {
-        url,
-        callback_data,
-        switch_inline_query
-    };
+struct inline_keyboard_button
+{
+    std::string text, data;
+    enum InlineKeyboardButtonType button_type;
+};
 
-    struct inline_keyboard_button
-    {
-        std::string text, data;
-        enum inline_keyboard_button_type button_type;
-    };
+struct location
+{
+    float longitude,
+          latidute;
+    
+};
 
-    struct location
-    {
-        float longitude,
-                latidute;
-    };
+struct inlineQuery
+{
+    uid_32 id;
+    const struct user* from;
+    const struct location* location;
+    std::string query;
+    uid_32 offset;
 
-    struct inlineQuery
-    {
-        uid_32 id;
-        const user* from;
-        const struct location* location;
-        std::string query;
-        uid_32 offset;
+    inlineQuery(Json::Value &val);
+    ~inlineQuery();
+};
 
-        inlineQuery(Json::Value &val);
-    };
+struct choosenInlineResult
+{
+    uid_32 result_id;
+    const struct user* from;
+    const struct location* location;
+    uid_32 inline_message_id;
+    std::string query;
 
-    struct choosenInlineResult
-    {
-        uid_32 result_id;
-        const user* from;
-        const struct location* location;
-        uid_32 inline_message_id;
-        std::string query;
+    choosenInlineResult(Json::Value &val);
+    ~choosenInlineResult();
+};
 
-        choosenInlineResult(Json::Value &val);
-    };
+struct callbackQuery
+{
+    uid_32 id;
+    const struct user* from;
+    const struct message* message;
+    uid_32 inline_message_id;
+    std::string data;
 
-    struct callbackQuery
-    {
-        uid_32 id;
-        const struct user* from;
-        const struct message* message;
-        uid_32 inline_message_id;
-        std::string data;
-
-        callbackQuery(Json::Value &val);
-    };
+    callbackQuery(Json::Value &val);
+    ~callbackQuery();
+};
+    
 }
 
 #endif

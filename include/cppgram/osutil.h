@@ -7,9 +7,11 @@
 
 namespace cppgram
 {
-    namespace osutil
-    {
-        int backgroundProcess();
-    }
+    
+namespace osutil
+{
+int backgroundProcess();    
+}
+
 }
 #endif //CPPGRAM_OSUTIL_H
