@@ -1,7 +1,18 @@
+/**
+ * TODO
+ * TO FINISH
+ * message
+ * messageEntity
+ * 
+ * here, messages, entities, data types are defined
+ * structs constructors / destructors' body are defined in src/structures.cpp
+ */
 #ifndef CPPGRAM_STRUCTURES_H
 #define CPPGRAM_STRUCTURES_H
+
 #include <string>
 
+//forward Json::Value
 namespace Json
 {
 class Value;
@@ -9,12 +20,16 @@ class Value;
 
 namespace cppgram
 {
+
+//useful and portable data types
 typedef unsigned long uid_32;
 typedef unsigned long long uid_64;
 typedef long id_32;
 typedef long long id_64;
 typedef unsigned long date_unix;
 
+//message chat type
+//may be a temporary solution
 enum ChatType : short
 {
     Private = 0,
@@ -23,12 +38,14 @@ enum ChatType : short
     Channel = 3
 };
 
+//message markup parser
 enum ParseMode : short
 {
     HTML = 0,
     Markdown = 1
 };
 
+//inline button type
 enum InlineKeyboardButtonType : short
 {
     URL = 0,
@@ -36,6 +53,7 @@ enum InlineKeyboardButtonType : short
     SwitchInlineQuery = 2
 };
 
+//identify chat
 struct chat
 {
     uid_64 id;
@@ -45,6 +63,7 @@ struct chat
     chat(Json::Value &val);
 };
 
+//identify user
 struct user
 {
     uid_32 id;
@@ -63,8 +82,10 @@ struct messageEntity
     const struct user* user;
 };
 
+//get message data
 struct message
 {
+    //TODO
     uid_32 message_id;
     const struct user* from;
     date_unix date;
@@ -82,19 +103,20 @@ struct message
     ~message();
 };
 
-struct inline_keyboard_button
+struct inlineKeyboardButton
 {
     std::string text, data;
     enum InlineKeyboardButtonType button_type;
 };
 
+//get location data
 struct location
 {
     float longitude,
           latidute;
-    
 };
 
+//get inline query data
 struct inlineQuery
 {
     uid_32 id;
@@ -107,6 +129,7 @@ struct inlineQuery
     ~inlineQuery();
 };
 
+//get the choosen result from inline query 
 struct choosenInlineResult
 {
     uid_32 result_id;
@@ -119,6 +142,7 @@ struct choosenInlineResult
     ~choosenInlineResult();
 };
 
+//get callback query data
 struct callbackQuery
 {
     uid_32 id;

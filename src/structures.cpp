@@ -1,8 +1,11 @@
 #include <json/json.h>
 #include "cppgram/structures.h"
 
+//TODO
+
 using namespace cppgram;
 
+/* constructors */
 chat::chat(Json::Value &val)
 {
     id = val["id"].asUInt64();
@@ -88,4 +91,28 @@ choosenInlineResult::choosenInlineResult(Json::Value &val)
     from = new struct user(val["from"]);
     inline_message_id = val["inline_message_id"].asUInt();
     query = val["query"].asString();
+}
+
+/* destructors */
+
+//TODO
+
+message::~message()
+{
+    //delete
+}
+
+inlineQuery::~inlineQuery()
+{
+    
+}
+
+callbackQuery::~callbackQuery()
+{
+    
+}
+
+choosenInlineResult::~choosenInlineResult()
+{
+    
 }
