@@ -29,7 +29,6 @@ typedef long long id_64;
 typedef unsigned long date_unix;
 
 //message chat type
-//may be a temporary solution
 enum ChatType : short
 {
     Private = 0,

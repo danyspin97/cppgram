@@ -3,6 +3,7 @@
 
 #define TELEGRAMAPI "https://api.telegram.org/bot"
 
+//forward Json::Value
 namespace Json
 {
 class Value;

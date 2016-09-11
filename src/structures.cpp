@@ -26,6 +26,10 @@ chat::chat(Json::Value &val)
 
 message::message(Json::Value &val)
 {
+    forward_from = nullptr;
+    forward_from_chat = nullptr;
+    reply_to_message = nullptr;
+    
     message_id = val["message_id"].asUInt();
     from = new struct user(val["from"]);
     date = val["date"].asUInt();
@@ -99,20 +103,29 @@ choosenInlineResult::choosenInlineResult(Json::Value &val)
 
 message::~message()
 {
-    //delete
+    delete from;
+    delete chat;
+    
+    if(forward_from == NULL) 
+        delete forward_from;
+    if(forward_from_chat == NULL) 
+        delete forward_from_chat;
+    if(reply_to_message == NULL) 
+        delete reply_to_message;
 }
 
 inlineQuery::~inlineQuery()
 {
-    
+    delete from;
 }
 
 callbackQuery::~callbackQuery()
 {
-    
+    delete from;
+    delete message;
 }
 
 choosenInlineResult::~choosenInlineResult()
 {
-    
+    delete from;
 }
