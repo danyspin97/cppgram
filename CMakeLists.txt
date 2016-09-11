@@ -1,10 +1,26 @@
 cmake_minimum_required(VERSION 2.8)
 project(cppgram)
 
+find_program(GIT "git")
+
+if(NOT GIT)
+	message(FATAL_ERROR "Cannot find git")
+endif()
+
 if(NOT NOGET_DEPS)
 	set(NOGET_DEPS "no")
 	message("Note: You can specify -DNOGET_DEPS=\"yes\" in order to avoid downloading dependencies everytime (if you have installed)")
+	if(NOT USE_SYSTEM_CURL)
+		set(USE_SYSTEM_CURL ON)
+		message("CPR: Using system curl  | USE_SYSTEM_CURL: ${USE_SYSTEM_CURL}")
+	endif()
+
+	if(NOT BUILD_CPR_TESTS)
+		set(BUILD_CPR_TESTS OFF)
+		message("CPR: Not building tests | BUILD_CPR_TESTS: ${BUILD_CPR_TESTS}")
+	endif()
 endif()
+
 
 if(NOGET_DEPS STREQUAL "no")
 	if(NOT UNIX)
@@ -19,7 +35,7 @@ if(NOGET_DEPS STREQUAL "no")
 		ExternalProject_Add(cpr
 			PREFIX ${DEPENDENCIES_PREFIX}
 			DOWNLOAD_COMMAND git clone ${CPR_GITHUB_URL}
-			CMAKE_ARGS -DUSE_SYSTEM_CURL=ON -DBUILD_CPR_TESTS=OFF
+			CMAKE_ARGS -DUSE_SYSTEM_CURL=${USE_SYSTEM_CURL} -DBUILD_CPR_TESTS=${BUILD_CPR_TESTS}
 			INSTALL_COMMAND cp ../cpr/include/cpr/ ${CMAKE_SOURCE_DIR}/include -rv && cp lib/libcpr.a ${CMAKE_SOURCE_DIR}/lib/ -vr
 		)
 
