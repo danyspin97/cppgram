@@ -6,11 +6,22 @@
 using namespace cppgram;
 
 /* constructors */
-chat::chat(Json::Value &val)
+chat::chat(Json::Value &val) //ITS DONE!!
 {
     id = val["id"].asUInt64();
-    //chat.type = static_cast<CHAT_TYPE>(val["type"].asString());
-
+    
+    if (!val["type"].isNull()) {
+       std::string typechat = val["type"].asString();
+       if(typechat == "private")
+           type = static_cast<ChatType>(0);
+       else if(typechat == "group")
+           type = static_cast<ChatType>(1);
+       else if(typechat == "supergroup")
+           type = static_cast<ChatType>(2);
+       else if(typechat == "channel")
+           type = static_cast<ChatType>(3);
+    }
+    
     if (!val["title"].isNull())
         title = val["title"].asString();
 
@@ -24,7 +35,7 @@ chat::chat(Json::Value &val)
         last_name = val["last_name"].asString();
 }
 
-message::message(Json::Value &val)
+message::message(Json::Value &val) //TO FINISH
 {
     forward_from = nullptr;
     forward_from_chat = nullptr;
@@ -57,7 +68,7 @@ message::message(Json::Value &val)
     }
 }
 
-user::user(Json::Value &val)
+user::user(Json::Value &val) //ITS DONE!
 {
     id = val["id"].asUInt();
     first_name = val["first_name"].asString();
@@ -68,7 +79,7 @@ user::user(Json::Value &val)
         username = val["username"].asString();
 }
 
-inlineQuery::inlineQuery(Json::Value &val)
+inlineQuery::inlineQuery(Json::Value &val) //TO FINISH (just location)
 {
     id = val["id"].asUInt();
     from = new struct user(val["from"]);
@@ -80,7 +91,7 @@ inlineQuery::inlineQuery(Json::Value &val)
     offset = val["offset"].asUInt();
 }
 
-callbackQuery::callbackQuery(Json::Value &val)
+callbackQuery::callbackQuery(Json::Value &val) //SEEMS FINISHED (still to test)
 {
     id = val["id"].asUInt();
     from = new struct user(val["from"]);
@@ -89,7 +100,7 @@ callbackQuery::callbackQuery(Json::Value &val)
     data = val["data"].asString();
 }
 
-choosenInlineResult::choosenInlineResult(Json::Value &val)
+choosenInlineResult::choosenInlineResult(Json::Value &val) // TO FINISH (just location)
 {
     result_id = val["result_id"].asUInt();
     from = new struct user(val["from"]);
