@@ -1,12 +1,11 @@
-#include <iostream>
-#include "cpr/cpr.h"
-#include "json/json.h"
+#include <cpr/cpr.h>
+#include <json/json.h>
+
 #include "cppgram/cppgram.h"
 
 using namespace cppgram;
-
-CoreBot::CoreBot(const char* api_token, bool background,
-                const char* filename,int timeout, int message_limit)
+CoreBot::CoreBot(const std::string &api_token, bool background,
+                const std::string &filename,int timeout, int message_limit)
         : Logger(filename), bot_token(api_token), lastUpdateId(0),lastChatId(0),
           timeout(timeout), msg_limit(message_limit)
 {
@@ -28,12 +27,7 @@ void CoreBot::run()
     getUpdates();
 }
 
-void CoreBot::sendMessage(const char* text,
-                                   ParseMode pmode,
-                                   bool disable_web_page_preview,
-                                   bool disable_notification,
-                                   uid_32 reply_to_message_id,
-                                   void* reply_markup) const
+void cppgram::CoreBot::sendMessage(const std::string& text, ParseMode pmode, bool disable_web_page_preview, bool disable_notification, cppgram::uid_32 reply_to_message_id, void* reply_markup) const
 {
     log_event("sending");
     char fmt[256];
@@ -43,25 +37,24 @@ void CoreBot::sendMessage(const char* text,
     else if(pmode == ParseMode::Markdown)
         parseMode="Markdown";
 
-    std::string fullURL = std::string(TELEGRAMAPI).append(bot_token)
-            .append("/sendMessage?text=")
-            .append(text).append("&chat_id=")
-            .append(std::to_string(lastChatId))
-            .append("&parse_mode=")
-            .append(parseMode)
-            .append("&disable_notification=")
-            .append(std::to_string(disable_notification))
-            .append("&disable_web_page_preview=")
-            .append(std::to_string(disable_web_page_preview));
+    std::string fullURL = std::string(TELEGRAMAPI)+bot_token
+            +"/sendMessage?text="
+            +text+"&chat_id="
+            +std::to_string(lastChatId)
+            +"&parse_mode="
+            +parseMode
+            +"&disable_notification="
+            +std::to_string(disable_notification)
+            +"&disable_web_page_preview="
+            +std::to_string(disable_web_page_preview);
 
     if(reply_to_message_id != 0 && reply_to_message_id > 0)
-        fullURL.append("&reply_to_message_id=").append(std::to_string(reply_to_message_id));
+        fullURL+"&reply_to_message_id="+std::to_string(reply_to_message_id);
 
     cpr::Response response = cpr::Get(cpr::Url{fullURL});
     if(response.status_code != 200) {
         sprintf(fmt, "(sendMessage) HTTP Response status code is not 200: %d", response.status_code);
         log_warn(fmt);
-        throw new NoHTTPOKResponse;
     } else {
         std::string json_doc = response.text;
         Json::Value valroot;
@@ -73,7 +66,7 @@ void CoreBot::sendMessage(const char* text,
         }
 
         if(!valroot["ok"].isBool() || valroot["ok"].isNull())
-            throwMalformedJson();
+            log_warn("Maybe a malformed JSON document...");
 
         if (!valroot["ok"].asBool()) {
             log_warn("(sendMessage) \"ok\" is not true!");
@@ -88,19 +81,18 @@ void CoreBot::getUpdates()
         char fmt[256];
          //TODO
          cpr::Response response = cpr::Get(cpr::Url{std::string(TELEGRAMAPI)
-                                                  .append(bot_token)
-                                                  .append("/getUpdates?timeout=")
-                                                  .append(std::to_string(timeout))
-                                                  .append("&limit=")
-                                                  .append(std::to_string(msg_limit))
-                                                  .append("&offset=")
-                                                  .append(std::to_string(lastUpdateId+1))
+                                                  +bot_token
+                                                  +"/getUpdates?timeout="
+                                                  +std::to_string(timeout)
+                                                  +"&limit="
+                                                  +std::to_string(msg_limit)
+                                                  +"&offset="
+                                                  +std::to_string(lastUpdateId+1)
         });
 
         if(response.status_code != 200) {
             sprintf(fmt, "HTTP Response status code is not 200: %d", response.status_code);
             log_warn(fmt);
-            throw new NoHTTPOKResponse;
         } else {
             std::string json_doc = response.text;
             Json::Value valroot;
@@ -110,12 +102,11 @@ void CoreBot::getUpdates()
                 throw new JsonParseError;
             }
 
-
             if(!valroot["ok"].isBool() || valroot["ok"].isNull())
-                throwMalformedJson();
+                log_warn("Maybe a malformed JSON document...");
 
             if(valroot["result"].isNull() || !valroot["result"].isArray())
-                throwMalformedJson();
+                log_warn("Maybe a malformed JSON document...");
 
             if (!valroot["ok"].asBool()) {
                 log_warn("\"ok\" is not true!");
@@ -125,13 +116,10 @@ void CoreBot::getUpdates()
             if (valroot["ok"].asBool() && valroot["result"].empty()) continue;
 
             for(Json::Value val: valroot["result"]) {
-                //parseAssignExecuteUpdate(val);
-
                 processUpdate(val);
                 lastUpdateId = val["update_id"].asLargestUInt();
-                log_event(std::string("Last Update ID: ")
-                                  .append(std::to_string(lastUpdateId))
-                                  .c_str());
+                log_event("Last Update ID: "+std::to_string(lastUpdateId));
+                log_event("Last Chat ID: "+std::to_string(lastChatId));
             }
         }
     }
@@ -139,18 +127,13 @@ void CoreBot::getUpdates()
 
 void CoreBot::processUpdate(Json::Value &val)
 {
-
-    log_event("here");
-    message message1(val["message"]);
-    log_event(message1.text.c_str());
-    processMessage(message1);
     if (!val["message"].isNull()) {
-        std::cout << "message arrived";
+        lastChatId = val["message"]["chat"]["id"].asLargestUInt();
         processMessage(message(val["message"]));
-    }
-    else if (!val["edited_message"].isNull())
+    } else if (!val["edited_message"].isNull()) {
+        lastChatId = val["edited_message"]["chat"]["id"].asLargestUInt();
         processEditedMessage(message(val["edited_message"]));
-    else if (!val["inline_query"].isNull())
+    } else if (!val["inline_query"].isNull())
         processInlineQuery(inlineQuery(val["inline_query"]));
     else if (!val["choosen_inline_result"].isNull())
         processChosenInlineResult(choosenInlineResult(val["choosen_inline_result"]));
@@ -165,9 +148,3 @@ void CoreBot::processInlineQuery(const struct inlineQuery& inlineQuery) {}
 void CoreBot::processChosenInlineResult(const struct choosenInlineResult& choosenInlineResult) {}
 void CoreBot::processCallbackQuery(const struct callbackQuery& callbackQuery) {}
 //
-
-void CoreBot::throwMalformedJson() const
-{
-    log_error("Malformed JSON document!!");
-    throw new MalformedJsonDocument;
-}

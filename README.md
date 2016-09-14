@@ -23,6 +23,12 @@ Easy C++ wrapper for Telegram Bot API
  $ chmod +x build.sh && ./build.sh
  ~~~
 
+ You can run build.sh using these arguments:
+
+ * -fc or --full-clean : will remove the entire build directory after compiling and installing (if requried)
+ * -i or --install : will install cppgram headers and static libs (usually /usr/local/lib)
+ * -ndg or --nodeps-get : will not get dependencies headers and libraries (cpr and jsoncpp), you need headers for compilation!!
+
  OR
 
  Do it manually! Enjoy
@@ -56,6 +62,13 @@ Easy C++ wrapper for Telegram Bot API
 
   *Clang is just an example!*
 
+  ---
+
+  *Aand... you may want to use your installed cpr and jsoncpp headers / static libraries, without need downloading and building everytime*
+
+  ~~~
+  $ cmake ../cppgram-build -DNOGET_DEPS="yes"
+  ~~~
 
  * After running CMake, you have to run make in order to compile the library and its dependencies
 
@@ -92,189 +105,4 @@ Easy C++ wrapper for Telegram Bot API
 
 ### Examples
 
- Simple update listener bot
-
- *mybot.cpp*
- 
- ```c++
- #include <json/json.h>
- #include <cppgram/corebot.h>
-
- using cppgram::CoreBot;
- using cppgram::message_t;
- using cppgram::cbquery_t;
-
-
- class MyBot : public CoreBot
- {
- public:
-   MyBot() : CoreBot("apitoken") {}
-   
-   void processMessage(const message_t &data) const 
-   {
-                
-   }
-   
-   void processInlineQuery(const cbquery_t &data) const
-   {
-
-   }
-
- };
-
- int main()
- {
-	 MyBot bot;
-	 bot.run();
-
-	 return 0;
- }
- ```
-
- You will find out log in ./tgbot.log, so you can use 
-
- ~~~
- $ tail -f ./tgbot.log
- ~~~
-
- to see logs in realtime!
-
-
- ---
-
- Simple update listener bot in background process and custom filename (only with GNU/Linux for now)
-
- *mybot.cpp*
-
- ```c++
- #include<json/json.h>
- #include<cppgram/corebot.h>
-
- using cppgram::CoreBot;
- using cppgram::message_t;
- using cppgram::cbquery_t;
-
-
- class MyBackgroundBot : public CoreBot
- {
- public:
-	MyBackgroundBot() : CoreBot("apitoken",true,"/home/user/bot_log.log"){}
-	
-	void processMessage(const message_t &data) const 
-	{
-               
-    }
-	void processInlineQuery(const cbquery_t &data) const
-    {
-
-    }
-
- };
-
- int main()
- {
-	 MyBackgroundBot bbot;
-	 bbot.run();
-
-	 return 0;
- }
- ```
- ---
- 
- Simple answer me bot :)
- 
- ```c++
- #include <json/json.h>
- #include <cppgram/corebot.h>
-
- using cppgram::CoreBot;
- using cppgram::message_t;
- using cppgram::cbquery_t;
-
-
- class MyBot : public CoreBot
- {
- public:
-   MyBot() : CoreBot("apitoken") {}
-   
-   void processMessage(const message_t &data) const 
-   {
-        sendMessage(std::string("Hello My Friend, ").append(data.from->username).c_str());
-   }
-   
-   void processInlineQuery(const cbquery_t &data) const
-   {
-
-   }
-
- };
-
- int main()
- {
-	 MyBot bot;
-	 bot.run();
-
-	 return 0;
- }
- ```
- 
- ---
- 
- Markup-styled messages!
- 
- (By default is set on HTML , MODE_HTML)
- 
-  ```c++
- #include <json/json.h>
- #include <cppgram/corebot.h>
-
- using cppgram::CoreBot;
- using cppgram::message_t;
- using cppgram::cbquery_t;
- using cppgram::PARSE_MODE;
-
- class MyBot : public CoreBot
- {
- public:
-   MyBot() : CoreBot("apitoken") {}
-   
-   void processMessage(const message_t &data) const 
-   {
-        sendMessage(std::string("*Hello* _My Friend_, ").append(data.from->username).c_str(),PARSE_MODE::MODE_MARKDOWN);
-        sendMessage("<b>BOLD TEXT</b><i>Italic</i>");
-   }
-   
-   void processInlineQuery(const cbquery_t &data) const
-   {
-
-   }
-
- };
-
- int main()
- {
-	 MyBot bot;
-	 bot.run();
-
-	 return 0;
- }
- ```
- 
- More examples on the way :)
-  
- ---
-
- *This is the default cppgram::CoreBot constructor*
- 
- *look at this if need to change parameters defaults and/or use them*
- 
- ```c++
- public:
-        CoreBot(const char* api_token,
-                bool background = false,
-                const char* filename="tgbot.log",
-                int message_limit = 100,
-                int timeout = 60
-                );
- ```
-
+ Examples on the way

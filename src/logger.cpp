@@ -3,12 +3,12 @@
 
 #include "cppgram/logger.h"
 
-cppgram::Logger::Logger(const char* filename) : fname(filename)
+cppgram::Logger::Logger(const std::string& filename) : fname(filename)
 {
 
 }
 
-void cppgram::Logger::log_error(const char* message) const
+void cppgram::Logger::log_error(const std::string& message) const
 {
     std::ofstream out;
     out.open(fname, std::ios::app | std::ios::out);
@@ -21,7 +21,7 @@ void cppgram::Logger::log_error(const char* message) const
     out.close();
 }
 
-void cppgram::Logger::log_event(const char* message) const
+void cppgram::Logger::log_event(const std::string& message) const
 {
     std::ofstream out;
     out.open(fname, std::ios::app | std::ios::out);
@@ -34,7 +34,7 @@ void cppgram::Logger::log_event(const char* message) const
     out.close();
 }
 
-void cppgram::Logger::log_warn(const char* message) const
+void cppgram::Logger::log_warn(const std::string& message) const
 {
     std::ofstream out;
     out.open(fname, std::ios::app | std::ios::out);
