@@ -8,7 +8,7 @@ using namespace cppgram;
 /* constructors */
 chat::chat(Json::Value &val) //ITS DONE!!
 {
-    id = val["id"].asUInt64();
+    id = val["id"].asUInt();
     
     if (!val["type"].isNull()) {
        std::string typechat = val["type"].asString();

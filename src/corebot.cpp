@@ -27,20 +27,21 @@ void CoreBot::run()
     getUpdates();
 }
 
-void cppgram::CoreBot::sendMessage(const std::string& text, ParseMode pmode, bool disable_web_page_preview, bool disable_notification, cppgram::uid_32 reply_to_message_id, void* reply_markup) const
+void cppgram::CoreBot::sendMessage(const std::string& text, ParseMode pmode, const std::string& customChatId, bool disable_web_page_preview, bool disable_notification, uid_32 reply_to_message_id, void* reply_markup)
 {
-    log_event("sending");
-    char fmt[256];
-    std::string parseMode;
+    std::string parseMode, choosenChatId=std::to_string(lastChatId);
     if(pmode == ParseMode::HTML)
         parseMode="HTML";
     else if(pmode == ParseMode::Markdown)
         parseMode="Markdown";
+    
+    if(customChatId != SENDMSG_DEFAULT_CHATID)
+        choosenChatId=customChatId;
 
     std::string fullURL = std::string(TELEGRAMAPI)+bot_token
             +"/sendMessage?text="
             +text+"&chat_id="
-            +std::to_string(lastChatId)
+            +choosenChatId
             +"&parse_mode="
             +parseMode
             +"&disable_notification="
@@ -51,10 +52,9 @@ void cppgram::CoreBot::sendMessage(const std::string& text, ParseMode pmode, boo
     if(reply_to_message_id != 0 && reply_to_message_id > 0)
         fullURL+"&reply_to_message_id="+std::to_string(reply_to_message_id);
 
-    cpr::Response response = cpr::Get(cpr::Url{fullURL});
+    const cpr::Response response = cpr::Get(cpr::Url{fullURL});
     if(response.status_code != 200) {
-        sprintf(fmt, "(sendMessage) HTTP Response status code is not 200: %d", response.status_code);
-        log_warn(fmt);
+        log_warn("(sendMessage) HTTP Response status code is not 200: "+std::to_string(response.status_code));
     } else {
         std::string json_doc = response.text;
         Json::Value valroot;
@@ -72,15 +72,15 @@ void cppgram::CoreBot::sendMessage(const std::string& text, ParseMode pmode, boo
             log_warn("(sendMessage) \"ok\" is not true!");
             throw new NotOkTelegramAPI;
         }
+        
+        log_event("Sent message to chatId: "+choosenChatId+" ,text: "+text);
     }
 }
 
 void CoreBot::getUpdates()
 {
      while(1) {
-        char fmt[256];
-         //TODO
-         cpr::Response response = cpr::Get(cpr::Url{std::string(TELEGRAMAPI)
+         const cpr::Response response = cpr::Get(cpr::Url{std::string(TELEGRAMAPI)
                                                   +bot_token
                                                   +"/getUpdates?timeout="
                                                   +std::to_string(timeout)
@@ -91,8 +91,7 @@ void CoreBot::getUpdates()
         });
 
         if(response.status_code != 200) {
-            sprintf(fmt, "HTTP Response status code is not 200: %d", response.status_code);
-            log_warn(fmt);
+            log_warn("(getUpdates) Response status code is not 200: "+response.status_code);
         } else {
             std::string json_doc = response.text;
             Json::Value valroot;

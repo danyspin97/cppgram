@@ -2,6 +2,7 @@
 #define __CPPGRAM_COREBOT_H
 
 #define TELEGRAMAPI "https://api.telegram.org/bot"
+#define SENDMSG_DEFAULT_CHATID "default"
 
 //forward Json::Value
 namespace Json
@@ -36,11 +37,11 @@ protected:
     virtual void processCallbackQuery(const struct callbackQuery& callbackQuery);
     void sendMessage(const std::string& text,
                      ParseMode pmode = static_cast<ParseMode>(0),
-                     //int customChatId
+                     const std::string &customChatId = SENDMSG_DEFAULT_CHATID,
                      bool disable_web_page_preview = true,
                      bool disable_notification = false,
                      uid_32 reply_to_message_id = 0,
-                     void* reply_markup = nullptr) const;
+                     void* reply_markup = nullptr);
     //void editMessage
 private:
     const std::string bot_token;
