@@ -55,7 +55,7 @@ enum InlineKeyboardButtonType : short
 //identify chat
 struct chat
 {
-    uid_64 id;
+    id_64 id;
     ChatType type;
     std::string title, username,
             first_name, last_name;
@@ -118,7 +118,7 @@ struct location
 //get inline query data
 struct inlineQuery
 {
-    uid_32 id;
+	 std::string id;
     const struct user* from;
     const struct location* location;
     std::string query;
@@ -131,7 +131,7 @@ struct inlineQuery
 //get the choosen result from inline query 
 struct choosenInlineResult
 {
-    uid_32 result_id;
+	 std::string result_id;
     const struct user* from;
     const struct location* location;
     uid_32 inline_message_id;
@@ -144,7 +144,7 @@ struct choosenInlineResult
 //get callback query data
 struct callbackQuery
 {
-    uid_32 id;
+	 std::string id;
     const struct user* from;
     const struct message* message;
     uid_32 inline_message_id;

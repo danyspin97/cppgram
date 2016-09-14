@@ -127,10 +127,10 @@ void CoreBot::getUpdates()
 void CoreBot::processUpdate(Json::Value &val)
 {
     if (!val["message"].isNull()) {
-        lastChatId = val["message"]["chat"]["id"].asLargestUInt();
+        lastChatId = val["message"]["chat"]["id"].asInt64();
         processMessage(message(val["message"]));
     } else if (!val["edited_message"].isNull()) {
-        lastChatId = val["edited_message"]["chat"]["id"].asLargestUInt();
+        lastChatId = val["edited_message"]["chat"]["id"].asInt64();
         processEditedMessage(message(val["edited_message"]));
     } else if (!val["inline_query"].isNull())
         processInlineQuery(inlineQuery(val["inline_query"]));

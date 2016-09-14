@@ -1,6 +1,8 @@
 #include <json/json.h>
 #include "cppgram/structures.h"
 
+
+#include <iostream>
 //TODO
 
 using namespace cppgram;
@@ -8,8 +10,8 @@ using namespace cppgram;
 /* constructors */
 chat::chat(Json::Value &val) //ITS DONE!!
 {
-    id = val["id"].asUInt();
-    
+    id = val["id"].asInt64();
+
     if (!val["type"].isNull()) {
        std::string typechat = val["type"].asString();
        if(typechat == "private")
@@ -81,7 +83,7 @@ user::user(Json::Value &val) //ITS DONE!
 
 inlineQuery::inlineQuery(Json::Value &val) //TO FINISH (just location)
 {
-    id = val["id"].asUInt();
+    id = val["id"].asString();
     from = new struct user(val["from"]);
     if (!val["location"].isNull()) {
         // TODO parseLocation
@@ -93,7 +95,7 @@ inlineQuery::inlineQuery(Json::Value &val) //TO FINISH (just location)
 
 callbackQuery::callbackQuery(Json::Value &val) //SEEMS FINISHED (still to test)
 {
-    id = val["id"].asUInt();
+    id = val["id"].asString();
     from = new struct user(val["from"]);
     message = new struct message(val["message"]);
     inline_message_id = val ["inline_message_id"].asUInt();
@@ -102,7 +104,7 @@ callbackQuery::callbackQuery(Json::Value &val) //SEEMS FINISHED (still to test)
 
 choosenInlineResult::choosenInlineResult(Json::Value &val) // TO FINISH (just location)
 {
-    result_id = val["result_id"].asUInt();
+    result_id = val["result_id"].asString();
     from = new struct user(val["from"]);
     inline_message_id = val["inline_message_id"].asUInt();
     query = val["query"].asString();
