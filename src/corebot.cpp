@@ -73,7 +73,7 @@ void cppgram::CoreBot::sendMessage(const std::string& text, ParseMode pmode, con
             throw new NotOkTelegramAPI;
         }
         
-        log_event("Sent message to chatId: "+choosenChatId+" ,text: "+text);
+        log_event("Sent message to chatId/@usernchan: "+choosenChatId+", text: "+text+", parse mode: "+parseMode);
     }
 }
 
@@ -117,8 +117,9 @@ void CoreBot::getUpdates()
             for(Json::Value val: valroot["result"]) {
                 processUpdate(val);
                 lastUpdateId = val["update_id"].asLargestUInt();
-                log_event("Last Update ID: "+std::to_string(lastUpdateId));
-                log_event("Last Chat ID: "+std::to_string(lastChatId));
+
+
+                log_event("Last update ID: "+std::to_string(lastUpdateId)+", last chat ID: "+std::to_string(lastChatId));
             }
         }
     }
@@ -127,23 +128,39 @@ void CoreBot::getUpdates()
 void CoreBot::processUpdate(Json::Value &val)
 {
     if (!val["message"].isNull()) {
+        struct message m = message(val["message"]);
         lastChatId = val["message"]["chat"]["id"].asInt64();
-        processMessage(message(val["message"]));
+        log_event("Got a message: "+m.text+", from: "+m.from->username+", message ID: "+std::to_string(m.message_id));
+        processMessage(m);
     } else if (!val["edited_message"].isNull()) {
+        struct message editedMessage = message(val["edited_message"]);
         lastChatId = val["edited_message"]["chat"]["id"].asInt64();
-        processEditedMessage(message(val["edited_message"]));
-    } else if (!val["inline_query"].isNull())
-        processInlineQuery(inlineQuery(val["inline_query"]));
-    else if (!val["choosen_inline_result"].isNull())
-        processChosenInlineResult(choosenInlineResult(val["choosen_inline_result"]));
-    else if (!val["callback_query"].isNull())
-        processCallbackQuery(callbackQuery(val["callback_query"]));
+        log_event("Got an edited message: "+editedMessage.text+", from: "+editedMessage.from->username+", message ID: "+std::to_string(editedMessage.message_id));
+        processEditedMessage(editedMessage);
+    } else if (!val["inline_query"].isNull()) {
+        struct inlineQuery iquery = inlineQuery(val["inline_query"]);
+        log_event("Got an inline query: "+iquery.query+", from: "+iquery.from->username+", query ID: "+iquery.id);
+        processInlineQuery(iquery);
+    } else if (!val["choosen_inline_result"].isNull()) {
+        struct choosenInlineResult chooseninlres = choosenInlineResult(val["choosen_inline_result"]);
+        log_event("Got a choosen inline result: "+chooseninlres.result_id+", from: "+chooseninlres.from->username+", query: "+chooseninlres.query+ ", query msg ID: "+std::to_string(chooseninlres.inline_message_id));
+        processChosenInlineResult(chooseninlres);
+    } else if (!val["callback_query"].isNull()) {
+        struct callbackQuery cbquery = callbackQuery(val["callback_query"]);
+        log_event("Got a callback query: "+cbquery.data+", from: "+cbquery.from->username+", cbquery ID: "+cbquery.id);
+        processCallbackQuery(cbquery);
+    }
 }
 
 //virtual functions
-void CoreBot::processMessage(const struct message& message) {}
-void CoreBot::processEditedMessage(const struct message& editedMessage) {}
-void CoreBot::processInlineQuery(const struct inlineQuery& inlineQuery) {}
-void CoreBot::processChosenInlineResult(const struct choosenInlineResult& choosenInlineResult) {}
-void CoreBot::processCallbackQuery(const struct callbackQuery& callbackQuery) {}
+void CoreBot::processMessage(const struct message& message) 
+{}
+void CoreBot::processEditedMessage(const struct message& editedMessage) 
+{}
+void CoreBot::processInlineQuery(const struct inlineQuery& inlineQuery) 
+{}
+void CoreBot::processChosenInlineResult(const struct choosenInlineResult& choosenInlineResult) 
+{}
+void CoreBot::processCallbackQuery(const struct callbackQuery& callbackQuery) 
+{}
 //

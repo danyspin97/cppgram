@@ -1,8 +1,6 @@
 #include <json/json.h>
 #include "cppgram/structures.h"
 
-
-#include <iostream>
 //TODO
 
 using namespace cppgram;
@@ -90,7 +88,7 @@ inlineQuery::inlineQuery(Json::Value &val) //TO FINISH (just location)
         //new_inlineQuery.location = parseLocation(val["location"]);
     }
     query = val["query"].asString();
-    offset = val["offset"].asUInt();
+    offset = val["offset"].asString();
 }
 
 callbackQuery::callbackQuery(Json::Value &val) //SEEMS FINISHED (still to test)

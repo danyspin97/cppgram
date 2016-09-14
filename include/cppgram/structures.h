@@ -118,11 +118,9 @@ struct location
 //get inline query data
 struct inlineQuery
 {
-	 std::string id;
+    std::string id, query, offset;
     const struct user* from;
     const struct location* location;
-    std::string query;
-    uid_32 offset;
 
     inlineQuery(Json::Value &val);
     ~inlineQuery();
@@ -131,7 +129,7 @@ struct inlineQuery
 //get the choosen result from inline query 
 struct choosenInlineResult
 {
-	 std::string result_id;
+    std::string result_id;
     const struct user* from;
     const struct location* location;
     uid_32 inline_message_id;
@@ -144,7 +142,7 @@ struct choosenInlineResult
 //get callback query data
 struct callbackQuery
 {
-	 std::string id;
+    std::string id;
     const struct user* from;
     const struct message* message;
     uid_32 inline_message_id;
