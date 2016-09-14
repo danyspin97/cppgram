@@ -10,5 +10,6 @@
 #include "inlinekeyboard.h"
 #include "structures.h"
 #include "exceptions.h"
+#include "logger.h"
 
 #endif //CPPGRAM_CPPGRAM_H

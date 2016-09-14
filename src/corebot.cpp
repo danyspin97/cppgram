@@ -1,3 +1,4 @@
+#include <iostream>
 #include "cpr/cpr.h"
 #include "json/json.h"
 #include "cppgram/cppgram.h"
@@ -34,6 +35,7 @@ void CoreBot::sendMessage(const char* text,
                                    uid_32 reply_to_message_id,
                                    void* reply_markup) const
 {
+    log_event("sending");
     char fmt[256];
     std::string parseMode;
     if(pmode == ParseMode::HTML)
@@ -137,8 +139,15 @@ void CoreBot::getUpdates()
 
 void CoreBot::processUpdate(Json::Value &val)
 {
-    if (!val["message"].isNull())
+
+    log_event("here");
+    message message1(val["message"]);
+    log_event(message1.text.c_str());
+    processMessage(message1);
+    if (!val["message"].isNull()) {
+        std::cout << "message arrived";
         processMessage(message(val["message"]));
+    }
     else if (!val["edited_message"].isNull())
         processEditedMessage(message(val["edited_message"]));
     else if (!val["inline_query"].isNull())
