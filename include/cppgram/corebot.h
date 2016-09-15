@@ -19,6 +19,7 @@ namespace cppgram
 class Logger;
 enum ParseMode : short;
 typedef unsigned long uid_32;
+typedef long long id_64;
 
 class CoreBot : public Logger
 {
@@ -57,7 +58,8 @@ protected:
     //void apiRequest(std::string& apiMethod, cpr::Parameters parameters) const;
 private:
     const std::string bot_token, bot_usern;
-    uid_32 lastUpdateId, lastChatId;
+    uid_32 lastUpdateId;
+    id_64 lastChatId;
     int timeout, msg_limit;
     void getUpdates();
     void processUpdate(Json::Value &val);
