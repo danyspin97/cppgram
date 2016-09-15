@@ -7,4 +7,7 @@
 #include "structures.h"
 #include "exceptions.h"
 
+//template functions body definitions
+#include "corebot.tpp"
+
 #endif //CPPGRAM_CPPGRAM_H

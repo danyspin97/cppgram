@@ -37,7 +37,9 @@ protected:
     virtual void processInlineQuery(const struct inlineQuery& inlineQuery);
     virtual void processChosenInlineResult(const struct choosenInlineResult& choosenInlineResult);
     virtual void processCallbackQuery(const struct callbackQuery& callbackQuery);
-    void sendMessage(const std::string& id,
+    
+    template<typename T>
+    void sendMessage(const T& id,
                      const std::string& text,
                      ParseMode parse_mode = static_cast<ParseMode>(1),
                      bool disable_web_page_preview = true,
