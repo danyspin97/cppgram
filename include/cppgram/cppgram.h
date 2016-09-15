@@ -6,7 +6,5 @@
 #include "inlinekeyboard.h"
 #include "structures.h"
 #include "exceptions.h"
-#include "logger.h"
-#include "osutil.h"
 
 #endif //CPPGRAM_CPPGRAM_H
