@@ -11,7 +11,7 @@ class InlineKeyboard
     public:
     InlineKeyboard();
     private:
-    CoreBot* Bot;
+    //CoreBot* Bot;
 
 };
 

@@ -10,8 +10,8 @@ using std::to_string;
 
 CoreBot::CoreBot(const string &api_token, const string& botusern,bool background,
                 const string &filename,int timeout, int message_limit)
-        : Logger(filename), bot_token(api_token), lastUpdateId(0),lastChatId(0),
-          timeout(timeout), msg_limit(message_limit), bot_usern(botusern)
+        : Logger(filename), bot_token(api_token), bot_usern(botusern),lastUpdateId(0),lastChatId(0),
+          timeout(timeout), msg_limit(message_limit)
 {
     if(background) {
         int bg=osutil::backgroundProcess();
