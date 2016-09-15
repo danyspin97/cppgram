@@ -4,8 +4,10 @@
 #include "cppgram/cppgram.h"
 
 using namespace cppgram;
-CoreBot::CoreBot(const std::string &api_token, bool background,
-                const std::string &filename,int timeout, int message_limit)
+using namespace std;
+
+CoreBot::CoreBot(const string &api_token, bool background,
+                const string filename,int timeout, int message_limit)
         : Logger(filename), bot_token(api_token), lastUpdateId(0),lastChatId(0),
           timeout(timeout), msg_limit(message_limit)
 {
@@ -27,32 +29,24 @@ void CoreBot::run()
     getUpdates();
 }
 
-void cppgram::CoreBot::sendMessage(const std::string& text, ParseMode pmode, const std::string& customChatId, bool disable_web_page_preview, bool disable_notification, uid_32 reply_to_message_id, void* reply_markup)
+const message& cppgram::CoreBot::sendMessage(const string& id, const std::string& text, ParseMode parse_mode, bool disable_web_page_preview, bool disable_notification, uid_32 reply_to_message_id, void* reply_markup)
 {
     std::string parseMode, choosenChatId=std::to_string(lastChatId);
-    if(pmode == ParseMode::HTML)
-        parseMode="HTML";
-    else if(pmode == ParseMode::Markdown)
-        parseMode="Markdown";
+    if(parse_mode == ParseMode::HTML)
+        parseMode = "HTML";
+    else if(parse_mode == ParseMode::Markdown)
+        parseMode = "Markdown";
+    else
+        parseMode = "";
     
-    if(customChatId != SENDMSG_DEFAULT_CHATID)
-        choosenChatId=customChatId;
+    auto response = cpr::Get(cpr::Url{"https://api.telegram.org/bot265978885:AAGKXzQ3uOPl71eKc1XtBc_PxexlF9mBV_g/sendMessage"},
+                  cpr::Parameters{{"chat_id", id}, {"text", text},
+                                  {"parse_mode", parse_mode},
+                                  {"disable_web_page_preview", disable_web_page_preview},
+                                  {"disable_notification", disable_notification},
+                                  {"reply_to_message_id", reply_to_message_id}});
+                                  //{"reply_markup", reply_markup}});*/
 
-    std::string fullURL = std::string(TELEGRAMAPI)+bot_token
-            +"/sendMessage?text="
-            +text+"&chat_id="
-            +choosenChatId
-            +"&parse_mode="
-            +parseMode
-            +"&disable_notification="
-            +std::to_string(disable_notification)
-            +"&disable_web_page_preview="
-            +std::to_string(disable_web_page_preview);
-
-    if(reply_to_message_id != 0 && reply_to_message_id > 0)
-        fullURL+"&reply_to_message_id="+std::to_string(reply_to_message_id);
-
-    const cpr::Response response = cpr::Get(cpr::Url{fullURL});
     if(response.status_code != 200) {
         log_warn("(sendMessage) HTTP Response status code is not 200: "+std::to_string(response.status_code));
     } else {
@@ -65,14 +59,6 @@ void cppgram::CoreBot::sendMessage(const std::string& text, ParseMode pmode, con
             throw new JsonParseError;
         }
 
-        if(!valroot["ok"].isBool() || valroot["ok"].isNull())
-            log_warn("Maybe a malformed JSON document...");
-
-        if (!valroot["ok"].asBool()) {
-            log_warn("(sendMessage) \"ok\" is not true!");
-            throw new NotOkTelegramAPI;
-        }
-        
         log_event("Sent message to chatId/@usernchan: "+choosenChatId+", text: "+text+", parse mode: "+parseMode);
     }
 }

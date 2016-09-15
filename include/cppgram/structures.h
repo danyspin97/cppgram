@@ -29,8 +29,7 @@ typedef long long id_64;
 typedef unsigned long date_unix;
 
 //message chat type
-enum ChatType : short
-{
+enum ChatType : short {
     Private = 0,
     Group = 1,
     Supergroup = 2,
@@ -38,23 +37,21 @@ enum ChatType : short
 };
 
 //message markup parser
-enum ParseMode : short
-{
-    HTML = 0,
-    Markdown = 1
+enum ParseMode : short {
+    None = 0,
+    HTML = 1,
+    Markdown = 2
 };
 
 //inline button type
-enum InlineKeyboardButtonType : short
-{
+enum InlineKeyboardButtonType : short {
     URL = 0,
     CallbackData = 1,
     SwitchInlineQuery = 2
 };
 
 //identify chat
-struct chat
-{
+struct chat {
     id_64 id;
     ChatType type;
     std::string title, username,
@@ -63,16 +60,14 @@ struct chat
 };
 
 //identify user
-struct user
-{
+struct user {
     uid_32 id;
     std::string first_name, last_name,
             username;
     user(Json::Value& val);
 };
 
-struct messageEntity
-{
+struct messageEntity {
     // TODO
     //messageEntity_type type;
     int offset,
@@ -82,8 +77,7 @@ struct messageEntity
 };
 
 //get message data
-struct message
-{
+struct message {
     //TODO
     uid_32 message_id;
     const struct user* from;
@@ -102,22 +96,19 @@ struct message
     ~message();
 };
 
-struct inlineKeyboardButton
-{
+struct inlineKeyboardButton {
     std::string text, data;
     enum InlineKeyboardButtonType button_type;
 };
 
 //get location data
-struct location
-{
+struct location {
     float longitude,
           latidute;
 };
 
 //get inline query data
-struct inlineQuery
-{
+struct inlineQuery {
     std::string id, query, offset;
     const struct user* from;
     const struct location* location;
@@ -127,8 +118,7 @@ struct inlineQuery
 };
 
 //get the choosen result from inline query 
-struct choosenInlineResult
-{
+struct choosenInlineResult {
     std::string result_id;
     const struct user* from;
     const struct location* location;
@@ -140,8 +130,7 @@ struct choosenInlineResult
 };
 
 //get callback query data
-struct callbackQuery
-{
+struct callbackQuery {
     std::string id;
     const struct user* from;
     const struct message* message;
@@ -150,6 +139,10 @@ struct callbackQuery
 
     callbackQuery(Json::Value &val);
     ~callbackQuery();
+};
+
+struct inlineKeyboard {
+
 };
     
 }

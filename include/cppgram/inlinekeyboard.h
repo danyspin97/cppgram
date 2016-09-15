@@ -8,8 +8,11 @@ namespace cppgram
 
 class InlineKeyboard
 {
+    public:
+    InlineKeyboard();
+    private:
+    CoreBot* Bot;
 
-    
 };
 
 }

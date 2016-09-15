@@ -1,7 +1,5 @@
 #include <json/json.h>
-#include "cppgram/structures.h"
-
-//TODO
+#include "cppgram/cppgram.h"
 
 using namespace cppgram;
 
@@ -10,18 +8,16 @@ chat::chat(Json::Value &val) //ITS DONE!!
 {
     id = val["id"].asInt64();
 
-    if (!val["type"].isNull()) {
-       std::string typechat = val["type"].asString();
-       if(typechat == "private")
-           type = static_cast<ChatType>(0);
-       else if(typechat == "group")
-           type = static_cast<ChatType>(1);
-       else if(typechat == "supergroup")
-           type = static_cast<ChatType>(2);
-       else if(typechat == "channel")
-           type = static_cast<ChatType>(3);
-    }
-    
+    std::string typechat = val["type"].asString();
+    if(typechat == "private")
+       type = ChatType::Private;
+    else if(typechat == "group")
+       type = ChatType::Group;
+    else if(typechat == "supergroup")
+       type = ChatType::Supergroup;
+    else if(typechat == "channel")
+       type = ChatType::Channel;
+
     if (!val["title"].isNull())
         title = val["title"].asString();
 
@@ -37,10 +33,6 @@ chat::chat(Json::Value &val) //ITS DONE!!
 
 message::message(Json::Value &val) //TO FINISH
 {
-    forward_from = nullptr;
-    forward_from_chat = nullptr;
-    reply_to_message = nullptr;
-    
     message_id = val["message_id"].asUInt();
     from = new struct user(val["from"]);
     date = val["date"].asUInt();
@@ -110,18 +102,16 @@ choosenInlineResult::choosenInlineResult(Json::Value &val) // TO FINISH (just lo
 
 /* destructors */
 
-//TODO
-
 message::~message()
 {
     delete from;
     delete chat;
     
-    if(forward_from == NULL) 
+    if(forward_from == NULL)
         delete forward_from;
-    if(forward_from_chat == NULL) 
+    if(forward_from_chat == NULL)
         delete forward_from_chat;
-    if(reply_to_message == NULL) 
+    if(reply_to_message == NULL)
         delete reply_to_message;
 }
 
