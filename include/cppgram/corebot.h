@@ -24,6 +24,7 @@ class CoreBot : public Logger
 {
 public:
     CoreBot(const std::string &api_token,
+            const std::string &botusern,
             bool background = false,
             const std::string &filename="tgbot.log",
             int message_limit = 100,
@@ -55,7 +56,7 @@ protected:
     //void editMessage
     //void apiRequest(std::string& apiMethod, cpr::Parameters parameters) const;
 private:
-    const std::string bot_token;
+    const std::string bot_token, bot_usern;
     uid_32 lastUpdateId, lastChatId;
     int timeout, msg_limit;
     void getUpdates();

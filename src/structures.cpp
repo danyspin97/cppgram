@@ -31,7 +31,7 @@ chat::chat(Json::Value &val) //ITS DONE!!
         last_name = val["last_name"].asString();
 }
 
-message::message(Json::Value &val) //TO FINISH
+message::message(Json::Value &val, const std::string& botusern) //TO FINISH
 {
     message_id = val["message_id"].asUInt();
     from = new struct user(val["from"]);
@@ -45,13 +45,18 @@ message::message(Json::Value &val) //TO FINISH
     }
 
     if (!val["reply_to_message"].isNull() && val["reply_to_message"].isObject())
-        reply_to_message = new struct message(val["reply_to_message"]);
+        reply_to_message = new struct message(val["reply_to_message"], botusern);
 
     if (!val["edit_date"].isNull())
         edit_date = val["edit_date"].asUInt();
 
-    if (!val["text"].isNull())
+    if (!val["text"].isNull()) {
+        std::size_t pos;
         text = val["text"].asString();
+        if((pos=text.find(botusern)) != std::string::npos) {
+            text.replace(pos,botusern.length(),"");
+        }
+    }
 
     if (!val["entities"].isNull() && val["entities"].isArray()) {
         //new_message.entities = parseMessageEntities(val["entites"]);
@@ -83,11 +88,11 @@ inlineQuery::inlineQuery(Json::Value &val) //TO FINISH (just location)
     offset = val["offset"].asString();
 }
 
-callbackQuery::callbackQuery(Json::Value &val) //SEEMS FINISHED (still to test)
+callbackQuery::callbackQuery(Json::Value &val, const std::string& botusern) //SEEMS FINISHED (still to test)
 {
     id = val["id"].asString();
     from = new struct user(val["from"]);
-    message = new struct message(val["message"]);
+    message = new struct message(val["message"],botusern);
     inline_message_id = val ["inline_message_id"].asUInt();
     data = val["data"].asString();
 }

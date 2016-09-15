@@ -8,10 +8,10 @@ using namespace cppgram;
 using std::string;
 using std::to_string;
 
-CoreBot::CoreBot(const string &api_token, bool background,
+CoreBot::CoreBot(const string &api_token, const string& botusern,bool background,
                 const string &filename,int timeout, int message_limit)
         : Logger(filename), bot_token(api_token), lastUpdateId(0),lastChatId(0),
-          timeout(timeout), msg_limit(message_limit)
+          timeout(timeout), msg_limit(message_limit), bot_usern(botusern)
 {
     if(background) {
         int bg=osutil::backgroundProcess();
@@ -108,12 +108,12 @@ void CoreBot::getUpdates()
 void CoreBot::processUpdate(Json::Value &val)
 {
     if (!val["message"].isNull()) {
-        struct message m = message(val["message"]);
+        struct message m = message(val["message"], bot_usern);
         lastChatId = val["message"]["chat"]["id"].asInt64();
         log_event("Got a message: "+m.text+", from: "+m.from->username+", message ID: "+to_string(m.message_id));
         processMessage(m);
     } else if (!val["edited_message"].isNull()) {
-        struct message editedMessage = message(val["edited_message"]);
+        struct message editedMessage = message(val["edited_message"], bot_usern);
         lastChatId = val["edited_message"]["chat"]["id"].asInt64();
         log_event("Got an edited message: "+editedMessage.text+", from: "+editedMessage.from->username+", message ID: "+to_string(editedMessage.message_id));
         processEditedMessage(editedMessage);
@@ -126,7 +126,7 @@ void CoreBot::processUpdate(Json::Value &val)
         log_event("Got a choosen inline result: "+chooseninlres.result_id+", from: "+chooseninlres.from->username+", query: "+chooseninlres.query+ ", query msg ID: "+to_string(chooseninlres.inline_message_id));
         processChosenInlineResult(chooseninlres);
     } else if (!val["callback_query"].isNull()) {
-        struct callbackQuery cbquery = callbackQuery(val["callback_query"]);
+        struct callbackQuery cbquery = callbackQuery(val["callback_query"], bot_usern);
         log_event("Got a callback query: "+cbquery.data+", from: "+cbquery.from->username+", cbquery ID: "+cbquery.id);
         processCallbackQuery(cbquery);
     }

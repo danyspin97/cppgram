@@ -92,7 +92,7 @@ struct message {
     //struct messageEntity (*entities)[];
     //struct attachment* message_data;
                                                         
-    message(Json::Value &val);
+    message(Json::Value &val, const std::string& botusern);
     ~message();
 };
 
@@ -137,7 +137,7 @@ struct callbackQuery {
     uid_32 inline_message_id;
     std::string data;
 
-    callbackQuery(Json::Value &val);
+    callbackQuery(Json::Value &val, const std::string &botusern);
     ~callbackQuery();
 };
 
