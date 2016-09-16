@@ -15,8 +15,7 @@ uid_32 cppgram::CoreBot::sendMessage(const T& id, const string& text,  const Par
                                      const bool& disable_web_page_preview, const bool& disable_notification, 
                                      const uid_32& reply_to_message_id) const
 {
-    string fid, parseMode;
-    cpr::Parameters httpGETparams;
+    string fid, parseMode="";
     
     if(typeid(id) != typeid(fid)) 
         fid=to_string(id);
@@ -28,20 +27,12 @@ uid_32 cppgram::CoreBot::sendMessage(const T& id, const string& text,  const Par
     else if(parse_mode == ParseMode::Markdown)
         parseMode = "Markdown";
     
-    if(parse_mode == ParseMode::None) { 
-        httpGETparams = {{"chat_id", to_string(chatId)}, {"text", text},
-                                    {"disable_web_page_preview", to_string(disable_web_page_preview)},
-                                    {"disable_notification", to_string(disable_notification)},
-                                    {"reply_to_message_id", to_string(reply_to_message_id)}};
-    } else {
-        httpGETparams = {{"chat_id", to_string(chatId)}, {"text", text},
-                                    {"parse_mode",parseMode},
-                                    {"disable_web_page_preview", to_string(disable_web_page_preview)},
-                                    {"disable_notification", to_string(disable_notification)},
-                                    {"reply_to_message_id", to_string(reply_to_message_id)}};
-    }
-    
-    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI+bot_token+"/sendMessage"},httpGETparams);
+    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI+bot_token+"/sendMessage"},
+                                            cpr::Parameters{{"chat_id",to_string(chatId)}, {"text", text},
+                                  {"parse_mode", parseMode},
+                                  {"disable_web_page_preview", to_string(disable_web_page_preview)},
+                                  {"disable_notification", to_string(disable_notification)},
+                                  {"reply_to_message_id", to_string(reply_to_message_id)}});
 
     Json::Value valroot;
     
@@ -56,8 +47,7 @@ uid_32 cppgram::CoreBot::sendMessage(const T& id, const std::string& text,const 
                                      const ParseMode& parse_mode,const bool& disable_web_page_preview,
                                      const bool& disable_notification,const uid_32& reply_to_message_id) const
 {
-    cpr::Parameters httpGETparams;
-    string parseMode,fid;
+    string parseMode="",fid;
     
     if(typeid(id) == typeid(fid)) 
         fid=id;
@@ -69,23 +59,13 @@ uid_32 cppgram::CoreBot::sendMessage(const T& id, const std::string& text,const 
     else if(parse_mode == ParseMode::Markdown)
         parseMode = "Markdown";
     
-    if(parse_mode != ParseMode::None) {
-        httpGETparams = {{"chat_id", fid}, {"text", text},
+    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI+bot_token+"/sendMessage"},
+                                            cpr::Parameters{{"chat_id",to_string(chatId)}, {"text", text},
                                   {"parse_mode", parseMode},
                                   {"disable_web_page_preview", to_string(disable_web_page_preview)},
                                   {"disable_notification", to_string(disable_notification)},
                                   {"reply_to_message_id", to_string(reply_to_message_id)},
-                                  {"reply_markup", writer->write(reply_markup)}};
-    } else {
-        httpGETparams = {{"chat_id", to_string(chatId)}, {"text", text},
-                                  {"disable_web_page_preview", to_string(disable_web_page_preview)},
-                                  {"disable_notification", to_string(disable_notification)},
-                                  {"reply_to_message_id", to_string(reply_to_message_id)},
-                                  {"reply_markup", writer->write(reply_markup)}};
-    }
-    
-    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI+bot_token+"/sendMessage"},httpGETparams);
-
+                                  {"reply_markup", writer->write(reply_markup)}});
     Json::Value valroot;
 
     if (!checkMethodError(response, valroot))
