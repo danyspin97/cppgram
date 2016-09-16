@@ -90,7 +90,7 @@ uid_32 cppgram::CoreBot::sendMessage(const string& text, const Json::Value& repl
     Json::Value valroot;
 
     if (!checkMethodError(response, valroot))
-        return 0;
+        return 1;
 
     return valroot["result"]["message_id"].asUInt();
 }
@@ -124,7 +124,7 @@ uid_32 cppgram::CoreBot::sendMessage(const string& text, const ParseMode& parse_
     Json::Value valroot;
 
     if (!checkMethodError(response, valroot))
-        return 0;
+        return 1;
 
     return valroot["result"]["message_id"].asUInt();
 }
