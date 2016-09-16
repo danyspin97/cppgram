@@ -7,8 +7,9 @@
 #include "inlinekeyboard.h"
 #include "structures.h"
 #include "exceptions.h"
+#include "osutil.h"
 
 //template functions body definitions
-#include "corebot.tpp"
+//#include "corebot.tpp"
 
 #endif //CPPGRAM_CPPGRAM_H

@@ -10,6 +10,7 @@
 namespace Json
 {
 class Value;
+class Reader;
 }
 
 namespace cppgram
@@ -32,6 +33,7 @@ public:
             int timeout = 60
             );
     void run();
+    Json::Reader* reader;
 protected:
     //basic bot core functions
     virtual void processMessage(const struct message& message);
@@ -40,15 +42,15 @@ protected:
     virtual void processChosenInlineResult(const struct choosenInlineResult& choosenInlineResult);
     virtual void processCallbackQuery(const struct callbackQuery& callbackQuery);
     
-    template<typename T>
-    void sendMessage(const T& id,
+    /*template<typename T>
+    uid_32 sendMessage(const T& id,
                      const std::string& text,
                      ParseMode parse_mode = static_cast<ParseMode>(1),
                      bool disable_web_page_preview = true,
                      bool disable_notification = false,
                      uid_32 reply_to_message_id = 0,
-                     void* reply_markup = nullptr);
-    void sendMessage(const std::string& text,
+                     void* reply_markup = nullptr);*/
+    uid_32 sendMessage(const std::string& text,
                      ParseMode parse_mode = static_cast<ParseMode>(1),
                      bool disable_web_page_preview = true,
                      bool disable_notification = false,
@@ -58,8 +60,8 @@ protected:
     //void apiRequest(std::string& apiMethod, cpr::Parameters parameters) const;
 private:
     const std::string bot_token, bot_usern;
-    uid_32 lastUpdateId;
-    id_64 lastChatId;
+    uid_32 updateId;
+    std::string chatId;
     int timeout, msg_limit;
     void getUpdates();
     void processUpdate(Json::Value &val);
