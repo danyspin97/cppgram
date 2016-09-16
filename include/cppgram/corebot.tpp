@@ -11,7 +11,9 @@ using std::string;
 using std::to_string;
 
 template<typename T>
-uid_32 cppgram::CoreBot::sendMessage(const T& id, const string& text,  const ParseMode& parse_mode, const bool& disable_web_page_preview, const bool& disable_notification, const uid_32& reply_to_message_id, const void* reply_markup) const
+uid_32 cppgram::CoreBot::sendMessage(const T& id, const string& text,  const ParseMode& parse_mode, 
+                                     const bool& disable_web_page_preview, const bool& disable_notification, 
+                                     const uid_32& reply_to_message_id) const
 {
     string fid, parseMode;
     cpr::Parameters httpGETparams;
@@ -27,12 +29,12 @@ uid_32 cppgram::CoreBot::sendMessage(const T& id, const string& text,  const Par
         parseMode = "Markdown";
     
     if(parse_mode == ParseMode::None) { 
-        httpGETparams = {{"chat_id", chatId}, {"text", text},
+        httpGETparams = {{"chat_id", to_string(chatId)}, {"text", text},
                                     {"disable_web_page_preview", to_string(disable_web_page_preview)},
                                     {"disable_notification", to_string(disable_notification)},
                                     {"reply_to_message_id", to_string(reply_to_message_id)}};
     } else {
-        httpGETparams = {{"chat_id", chatId}, {"text", text},
+        httpGETparams = {{"chat_id", to_string(chatId)}, {"text", text},
                                     {"parse_mode",parseMode},
                                     {"disable_web_page_preview", to_string(disable_web_page_preview)},
                                     {"disable_notification", to_string(disable_notification)},
@@ -40,26 +42,54 @@ uid_32 cppgram::CoreBot::sendMessage(const T& id, const string& text,  const Par
     }
     
     const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI+bot_token+"/sendMessage"},httpGETparams);
-                                  //{"reply_markup", reply_markup}});*/
+
+    Json::Value valroot;
+    
+    if (!checkMethodError(response, valroot))
+        return 0;
+    
+    return valroot["result"]["message_id"].asUInt();
+}
+
+template<typename T>
+uid_32 cppgram::CoreBot::sendMessage(const T& id, const std::string& text,const Json::Value& reply_markup,
+                                     const ParseMode& parse_mode,const bool& disable_web_page_preview,
+                                     const bool& disable_notification,const uid_32& reply_to_message_id) const
+{
+    cpr::Parameters httpGETparams;
+    string parseMode,fid;
+    
+    if(typeid(id) == typeid(fid)) 
+        fid=id;
+    else
+        fid=to_string(id);
+    
+    if(parse_mode == ParseMode::HTML)
+        parseMode = "HTML";
+    else if(parse_mode == ParseMode::Markdown)
+        parseMode = "Markdown";
+    
+    if(parse_mode != ParseMode::None) {
+        httpGETparams = {{"chat_id", fid}, {"text", text},
+                                  {"parse_mode", parseMode},
+                                  {"disable_web_page_preview", to_string(disable_web_page_preview)},
+                                  {"disable_notification", to_string(disable_notification)},
+                                  {"reply_to_message_id", to_string(reply_to_message_id)},
+                                  {"reply_markup", writer->write(reply_markup)}};
+    } else {
+        httpGETparams = {{"chat_id", to_string(chatId)}, {"text", text},
+                                  {"disable_web_page_preview", to_string(disable_web_page_preview)},
+                                  {"disable_notification", to_string(disable_notification)},
+                                  {"reply_to_message_id", to_string(reply_to_message_id)},
+                                  {"reply_markup", writer->write(reply_markup)}};
+    }
+    
+    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI+bot_token+"/sendMessage"},httpGETparams);
 
     Json::Value valroot;
 
-    // If there was an error in the connection print it
-    if (response.error.code != cpr::ErrorCode::OK) {
-        log_error("Error:" + response.error.message);
-        return 1;
-    }
-
-    if(!reader->parse(response.text,valroot)) {
-        log_error("(sendMessage) Error while parsing JSON document!");
-        return 1;
-    }
-
-    // Print method error
-    if(response.status_code != 200) {
-        log_error("Error code: " + valroot["error_code"].asString() + "/n Description: " + valroot["description"].asString());
-        return 1;
-    }
+    if (!checkMethodError(response, valroot))
+        return 0;
 
     return valroot["result"]["message_id"].asUInt();
 }
