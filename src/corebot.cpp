@@ -2,7 +2,7 @@
 #include <json/json.h>
 
 #include "cppgram/cppgram.h"
-#include "cppgram/osutil.h"
+#include "cppgram/utils.h"
 
 using namespace cppgram;
 using std::string;
