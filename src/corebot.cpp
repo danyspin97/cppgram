@@ -11,6 +11,9 @@ CoreBot::CoreBot(const string &api_token, const string& botusern,const bool &bac
         : Logger(filename), bot_token(api_token), bot_usern(botusern),updateId(0),chatId(0),
           timeout(timeout), msg_limit(message_limit), reader(new Json::Reader)
 {
+    // Initialize Json::Reader and Json::FastWriter
+    reader = new Json::Reader;
+    writer = new Json::FastWriter;
     if(background) {
         int bg=osutil::backgroundProcess();
         if (bg == OSUTIL_NEWPROC_NOTSUPPORTED) {
@@ -34,7 +37,29 @@ void CoreBot::run()
     getUpdates();
 }
 
-uid_32 cppgram::CoreBot::sendMessage(const string& text,const ParseMode& parse_mode, const bool &disable_web_page_preview, const bool &disable_notification, const uid_32& reply_to_message_id, const void* reply_markup) const
+bool CoreBot::checkMethodError(const cpr::Response& response, Json::Value& val)
+{
+    // If there was an error in the connection print it
+    if (response.error.code != cpr::ErrorCode::OK) {
+        log_error("Error:" + response.error.message);
+        return false;
+    }
+
+    if(!reader->parse(response.text, val)) {
+        log_error("(sendMessage) Error while parsing JSON document!");
+        throw new JsonParseError;
+    }
+
+    // Print method error
+    if(response.status_code != 200) {
+        log_error("Error code: " + val["error_code"].asString() + "/n Description: " + val["description"].asString());
+        return false;
+    }
+
+    return true;
+}
+
+uid_32 cppgram::CoreBot::sendMessage(const string& text, const Json::Value& reply_markup, ParseMode parse_mode, bool disable_web_page_preview, bool disable_notification, uid_32 reply_to_message_id)
 {
     string parseMode;
     cpr::Parameters httpGETparams;
@@ -43,40 +68,42 @@ uid_32 cppgram::CoreBot::sendMessage(const string& text,const ParseMode& parse_m
         parseMode = "HTML";
     else if(parse_mode == ParseMode::Markdown)
         parseMode = "Markdown";
-    
-    if(parse_mode == ParseMode::None) { 
-        httpGETparams = {{"chat_id", to_string(chatId)}, {"text", text},
-                                    {"disable_web_page_preview", to_string(disable_web_page_preview)},
-                                    {"disable_notification", to_string(disable_notification)},
-                                    {"reply_to_message_id", to_string(reply_to_message_id)}};
-    } else {
-        httpGETparams = {{"chat_id", to_string(chatId)}, {"text", text},
-                                    {"parse_mode",parseMode},
-                                    {"disable_web_page_preview", to_string(disable_web_page_preview)},
-                                    {"disable_notification", to_string(disable_notification)},
-                                    {"reply_to_message_id", to_string(reply_to_message_id)}};
-    }
-    
-    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI+bot_token+"/sendMessage"},httpGETparams);
+
+    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI+bot_token+"/sendMessage"},
+                  cpr::Parameters{{"chat_id", chatId}, {"text", text},
+                                  {"parse_mode", parseMode},
+                                  {"disable_web_page_preview", to_string(disable_web_page_preview)},
+                                  {"disable_notification", to_string(disable_notification)},
+                                  {"reply_to_message_id", to_string(reply_to_message_id)},
+                                  {"reply_markup", writer->write(reply_markup)}});
 
     Json::Value valroot;
 
-    // If there was an error in the connection print it
-    if (response.error.code != cpr::ErrorCode::OK) {
-        log_error("Error:" + response.error.message);
-        return 1;
-    }
+    if (!checkMethodError(response, valroot))
+        return 0;
 
-    if(!reader->parse(response.text,valroot)) {
-        log_error("(sendMessage) Error while parsing JSON document!");
-        return 1;
-    }
+    return valroot["result"]["message_id"].asUInt();
+}
 
-    // Print method error
-    if(response.status_code != 200) {
-        log_error("Error code: " + valroot["error_code"].asString() + "/n Description: " + valroot["description"].asString());
-        return 1;
-    }
+uid_32 cppgram::CoreBot::sendMessage(const string& text, ParseMode parse_mode, bool disable_web_page_preview, bool disable_notification, uid_32 reply_to_message_id)
+{
+    string parseMode = "";
+    if(parse_mode == ParseMode::HTML)
+        parseMode = "HTML";
+    else if(parse_mode == ParseMode::Markdown)
+        parseMode = "Markdown";
+
+    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI+bot_token+"/sendMessage"},
+                  cpr::Parameters{{"chat_id", chatId}, {"text", text},
+                                  {"parse_mode", parseMode},
+                                  {"disable_web_page_preview", to_string(disable_web_page_preview)},
+                                  {"disable_notification", to_string(disable_notification)},
+                                  {"reply_to_message_id", to_string(reply_to_message_id)}});
+
+    Json::Value valroot;
+
+    if (!checkMethodError(response, valroot))
+        return 0;
 
     return valroot["result"]["message_id"].asUInt();
 }
@@ -90,23 +117,15 @@ void CoreBot::getUpdates()
                                                  {"limit", to_string(msg_limit)},
                                                  {"offset", to_string(updateId + 1)}});
          Json::Value valroot;
+         if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
 
-         if (!reader->parse(response.text, valroot)) {
-             throw new JsonParseError;
-         }
+             for(Json::Value val: valroot["result"]) {
+                 processUpdate(val);
+                 updateId = val["update_id"].asLargestUInt();
 
-         // Print method error
-         if(response.status_code != 200) {
-             log_error("Error code: " + valroot["error_code"].asString() + "/n Description: " + valroot["description"].asString());
-         }
-         
-         if(valroot["ok"].asBool() && valroot["result"].empty()) 
-             continue;
-         
-         for(Json::Value& val: valroot["result"]) {
-             processUpdate(val);
-             updateId = val["update_id"].asUInt();
-             log_event("Last update ID: "+to_string(updateId)+", last chat ID: "+to_string(chatId));
+
+                 log_event("Last update ID: "+to_string(updateId)+", last chat ID: "+chatId);
+             }
          }
      }
 }
