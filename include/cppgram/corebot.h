@@ -39,7 +39,6 @@ public:
             );
     ~CoreBot();
     void run();
-    Json::Reader* reader;
 protected:
     //basic bot core functions
     virtual void processMessage(const struct message& message);
@@ -73,11 +72,10 @@ protected:
 
     // Check if the called api method had any error, including connection(curl) error or api error returned by telegram
     bool checkMethodError(const cpr::Response& response, Json::Value& val);
->>>>>>> dev
 private:
     const std::string bot_token, bot_usern;
     uid_32 updateId;
-    id_64 chatId;
+    std::string chatId;
     const uid_32 timeout, msg_limit;
     void getUpdates();
     void processUpdate(Json::Value &val);

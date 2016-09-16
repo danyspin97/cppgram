@@ -27,12 +27,12 @@ uid_32 cppgram::CoreBot::sendMessage(const T& id, const string& text,  const Par
         parseMode = "Markdown";
     
     if(parse_mode == ParseMode::None) { 
-        httpGETparams = {{"chat_id", to_string(chatId)}, {"text", text},
+        httpGETparams = {{"chat_id", chatId}, {"text", text},
                                     {"disable_web_page_preview", to_string(disable_web_page_preview)},
                                     {"disable_notification", to_string(disable_notification)},
                                     {"reply_to_message_id", to_string(reply_to_message_id)}};
     } else {
-        httpGETparams = {{"chat_id", to_string(chatId)}, {"text", text},
+        httpGETparams = {{"chat_id", chatId}, {"text", text},
                                     {"parse_mode",parseMode},
                                     {"disable_web_page_preview", to_string(disable_web_page_preview)},
                                     {"disable_notification", to_string(disable_notification)},

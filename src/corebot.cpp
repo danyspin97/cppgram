@@ -8,8 +8,8 @@ using std::to_string;
 
 CoreBot::CoreBot(const string &api_token, const string& botusern,const bool &background,
                  const string &filename,const uid_32 &timeout, const uid_32 &message_limit)
-        : Logger(filename), bot_token(api_token), bot_usern(botusern),updateId(0),chatId(0),
-          timeout(timeout), msg_limit(message_limit), reader(new Json::Reader)
+        : Logger(filename), bot_token(api_token), bot_usern(botusern),updateId(0),chatId(""),
+          timeout(timeout), msg_limit(message_limit)
 {
     // Initialize Json::Reader and Json::FastWriter
     reader = new Json::Reader;
@@ -30,6 +30,7 @@ CoreBot::CoreBot(const string &api_token, const string& botusern,const bool &bac
 CoreBot::~CoreBot()
 {
     delete reader;
+    delete writer;
 }
 
 void CoreBot::run()
