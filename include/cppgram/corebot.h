@@ -75,7 +75,7 @@ protected:
 private:
     const std::string bot_token, bot_usern;
     uid_32 updateId;
-    std::string chatId;
+    std::string chatId, inlineQueryId, callbackQueryId;
     const uid_32 timeout, msg_limit;
     void getUpdates();
     void processUpdate(Json::Value &val);
