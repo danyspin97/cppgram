@@ -52,13 +52,10 @@ message::message(Json::Value &val, const std::string& botusern) //TO FINISH
 
     if (!val["text"].isNull()) {
         std::size_t pos;
-        std::string fulltxt = val["text"].asString();
-        if((pos=fulltxt.find(botusern)) != std::string::npos) {
-            fulltxt.replace(pos,botusern.length(),"");
+        text = val["text"].asString();
+        if((pos=text.find(botusern)) != std::string::npos) {
+            text.replace(pos,botusern.length(),"");
         }
-        
-        std::vector<std::string> vecstrs = util::split(fulltxt,' ');
-        text = new struct text(vecstrs,fulltxt);
     }
 
     if (!val["entities"].isNull() && val["entities"].isArray()) {
@@ -84,7 +81,7 @@ inlineQuery::inlineQuery(Json::Value &val) //TO FINISH (just location)
     id = val["id"].asString();
     from = new struct user(val["from"]);
     if (!val["location"].isNull()) {
-        // TODO parseLocation
+        // TODO parseLocationfulltxt
         //new_inlineQuery.location = parseLocation(val["location"]);
     }
     query = val["query"].asString();
@@ -108,29 +105,6 @@ choosenInlineResult::choosenInlineResult(Json::Value &val) // TO FINISH (just lo
     query = val["query"].asString();
 }
 
-text::text(std::vector<std::string>& vecstrs, const std::string& full)
-{
-    std::size_t vecsz = vecstrs.size();
-    
-    this->full = full;
-    
-    if(vecsz == 1) {
-        command = vecstrs.at(0);
-        argv = {};
-        argc = vecsz;
-    }
-    
-    if(vecsz > 1) {
-        command = vecstrs.at(0);
-        vecstrs.erase(vecstrs.begin());
-        for(const std::string& singlearg : vecstrs) {
-            argv.push_back(singlearg);
-        }
-        
-        argc=argv.size()+1;
-    }
-}
-
 /* destructors */
 
 message::~message()
@@ -144,8 +118,6 @@ message::~message()
         delete forward_from_chat;
     if(reply_to_message == NULL)
         delete reply_to_message;
-    if(text == NULL)
-        delete text;
 }
 
 inlineQuery::~inlineQuery()

@@ -84,7 +84,7 @@ struct message {
     date_unix forward_date;
     const struct message* reply_to_message;
     date_unix edit_date;
-    const struct text* text;
+    std::string text;
     //struct messageEntity (*entities)[];
     //struct attachment* message_data;
                                                         
@@ -139,14 +139,6 @@ struct callbackQuery {
 
 struct inlineKeyboard {
 
-};
-
-struct text {
-    std::string command,full;
-    std::vector<std::string> argv;
-    uid_32 argc;
-    
-    text(std::vector<std::string>& vecstrs, const std::string& full);
 };
     
 }
