@@ -84,7 +84,7 @@ struct message {
     date_unix forward_date;
     const struct message* reply_to_message;
     date_unix edit_date;
-    std::string text;
+    const struct text* text;
     //struct messageEntity (*entities)[];
     //struct attachment* message_data;
                                                         
@@ -145,6 +145,8 @@ struct text {
     std::string command,full;
     std::vector<std::string> argv;
     uid_32 argc;
+    
+    text(std::vector<std::string>& vecstrs, const std::string& full);
 };
     
 }
