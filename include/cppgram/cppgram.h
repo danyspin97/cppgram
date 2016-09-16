@@ -1,13 +1,14 @@
 #ifndef CPPGRAM_CPPGRAM_H
 #define CPPGRAM_CPPGRAM_H
 
+#include "emoji.h"
 #include "types.h"
 #include "logger.h"
 #include "corebot.h"
 #include "inlinekeyboard.h"
 #include "structures.h"
 #include "exceptions.h"
-#include "osutil.h"
+#include "utils.h"
 
 //template functions body definitions
 //#include "corebot.tpp"

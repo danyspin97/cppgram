@@ -3,7 +3,7 @@
 #include<stdlib.h>
 #endif
 
-#include "cppgram/osutil.h"
+#include "cppgram/utils.h"
 
 int cppgram::osutil::backgroundProcess()
 {

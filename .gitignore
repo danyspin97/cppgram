@@ -10,3 +10,5 @@ Makefile
 tgbot.log
 bot.cpp
 bot
+*.swp
+*.*.swp

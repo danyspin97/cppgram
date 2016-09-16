@@ -11,6 +11,8 @@
 #define CPPGRAM_STRUCTURES_H
 
 #include <string>
+#include <vector>
+
 #include "types.h"
 
 //forward Json::Value
@@ -137,6 +139,12 @@ struct callbackQuery {
 
 struct inlineKeyboard {
 
+};
+
+struct text {
+    std::string command,full;
+    std::vector<std::string> argv;
+    uid_32 argc;
 };
     
 }
