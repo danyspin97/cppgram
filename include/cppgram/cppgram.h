@@ -1,6 +1,7 @@
 #ifndef CPPGRAM_CPPGRAM_H
 #define CPPGRAM_CPPGRAM_H
 
+#include "emoji.h"
 #include "types.h"
 #include "logger.h"
 #include "corebot.h"
