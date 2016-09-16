@@ -145,7 +145,7 @@ struct text {
     std::string command,full;
     std::vector<std::string> argv;
     uid_32 argc;
-}
+};
     
 }
 
