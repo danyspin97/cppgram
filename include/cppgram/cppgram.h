@@ -11,6 +11,6 @@
 #include "utils.h"
 
 //template functions body definitions
-//#include "corebot.tpp"
+#include "corebot.tpp"
 
 #endif //CPPGRAM_CPPGRAM_H

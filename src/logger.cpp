@@ -12,11 +12,7 @@ void cppgram::Logger::log_error(const std::string& message) const
 {
     std::ofstream out;
     out.open(fname, std::ios::app | std::ios::out);
-    std::string fmtStr = "[ERROR][";
-    fmtStr.append(__getTime());
-    fmtStr.append("] ");
-    fmtStr.append(message);
-    fmtStr.append("\n");
+    const std::string fmtStr = "[ERROR]["+__getTime()+"] "+message+'\n';
     out.write(fmtStr.c_str(),fmtStr.length());
     out.close();
 }
@@ -25,11 +21,7 @@ void cppgram::Logger::log_event(const std::string& message) const
 {
     std::ofstream out;
     out.open(fname, std::ios::app | std::ios::out);
-    std::string fmtStr = "[EVENT][";
-    fmtStr.append(__getTime());
-    fmtStr.append("] ");
-    fmtStr.append(message);
-    fmtStr.append("\n");
+    const std::string fmtStr = "[EVENT]["+__getTime()+"] "+message+'\n';
     out.write(fmtStr.c_str(),fmtStr.length());
     out.close();
 }
@@ -38,11 +30,7 @@ void cppgram::Logger::log_warn(const std::string& message) const
 {
     std::ofstream out;
     out.open(fname, std::ios::app | std::ios::out);
-    std::string fmtStr = "[WARNING][";
-    fmtStr.append(__getTime());
-    fmtStr.append("] ");
-    fmtStr.append(message);
-    fmtStr.append("\n");
+    const std::string fmtStr = "[WARNING]["+__getTime()+"] "+message+'\n';
     out.write(fmtStr.c_str(),fmtStr.length());
     out.close();
 }
