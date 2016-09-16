@@ -51,7 +51,7 @@ bool CoreBot::checkMethodError(const cpr::Response& response, Json::Value& val) 
 
     // Print method error
     if(response.status_code != 200) {
-        log_error("Telegram Error: " + val["error_code"].asString() + "/n Description: " + val["description"].asString());
+        log_error("Telegram Error: " + val["error_code"].asString() + ", Description: " + val["description"].asString());
         return false;
     }
 
