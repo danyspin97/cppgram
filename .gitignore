@@ -12,3 +12,4 @@ bot.cpp
 bot
 *.swp
 *.*.swp
+cppgram.log
