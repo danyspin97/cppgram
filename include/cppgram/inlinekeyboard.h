@@ -3,6 +3,11 @@
 
 #include <string>
 
+namespace Json
+{
+class Value;
+}
+
 namespace cppgram
 {
 
@@ -13,14 +18,12 @@ class InlineKeyboard
 public:
     InlineKeyboard();
 
+protected:
     bool addButton(std::string& text, std::string& data, InlineKeyboardButtonType buttonType);
-
     bool addButton(const struct inlineKeyboardButton& newButton);
-
     bool addButton(const struct inlineKeyboardButton* newButtons[]);
 
     inline void changeRow();
-
     inline void clearKeyboard();
 
     void getKeyboard(std::string& reply_markup, bool clearKeyboard = true);

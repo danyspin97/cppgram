@@ -5,7 +5,6 @@
 #include "types.h"
 #include "logger.h"
 #include "corebot.h"
-#include "inlinekeyboard.h"
 #include "structures.h"
 #include "exceptions.h"
 #include "utils.h"
