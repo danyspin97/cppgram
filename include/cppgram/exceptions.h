@@ -30,6 +30,12 @@ public:
     virtual const char* what() const throw();
 };
 
+class InlineKeyboardNotValid : public  std::exception
+{
+    public:
+    virtual const char* what() const throw();
+};
+
 }
 
 #endif

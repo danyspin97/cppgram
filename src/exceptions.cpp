@@ -1,21 +1,28 @@
 #include "cppgram/exceptions.h"
 
-const char* cppgram::JsonParseError::what() const throw()
+using namespace cppgram;
+
+const char* JsonParseError::what() const throw()
 {
     return "Error while parsing JSON document";
 }
 
-const char* cppgram::NotOkTelegramAPI::what() const throw()
+const char* NotOkTelegramAPI::what() const throw()
 {
     return "Telegram API's JSON says NOT OK!";
 }
 
-const char* cppgram::BgProcessOSNotSupported::what() const throw()
+const char* BgProcessOSNotSupported::what() const throw()
 {
     return "Operating System's new background process implementation not supported";
 }
 
-const char* cppgram::BgProcessFailed::what() const throw()
+const char* BgProcessFailed::what() const throw()
 {
     return "Error while creating new process";
+}
+
+const char* InlineKeyboardNotValid::what() const throw()
+{
+    return "Inline keyboard contains data not valid";
 }

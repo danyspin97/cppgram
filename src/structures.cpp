@@ -31,9 +31,11 @@ chat::chat(Json::Value &val) //ITS DONE!!
         last_name = val["last_name"].asString();
 }
 
-message::message(Json::Value &val, const std::string& botusern) //TO FINISH
+message::message(Json::Value &val, const std::string& botusern) : message_id(val["message_id"].asUInt()),
+                                                                  from(new struct user(val["from"])),
+                                                                  date(val["date"].asUInt()),
+                                                                  chat(new struct chat(val["chat"]))
 {
-    //nullptr initialization
     message_id = val["message_id"].asUInt();
     from = new struct user(val["from"]);
     date = val["date"].asUInt();
@@ -66,10 +68,8 @@ message::message(Json::Value &val, const std::string& botusern) //TO FINISH
     }
 }
 
-user::user(Json::Value &val) //ITS DONE!
+user::user(Json::Value &val) : id(val["id"].asUInt()), first_name(val["first_name"].asString())
 {
-    id = val["id"].asUInt();
-    first_name = val["first_name"].asString();
     if (!val["last_name"].isNull())
         last_name = val["last_name"].asString();
 
@@ -77,34 +77,33 @@ user::user(Json::Value &val) //ITS DONE!
         username = val["username"].asString();
 }
 
-inlineQuery::inlineQuery(Json::Value &val) //TO FINISH (just location)
+inlineQuery::inlineQuery(Json::Value &val) : id(val["id"].asString()),query(val["query"].asString()), 
+                                             offset(val["offset"].asString()), from(new struct user(val["from"])),
+                                             location(nullptr)
 {
-    id = val["id"].asString();
-    from = new struct user(val["from"]);
     if (!val["location"].isNull()) {
         // TODO parseLocationfulltxt
         //new_inlineQuery.location = parseLocation(val["location"]);
     }
-    query = val["query"].asString();
-    offset = val["offset"].asString();
 }
 
-callbackQuery::callbackQuery(Json::Value &val, const std::string& botusern) //SEEMS FINISHED (still to test)
-{
-    id = val["id"].asString();
-    from = new struct user(val["from"]);
-    message = new struct message(val["message"],botusern);
-    inline_message_id = val ["inline_message_id"].asUInt();
-    data = val["data"].asString();
-}
+callbackQuery::callbackQuery(Json::Value &val, const std::string& botusern) :id(val["id"].asString()),
+                                                                             from(new struct user(val["from"])), 
+                                                                             message(new struct message(val["message"],botusern)),
+                                                                             inline_message_id(val ["inline_message_id"].asUInt()),
+                                                                             data(val["data"].asString())
 
-choosenInlineResult::choosenInlineResult(Json::Value &val) // TO FINISH (just location)
-{
-    result_id = val["result_id"].asString();
-    from = new struct user(val["from"]);
-    inline_message_id = val["inline_message_id"].asUInt();
-    query = val["query"].asString();
-}
+{}
+
+choosenInlineResult::choosenInlineResult(Json::Value &val) : result_id(val["result_id"].asString()), 
+                                                             from(new struct user(val["from"])),
+                                                             location(nullptr),
+                                                             inline_message_id(val["inline_message_id"].asUInt()),
+                                                             query(val["query"].asString())
+{}
+
+messageEntity::messageEntity(Json::Value& val) : offset(0), lenght(0), url(""), from(nullptr)
+{}
 
 /* destructors */
 
@@ -113,7 +112,6 @@ message::~message()
     delete from;
     delete chat;
     
-    //check for != NULL
     if(forward_from == NULL)
         delete forward_from;
     if(forward_from_chat == NULL)
@@ -125,6 +123,9 @@ message::~message()
 inlineQuery::~inlineQuery()
 {
     delete from;
+    
+    if(location != NULL) 
+        delete location;
 }
 
 callbackQuery::~callbackQuery()
@@ -136,4 +137,13 @@ callbackQuery::~callbackQuery()
 choosenInlineResult::~choosenInlineResult()
 {
     delete from;
+    
+    if(location != NULL)
+        delete location;
+}
+
+messageEntity::~messageEntity()
+{
+    if(from != NULL) 
+        delete from;
 }

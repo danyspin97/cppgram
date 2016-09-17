@@ -38,6 +38,7 @@ public:
             const uid_32 &timeout = 60);
     ~CoreBot();
     void run();
+
 protected:
     //basic bot core functions
     virtual void processMessage(const struct message& message);
@@ -50,28 +51,14 @@ protected:
     uid_32 sendMessage(const T& id,
                        const std::string& text,
                        const ParseMode& parse_mode = static_cast<ParseMode>(0),
-                       const bool &disable_web_page_preview = true,
-                       const bool &disable_notification = false,
-                       const uid_32 &reply_to_message_id = 0) const;
-    
-    template<typename T>
-    uid_32 sendMessage(const T& id,
-                       const std::string& text,
-                       const Json::Value& reply_markup,
-                       const ParseMode& parse_mode = static_cast<ParseMode>(0),
+                       const std::string& reply_markup = "",
                        const bool& disable_web_page_preview = true,
                        const bool& disable_notification = false,
                        const uid_32& reply_to_message_id = 0) const;
                      
     uid_32 sendMessage(const std::string& text,
-                       const Json::Value& reply_markup,
                        const ParseMode& parse_mode = static_cast<ParseMode>(0),
-                       const bool& disable_web_page_preview = true,
-                       const bool& disable_notification = false,
-                       const uid_32& reply_to_message_id = 0) const;
-
-    uid_32 sendMessage(const std::string& text,
-                       const ParseMode& parse_mode = static_cast<ParseMode>(0),
+                       const std::string& reply_markup = "",
                        const bool& disable_web_page_preview = true,
                        const bool& disable_notification = false,
                        const uid_32& reply_to_message_id = 0) const;
@@ -83,9 +70,6 @@ private:
     std::string inlineQueryId, callbackQueryId;
     id_64 chatId;
     const uid_32 timeout, msg_limit;
-    Json::Reader *reader;
-    Json::FastWriter* writer;
-    
     void getUpdates();
     void processUpdate(Json::Value &val);
     // Check if the called api method had any error, including connection(curl) error or api error returned by telegram
