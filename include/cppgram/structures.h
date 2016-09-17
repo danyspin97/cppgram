@@ -137,10 +137,6 @@ struct callbackQuery {
     ~callbackQuery();
 };
 
-struct inlineKeyboard {
-
-};
-    
 }
 
 #endif

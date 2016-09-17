@@ -77,6 +77,7 @@ protected:
                        const uid_32& reply_to_message_id = 0) const;
 
     //void editMessageText(uid_32 message_id, std::string& text) const;
+    class InlineKeyboard* inlineKeyboard;
 private:
     const std::string bot_token, bot_usern;
     uid_32 updateId;

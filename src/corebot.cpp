@@ -2,6 +2,10 @@
 #include <json/json.h>
 #include "cppgram/cppgram.h"
 
+//DEBUG
+#include <iostream>
+
+
 using namespace cppgram;
 using std::string;
 using std::to_string;
@@ -12,6 +16,8 @@ CoreBot::CoreBot(const string &api_token, const string& botusern,const bool &bac
           inlineQueryId(""), callbackQueryId(""), chatId(0), timeout(timeout), 
           msg_limit(message_limit), reader(new Json::Reader), writer(new Json::FastWriter)
 {
+    writer->omitEndingLineFeed();
+    inlineKeyboard = new InlineKeyboard(this);
     if(background) {
         int bg=osutil::backgroundProcess();
         if (bg == OSUTIL_NEWPROC_NOTSUPPORTED) {
@@ -68,6 +74,9 @@ uid_32 cppgram::CoreBot::sendMessage(const string& text, const Json::Value& repl
         parseMode = "HTML";
     else if(parse_mode == ParseMode::Markdown)
         parseMode = "Markdown";
+
+    //std::string re = "{\"inline_keyboard\":[[{\"text\":\"qualcosa\",\"callback_data\":\"data\"}]]}";
+
 
     const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI+bot_token+"/sendMessage"},
                                             cpr::Parameters{{"chat_id",to_string(chatId)}, {"text", text},
