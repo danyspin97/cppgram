@@ -33,6 +33,7 @@ chat::chat(Json::Value &val) //ITS DONE!!
 
 message::message(Json::Value &val, const std::string& botusern) //TO FINISH
 {
+    //nullptr initialization
     message_id = val["message_id"].asUInt();
     from = new struct user(val["from"]);
     date = val["date"].asUInt();
@@ -112,6 +113,7 @@ message::~message()
     delete from;
     delete chat;
     
+    //check for != NULL
     if(forward_from == NULL)
         delete forward_from;
     if(forward_from_chat == NULL)
