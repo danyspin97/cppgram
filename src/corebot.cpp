@@ -1,6 +1,7 @@
 #include <cpr/cpr.h>
 #include <json/json.h>
 #include "cppgram/cppgram.h"
+#include "cppgram/inlinekeyboard.h"
 
 //DEBUG
 #include <iostream>

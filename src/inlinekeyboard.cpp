@@ -1,5 +1,6 @@
 #include <json/json.h>
 #include "cppgram/cppgram.h"
+#include "cppgram/inlinekeyboard.h"
 
 using namespace cppgram;
 using namespace std;
