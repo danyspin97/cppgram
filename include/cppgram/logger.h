@@ -9,13 +9,13 @@ namespace cppgram
 class Logger
 {
 public:
-    Logger(const std::string& filename);
+    explicit Logger(const std::string& filename);
     void log_event(const std::string& message) const;
     void log_error(const std::string& message) const;
     void log_warn(const std::string& message) const;
 private:
     const std::string fname;
-    std::string __getTime() const;
+    std::string __getTime(const std::string& timeformat="%a %F %r") const;
 };
 
 }

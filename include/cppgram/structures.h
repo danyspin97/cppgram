@@ -53,6 +53,7 @@ struct chat {
     std::string title, username,
             first_name, last_name;
     explicit chat(Json::Value &val);
+    chat(const struct chat& prev) = delete;
 };
 
 //identify user
@@ -61,6 +62,7 @@ struct user {
     std::string first_name, last_name,
             username;
     explicit user(Json::Value& val);
+    user(const struct user& prev) = delete;
 };
 
 struct messageEntity {
@@ -69,7 +71,11 @@ struct messageEntity {
     int offset,
         lenght;
     std::string url;
-    const struct user* user;
+    const struct user* from;
+    
+    explicit messageEntity(Json::Value &val);
+    ~messageEntity();
+    messageEntity(const struct messageEntity& prev) = delete;
 };
 
 //get message data
@@ -89,6 +95,7 @@ struct message {
     //struct attachment* message_data;
                                                         
     message(Json::Value &val, const std::string& botusern);
+    message(const struct message& prev) = delete;
     ~message();
 };
 
@@ -110,6 +117,7 @@ struct inlineQuery {
     const struct location* location;
 
     explicit inlineQuery(Json::Value& val);
+    inlineQuery(const struct inlineQuery& prev) = delete;
     ~inlineQuery();
 };
 
@@ -122,6 +130,7 @@ struct choosenInlineResult {
     std::string query;
 
     explicit choosenInlineResult(Json::Value &val);
+    choosenInlineResult(const struct choosenInlineResult& prev) = delete;
     ~choosenInlineResult();
 };
 
@@ -134,6 +143,7 @@ struct callbackQuery {
     std::string data;
 
     callbackQuery(Json::Value &val, const std::string &botusern);
+    callbackQuery(const struct callbackQuery& prev) = delete;
     ~callbackQuery();
 };
 

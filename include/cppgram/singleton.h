@@ -18,6 +18,7 @@ namespace cppgram
 class Singleton
 {
 public:
+    Singleton(const Singleton& prev) = delete;
     ~Singleton();
     static Singleton* getInstance();
     std::string write(Json::Value& val);

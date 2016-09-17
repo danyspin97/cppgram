@@ -77,7 +77,8 @@ user::user(Json::Value &val) : id(val["id"].asUInt()), first_name(val["first_nam
 }
 
 inlineQuery::inlineQuery(Json::Value &val) : id(val["id"].asString()),query(val["query"].asString()), 
-                                             offset(val["offset"].asString()), from(new struct user(val["from"]))
+                                             offset(val["offset"].asString()), from(new struct user(val["from"])),
+                                             location(nullptr)
 {
     if (!val["location"].isNull()) {
         // TODO parseLocationfulltxt
@@ -95,8 +96,12 @@ callbackQuery::callbackQuery(Json::Value &val, const std::string& botusern) :id(
 
 choosenInlineResult::choosenInlineResult(Json::Value &val) : result_id(val["result_id"].asString()), 
                                                              from(new struct user(val["from"])),
+                                                             location(nullptr),
                                                              inline_message_id(val["inline_message_id"].asUInt()),
                                                              query(val["query"].asString())
+{}
+
+messageEntity::messageEntity(Json::Value& val) : offset(0), lenght(0), url(""), from(nullptr)
 {}
 
 /* destructors */
@@ -117,6 +122,9 @@ message::~message()
 inlineQuery::~inlineQuery()
 {
     delete from;
+    
+    if(location != NULL) 
+        delete location;
 }
 
 callbackQuery::~callbackQuery()
@@ -128,4 +136,13 @@ callbackQuery::~callbackQuery()
 choosenInlineResult::~choosenInlineResult()
 {
     delete from;
+    
+    if(location != NULL)
+        delete location;
+}
+
+messageEntity::~messageEntity()
+{
+    if(from != NULL) 
+        delete from;
 }

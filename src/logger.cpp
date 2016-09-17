@@ -35,15 +35,23 @@ void cppgram::Logger::log_warn(const std::string& message) const
     out.close();
 }
 
-std::string cppgram::Logger::__getTime() const
+std::string cppgram::Logger::__getTime(const std::string& timeformat) const
 {
-    time_t raw;
+    char finalTime[256];
+    
+    time_t ttime;
     struct tm *tinfo;
 
-    time(&raw);
-    tinfo = localtime(&raw);
-
-    std::string fmtTime = asctime(tinfo);
-    fmtTime.erase(fmtTime.size()-1);
-    return fmtTime;
+    ttime = time(NULL);
+    tinfo = localtime(&ttime);
+    
+    if(tinfo==NULL) {
+        return "tm error!";
+    }
+    
+    if(strftime(finalTime,sizeof(finalTime),timeformat.c_str(),tinfo) == 0) {
+        return "stfrtime() error!";
+    }
+    
+    return std::string(finalTime);
 }
