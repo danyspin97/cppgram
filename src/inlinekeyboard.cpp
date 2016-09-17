@@ -10,12 +10,6 @@ InlineKeyboard::InlineKeyboard()
 
 }
 
-InlineKeyboard::InlineKeyboard(CoreBot* Bot)
-        : column(0), row(0), Bot(Bot)
-{
-
-}
-
 Json::Value& InlineKeyboard::getKeyboard()
 {
     return inline_keyboard;
@@ -47,4 +41,16 @@ bool InlineKeyboard::addButton(string& text, string& data, InlineKeyboardButtonT
     column++;
 
     return true;
+}
+
+void InlineKeyboard::clearKeyboard()
+{
+    inline_keyboard.clear();
+}
+
+void InlineKeyboard::getKeyboard(std::string& reply_markup, bool clearKeyboard)
+{
+    reply_markup = Singleton::writer->write(inline_keyboard);
+    if (clearKeyboard)
+        inline_keyboard.clear();
 }

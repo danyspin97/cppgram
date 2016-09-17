@@ -14,10 +14,8 @@ CoreBot::CoreBot(const string &api_token, const string& botusern,const bool &bac
                  const string &filename,const uid_32 &timeout, const uid_32 &message_limit)
         : Logger(filename), bot_token(api_token), bot_usern(botusern), updateId(0),
           inlineQueryId(""), callbackQueryId(""), chatId(0), timeout(timeout), 
-          msg_limit(message_limit), reader(new Json::Reader), writer(new Json::FastWriter)
+          msg_limit(message_limit)
 {
-    writer->omitEndingLineFeed();
-    inlineKeyboard = new InlineKeyboard(this);
     if(background) {
         int bg=osutil::backgroundProcess();
         if (bg == OSUTIL_NEWPROC_NOTSUPPORTED) {
@@ -64,8 +62,9 @@ bool CoreBot::checkMethodError(const cpr::Response& response, Json::Value& val) 
     return true;
 }
 
-uid_32 cppgram::CoreBot::sendMessage(const string& text, const Json::Value& reply_markup,const ParseMode& parse_mode, 
-                                     const bool& disable_web_page_preview, const bool& disable_notification, 
+uid_32 cppgram::CoreBot::sendMessage(const string& text, const ParseMode& parse_mode,
+                                     const string& reply_markup, const bool& disable_web_page_preview,
+                                     const bool& disable_notification,
                                      const uid_32& reply_to_message_id) const
 {
     string parseMode = "";
@@ -84,33 +83,8 @@ uid_32 cppgram::CoreBot::sendMessage(const string& text, const Json::Value& repl
                                   {"disable_web_page_preview", to_string(disable_web_page_preview)},
                                   {"disable_notification", to_string(disable_notification)},
                                   {"reply_to_message_id", to_string(reply_to_message_id)},
-                                  {"reply_markup", writer->write(reply_markup)}});
+                                  {"reply_markup", reply_markup}});
 
-    Json::Value valroot;
-
-    if (!checkMethodError(response, valroot))
-        return 1;
-
-    return valroot["result"]["message_id"].asUInt();
-}
-
-uid_32 cppgram::CoreBot::sendMessage(const string& text, const ParseMode& parse_mode, const bool& disable_web_page_preview, 
-                                     const bool& disable_notification, const uid_32& reply_to_message_id) const
-{
-    string parseMode="";
-    
-    if(parse_mode == ParseMode::HTML)
-        parseMode = "HTML";
-    else if(parse_mode == ParseMode::Markdown)
-        parseMode = "Markdown";
-    
-   const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI+bot_token+"/sendMessage"},
-                                            cpr::Parameters{{"chat_id",to_string(chatId)}, {"text", text},
-                                  {"parse_mode", parseMode},
-                                  {"disable_web_page_preview", to_string(disable_web_page_preview)},
-                                  {"disable_notification", to_string(disable_notification)},
-                                  {"reply_to_message_id", to_string(reply_to_message_id)}});
-   
     Json::Value valroot;
 
     if (!checkMethodError(response, valroot))

@@ -9,6 +9,8 @@
 #include "structures.h"
 #include "exceptions.h"
 #include "utils.h"
+#include "singleton.h"
+#include "parameters.h"
 
 //template functions body definitions
 #include "corebot.tpp"

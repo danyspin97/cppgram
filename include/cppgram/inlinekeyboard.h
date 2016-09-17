@@ -12,9 +12,6 @@ class InlineKeyboard
 {
     public:
     InlineKeyboard();
-    InlineKeyboard(CoreBot* Bot);
-
-    Json::Value& getKeyboard();
 
     bool addButton(std::string& text, std::string& data, InlineKeyboardButtonType buttonType);
 
@@ -24,8 +21,12 @@ class InlineKeyboard
 
     inline void changeRow();
 
+    inline void clearKeyboard();
+
+    void getKeyboard(std::string& reply_markup, bool clearKeyboard = true);
+    Json::Value& getKeyboard();
+
     private:
-    const CoreBot* Bot;
     Json::Value inline_keyboard;
     short column;
     short row;
