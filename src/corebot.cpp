@@ -31,8 +31,7 @@ CoreBot::CoreBot(const string &api_token, const string& botusern,const bool &bac
 
 CoreBot::~CoreBot()
 {
-    delete reader;
-    delete writer;
+  
 }
 
 void CoreBot::run()
@@ -48,7 +47,7 @@ bool CoreBot::checkMethodError(const cpr::Response& response, Json::Value& val) 
         return false;
     }
 
-    if(!reader->parse(response.text, val)) {
+    if(!Singleton::getInstance()->getReader()->parse(response.text, val)) {
         log_error("JSON Parser: Error while parsing JSON document!");
         throw new JsonParseError;
     }

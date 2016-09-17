@@ -10,7 +10,7 @@ enum InlineKeyboardButtonType : short;
 
 class InlineKeyboard
 {
-    public:
+public:
     InlineKeyboard();
 
     bool addButton(std::string& text, std::string& data, InlineKeyboardButtonType buttonType);
@@ -26,7 +26,7 @@ class InlineKeyboard
     void getKeyboard(std::string& reply_markup, bool clearKeyboard = true);
     Json::Value& getKeyboard();
 
-    private:
+private:
     Json::Value inline_keyboard;
     short column;
     short row;

@@ -1,4 +1,4 @@
-set(COMPILER_WARNINGS "-W -Wall -Wextra") #brutal
+set(COMPILER_WARNINGS "-W -Wall -Wextra -Wno-unused-parameter") #brutal
 set(JSONCPP_STATICLIB libjsoncpp.a)
 set(CPR_STATICLIB libcpr.a)
 

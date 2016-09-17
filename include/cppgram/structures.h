@@ -52,7 +52,7 @@ struct chat {
     ChatType type;
     std::string title, username,
             first_name, last_name;
-    chat(Json::Value &val);
+    explicit chat(Json::Value &val);
 };
 
 //identify user
@@ -60,7 +60,7 @@ struct user {
     uid_32 id;
     std::string first_name, last_name,
             username;
-    user(Json::Value& val);
+    explicit user(Json::Value& val);
 };
 
 struct messageEntity {
@@ -109,7 +109,7 @@ struct inlineQuery {
     const struct user* from;
     const struct location* location;
 
-    inlineQuery(Json::Value &val);
+    explicit inlineQuery(Json::Value& val);
     ~inlineQuery();
 };
 
@@ -121,7 +121,7 @@ struct choosenInlineResult {
     uid_32 inline_message_id;
     std::string query;
 
-    choosenInlineResult(Json::Value &val);
+    explicit choosenInlineResult(Json::Value &val);
     ~choosenInlineResult();
 };
 

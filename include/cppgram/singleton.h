@@ -1,23 +1,36 @@
 #ifndef CPPGRAM_SINGLETON_H
 #define CPPGRAM_SINGLETON_H
 
+#include <string>
+
 #include "parameters.h"
 
+namespace Json
+{
+class Reader;
+class FastWriter;
+class Value;
+}
+
+namespace cppgram 
+{
+    
 class Singleton
 {
-    public:
-    static Singleton* Istance();
-
-    static std::string& write(Json::Value& val);
-
-    static inline Json::Reader* getReader() { return reader; };
-
-    static inline Json::FastWriter* getWriter() { return writer; };
-
-    private:
+public:
+    ~Singleton();
+    static Singleton* getInstance();
+    std::string write(Json::Value& val);
+    Json::Reader* getReader();
+    Json::FastWriter* getWriter();
+private:
+    Singleton();
+    static Singleton* instance;
     Json::Reader* reader;
     Json::FastWriter* writer;
-    class InlineKeyboard* Keyboards[THREADS];
+    //class InlineKeyboard* keyboards[THREADS];
 };
+
+}
 
 #endif //CPPGRAM_SINGLETON_H
