@@ -21,7 +21,6 @@ if(NOT NOGET_DEPS)
 	endif()
 endif()
 
-
 if(NOGET_DEPS STREQUAL "no")
 	if(NOT UNIX)
 		message(WARN "You must get dependencies your own, put headers in ${CMAKE_SOURCE_DIR}/include and the static lib in  ${CMAKE_SOURCE_DIR}")
@@ -49,6 +48,8 @@ if(NOGET_DEPS STREQUAL "no")
 			COMMAND rm -rfv {extdep/src/*,extdep/tmp/*})
 	endif()
 endif()
+
+include_directories(include)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")

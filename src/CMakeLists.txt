@@ -2,7 +2,7 @@ set(COMPILER_WARNINGS "-W -Wall -Wextra -Wno-unused-parameter") #brutal
 set(JSONCPP_STATICLIB libjsoncpp.a)
 set(CPR_STATICLIB libcpr.a)
 
-include_directories(../include)
+find_package(Threads REQUIRED)
 
 file(GLOB_RECURSE SOURCES *.cpp)
 
@@ -23,11 +23,12 @@ if(NOT ARCH)
 endif(NOT ARCH)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-	set(CMAKE_CXX_FLAGS "-std=c++14 -lpthread ${NATIVE} ${ARCH} ${COMPILER_WARNINGS}")
+	set(CMAKE_CXX_FLAGS "-std=c++14 ${NATIVE} ${ARCH} ${COMPILER_WARNINGS}")
 endif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
 message("Note: you are building static library, you have to link your executable manually with this and other static libraries (libcppgram.a , libcpr.a , libjsoncpp.a)")
 add_library(cppgram STATIC ${SOURCES})
+target_link_libraries(cppgram ${CMAKE_LIBS_INIT_THREADS})
 
 install(TARGETS cppgram
 	ARCHIVE DESTINATION lib
