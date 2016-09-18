@@ -44,12 +44,12 @@ public:
 
 protected:
     //basic bot core functions
-    virtual void processMessage(const struct message& message, const short thread_number);
-    virtual void processEditedMessage(const struct message& editedMessage, const short thread_number);
-    virtual void processInlineQuery(const struct inlineQuery& inlineQuery, const short thread_number);
-    virtual void processChosenInlineResult(const struct choosenInlineResult& choosenInlineResult, const short thread_number);
-    virtual void processCallbackQuery(const struct callbackQuery& callbackQuery, const short thread_number);
-    
+    virtual void processMessage(const struct message& message);
+    virtual void processEditedMessage(const struct message& editedMessage);
+    virtual void processInlineQuery(const struct inlineQuery& inlineQuery);
+    virtual void processChosenInlineResult(const struct choosenInlineResult& choosenInlineResult);
+    virtual void processCallbackQuery(const struct callbackQuery& callbackQuery);
+
     template<typename T>
     uid_32 sendMessage(const T& id,
                        const std::string& text,
@@ -63,15 +63,11 @@ protected:
 private:
     const std::string bot_token, bot_usern;
     uid_32 updateId;
-    std::string inlineQueryId[THREADS], callbackQueryId[THREADS];
-    id_64 chatId[THREADS];
-    uid_32 messageId[THREADS];
     const uid_32 timeout, msg_limit;
     void getUpdates();
-    short processUpdate(Json::Value &val, const short thread_number);
+    short processUpdate(Json::Value &val);
     // Check if the called api method had any error, including connection(curl) error or api error returned by telegram
     bool checkMethodError(const cpr::Response& response, Json::Value& val) const;
-    std::vector<std::future<short>> futures;
 };
     
 }

@@ -72,7 +72,7 @@ void CoreBot::getUpdates()
          Json::Value valroot;
          if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
              for(Json::Value &val: valroot["result"]) {
-                 async(processUpdate, val, 0);
+                 processUpdate(val);
                  updateId = val["update_id"].asUInt();
                  log_event("Last update ID: "+to_string(updateId));
              }
@@ -80,37 +80,25 @@ void CoreBot::getUpdates()
      }
 }
 
-short CoreBot::processUpdate(Json::Value &val, const short thread_number)
+short CoreBot::processUpdate(Json::Value &val)
 {
     if (!val["message"].isNull()) {
-        chatId[thread_number] = val["message"]["chat"]["id"].asInt64();
-        processMessage(message(val["message"], bot_usern), thread_number);
-        chatId[thread_number] = 0;
+        processMessage(message(val["message"], bot_usern));
     } else if (!val["edited_message"].isNull()) {
-        chatId[thread_number] = val["edited_message"]["chat"]["id"].asInt64();
-        processEditedMessage(message(val["edited_message"], bot_usern), thread_number);
-        chatId[thread_number] = 0;
+        processEditedMessage(message(val["edited_message"], bot_usern));
     } else if (!val["inline_query"].isNull()) {
-        inlineQueryId[thread_number] = val["inline_query"]["id"].asString();
-        processInlineQuery(inlineQuery(val["inline_query"]), thread_number);
-        inlineQueryId[thread_number] = "";
+        processInlineQuery(inlineQuery(val["inline_query"]));
     } else if (!val["choosen_inline_result"].isNull()) {
-        processChosenInlineResult(choosenInlineResult(val["choosen_inline_result"]), thread_number);
+        processChosenInlineResult(choosenInlineResult(val["choosen_inline_result"]));
     } else if (!val["callback_query"].isNull()) {
-        callbackQueryId[thread_number] = val["callback_query"]["id"].asString();
-        chatId[thread_number] = val["callback_query"]["message"]["chat"]["id"].asInt64();
-        messageId[thread_number] = val["callback_query"]["message"]["message_id"].asUInt();
-        processCallbackQuery(callbackQuery(val["callback_query"], bot_usern), thread_number);
-        callbackQueryId[thread_number] = "";
-        chatId[thread_number] = 0;
-        messageId[thread_number] = 0;
+        processCallbackQuery(callbackQuery(val["callback_query"], bot_usern));
     }
 }
 
 //virtual functions
-void CoreBot::processMessage(const struct message& message, const short thread_number) {}
-void CoreBot::processEditedMessage(const struct message& editedMessage, const short thread_number) {}
-void CoreBot::processInlineQuery(const struct inlineQuery& inlineQuery, const short thread_number) {}
-void CoreBot::processChosenInlineResult(const struct choosenInlineResult& choosenInlineResult, const short thread_number) {}
-void CoreBot::processCallbackQuery(const struct callbackQuery& callbackQuery, const short thread_number ){}
+void CoreBot::processMessage(const struct message& message) {}
+void CoreBot::processEditedMessage(const struct message& editedMessage) {}
+void CoreBot::processInlineQuery(const struct inlineQuery& inlineQuery) {}
+void CoreBot::processChosenInlineResult(const struct choosenInlineResult& choosenInlineResult) {}
+void CoreBot::processCallbackQuery(const struct callbackQuery& callbackQuery){}
 //
