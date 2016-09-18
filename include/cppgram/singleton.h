@@ -3,8 +3,6 @@
 
 #include <string>
 
-#include "parameters.h"
-
 namespace Json
 {
 class Reader;
@@ -21,15 +19,15 @@ public:
     Singleton(const Singleton& prev) = delete;
     ~Singleton();
     static Singleton* getInstance();
-    std::string write(Json::Value& val);
-    Json::Reader* getReader();
-    Json::FastWriter* getWriter();
+    std::string write(Json::Value& val) const;
+    Json::Reader* getReader() const;
+    Json::FastWriter* getWriter() const;
 private:
     Singleton();
     static Singleton* instance;
     Json::Reader* reader;
     Json::FastWriter* writer;
-    class InlineKeyboard* keyboards[THREADS];
+    //class InlineKeyboard* keyboards[THREADS];
 };
 
 }

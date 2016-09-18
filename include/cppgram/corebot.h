@@ -4,17 +4,6 @@
 #define TELEGRAMAPI "https://api.telegram.org/bot"
 
 #include <string>
-#include <vector>
-#include <future>
-#include "parameters.h"
-
-//forward Json::Value
-namespace Json
-{
-class Value;
-class Reader;
-class FastWriter;
-}
 
 namespace cpr
 {
@@ -39,9 +28,7 @@ public:
             const std::string &filename="tgbot.log",
             const uid_32 &message_limit = 100,
             const uid_32 &timeout = 60);
-    ~CoreBot();
     void run();
-
 protected:
     //basic bot core functions
     virtual void processMessage(const struct message& message);
@@ -65,7 +52,7 @@ private:
     uid_32 updateId;
     const uid_32 timeout, msg_limit;
     void getUpdates();
-    short processUpdate(Json::Value &val);
+    void processUpdate(Json::Value &val);
     // Check if the called api method had any error, including connection(curl) error or api error returned by telegram
     bool checkMethodError(const cpr::Response& response, Json::Value& val) const;
 };
