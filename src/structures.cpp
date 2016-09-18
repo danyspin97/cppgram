@@ -147,3 +147,12 @@ messageEntity::~messageEntity()
     if(from != NULL) 
         delete from;
 }
+
+inlineKeyboardButton::inlineKeyboardButton(std::string &text,
+                                           std::string &data,
+                                           InlineKeyboardButtonType button_type)
+{
+    this->text = text;
+    this->data = data;
+    this->button_type = button_type;
+}

@@ -8,6 +8,7 @@
 #include "structures.h"
 #include "exceptions.h"
 #include "utils.h"
+#include "inlinekeyboard.h"
 #include "singleton.h"
 #include "parameters.h"
 

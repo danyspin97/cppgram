@@ -22,7 +22,7 @@ void InlineKeyboard::changeRow()
     column = 0;
 }
 
-bool InlineKeyboard::addButton(string& text, string& data, InlineKeyboardButtonType buttonType)
+bool InlineKeyboard::addButton(const string& text, const string& data, const InlineKeyboardButtonType buttonType)
 {
     if (text == "" || data == "")
         throw new InlineKeyboardNotValid;
@@ -41,6 +41,20 @@ bool InlineKeyboard::addButton(string& text, string& data, InlineKeyboardButtonT
 
     column++;
 
+    return true;
+}
+
+bool InlineKeyboard::addButton(const struct inlineKeyboardButton &newButton)
+{
+    return addButton(newButton.text, newButton.data, newButton.button_type);
+}
+
+bool InlineKeyboard::addButton(const vector<inlineKeyboardButton>& newButtons)
+{
+    for (auto const& button: newButtons) {
+        if (addButton(button.text, button.data, button.button_type) == false)
+            return false;
+    }
     return true;
 }
 

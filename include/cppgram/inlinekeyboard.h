@@ -2,6 +2,7 @@
 #define INLINE_KEYBOARD_CPPGRAM_H
 
 #include <string>
+#include <vector>
 
 namespace Json
 {
@@ -18,10 +19,9 @@ class InlineKeyboard
 public:
     InlineKeyboard();
 
-protected:
-    bool addButton(std::string& text, std::string& data, InlineKeyboardButtonType buttonType);
+    bool addButton(const std::string& text, const std::string& data, const InlineKeyboardButtonType buttonType);
     bool addButton(const struct inlineKeyboardButton& newButton);
-    bool addButton(const struct inlineKeyboardButton* newButtons[]);
+    bool addButton(const std::vector<struct inlineKeyboardButton>& newButtons);
 
     inline void changeRow();
     inline void clearKeyboard();

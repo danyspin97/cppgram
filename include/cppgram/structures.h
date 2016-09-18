@@ -102,6 +102,7 @@ struct message {
 struct inlineKeyboardButton {
     std::string text, data;
     enum InlineKeyboardButtonType button_type;
+    inlineKeyboardButton(std::string& text, std::string& data, InlineKeyboardButtonType button_type);
 };
 
 //get location data
