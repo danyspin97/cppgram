@@ -102,7 +102,8 @@ struct message {
 struct inlineKeyboardButton {
     std::string text, data;
     enum InlineKeyboardButtonType button_type;
-    inlineKeyboardButton(std::string& text, std::string& data, InlineKeyboardButtonType button_type);
+    inlineKeyboardButton(const std::string& text, const std::string& data, const InlineKeyboardButtonType &button_type);
+	 inlineKeyboardButton(const inlineKeyboardButton& prev) = delete;
 };
 
 //get location data

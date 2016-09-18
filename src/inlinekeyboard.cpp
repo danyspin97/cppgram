@@ -10,7 +10,7 @@ InlineKeyboard::InlineKeyboard()
 
 }
 
-Json::Value& InlineKeyboard::getKeyboard()
+Json::Value InlineKeyboard::getKeyboard() const
 {
     return inline_keyboard;
 }
@@ -21,7 +21,7 @@ void InlineKeyboard::changeRow()
     column = 0;
 }
 
-bool InlineKeyboard::addButton(const string& text, const string& data, const InlineKeyboardButtonType buttonType)
+bool InlineKeyboard::addButton(const string& text, const string& data, const InlineKeyboardButtonType& buttonType)
 {
     if (text == "" || data == "")
         throw new InlineKeyboardNotValid;
@@ -62,7 +62,7 @@ void InlineKeyboard::clearKeyboard()
     inline_keyboard.clear();
 }
 
-void InlineKeyboard::getKeyboard(std::string& reply_markup, bool clearKeyboard)
+void InlineKeyboard::getKeyboard(std::string& reply_markup, const bool &clearKeyboard)
 {
     reply_markup = Singleton::getInstance()->write(inline_keyboard);
     if (clearKeyboard)

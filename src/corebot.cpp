@@ -2,10 +2,6 @@
 #include <json/json.h>
 #include "cppgram/cppgram.h"
 
-//DEBUG
-#include <iostream>
-
-
 using namespace cppgram;
 using namespace std;
 
@@ -26,11 +22,6 @@ CoreBot::CoreBot(const string &api_token, const string& botusern,const bool &bac
         } else if(bg == OSUTIL_NEWPROC_SUCCESS)
             log_event("New background process created!!");
     }
-}
-
-CoreBot::~CoreBot()
-{
-  
 }
 
 void CoreBot::run()
@@ -80,7 +71,7 @@ void CoreBot::getUpdates()
      }
 }
 
-short CoreBot::processUpdate(Json::Value &val)
+void CoreBot::processUpdate(Json::Value &val)
 {
     if (!val["message"].isNull()) {
         processMessage(message(val["message"], bot_usern));

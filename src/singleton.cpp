@@ -8,9 +8,9 @@ Singleton* Singleton::instance = nullptr;
 Singleton::Singleton() : reader(new Json::Reader), writer(new Json::FastWriter)
 {
     writer->omitEndingLineFeed();
-    for (int i = THREADS - 1; i--; ) {
+    /*for (int i = THREADS - 1; i--; ) {
         keyboards[i] = new InlineKeyboard();
-    }
+    }*/
 }
 
 Singleton::~Singleton()
@@ -32,17 +32,17 @@ Singleton* Singleton::getInstance()
     return instance;
 }
 
-std::string Singleton::write(Json::Value& val)
+std::string Singleton::write(Json::Value& val) const 
 {
      return writer->write(val);
 }
 
-Json::Reader* Singleton::getReader()
+Json::Reader* Singleton::getReader() const
 {
     return this->reader;
 }
 
-Json::FastWriter* Singleton::getWriter()
+Json::FastWriter* Singleton::getWriter() const
 {
     return this->writer;
 }
