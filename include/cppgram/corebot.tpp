@@ -31,7 +31,7 @@ uid_32 cppgram::CoreBot::sendMessage(const T& id, const std::string& text,
     else if(parse_mode == ParseMode::Markdown)
         parseMode = "Markdown";
     
-    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI+bot_token+"/sendMessage"},
+    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI+ bot_token +"/sendMessage"},
                                             cpr::Parameters{{"chat_id", fid},
                                             {"text", text},
                                             {"parse_mode", parseMode},

@@ -4,10 +4,8 @@
 using namespace cppgram;
 
 /* constructors */
-chat::chat(Json::Value &val) //ITS DONE!!
+chat::chat(Json::Value &val) : id(val["id"].asInt64()) //ITS DONE!!
 {
-    id = val["id"].asInt64();
-
     std::string typechat = val["type"].asString();
     if(typechat == "private")
        type = ChatType::Private;
@@ -34,13 +32,11 @@ chat::chat(Json::Value &val) //ITS DONE!!
 message::message(Json::Value &val, const std::string& botusern) : message_id(val["message_id"].asUInt()),
                                                                   from(new struct user(val["from"])),
                                                                   date(val["date"].asUInt()),
-                                                                  chat(new struct chat(val["chat"]))
+                                                                  chat(new struct chat(val["chat"])),
+																						forward_from(nullptr),
+																						forward_from_chat(nullptr),
+																						reply_to_message(nullptr)
 {
-    message_id = val["message_id"].asUInt();
-    from = new struct user(val["from"]);
-    date = val["date"].asUInt();
-    chat = new struct chat(val["chat"]);
-
     if (!val["forward_from"].isNull() && val["forward_from"].isObject()) {
         forward_from = new struct user(val["forward_from"]);
         forward_from_chat = new struct chat(val["forward_from_chat"]);
@@ -112,11 +108,11 @@ message::~message()
     delete from;
     delete chat;
     
-    if(forward_from == NULL)
+    if(forward_from != NULL)
         delete forward_from;
-    if(forward_from_chat == NULL)
+    if(forward_from_chat != NULL)
         delete forward_from_chat;
-    if(reply_to_message == NULL)
+    if(reply_to_message != NULL)
         delete reply_to_message;
 }
 
@@ -148,11 +144,8 @@ messageEntity::~messageEntity()
         delete from;
 }
 
-inlineKeyboardButton::inlineKeyboardButton(std::string &text,
-                                           std::string &data,
-                                           InlineKeyboardButtonType button_type)
-{
-    this->text = text;
-    this->data = data;
-    this->button_type = button_type;
-}
+inlineKeyboardButton::inlineKeyboardButton(const std::string &text,
+                                           const std::string &data,
+                                           const InlineKeyboardButtonType &button_type)
+	: text(text),data(data),button_type(button_type)
+{}

@@ -1,0 +1,6 @@
+#ifndef CPPGRAM_DEFINES_H
+#define CPPGRAM_DEFINES_H
+
+#define THREADS 8
+
+#endif //CPPGRAM_DEFINES_H

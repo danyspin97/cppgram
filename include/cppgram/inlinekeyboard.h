@@ -26,8 +26,8 @@ public:
     inline void changeRow();
     inline void clearKeyboard();
 
-    void getKeyboard(std::string& reply_markup, bool clearKeyboard = true);
-    Json::Value& getKeyboard();
+    void getKeyboard(std::string& reply_markup, const bool &clearKeyboard = true) ;
+    Json::Value getKeyboard() const;
 
 private:
     Json::Value inline_keyboard;

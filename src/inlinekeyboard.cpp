@@ -10,7 +10,7 @@ InlineKeyboard::InlineKeyboard()
 
 }
 
-Json::Value& InlineKeyboard::getKeyboard()
+Json::Value InlineKeyboard::getKeyboard() const
 {
     return inline_keyboard;
 }
@@ -62,7 +62,7 @@ void InlineKeyboard::clearKeyboard()
     inline_keyboard.clear();
 }
 
-void InlineKeyboard::getKeyboard(std::string& reply_markup, bool clearKeyboard)
+void InlineKeyboard::getKeyboard(std::string& reply_markup, const bool &clearKeyboard)
 {
     reply_markup = Singleton::getInstance()->getWriter()->write(inline_keyboard);
     if (clearKeyboard)

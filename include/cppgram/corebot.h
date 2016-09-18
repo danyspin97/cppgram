@@ -4,17 +4,7 @@
 #define TELEGRAMAPI "https://api.telegram.org/bot"
 
 #include <string>
-#include <vector>
-#include <future>
-#include "parameters.h"
-
-//forward Json::Value
-namespace Json
-{
-class Value;
-class Reader;
-class FastWriter;
-}
+#include "logger.h"
 
 namespace cpr
 {
@@ -25,7 +15,6 @@ namespace cppgram
 {
 
 //forwards
-class Logger;
 enum ParseMode : short;
 typedef unsigned long uid_32;
 typedef long long id_64;
@@ -39,10 +28,7 @@ public:
             const std::string &filename="tgbot.log",
             const uid_32 &message_limit = 100,
             const uid_32 &timeout = 60);
-    ~CoreBot();
     void run();
-
-    const std::string bot_token;
 protected:
     //basic bot core functions
     virtual void processMessage(const struct message& message);
@@ -62,7 +48,7 @@ protected:
                      
     //void editMessageText(uid_32 message_id, std::string& text) const;
 private:
-    const std::string bot_usern;
+    const std::string bot_token, bot_usern;
     uid_32 updateId;
     const uid_32 timeout, msg_limit;
     void getUpdates();
