@@ -21,15 +21,16 @@ public:
     Singleton(const Singleton& prev) = delete;
     ~Singleton();
     static Singleton* getInstance();
-    std::string write(Json::Value& val);
     Json::Reader* getReader();
     Json::FastWriter* getWriter();
+    const std::string& getToken() { return bot_token; };
+    void setToken(std::string& new_token) { bot_token = new_token; }
 private:
     Singleton();
     static Singleton* instance;
     Json::Reader* reader;
     Json::FastWriter* writer;
-    class InlineKeyboard* keyboards[THREADS];
+    std::string bot_token;
 };
 
 }

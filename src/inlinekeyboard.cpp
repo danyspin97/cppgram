@@ -64,7 +64,7 @@ void InlineKeyboard::clearKeyboard()
 
 void InlineKeyboard::getKeyboard(std::string& reply_markup, bool clearKeyboard)
 {
-    reply_markup = Singleton::getInstance()->write(inline_keyboard);
+    reply_markup = Singleton::getInstance()->getWriter()->write(inline_keyboard);
     if (clearKeyboard)
         inline_keyboard.clear();
 }

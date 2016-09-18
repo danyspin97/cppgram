@@ -33,7 +33,7 @@ typedef long long id_64;
 class CoreBot : public Logger
 {
 public:
-    CoreBot(const std::string &api_token,
+    CoreBot(std::string &api_token,
             const std::string &botusern,
             const bool &background = false,
             const std::string &filename="tgbot.log",
@@ -42,6 +42,7 @@ public:
     ~CoreBot();
     void run();
 
+    const std::string bot_token;
 protected:
     //basic bot core functions
     virtual void processMessage(const struct message& message);
@@ -61,11 +62,11 @@ protected:
                      
     //void editMessageText(uid_32 message_id, std::string& text) const;
 private:
-    const std::string bot_token, bot_usern;
+    const std::string bot_usern;
     uid_32 updateId;
     const uid_32 timeout, msg_limit;
     void getUpdates();
-    short processUpdate(Json::Value &val);
+    void processUpdate(Json::Value &val);
     // Check if the called api method had any error, including connection(curl) error or api error returned by telegram
     bool checkMethodError(const cpr::Response& response, Json::Value& val) const;
 };

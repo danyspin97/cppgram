@@ -12,6 +12,8 @@
 #include "singleton.h"
 #include "parameters.h"
 #include "inlinekeyboard.h"
+#include "inlinequeryresult.h"
+#include "inlinequerybot.h"
 
 //template functions body definitions
 #include "corebot.tpp"

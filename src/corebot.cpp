@@ -9,7 +9,7 @@
 using namespace cppgram;
 using namespace std;
 
-CoreBot::CoreBot(const string &api_token, const string& botusern,const bool &background,
+CoreBot::CoreBot(string &api_token, const string& botusern,const bool &background,
                  const string &filename,const uid_32 &timeout, const uid_32 &message_limit)
         : Logger(filename), bot_token(api_token), bot_usern(botusern), updateId(0),
          timeout(timeout),
@@ -26,6 +26,7 @@ CoreBot::CoreBot(const string &api_token, const string& botusern,const bool &bac
         } else if(bg == OSUTIL_NEWPROC_SUCCESS)
             log_event("New background process created!!");
     }
+    Singleton::getInstance()->setToken(api_token);
 }
 
 CoreBot::~CoreBot()
@@ -80,7 +81,7 @@ void CoreBot::getUpdates()
      }
 }
 
-short CoreBot::processUpdate(Json::Value &val)
+void CoreBot::processUpdate(Json::Value &val)
 {
     if (!val["message"].isNull()) {
         processMessage(message(val["message"], bot_usern));
