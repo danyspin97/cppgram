@@ -1,12 +1,17 @@
 #include<json/json.h>
-#include "cppgram/singleton.h"
+#include "cppgram/cppgram.h"
 
 using namespace cppgram;
 
 Singleton* Singleton::instance = nullptr;
 
 Singleton::Singleton() : reader(new Json::Reader), writer(new Json::FastWriter)
-{}
+{
+    writer->omitEndingLineFeed();
+    for (int i = THREADS - 1; i--; ) {
+        keyboards[i] = new InlineKeyboard();
+    }
+}
 
 Singleton::~Singleton()
 {
@@ -29,7 +34,7 @@ Singleton* Singleton::getInstance()
 
 std::string Singleton::write(Json::Value& val)
 {
-     return "";
+     return writer->write(val);
 }
 
 Json::Reader* Singleton::getReader()
