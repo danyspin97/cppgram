@@ -2,10 +2,6 @@
 #include <json/json.h>
 #include "cppgram/cppgram.h"
 
-//DEBUG
-#include <iostream>
-
-
 using namespace cppgram;
 using namespace std;
 
@@ -27,11 +23,6 @@ CoreBot::CoreBot(string &api_token, const string& botusern,const bool &backgroun
             log_event("New background process created!!");
     }
     Singleton::getInstance()->setToken(api_token);
-}
-
-CoreBot::~CoreBot()
-{
-  
 }
 
 void CoreBot::run()

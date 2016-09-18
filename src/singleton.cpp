@@ -29,12 +29,12 @@ Singleton* Singleton::getInstance()
     return instance;
 }
 
-Json::Reader* Singleton::getReader()
+Json::Reader* Singleton::getReader() const
 {
     return this->reader;
 }
 
-Json::FastWriter* Singleton::getWriter()
+Json::FastWriter* Singleton::getWriter() const
 {
     return this->writer;
 }

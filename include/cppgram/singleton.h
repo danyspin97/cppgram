@@ -3,8 +3,6 @@
 
 #include <string>
 
-#include "parameters.h"
-
 namespace Json
 {
 class Reader;
@@ -31,8 +29,6 @@ private:
     Json::Reader* reader;
     Json::FastWriter* writer;
     std::string bot_token;
-};
-
 }
 
 #endif //CPPGRAM_SINGLETON_H
