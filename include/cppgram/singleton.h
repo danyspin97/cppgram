@@ -29,7 +29,7 @@ private:
     static Singleton* instance;
     Json::Reader* reader;
     Json::FastWriter* writer;
-    //class InlineKeyboard* keyboards[THREADS];
+    class InlineKeyboard* keyboards[THREADS];
 };
 
 }

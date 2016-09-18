@@ -10,6 +10,7 @@
 #include "utils.h"
 #include "singleton.h"
 #include "parameters.h"
+#include "inlinekeyboard.h"
 
 //template functions body definitions
 #include "corebot.tpp"

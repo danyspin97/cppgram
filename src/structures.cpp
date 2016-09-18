@@ -124,7 +124,7 @@ inlineQuery::~inlineQuery()
 {
     delete from;
     
-    if(location != NULL) 
+    if(location != NULL)
         delete location;
 }
 
@@ -144,6 +144,6 @@ choosenInlineResult::~choosenInlineResult()
 
 messageEntity::~messageEntity()
 {
-    if(from != NULL) 
+    if(from != NULL)
         delete from;
 }

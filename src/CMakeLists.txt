@@ -23,7 +23,7 @@ if(NOT ARCH)
 endif(NOT ARCH)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-	set(CMAKE_CXX_FLAGS "-std=c++14 ${NATIVE} ${ARCH} ${COMPILER_WARNINGS}")
+	set(CMAKE_CXX_FLAGS "-std=c++14 -lpthread ${NATIVE} ${ARCH} ${COMPILER_WARNINGS}")
 endif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
 message("Note: you are building static library, you have to link your executable manually with this and other static libraries (libcppgram.a , libcpr.a , libjsoncpp.a)")
