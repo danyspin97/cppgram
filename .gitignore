@@ -13,3 +13,4 @@ bot
 *.swp
 *.*.swp
 cppgram.log
+CMakeFiles/
