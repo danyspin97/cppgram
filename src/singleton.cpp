@@ -38,3 +38,10 @@ Json::FastWriter* Singleton::getWriter() const
 {
     return this->writer;
 }
+
+const std::string& Singleton::getLogFilename() const
+{
+    return logfilename;
+}
+
+

@@ -15,22 +15,23 @@ namespace cppgram
 
 class Singleton
 {
-    public:
+public:
     Singleton(const Singleton &prev) = delete;
     ~Singleton();
     static Singleton *getInstance();
     Json::Reader *getReader() const;
     Json::FastWriter *getWriter() const;
-    const std::string &getToken()
-    { return bot_token; };
-    void setToken(std::string &new_token)
-    { bot_token = new_token; }
-    private:
+    const std::string &getToken() const;
+    const std::string &getLogFilename() const;
+    void setToken(const std::string &new_token);
+    void setLogFilename(const std::string &new_filename);
+    
+private:
     Singleton();
     static Singleton *instance;
     Json::Reader *reader;
     Json::FastWriter *writer;
-    std::string bot_token;
+    std::string bot_token, logfilename;
 };
 
 }

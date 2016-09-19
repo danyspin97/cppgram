@@ -22,7 +22,7 @@ typedef long long id_64;
 class CoreBot : public Logger
 {
 public:
-    CoreBot(std::string &api_token,
+    CoreBot(const std::string &api_token,
             const std::string &botusern,
             const bool &background = false,
             const std::string &filename="tgbot.log",

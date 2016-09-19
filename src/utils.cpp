@@ -4,8 +4,10 @@
 #endif
 
 #include <sstream>
+#include <fstream>
 
 #include "cppgram/utils.h"
+#include "cppgram/singleton.h"
 
 int cppgram::osutil::backgroundProcess()
 {
@@ -48,4 +50,47 @@ std::vector<std::string> cppgram::util::split(const std::string& str, const char
     }
 
     return vecstrs;
+}
+
+
+std::string cppgram::util::getTime(const std::string& timeformat) const
+{
+    char finalTime[256];
+    
+    time_t ttime;
+    struct tm *tinfo;
+
+    ttime = time(NULL);
+    tinfo = localtime(&ttime);
+    
+    if(tinfo==NULL) {
+        return "tm error!";
+    }
+    
+    if(strftime(finalTime,sizeof(finalTime),timeformat.c_str(),tinfo) == 0) {
+        return "stfrtime() error!";
+    }
+    
+    return std::string(finalTime);
+}
+
+void cppgram::util::log(const Log& l, const std::string& message, const std::string& filename) 
+{
+    std::string logType;
+    
+    if(filename == FILENAME_DEFAULT)
+        filename=Singleton::getInstance()->getLogFilename();
+    
+    if(l == Log::Error) 
+        logType="[ERROR]";
+    else if(l == Log::Event)
+        logType="[EVENT]";
+    else if(l == Log::Warning)
+        logType="[WARNING]";
+    
+    std::ofstream out;
+    out.open(filename, std::ios::app | std::ios::out);
+    const std::string fmtStr = logType+"["+getTime()+"] "+message+'\n';
+    out.write(fmtStr.c_str(),fmtStr.length());
+    out.close();
 }

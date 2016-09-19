@@ -5,7 +5,7 @@
 using namespace cppgram;
 using namespace std;
 
-CoreBot::CoreBot(string &api_token, const string& botusern,const bool &background,
+CoreBot::CoreBot(const string &api_token, const string& botusern,const bool &background,
                  const string &filename,const uid_32 &timeout, const uid_32 &message_limit)
         : Logger(filename), bot_token(api_token), bot_usern(botusern), updateId(0),
          timeout(timeout),
