@@ -2,9 +2,9 @@
 #include <json/json.h>
 #include <string>
 
-#include "corebot.h"
 #include "types.h"
 #include "singleton.h"
+#include "structures.h"
 
 using namespace cppgram;
 
