@@ -6,6 +6,9 @@
 #include "cppgram/utils.h"
 #include "cppgram/exceptions.h"
 
+// DEBUG
+#include <iostream>
+
 using namespace cppgram;
 using util::Log;
 using util::log;
@@ -63,7 +66,7 @@ void Singleton::setLogFilename(const std::string &new_filename)
 
 short Singleton::setToken(const std::string &new_token)
 {
-    if(!bot_token.empty()) {
+    if(bot_token.empty()) {
         bot_token = new_token;
         return 0;
     } else
@@ -78,7 +81,7 @@ bool Singleton::checkMethodError(const cpr::Response& response, Json::Value& val
         return false;
     }
 
-    if(!Singleton::getInstance()->getReader()->parse(response.text, val)) {
+    if(!reader->parse(response.text, val)) {
         log(Log::Error,"JSON Parser: Error while parsing JSON document!");
         throw new JsonParseError;
     }

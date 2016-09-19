@@ -16,7 +16,7 @@ enum InlineKeyboardButtonType : short;
 
 class InlineKeyboard
 {
-protected:
+    public:
     InlineKeyboard();
 
     bool addButton(const std::string& text, const std::string& data, const InlineKeyboardButtonType& buttonType);

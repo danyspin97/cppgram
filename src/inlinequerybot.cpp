@@ -16,7 +16,7 @@ bool InlineQueryBot::answerInlineQuery(const string &inline_query_id,
                                        const string &switch_pm_text,
                                        const string &switch_pm_paramter)
 {
-    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + Singleton::getInstance()->getToken() + "/sendMessage"},
+    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + Singleton::getInstance()->getToken() + "/answerInlineQuery"},
                                             cpr::Parameters{{"inline_query_id", inline_query_id},
                                                             {"results", results},
                                                             {"cache_time", to_string(cache_time)},
@@ -25,9 +25,10 @@ bool InlineQueryBot::answerInlineQuery(const string &inline_query_id,
                                                             {"switch_pm_text", switch_pm_paramter},
                                                             {"switch_pm_parameter", switch_pm_paramter}});
 
+
     Json::Value valroot;
-    //if (!checkMethodError(response, valroot))
-    //    return false;
+    if (!Singleton::getInstance()->checkMethodError(response, valroot))
+        return false;
 
     return valroot["result"].asBool();
 }

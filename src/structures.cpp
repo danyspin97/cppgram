@@ -86,7 +86,7 @@ inlineQuery::inlineQuery(Json::Value &val) : id(val["id"].asString()),query(val[
 callbackQuery::callbackQuery(Json::Value &val, const std::string& botusern) :id(val["id"].asString()),
                                                                              from(new struct user(val["from"])), 
                                                                              message(new struct message(val["message"],botusern)),
-                                                                             inline_message_id(val ["inline_message_id"].asUInt()),
+                                                                             inline_message_id(val["inline_message_id"].asUInt()),
                                                                              data(val["data"].asString())
 
 {}

@@ -3,6 +3,11 @@
 
 #include <string>
 
+namespace jsoncpp
+{
+class Value;
+}
+
 namespace cppgram
 {
 
