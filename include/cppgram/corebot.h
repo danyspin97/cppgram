@@ -1,15 +1,7 @@
 #ifndef __CPPGRAM_COREBOT_H
 #define __CPPGRAM_COREBOT_H
 
-#define TELEGRAMAPI "https://api.telegram.org/bot"
-
 #include <string>
-#include "logger.h"
-
-namespace cpr
-{
-class Response;
-}
 
 namespace cppgram
 {
@@ -19,7 +11,7 @@ enum ParseMode : short;
 typedef unsigned long uid_32;
 typedef long long id_64;
 
-class CoreBot : public Logger
+class CoreBot
 {
 public:
     CoreBot(const std::string &api_token,
@@ -53,8 +45,6 @@ private:
     const uid_32 timeout, msg_limit;
     void getUpdates();
     void processUpdate(Json::Value &val);
-    // Check if the called api method had any error, including connection(curl) error or api error returned by telegram
-    bool checkMethodError(const cpr::Response& response, Json::Value& val) const;
 };
     
 }

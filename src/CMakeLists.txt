@@ -8,7 +8,9 @@ file(GLOB_RECURSE SOURCES *.cpp)
 
 #fix for Qt Creator not showing cppgram's includes
 file(GLOB_RECURSE HEADERS ../include/cppgram/*.h)
+file(GLOB_RECURSE TEMPLATES ../include/cppgram/*.tpp)
 add_custom_target(headers SOURCES ${HEADERS})
+add_custom_target(templates SOURCES ${TEMPLATES})
 
 if(NOT SOURCES)
 	message(FATAL_ERROR "Cannot find sources! Aborting...")

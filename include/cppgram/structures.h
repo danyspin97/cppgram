@@ -1,12 +1,3 @@
-/**
- * TODO
- * TO FINISH
- * message
- * messageEntity
- * 
- * here, messages, entities, data types are defined
- * structs constructors / destructors' body are defined in src/structures.cpp
- */
 #ifndef CPPGRAM_STRUCTURES_H
 #define CPPGRAM_STRUCTURES_H
 

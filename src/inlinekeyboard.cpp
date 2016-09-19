@@ -1,5 +1,9 @@
 #include <json/json.h>
-#include "cppgram/cppgram.h"
+
+#include "cppgram/inlinekeyboard.h"
+#include "cppgram/exceptions.h"
+#include "cppgram/structures.h"
+#include "cppgram/singleton.h"
 
 using namespace cppgram;
 using namespace std;
@@ -21,7 +25,7 @@ void InlineKeyboard::changeRow()
     column = 0;
 }
 
-bool InlineKeyboard::addButton(const string& text, const string& data, const InlineKeyboardButtonType buttonType)
+bool InlineKeyboard::addButton(const string& text, const string& data, const InlineKeyboardButtonType& buttonType)
 {
     if (text == "" || data == "")
         throw new InlineKeyboardNotValid;

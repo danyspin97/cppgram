@@ -10,6 +10,11 @@ class FastWriter;
 class Value;
 }
 
+namespace cpr
+{
+class Response;
+}
+
 namespace cppgram
 {
 
@@ -23,9 +28,9 @@ public:
     Json::FastWriter *getWriter() const;
     const std::string &getToken() const;
     const std::string &getLogFilename() const;
-    void setToken(const std::string &new_token);
+    short setToken(const std::string &new_token);
     void setLogFilename(const std::string &new_filename);
-    
+    bool checkMethodError(const cpr::Response& response, Json::Value& val) const;
 private:
     Singleton();
     static Singleton *instance;

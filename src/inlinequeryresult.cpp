@@ -1,21 +1,20 @@
 #include <json/json.h>
-#include "cppgram/cppgram.h"
+#include "cppgram/inlinequeryresult.h"
+#include "cppgram/structures.h"
 
 using namespace cppgram;
-using namespace std;
+using std::string;
+using std::to_string;
 
-InlineQueryResult::InlineQueryResult()
-{
-    results = Json::Value();
-    articleId = 0;
-}
+InlineQueryResult::InlineQueryResult() : results(Json::Value()), articleId(0)
+{}
 
-short InlineQueryResult::newArticle(const std::string &title,
-                                    const std::string &message_text,
-                                    const std::string &description,
+short InlineQueryResult::newArticle(const string &title,
+                                    const string &message_text,
+                                    const string &description,
                                     const Json::Value &reply_markup,
-                                    ParseMode parse_mode,
-                                    bool disable_web_page_preview)
+                                    const ParseMode &parse_mode,
+                                    const bool &disable_web_page_preview)
 {
     string mode = "";
     if (parse_mode == ParseMode::HTML)

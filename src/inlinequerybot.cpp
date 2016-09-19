@@ -1,13 +1,20 @@
+#include <cpr/cpr.h>
 #include <json/json.h>
-#include "cppgram/cppgram.h"
+#include "cppgram/inlinequerybot.h"
+#include "cppgram/defines.h"
+#include "cppgram/singleton.h"
 
-bool InlineQueryBot::answerInlineQuery(const std::string &inline_query_id,
-                                       const std::string &results,
-                                       int cache_time,
-                                       bool is_personal,
-                                       const std::string &next_offset,
-                                       const std::string &switch_pm_text,
-                                       const std::string &switch_pm_paramter)
+using namespace cppgram;
+using std::to_string;
+using std::string;
+
+bool InlineQueryBot::answerInlineQuery(const string &inline_query_id,
+                                       const string &results,
+                                       const int &cache_time,
+                                       const bool &is_personal,
+                                       const string &next_offset,
+                                       const string &switch_pm_text,
+                                       const string &switch_pm_paramter)
 {
     const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + Singleton::getInstance()->getToken() + "/sendMessage"},
                                             cpr::Parameters{{"inline_query_id", inline_query_id},

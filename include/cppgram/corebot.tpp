@@ -4,6 +4,7 @@
 
 #include "cppgram/corebot.h"
 #include "cppgram/types.h"
+#include "cppgram/singleton.h"
 
 using namespace cppgram;
 
@@ -41,7 +42,7 @@ uid_32 cppgram::CoreBot::sendMessage(const T& id, const std::string& text,
                                             {"reply_markup", reply_markup}});
 
     Json::Value valroot;
-    if (!checkMethodError(response, valroot))
+    if (!Singleton::getInstance()->checkMethodError(response, valroot))
         return 1;
 
     return valroot["result"]["message_id"].asUInt();

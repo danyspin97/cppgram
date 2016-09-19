@@ -8,11 +8,11 @@ namespace cppgram
 
 class InlineQueryBot
 {
-    public:
-    bool answerInlineQuery(const std::string& inline_query_id,
+protected:
+    static bool answerInlineQuery(const std::string& inline_query_id,
                            const std::string& results,
-                           int cache_time = 300,
-                           bool is_personal = false,
+                           const int &cache_time = 300,
+                           const bool &is_personal = false,
                            const std::string& next_offset = "",
                            const std::string& switch_pm_text = "",
                            const std::string& switch_pm_paramter = "");

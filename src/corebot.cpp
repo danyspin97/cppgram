@@ -1,55 +1,44 @@
 #include <cpr/cpr.h>
 #include <json/json.h>
-#include "cppgram/cppgram.h"
+
+#include "cppgram/defines.h"
+#include "cppgram/corebot.h"
+#include "cppgram/exceptions.h"
+#include "cppgram/singleton.h"
+#include "cppgram/utils.h"
+#include "cppgram/structures.h"
 
 using namespace cppgram;
 using namespace std;
 
+using util::Log;
+using util::log;
+
 CoreBot::CoreBot(const string &api_token, const string& botusern,const bool &background,
                  const string &filename,const uid_32 &timeout, const uid_32 &message_limit)
-        : Logger(filename), bot_token(api_token), bot_usern(botusern), updateId(0),
+        : bot_token(api_token), bot_usern(botusern), updateId(0),
          timeout(timeout),
           msg_limit(message_limit)
 {
     if(background) {
         int bg=osutil::backgroundProcess();
         if (bg == OSUTIL_NEWPROC_NOTSUPPORTED) {
-            log_error("Your operating system is not supported (not yet) for background process");
+            log(Log::Error,"Your operating system is not supported (not yet) for background process");
             throw new BgProcessOSNotSupported;
         } else if(bg == OSUTIL_NEWPROC_FAILED) {
-            log_error("Error while creating background process");
+            log(Log::Error,"Error while creating background process");
             throw new BgProcessFailed;
         } else if(bg == OSUTIL_NEWPROC_SUCCESS)
-            log_event("New background process created!!");
+            log(Log::Event,"New background process created!!");
     }
+
     Singleton::getInstance()->setToken(api_token);
+    Singleton::getInstance()->setLogFilename(filename);
 }
 
 void CoreBot::run()
 {
     getUpdates();
-}
-
-bool CoreBot::checkMethodError(const cpr::Response& response, Json::Value& val) const
-{
-    // If there was an error in the connection print it
-    if (response.error.code != cpr::ErrorCode::OK) {
-        log_error("HTTP Error:" + response.error.message);
-        return false;
-    }
-
-    if(!Singleton::getInstance()->getReader()->parse(response.text, val)) {
-        log_error("JSON Parser: Error while parsing JSON document!");
-        throw new JsonParseError;
-    }
-
-    // Print method error
-    if(response.status_code != 200) {
-        log_error("Telegram Error: " + val["error_code"].asString() + ", Description: " + val["description"].asString());
-        return false;
-    }
-
-    return true;
 }
 
 // Ask telegram to send all updates that need to be parsed
@@ -62,11 +51,11 @@ void CoreBot::getUpdates()
                                                  {"offset", to_string(updateId + 1)}});
          
          Json::Value valroot;
-         if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
+         if (Singleton::getInstance()->checkMethodError(response, valroot) && !valroot["result"].empty()) {
              for(Json::Value &val: valroot["result"]) {
                  processUpdate(val);
                  updateId = val["update_id"].asUInt();
-                 log_event("Last update ID: "+to_string(updateId));
+                 log(Log::Event,"Last update ID: "+to_string(updateId));
              }
          }
      }

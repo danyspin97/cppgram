@@ -1,5 +1,5 @@
 #include <json/json.h>
-#include "cppgram/cppgram.h"
+#include "cppgram/structures.h"
 
 using namespace cppgram;
 
@@ -33,9 +33,9 @@ message::message(Json::Value &val, const std::string& botusern) : message_id(val
                                                                   from(new struct user(val["from"])),
                                                                   date(val["date"].asUInt()),
                                                                   chat(new struct chat(val["chat"])),
-																						forward_from(nullptr),
-																						forward_from_chat(nullptr),
-																						reply_to_message(nullptr)
+                                                                  forward_from(nullptr),
+                                                                  forward_from_chat(nullptr),
+                                                                  reply_to_message(nullptr)
 {
     if (!val["forward_from"].isNull() && val["forward_from"].isObject()) {
         forward_from = new struct user(val["forward_from"]);
@@ -101,6 +101,13 @@ choosenInlineResult::choosenInlineResult(Json::Value &val) : result_id(val["resu
 messageEntity::messageEntity(Json::Value& val) : offset(0), lenght(0), url(""), from(nullptr)
 {}
 
+inlineKeyboardButton::inlineKeyboardButton(const std::string &text,
+                                           const std::string &data,
+                                           const InlineKeyboardButtonType &button_type)
+    : text(text),data(data),button_type(button_type)
+{}
+
+
 /* destructors */
 
 message::~message()
@@ -143,9 +150,3 @@ messageEntity::~messageEntity()
     if(from != NULL)
         delete from;
 }
-
-inlineKeyboardButton::inlineKeyboardButton(const std::string &text,
-                                           const std::string &data,
-                                           const InlineKeyboardButtonType &button_type)
-	: text(text),data(data),button_type(button_type)
-{}

@@ -16,10 +16,10 @@ enum InlineKeyboardButtonType : short;
 
 class InlineKeyboard
 {
-public:
+protected:
     InlineKeyboard();
 
-    bool addButton(const std::string& text, const std::string& data, const InlineKeyboardButtonType buttonType);
+    bool addButton(const std::string& text, const std::string& data, const InlineKeyboardButtonType& buttonType);
     bool addButton(const struct inlineKeyboardButton& newButton);
     bool addButton(const std::vector<struct inlineKeyboardButton>& newButtons);
 
