@@ -10,7 +10,7 @@ enum ParseMode : short;
 
 class InlineQueryResult
 {
-protected:
+public:
     InlineQueryResult();
     short newArticle(const std::string &title,
                      const std::string &message_text,
