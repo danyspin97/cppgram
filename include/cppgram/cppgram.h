@@ -12,7 +12,4 @@
 #include "inlinequeryresult.h"
 #include "inlinequerybot.h"
 
-//template functions body definitions
-#include "corebot.tpp"
-
 #endif //CPPGRAM_CPPGRAM_H

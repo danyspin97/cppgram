@@ -49,4 +49,6 @@ private:
     
 }
 
+#include "corebot.tpp"
+
 #endif
