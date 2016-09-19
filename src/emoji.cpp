@@ -41,11 +41,11 @@ const std::string Emoji::smileGrinning = "\xF0\x9F\x98\x81",
                   Emoji::dizzyFace = "\xF0\x9F\x98\xB5",
                   Emoji::medicalMaskFace = "\xF0\x9F\x98\xB7";
                   
-const std::string Emoji::notSeeingMonkey = "\xF0\x9\x99\x88",
+const std::string Emoji::notSeeingMonkey = "\xF0\x9F\x99\x88",
                   Emoji::notHearingMonkey = "\xF0\x9F\x99\x89",
                   Emoji::notSpeakingMonkey = "\xF0\x9F\x99\x8A";
                   
-const std::string Emoji::smileCatGrinning = "\xF0\x9\x98\xB8",
+const std::string Emoji::smileCatGrinning = "\xF0\x9F\x98\xB8",
                   Emoji::smileCatTearsOfJoy = "\xF0\x9F\x98\xB9",
                   Emoji::smileCatOpenMouth = "\xF0\x9F\x98\xBA",
                   Emoji::smileCatHeartEyes = "\xF0\x9F\x98\xBB",
