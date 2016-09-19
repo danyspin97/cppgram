@@ -63,7 +63,7 @@ void Singleton::setLogFilename(const std::string &new_filename)
 
 short Singleton::setToken(const std::string &new_token)
 {
-    if(!bot_token.empty()) {
+    if(bot_token.empty()) {
         bot_token = new_token;
         return 0;
     } else
