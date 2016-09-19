@@ -6,6 +6,10 @@ set(CPR_STATICLIB libcpr.a)
 
 file(GLOB_RECURSE SOURCES *.cpp)
 
+#fix for Qt Creator not showing cppgram's includes
+file(GLOB_RECURSE HEADERS ../include/cppgram/*.h)
+add_custom_target(headers SOURCES ${HEADERS})
+
 if(NOT SOURCES)
 	message(FATAL_ERROR "Cannot find sources! Aborting...")
 endif(NOT SOURCES)
