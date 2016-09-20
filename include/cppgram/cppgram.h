@@ -11,8 +11,10 @@
 #include "inlinekeyboard.h"
 #include "inlinequeryresult.h"
 #include "inlinequerybot.h"
+#include "editbot.h"
 
 //template functions body definitions
 #include "corebot.tpp"
+#include "editbot.tpp"
 
 #endif //CPPGRAM_CPPGRAM_H

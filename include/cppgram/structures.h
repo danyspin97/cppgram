@@ -132,7 +132,7 @@ struct callbackQuery {
     std::string id;
     const struct user* from;
     const struct message* message;
-    uid_32 inline_message_id;
+    std::string inline_message_id;
     std::string data;
 
     callbackQuery(Json::Value &val, const std::string &botusern);
