@@ -31,6 +31,8 @@ public:
                 const uid_32 &message_limit = 100,
                 const uid_32 &timeout = 60);
     void run();
+
+    // Telegram Bot API methods
     template<typename T>
     uid_32 sendMessage(const T &id,
                        const std::string &text,
@@ -48,11 +50,29 @@ public:
                            const ParseMode &parse_mode = static_cast<ParseMode>(1),
                            const bool &disable_web_page_preview = true) const;
 
+    template<typename T>
+    uid_32 editMessageReplyMarkup(const T &id,
+                                  const uid_32 &message_id,
+                                  const std::string &reply_markup="") const;
+
+    template<typename T>
+    uid_32 editMessageCaption(const T &id,
+                              const uid_32 &message_id,
+                              const std::string &caption,
+                              const std::string &reply_markup="") const;
+
     bool editMessageText(const std::string &inline_message_id,
                          const std::string &text,
                          const std::string &reply_markup = "",
                          const ParseMode &parse_mode = static_cast<ParseMode>(1),
                          const bool &disable_web_page_preview = true) const;
+
+    bool editMessageReplyMarkup(const std::string &inline_message_id,
+                                const std::string &reply_markup="") const;
+
+    bool editMessageCaption(const std::string &inline_message_id,
+                            const std::string &caption,
+                            const std::string &reply_markup="") const;
 
     bool answerInlineQuery(const std::string &inline_query_id,
                            const std::string &results,
@@ -61,6 +81,7 @@ public:
                            const std::string &next_offset = "",
                            const std::string &switch_pm_text = "",
                            const std::string &switch_pm_paramter = "") const;
+    // end of Telegram Bot API methods
 protected:
     virtual void processMessage(const struct message &message);
     virtual void processEditedMessage(const struct message &editedMessage);

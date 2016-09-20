@@ -123,6 +123,36 @@ bool TelegramBot::editMessageText(const string& inline_message_id,
     return valroot["result"].asBool();
 }
 
+bool TelegramBot::editMessageReplyMarkup(const string &inline_message_id,
+                                         const string &reply_markup) const
+{
+    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageReplyMarkup"},
+                                            cpr::Parameters{{"inline_message_id", inline_message_id},
+                                                            {"reply_markup", reply_markup}});
+
+    Json::Value valroot;
+    if(!checkMethodError(response, valroot))
+        return false;
+
+    return valroot["result"].asBool();
+}
+
+bool TelegramBot::editMessageCaption(const string &inline_message_id,
+                                     const string &caption,
+                                     const string &reply_markup) const
+{
+    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "editMessageCaption"},
+                                            cpr::Parameters{{"inline_message_id",inline_message_id},
+                                                            {"caption",caption},
+                                                            {"reply_markup",reply_markup}});
+
+    Json::Value valroot;
+    if(!checkMethodError(response, valroot))
+        return false;
+
+    return valroot["result"].asBool();
+}
+
 bool TelegramBot::answerInlineQuery(const string &inline_query_id,
                                     const string &results,
                                     const int &cache_time,

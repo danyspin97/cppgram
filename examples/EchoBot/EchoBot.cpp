@@ -8,8 +8,8 @@ using namespace std;
 class EchoBot : public TelegramBot
 {
     public:
-    EchoBot(string token) : TelegramBot(token, "@echobot") {}
-    void processMessage(const cppgram::message& message) override
+    EchoBot(string token) : TelegramBot(token) {}
+    void processMessage(const cppgram::message& message)
     {
         sendMessage(message.chat->id, message.text);
     }
