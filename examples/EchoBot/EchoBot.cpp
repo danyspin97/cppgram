@@ -9,7 +9,7 @@ class EchoBot : public TelegramBot
 {
     public:
     EchoBot(string token) : TelegramBot(token, "@echobot") {}
-    virtual void processMessage(const cppgram::message& message) override
+    void processMessage(const cppgram::message& message) override
     {
         sendMessage(message.chat->id, message.text);
     }

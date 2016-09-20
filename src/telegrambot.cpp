@@ -14,9 +14,9 @@ using namespace std;
 using util::Log;
 using util::log;
 
-TelegramBot::TelegramBot(const string &api_token, const string& botusern,const bool &background,
+TelegramBot::TelegramBot(const string &api_token, const bool &background,
                  const string &filename,const uid_32 &timeout, const uid_32 &message_limit)
-        : bot_token(api_token), bot_usern(botusern), updateId(0),
+        : bot_token(api_token), updateId(0),
          timeout(timeout),
           msg_limit(message_limit)
 {
@@ -86,15 +86,15 @@ void TelegramBot::getUpdates()
 void TelegramBot::processUpdate(Json::Value &val)
 {
     if (!val["message"].isNull()) {
-        processMessage(message(val["message"], bot_usern));
+        processMessage(message(val["message"]));
     } else if (!val["edited_message"].isNull()) {
-        processEditedMessage(message(val["edited_message"], bot_usern));
+        processEditedMessage(message(val["edited_message"]));
     } else if (!val["inline_query"].isNull()) {
         processInlineQuery(inlineQuery(val["inline_query"]));
     } else if (!val["choosen_inline_result"].isNull()) {
         processChosenInlineResult(choosenInlineResult(val["choosen_inline_result"]));
     } else if (!val["callback_query"].isNull()) {
-        processCallbackQuery(callbackQuery(val["callback_query"], bot_usern));
+        processCallbackQuery(callbackQuery(val["callback_query"]));
     }
 }
 

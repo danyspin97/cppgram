@@ -29,7 +29,7 @@ chat::chat(Json::Value &val) : id(val["id"].asInt64()) //ITS DONE!!
         last_name = val["last_name"].asString();
 }
 
-message::message(Json::Value &val, const std::string& botusern) : message_id(val["message_id"].asUInt()),
+message::message(Json::Value &val) : message_id(val["message_id"].asUInt()),
                                                                   from(new struct user(val["from"])),
                                                                   date(val["date"].asUInt()),
                                                                   chat(new struct chat(val["chat"])),
@@ -44,17 +44,13 @@ message::message(Json::Value &val, const std::string& botusern) : message_id(val
     }
 
     if (!val["reply_to_message"].isNull() && val["reply_to_message"].isObject())
-        reply_to_message = new struct message(val["reply_to_message"], botusern);
+        reply_to_message = new struct message(val["reply_to_message"]);
 
     if (!val["edit_date"].isNull())
         edit_date = val["edit_date"].asUInt();
 
     if (!val["text"].isNull()) {
-        std::size_t pos;
         text = val["text"].asString();
-        if((pos=text.find(botusern)) != std::string::npos) {
-            text.replace(pos,botusern.length(),"");
-        }
     }
 
     if (!val["entities"].isNull() && val["entities"].isArray()) {
@@ -83,9 +79,9 @@ inlineQuery::inlineQuery(Json::Value &val) : id(val["id"].asString()),query(val[
     }
 }
 
-callbackQuery::callbackQuery(Json::Value &val, const std::string& botusern) :id(val["id"].asString()),
+callbackQuery::callbackQuery(Json::Value &val) :id(val["id"].asString()),
                                                                              from(new struct user(val["from"])), 
-                                                                             message(new struct message(val["message"],botusern)),
+                                                                             message(new struct message(val["message"])),
                                                                              inline_message_id(val["inline_message_id"].asString()),
                                                                              data(val["data"].asString())
 

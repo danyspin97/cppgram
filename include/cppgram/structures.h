@@ -85,7 +85,7 @@ struct message {
     //struct messageEntity (*entities)[];
     //struct attachment* message_data;
                                                         
-    message(Json::Value &val, const std::string& botusern);
+    message(Json::Value &val);
     message(const struct message& prev) = delete;
     ~message();
 };
@@ -135,7 +135,7 @@ struct callbackQuery {
     std::string inline_message_id;
     std::string data;
 
-    callbackQuery(Json::Value &val, const std::string &botusern);
+    callbackQuery(Json::Value &val);
     callbackQuery(const struct callbackQuery& prev) = delete;
     ~callbackQuery();
 };

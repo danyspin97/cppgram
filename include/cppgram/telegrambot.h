@@ -26,7 +26,6 @@ class TelegramBot
 {
     public:
     TelegramBot(const std::string &api_token,
-                const std::string &botusern,
                 const bool &background = false,
                 const std::string &filename = "tgbot.log",
                 const uid_32 &message_limit = 100,
@@ -73,7 +72,7 @@ class TelegramBot
     void getUpdates();
 
     private:
-    const std::string bot_token, bot_usern;
+    const std::string bot_token;
     uid_32 updateId;
     const uid_32 timeout, msg_limit;
     void processUpdate(Json::Value &val);
