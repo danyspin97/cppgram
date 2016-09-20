@@ -18,7 +18,7 @@ public:
                      const Json::Value &reply_markup = Json::Value(),
                      const ParseMode &parse_mode = static_cast<ParseMode>(0),
                      const bool &disable_web_page_preview = true);
-    const Json::Value &getResults();
+    const Json::Value &getResults() const;
 private:
     Json::Value results;
     short articleId;

@@ -6,9 +6,6 @@
 #include "cppgram/utils.h"
 #include "cppgram/exceptions.h"
 
-// DEBUG
-#include <iostream>
-
 using namespace cppgram;
 using util::Log;
 using util::log;

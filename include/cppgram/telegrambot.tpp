@@ -53,8 +53,8 @@ uid_32 TelegramBot::editMessageText(const T &id,
                                 const uid_32 &message_id,
                                 const string &text,
                                 const string &reply_markup,
-                                const ParseMode parse_mode,
-                                const bool disable_web_page_preview) const
+                                const ParseMode &parse_mode,
+                                const bool &disable_web_page_preview) const
 {
     string parseMode = "", fid;
 
@@ -68,9 +68,8 @@ uid_32 TelegramBot::editMessageText(const T &id,
     else if (parse_mode == ParseMode::Markdown)
         parseMode = "Markdown";
 
-    const cpr::Response
-            response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageText"},
-                                cpr::Parameters{{"chat_id", fid},
+    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageText"},
+                                            cpr::Parameters{{"chat_id", fid},
                                                 {"message_id", to_string(message_id)},
                                                 {"text", text},
                                                 {"parse_mode", parseMode},

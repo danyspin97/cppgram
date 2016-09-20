@@ -6,8 +6,7 @@ using std::string;
 using std::to_string;
 
 InlineQueryResult::InlineQueryResult() : results(Json::Value()), articleId(0)
-{
-}
+{}
 
 short InlineQueryResult::newArticle(const string &title,
                                     const string &message_text,
@@ -36,7 +35,7 @@ short InlineQueryResult::newArticle(const string &title,
     return articleId;
 }
 
-const Json::Value& InlineQueryResult::getResults()
+const Json::Value& InlineQueryResult::getResults() const
 {
     return results;
 }

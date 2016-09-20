@@ -10,9 +10,7 @@ using namespace std;
 
 InlineKeyboard::InlineKeyboard()
         : column(0), row(0)
-{
-
-}
+{}
 
 Json::Value InlineKeyboard::getKeyboard() const
 {
@@ -54,7 +52,7 @@ bool InlineKeyboard::addButton(const struct inlineKeyboardButton &newButton)
 
 bool InlineKeyboard::addButton(const vector<inlineKeyboardButton>& newButtons)
 {
-    for (auto const& button: newButtons) {
+    for (const inlineKeyboardButton& button: newButtons) {
         if (addButton(button.text, button.data, button.button_type) == false)
             return false;
     }
