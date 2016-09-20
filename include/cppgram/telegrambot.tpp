@@ -121,7 +121,7 @@ uid_32 TelegramBot::editMessageCaption(const T& id,
 
     const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageCaption"},
                                             cpr::Parameters{{"chat_id", fid},
-                                                            {"message_id", message_id},
+                                                            {"message_id", to_string(message_id)},
                                                             {"caption", caption},
                                                             {"reply_markup",reply_markup}});
 
