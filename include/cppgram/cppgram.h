@@ -4,13 +4,11 @@
 #include "defines.h"
 #include "emoji.h"
 #include "types.h"
-#include "corebot.h"
+#include "telegrambot.h"
 #include "structures.h"
 #include "exceptions.h"
 #include "utils.h"
 #include "inlinekeyboard.h"
 #include "inlinequeryresult.h"
-#include "inlinequerybot.h"
-#include "editbot.h"
 
 #endif //CPPGRAM_CPPGRAM_H
