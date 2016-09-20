@@ -42,7 +42,7 @@ uid_32 TelegramBot::sendMessage(const T &id, const std::string &text,
                                                             {"reply_markup", reply_markup}});
 
     Json::Value valroot;
-    if (!Singleton::getInstance()->checkMethodError(response, valroot))
+    if (!checkMethodError(response, valroot))
         return 1;
 
     return valroot["result"]["message_id"].asUInt();
@@ -69,7 +69,7 @@ uid_32 TelegramBot::editMessageText(const T &id,
         parseMode = "Markdown";
 
     const cpr::Response
-            response = cpr::Get(cpr::Url{TELEGRAMAPI + Singleton::getInstance()->getToken() + "/editMessageText"},
+            response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageText"},
                                 cpr::Parameters{{"chat_id", fid},
                                                 {"message_id", to_string(message_id)},
                                                 {"text", text},
@@ -78,7 +78,7 @@ uid_32 TelegramBot::editMessageText(const T &id,
                                                 {"reply_markup", reply_markup}});
 
     Json::Value valroot;
-    if (!Singleton::getInstance()->checkMethodError(response, valroot))
+    if (!checkMethodError(response, valroot))
         return 1;
 
     return valroot["result"]["message_id"].asUInt();

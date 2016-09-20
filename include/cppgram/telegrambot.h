@@ -6,6 +6,12 @@
 namespace Json
 {
 class Value;
+class Reader;
+}
+
+namespace cpr
+{
+class Response;
 }
 
 namespace cppgram
@@ -64,12 +70,15 @@ class TelegramBot
                            const std::string &next_offset = "",
                            const std::string &switch_pm_text = "",
                            const std::string &switch_pm_paramter = "");
+    void getUpdates();
+
     private:
     const std::string bot_token, bot_usern;
     uid_32 updateId;
     const uid_32 timeout, msg_limit;
-    void getUpdates();
     void processUpdate(Json::Value &val);
+    bool checkMethodError(const cpr::Response& response, Json::Value& val) const;
+    Json::Reader* reader;
 };
 
 }

@@ -24,7 +24,8 @@ int cppgram::osutil::backgroundProcess()
 			 exit(0);
 	 }
 
-    if(setsid() < 0) return OSUTIL_NEWPROC_FAILED;
+    if(setsid() < 0)
+        return OSUTIL_NEWPROC_FAILED;
 
     /*close file descriptors*/
     close(0);
