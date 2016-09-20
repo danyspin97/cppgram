@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace jsoncpp
+namespace Json
 {
 class Value;
 }
@@ -53,5 +53,7 @@ private:
 };
     
 }
+
+#include "corebot.tpp"
 
 #endif
