@@ -23,8 +23,8 @@ public:
     bool addButton(const struct inlineKeyboardButton& newButton);
     bool addButton(const std::vector<struct inlineKeyboardButton>& newButtons);
 
-    inline void changeRow();
-    inline void clearKeyboard();
+    void changeRow();
+    void clearKeyboard();
 
     void getKeyboard(std::string& reply_markup, const bool &clearKeyboard = true) ;
     Json::Value getKeyboard() const;
