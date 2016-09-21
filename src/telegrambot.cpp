@@ -1,6 +1,5 @@
 #include <cpr/cpr.h>
 #include <json/json.h>
-#include <CLucene.h>
 
 #include "cppgram/defines.h"
 #include "cppgram/telegrambot.h"
