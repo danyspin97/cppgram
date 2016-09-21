@@ -33,6 +33,7 @@ public:
     void run();
 
     // Telegram Bot API methods
+
     template<typename T>
     uid_32 sendMessage(const T &id,
                        const std::string &text,
@@ -84,6 +85,7 @@ public:
     bool getUpdates(Json::Value& val, const uid_32& offset = 0,
                     const uid_32& limit = 100,
                     const uid_32& timeout = 10);
+
     // end of Telegram Bot API methods
 protected:
     virtual void processMessage(const struct message &message);

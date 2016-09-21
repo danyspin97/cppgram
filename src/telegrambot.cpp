@@ -65,7 +65,9 @@ bool TelegramBot::checkMethodError(const cpr::Response &response, Json::Value &v
 // Ask telegram to send all updates that need to be parsed
 void TelegramBot::processUpdates()
 {
-    /*do {
+    //runOnce, needed in order to get the initial update_id offset
+    //this will not be executed more than 1 time, after the first update
+    do {
         const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"},
                                                 cpr::Parameters{{"timeout", to_string(timeout)},
                                                                 {"limit", to_string(update_limit)},
@@ -73,20 +75,20 @@ void TelegramBot::processUpdates()
 
         Json::Value valroot;
         if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
+            //sets the initial offset
             updateId = valroot["result"][0]["update_id"].asUInt();
         }
 
-    } while (updateId == 0);*/
+    } while (updateId == 0);
 
     while (1) {
         const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"},
                                                 cpr::Parameters{{"timeout", to_string(timeout)},
                                                                 {"limit", to_string(update_limit)},
-                                                                {"offset", to_string(updateId+1)}});
+                                                                {"offset", to_string(updateId)}});
 
         Json::Value valroot;
         if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
-            short updateResultSize = valroot["result"].size()-1;
             for (Json::Value &val: valroot["result"]) {
                 if (!val["message"].isNull()) {
                     processMessage(message(val["message"]));
@@ -100,8 +102,7 @@ void TelegramBot::processUpdates()
                     processCallbackQuery(callbackQuery(val["callback_query"]));
                 }
             }
-            //updateId += valroot["result"].size();
-            updateId=valroot["result"][updateResultSize]["update_id"].asUInt();
+            updateId += valroot["result"].size();
             log(Log::Event,"Last Update ID: "+to_string(updateId));
         }
     }
