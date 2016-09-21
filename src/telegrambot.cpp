@@ -64,9 +64,9 @@ bool TelegramBot::checkMethodError(const cpr::Response &response, Json::Value &v
 }
 
 // Ask telegram to send all updates that need to be parsed
-void TelegramBot::processUpdates(bool loop)
+void TelegramBot::processUpdates()
 {
-    do {
+    /*do {
         const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"},
                                                 cpr::Parameters{{"timeout", to_string(timeout)},
                                                                 {"limit", to_string(update_limit)},
@@ -77,16 +77,17 @@ void TelegramBot::processUpdates(bool loop)
             updateId = valroot["result"][0]["update_id"].asUInt();
         }
 
-    } while (updateId == 0);
+    } while (updateId == 0);*/
 
-    while (loop) {
+    while (1) {
         const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"},
                                                 cpr::Parameters{{"timeout", to_string(timeout)},
                                                                 {"limit", to_string(update_limit)},
-                                                                {"offset", to_string(updateId)}});
+                                                                {"offset", to_string(updateId+1)}});
 
         Json::Value valroot;
         if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
+            short updateResultSize = valroot["result"].size()-1;
             for (Json::Value &val: valroot["result"]) {
                 if (!val["message"].isNull()) {
                     processMessage(message(val["message"]));
@@ -100,23 +101,23 @@ void TelegramBot::processUpdates(bool loop)
                     processCallbackQuery(callbackQuery(val["callback_query"]));
                 }
             }
-            updateId += valroot["result"].size();
+            //updateId += valroot["result"].size();
+            updateId=valroot["result"][updateResultSize]["update_id"].asUInt();
+            log(Log::Event,"Last Update ID: "+to_string(updateId));
         }
     }
 }
 
-Json::Value &TelegramBot::getUpdates(const uid_32 &offset, const uid_32 &limit, const uid_32 &timeout)
+bool TelegramBot::getUpdates(Json::Value& val,const uid_32 &offset, const uid_32 &limit, const uid_32 &timeout)
 {
     const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"},
                                             cpr::Parameters{{"timeout", to_string(timeout)},
                                                             {"limit", to_string(limit)},
                                                             {"offset", to_string(offset + 1)}});
+    if (!checkMethodError(response, val))
+        return false;
 
-    Json::Value valroot;
-    if (!checkMethodError(response, valroot) && !valroot["result"].empty()) {
-        return valroot;
-    }
-    return valroot["result"];
+    return true;
 }
 
 bool TelegramBot::editMessageText(const string &inline_message_id,

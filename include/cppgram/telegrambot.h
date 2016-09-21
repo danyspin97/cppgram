@@ -28,8 +28,8 @@ public:
     TelegramBot(const std::string &api_token,
                 const bool &background = false,
                 const std::string &filename = "tgbot.log",
-                const uid_32 &message_limit = 100,
-                const uid_32 &timeout = 0);
+                const uid_32 &message_limit = 50,
+                const uid_32 &timeout = 60);
     void run();
 
     // Telegram Bot API methods
@@ -81,7 +81,9 @@ public:
                            const std::string &next_offset = "",
                            const std::string &switch_pm_text = "",
                            const std::string &switch_pm_paramter = "") const;
-    Json::Value& getUpdates(const uid_32& offset = 0, const uid_32& limit = 100, const uid_32& timeout = 0);
+    bool getUpdates(Json::Value& val, const uid_32& offset = 0,
+                    const uid_32& limit = 100,
+                    const uid_32& timeout = 10);
     // end of Telegram Bot API methods
 protected:
     virtual void processMessage(const struct message &message);
@@ -95,7 +97,7 @@ private:
     const uid_32 timeout, update_limit;
     bool checkMethodError(const cpr::Response& response, Json::Value& val) const;
     Json::Reader* reader;
-    void processUpdates(bool loop = true);
+    void processUpdates();
 };
 
 }
