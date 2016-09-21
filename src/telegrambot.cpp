@@ -103,7 +103,6 @@ void TelegramBot::processUpdates()
                 }
             }
             updateId += valroot["result"].size();
-            log(Log::Event,"Last Update ID: "+to_string(updateId));
         }
     }
 }
