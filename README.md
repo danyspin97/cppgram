@@ -12,7 +12,19 @@ Easy C++ wrapper for Telegram Bot API
 
  Git is required in order to get the libraries
 
- libcurl is required in order to use libcpr (RUNTIME!)
+ libcurl is required in order to use libcpr
+
+## Documentation
+
+ You can find documentation [here](https://gitlab.com/WiseDragonStd/cppgram/wikis/home)
+ 
+ Not finished yet :)
+
+## Examples 
+ 
+ Full explained in the docs, you can find examples in the examples/ directory.
+ 
+ EchoBot example is coming with an useful CMakeLists.txt sample for larger projects with CppGram
 
 ## How to compile the static library?
  
@@ -111,10 +123,4 @@ Easy C++ wrapper for Telegram Bot API
  -O2 -march=native -mtune=native -Wall -std=c++14
  ~~~
 
-### Examples
 
- see *examples/* directory
-
-### Wiki
- 
- is coming :)
