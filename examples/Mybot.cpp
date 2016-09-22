@@ -3,16 +3,15 @@
 #define TOKEN "token"
 
 using namespace cppgram;
-using namespace std;
 
 class MyBot : public TelegramBot
 {
     public:
-    MyBot(string token) : TelegramBot(token)
+    MyBot() : TelegramBot(TOKEN)
     {}
 
     // Every time the bot receive a message this function will be called
-    void processMessage(const cppgram::message &message) override final
+    void processMessage(const message &message) override final
     {
 		  // This is where the button will be stored
 		  string gen_button;
@@ -37,7 +36,7 @@ class MyBot : public TelegramBot
     }
 
     // Every time a user press a bot button of type CallbackQuery this function will be called
-    void processCallbackQuery(const cppgram::callbackQuery &callbackQuery) override final
+    void processCallbackQuery(const callbackQuery &callbackQuery) override final
     {
         // Did the user called a button with callback_data as edit?
         if (callbackQuery.data == "edit") {
@@ -67,7 +66,7 @@ class MyBot : public TelegramBot
 int main()
 {
 	 //create the bot with your token (see BotFather)
-    MyBot bot(TOKEN);
+    MyBot bot;
 
 	 //call run() to start getting updates 
     bot.run(); 
