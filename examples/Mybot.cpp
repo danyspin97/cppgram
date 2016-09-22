@@ -1,6 +1,6 @@
-#include <iostream>
-#include <json/json.h>
-#include "cppgram/cppgram.h"
+#include <cppgram/cppgram.h>
+
+#define TOKEN "token"
 
 using namespace cppgram;
 using namespace std;
@@ -12,34 +12,37 @@ class MyBot : public TelegramBot
     {}
 
     // Every time the bot receive a message this function will be called
-    void processMessage(const cppgram::message &message) override
+    void processMessage(const cppgram::message &message) override final
     {
+		  // This is where the button will be stored
+		  string gen_button;
+
         // Create a new keyboard classe to add buttons to a message
-        auto keyboard = new InlineKeyboard();
+        InlineKeyboard keyboard;
+
         // Add first button that will be clickable and will send "edit" to the bot when pressed
-        keyboard->addButton("Edit Me", "edit", InlineKeyboardButtonType::CallbackData);
+        keyboard.addButton("Edit Me", "edit", InlineKeyboardButtonType::CallbackData);
 
         //Change row so the next button will be under the last
-        keyboard->changeRow();
+        keyboard.changeRow();
 
         // Add the second button as a link to this wrapper source
-        keyboard->addButton("Source", "https://gitlab.com/WiseDragonStd/cppgram", InlineKeyboardButtonType::URL);
+        keyboard.addButton("Source", "https://gitlab.com/WiseDragonStd/cppgram", InlineKeyboardButtonType::URL);
 
-        string button_string;
         // Get the keyboard we created and pass it to sendMessage method
-        keyboard->getKeyboard(button_string);
+        keyboard.getKeyboard(gen_button);
 
         // Call the api
-        sendMessage(message.chat->id, "Test bot for Cppgram wrapper", button_string);
+        sendMessage(message.chat->id, "Test bot for Cppgram wrapper", gen_button);
     }
 
     // Every time a user press a bot button of type CallbackQuery this function will be called
-    void processCallbackQuery(const cppgram::callbackQuery &callbackQuery) override
+    void processCallbackQuery(const cppgram::callbackQuery &callbackQuery) override final
     {
         // Did the user called a button with callback_data as edit?
         if (callbackQuery.data == "edit") {
             // Is this message been sent by an inline query?
-            if (callbackQuery.inline_message_id != "") {
+            if (!callbackQuery.inline_message_id.empty()) {
                 // Then modify it using inline_message_id
                 editMessageText(callbackQuery.inline_message_id, "This is an inline message");
             } else {
@@ -50,7 +53,7 @@ class MyBot : public TelegramBot
             }
             // Then change the message with the data of the button the user pressed
         } else {
-            if (callbackQuery.inline_message_id != "") {
+            if (!callbackQuery.inline_message_id.empty()) {
                 editMessageText(callbackQuery.inline_message_id, callbackQuery.data);
             } else {
                 editMessageText(callbackQuery.message->chat->id,
@@ -63,8 +66,11 @@ class MyBot : public TelegramBot
 
 int main()
 {
-    MyBot bot("token");
-    bot.run();
+	 //create the bot with your token (see BotFather)
+    MyBot bot(TOKEN);
+
+	 //call run() to start getting updates 
+    bot.run(); 
 
     return 0;
 }

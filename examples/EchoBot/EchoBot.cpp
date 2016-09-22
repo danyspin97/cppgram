@@ -1,23 +1,25 @@
-#include <iostream>
-#include <json/json.h>
-#include "cppgram/cppgram.h"
+#include <cppgram/cppgram.h>
+
+#define TOKEN "token"
 
 using namespace cppgram;
-using namespace std;
 
 class EchoBot : public TelegramBot
 {
     public:
-    EchoBot(string token) : TelegramBot(token) {}
-    void processMessage(const cppgram::message& message)
+    EchoBot(const std::string token) : TelegramBot("token") {}
+    void processMessage(const cppgram::message& message) override final
     {
-        sendMessage(message.chat->id, message.text);
+		 if(message.chat->type != ChatType::Private) 
+			sendMessage(message.chat->id, "Message: *message.text*"+" sent by: *"+message.user->username+"*", ParseMode::Markdown);
+       else
+			sendMessage(message.chat->id, "Message: *message.text*", ParseMode::Markdown);
     }
 
 };
 
 int main() {
-    MyBot bot(string("token"));
+    MyBot bot(TOKEN);
     bot.run();
 
     return 0;

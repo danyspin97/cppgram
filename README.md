@@ -103,6 +103,18 @@ Easy C++ wrapper for Telegram Bot API
  $ g++ mysrc.cpp -o mybot libcpr.a libjsoncpp.a libcppgram.a -lcurl
  ~~~
 
+ ---
+
+ We reccomend to build YOUR bot on YOUR own computer to get better performance, using these flags:
+
+ ~~~
+ -O2 -march=native -mtune=native -Wall -std=c++14
+ ~~~
+
 ### Examples
 
- Examples on the way
+ see *examples/* directory
+
+### Wiki
+ 
+ is coming :)
