@@ -8,17 +8,38 @@ Easy C++ wrapper for Telegram Bot API
  * jsoncpp
  * cpr
 
- CMake will get these libraries and will configure them (once)
+ CMake will get these libraries and will configure them (once) for you
 
  Git is required in order to get the libraries
 
  libcurl is required in order to use libcpr
 
-## Documentation
+## Practical Tutorial
 
- You can find documentation [here](https://gitlab.com/WiseDragonStd/cppgram/wikis/home)
+ You can find tutorial [here](https://gitlab.com/WiseDragonStd/cppgram/wikis/home)
  
  Not finished yet :)
+
+
+## Documentation
+ 
+ Documentation is generated through Doxygen!
+
+ Can find inside doc/ (choose HTML or LaTeX format)
+
+ ~~~
+ $ cd doc/latex
+ $ make
+ ~~~
+
+ Makes a Portable Document Format of the documentation
+ 
+ else you can read it through a LaTex Reader or using directly HTML 
+
+ ~~~
+ $ cd doc/html
+ $ $BROWSER index.html
+ ~~~
 
 ## Examples 
  
@@ -27,21 +48,6 @@ Easy C++ wrapper for Telegram Bot API
  EchoBot example is coming with an useful CMakeLists.txt sample for larger projects with CppGram
 
 ## How to compile the static library?
- 
- *TWO OPTIONS*:
-
- Run build.sh
- ~~~
- $ chmod +x build.sh && ./build.sh
- ~~~
-
- You can run build.sh using these arguments:
-
- * -fc or --full-clean : will remove the entire build directory after compiling and installing (if requried)
- * -i or --install : will install cppgram headers and static libs (usually /usr/local/lib)
- * -ndg or --nodeps-get : will not get dependencies headers and libraries (cpr and jsoncpp), you need headers for compilation!!
-
- OR
 
  Do it manually! Enjoy
 
@@ -92,7 +98,7 @@ Easy C++ wrapper for Telegram Bot API
 
  * You will find out all the static libraries in ../CppGram/lib
 
-## Other make rules
+## Cleaning 
 
  * In the build directory to clean (then you need to rebuild the libraries)
 
@@ -104,7 +110,7 @@ Easy C++ wrapper for Telegram Bot API
  * In the source directory to remove useless headers (after building)
 
  ~~~
- $ ./clean.sh
+ $ ./clean-extra-headers.sh
  ~~~
 
 ## How do I link to my own bot?
