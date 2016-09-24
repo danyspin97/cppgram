@@ -24,6 +24,15 @@ Easy C++ wrapper for Telegram Bot API
 ## Documentation
  
  Documentation is generated through Doxygen!
+ After building libraries, run easily:
+
+ ~~~
+ $ make gendoc
+ ~~~
+
+ So, you can find documentation inside CppGram/doc
+
+ Follow instruction below
 
  Can find inside doc/ (choose HTML or LaTeX format)
 

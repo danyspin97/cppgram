@@ -2,9 +2,14 @@ cmake_minimum_required(VERSION 2.8)
 project(cppgram)
 
 find_program(GIT "git")
+find_program(DOXYGEN "doxygen")
 
 if(NOT GIT)
-	message(FATAL_ERROR "Cannot find git")
+	message(WARNING "Cannot find git")
+endif()
+
+if(NOT DOXYGEN)
+	message(WARNING "Cannot find Doxygen to generate doc (make gendoc)")
 endif()
 
 if(NOT NOGET_DEPS)
@@ -54,4 +59,10 @@ include_directories(include)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
 
+add_custom_target(gendoc
+	COMMAND doxygen ${CMAKE_SOURCE_DIR}/Doxyfile
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+	)
+
 add_subdirectory(src)
+message("You can easily generate documentation by running \"make gendoc\"")

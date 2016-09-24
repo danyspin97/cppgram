@@ -23,7 +23,7 @@ typedef unsigned long uid_32;
 typedef long long id_64;
 
 /**
- * @brief The TelegramBot class
+ * The TelegramBot class
  */
 class TelegramBot
 {
