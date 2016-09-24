@@ -22,6 +22,9 @@ enum ParseMode : short;
 typedef unsigned long uid_32;
 typedef long long id_64;
 
+/**
+ * @brief The TelegramBot class
+ */
 class TelegramBot
 {
 public:
