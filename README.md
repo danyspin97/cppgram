@@ -14,34 +14,9 @@ Easy C++ wrapper for Telegram Bot API
 
  libcurl is required in order to use libcpr
 
-## Documentation
+## Documentation and guide
  
- Documentation is generated through Doxygen!
- After building libraries, run easily:
-
- ~~~
- $ make gendoc
- ~~~
-
- So, you can find documentation inside CppGram/doc
-
- Follow instruction below
-
- Can find inside doc/ (choose HTML or LaTeX format)
-
- ~~~
- $ cd doc/latex
- $ make
- ~~~
-
- Makes a Portable Document Format of the documentation
- 
- else you can read it through a LaTex Reader or using directly HTML 
-
- ~~~
- $ cd doc/html
- $ $BROWSER index.html
- ~~~
+ Documentation and guide are on the way
 
 ## Examples 
  
@@ -51,7 +26,6 @@ Easy C++ wrapper for Telegram Bot API
 
 ## How to compile the static library?
 
- Do it manually! Enjoy
 
  * Make a new directory OUTSIDE the source directory
  ~~~
@@ -67,20 +41,6 @@ Easy C++ wrapper for Telegram Bot API
  ~~~
  $ cmake ../cppgram-build
  ~~~
-
-  *You may want to use another compiler, then, you have two options:*
-
-  ~~~
-  $ CXX=/usr/bin/clang++ cmake ../cppgram-build
-  ~~~
-
-  *or*
-
-  ~~~
-  $ cmake ../cppgram-build -DCMAKE_CXX_COMPILER=/usr/bin/clang++
-  ~~~
-
-  *Clang is just an example!*
 
   ---
 
