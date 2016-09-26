@@ -1,7 +1,50 @@
-#ifndef __CPPGRAM_COREBOT_H
+﻿#ifndef __CPPGRAM_COREBOT_H
 #define __CPPGRAM_COREBOT_H
 
 #include <string>
+
+/*! \mainpage Reference
+ * \authors Stefano Belli, Danilo Spinella
+ *
+ * \section WhereToGet
+ *
+ * \subsection GitRepository
+ *
+ * <a href="https://gitlab.com/WiseDragonStd/cppgram" target="_blank">GitLab - CppGram</a>
+ *
+ * Cloning repository:
+ *
+ * $ <tt>git clone https://gitlab.com/WiseDragonStd/cppgram.git</tt>
+ *
+ * \subsection Branches
+ *
+ *  - master : main "stable" branch
+ *  - dev    : development branch
+ *
+ * \section DevelopmentInfos
+ *
+ * \subsection Dependencies
+ *
+ * This library requires:
+ *  - jsoncpp
+ *  - cpr
+ *  - curl
+ *
+ * \subsection BuildTools
+ *
+ *  - CMake
+ *  - Make
+ *  - GCC / Clang are preferred (tested with GCC 6.2.1)
+ *
+ * \subsection StaticAnalyzer
+ *
+ * We <3 CppCheck, analyze using this command:
+ *
+ * $ <tt>cd src/</tt>
+ *
+ * $ <tt>cppcheck *.cpp --enable=all --language=c++ --report-progress --verbose -I../include -I/usr/include --force 2>cppgram.log</tt>
+ *
+ */
 
 namespace Json
 {
@@ -14,6 +57,11 @@ namespace cpr
 class Response;
 }
 
+/*! \namespace cppgram
+ *
+ * \brief main namespace for CppGram
+ *
+ */
 namespace cppgram
 {
 
@@ -22,17 +70,35 @@ enum ParseMode : short;
 typedef unsigned long uid_32;
 typedef long long id_64;
 
-/**
- * The TelegramBot class
+/*! \class TelegramBot
+ *
+ *  \brief contains api methods, update handlers and listener
+ *
  */
 class TelegramBot
 {
 public:
+    /*! \fn TelegramBot::TelegramBot(const std::string &api_token,
+                const bool &background = false,
+                const std::string &filename = "tgbot.log",
+                const uid_32 &limit = 50,
+                const uid_32 &timeout = 60)
+     * \brief TelegramBot constructor
+     * \param api_token: the Bot API token (REQUIRED)
+     * \param background: tries to fork the process and put the new in background (default: false)
+     * \param filename: log output filename/path (default: tgbot.log)
+     * \param message_limit: max update limit (default: 50)
+     * \param timeout: max timeout for HTTP long polling (default: 100s)
+     */
     TelegramBot(const std::string &api_token,
                 const bool &background = false,
                 const std::string &filename = "tgbot.log",
-                const uid_32 &message_limit = 50,
+                const uid_32 &limit = 50,
                 const uid_32 &timeout = 60);
+
+    /*! \fn void TelegramBot::run()
+     * \brief runs infinite loop which handles updates (HTTP long polling "getUpdates" API method)
+     */
     void run();
 
     // Telegram Bot API methods

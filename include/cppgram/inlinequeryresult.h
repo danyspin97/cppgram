@@ -8,9 +8,15 @@ namespace cppgram
 
 enum ParseMode : short;
 
+/*! \class InlineQueryResult
+ * \brief represents an InlineQueryResult object
+ */
 class InlineQueryResult
 {
 public:
+    /*! \fn InlineQueryResult::InlineQueryResult()
+     * \brief InlineQueryResult constructor
+     */
     InlineQueryResult();
     short newArticle(const std::string &title,
                      const std::string &message_text,

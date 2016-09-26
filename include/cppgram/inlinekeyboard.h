@@ -14,9 +14,15 @@ namespace cppgram
 
 enum InlineKeyboardButtonType : short;
 
+/*! \class InlineKeyboard
+ * \brief represents an InlineKeyboard which will be generated later (see getKeyboard() member)
+ */
 class InlineKeyboard
 {
 public:
+    /*! \fn InlineKeyboard::InlineKeyboard()
+     * \brief InlineKeyboard constructor
+     */
     InlineKeyboard();
 
     bool addButton(const std::string& text, const std::string& data, const InlineKeyboardButtonType& buttonType);

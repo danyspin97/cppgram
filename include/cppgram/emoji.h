@@ -8,6 +8,9 @@
 namespace cppgram
 {
 
+/*! \class Emoji
+ * \brief Contains static emoji strings members
+ */
 class Emoji
 {
 public:

@@ -15,9 +15,9 @@ using util::Log;
 using util::log;
 
 TelegramBot::TelegramBot(const string &api_token, const bool &background,
-                         const string &filename, const uid_32 &timeout, const uid_32 &message_limit)
+                         const string &filename, const uid_32 &timeout, const uid_32 &limit)
         : bot_token(api_token), updateId(0),
-          timeout(timeout), update_limit(message_limit),
+          timeout(timeout), update_limit(limit),
           reader(Singleton::getInstance()->getReader())
 {
     if (background) {

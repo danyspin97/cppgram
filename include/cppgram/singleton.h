@@ -18,10 +18,20 @@ class Response;
 namespace cppgram
 {
 
+/*! \class Singleton
+ * \brief Singleton class is used inside the project and should not be used with the final bot
+ */
 class Singleton
 {
 public:
+    /*! \fn Singleton::Singleton(const Singleton &prev) = delete
+     * \brief disable copy constructor
+     * \param prev: the copied class
+     */
     Singleton(const Singleton &prev) = delete;
+    /*! \fn Singleton::~Singleton()
+     * \brief public Singleton destroyer
+     */
     ~Singleton();
     static Singleton *getInstance();
     Json::Reader *getReader() const;
