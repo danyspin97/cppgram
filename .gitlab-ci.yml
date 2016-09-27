@@ -14,9 +14,9 @@ pages:
    script:
       - which doxygen || apt-get -y install doxygen
       - make gendoc
-      - mv doc/html public/ 
+      - mv ../cppgram/doc/html public/ 
    artifacts:
       paths:
-         - public
+         - ../build/public
            #only:
       #      - master
