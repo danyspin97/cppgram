@@ -9,3 +9,13 @@ before_script:
 rspec:
    script:
       - make --jobs=5
+
+pages:
+   script:
+      - cd ../build 
+      - make gendoc
+   artifacts:
+      paths:
+         - ../cppgram/doc/html
+   only:
+      - master
