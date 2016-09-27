@@ -42,16 +42,7 @@ Easy C++ wrapper for Telegram Bot API
  $ cmake ../cppgram-build
  ~~~
 
-  ---
-
-  *Aand... you may want to use your installed cpr and jsoncpp headers / static libraries, without need downloading and building everytime*
-
-  ~~~
-  $ cmake ../cppgram-build -DNOGET_DEPS="yes"
-  ~~~
-
  * After running CMake, you have to run make in order to compile the library and its dependencies
-
  ~~~
  $ make
  ~~~
@@ -59,6 +50,8 @@ Easy C++ wrapper for Telegram Bot API
  This will download required dependencies and configure them in order to compile our library.
 
  * You will find out all the static libraries in ../CppGram/lib
+
+ You can find in the documentation all availible CMake configuration options
 
 ## Cleaning 
 

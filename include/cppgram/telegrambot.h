@@ -44,6 +44,41 @@
  *
  * $ <tt>cppcheck *.cpp --enable=all --language=c++ --report-progress --verbose -I../include -I/usr/include --force 2>cppgram.log</tt>
  *
+ * \section HowToCompile
+ *
+ * \subsection CMakeConfigureOptions
+ *
+ * You can configure the project with various options
+ *
+ * $ <tt> cmake $CPPGRAM_PATH $OPTIONS </tt>
+ *
+ * Availible options are:
+ *
+ *  - -DNOGET_DEPS : possible values - "yes" or "no" <tt>-DNOGET:DEPS="yes"</tt> - says that you don't want <tt>make</tt> to download for you any dependency ( default: no)
+ *  - -DNATIVE : possible values - "yes" or "no" <tt>-DNATIVE="yes"</tt> - says that you want a natively-built static library for your CPU (default: no) (reccomended) (MAY not work on other CPU)
+ *  - -DARCH : possible values - "-m32" or "-m64" <tt>-DARCH="-m64"</tt> - if your compiler has multi-libs, than, if required, you can build lib32/64 libraries (default: nothing, depends on compiler)
+ *  - -DOPTIMIZATION_LEVEL : possible values - "2" , "3" , "4", "fast"... - <tt>-DOPTIMIZATION_LEVEL="2"</tt> - says the compiler the optimization level, if desired. (HIGHLY reccomended: 2) (default: nothing)
+ *
+ *  CMake useful options
+ *
+ *  - -DCMAKE_CXX_COMPILER : says what compiler you want to use (CppGram is fully working with GCC-C++ {aka g++})
+ *  - -DCMAKE_BUILD_TYPE : possible values - "Debug" or "Release" - (default: "Release") <tt>-DCMAKE_BUILD_TYPE="Debug"</tt>
+ *
+ * A great CMake project configuration command is:
+ *
+ * $ <tt>cmake ../cppgram -DCMAKE_CXX_COMPILER="/usr/bin/g++" -DNATIVE="yes" -DOPTIMIZATION_LEVEL="2"</tt>
+ *
+ * \subsection MakeRules
+ *
+ * possible make rules are:
+ *
+ *  - make : builds the library
+ *  - make install : installs headers and static library in PREFIX (choosen by CMake, you can change the prefix using -DCMAKE_INSTALL_PREFIX="/pre/fix" option)
+ *  - make gendoc : makes the documentation with doxygen (in ../cppgram/doc)
+ *
+ * We reccomend to use make with the --jobs=N / -jN option: best value for 'N' is you CPU's cores + 1
+ *
+ * So, my CPU is Quad-Core, i use --jobs=5 / -j5
  */
 
 namespace Json
