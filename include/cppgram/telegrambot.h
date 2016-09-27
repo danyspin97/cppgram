@@ -55,6 +55,7 @@ class Reader;
 namespace cpr
 {
 class Response;
+class Session;
 }
 
 /*! \namespace cppgram
@@ -77,7 +78,7 @@ typedef long long id_64;
  */
 class TelegramBot
 {
-public:
+    public:
     /*! \fn TelegramBot::TelegramBot(const std::string &api_token,
                 const bool &background = false,
                 const std::string &filename = "tgbot.log",
@@ -123,13 +124,13 @@ public:
     template<typename T>
     uid_32 editMessageReplyMarkup(const T &id,
                                   const uid_32 &message_id,
-                                  const std::string &reply_markup="") const;
+                                  const std::string &reply_markup = "") const;
 
     template<typename T>
     uid_32 editMessageCaption(const T &id,
                               const uid_32 &message_id,
                               const std::string &caption,
-                              const std::string &reply_markup="") const;
+                              const std::string &reply_markup = "") const;
 
     bool editMessageText(const std::string &inline_message_id,
                          const std::string &text,
@@ -138,11 +139,11 @@ public:
                          const bool &disable_web_page_preview = true) const;
 
     bool editMessageReplyMarkup(const std::string &inline_message_id,
-                                const std::string &reply_markup="") const;
+                                const std::string &reply_markup = "") const;
 
     bool editMessageCaption(const std::string &inline_message_id,
                             const std::string &caption,
-                            const std::string &reply_markup="") const;
+                            const std::string &reply_markup = "") const;
 
     bool answerInlineQuery(const std::string &inline_query_id,
                            const std::string &results,
@@ -151,23 +152,24 @@ public:
                            const std::string &next_offset = "",
                            const std::string &switch_pm_text = "",
                            const std::string &switch_pm_paramter = "") const;
-    bool getUpdates(Json::Value& val, const uid_32& offset = 0,
-                    const uid_32& limit = 100,
-                    const uid_32& timeout = 10);
+    bool getUpdates(Json::Value &val, const uid_32 &offset = 0,
+                    const uid_32 &limit = 100,
+                    const uid_32 &timeout = 10);
 
     // end of Telegram Bot API methods
-protected:
+    protected:
     virtual void processMessage(const struct message &message);
     virtual void processEditedMessage(const struct message &editedMessage);
     virtual void processInlineQuery(const struct inlineQuery &inlineQuery);
     virtual void processChosenInlineResult(const struct choosenInlineResult &choosenInlineResult);
     virtual void processCallbackQuery(const struct callbackQuery &callbackQuery);
-private:
+    private:
     const std::string bot_token;
     uid_32 updateId;
     const uid_32 timeout, update_limit;
-    bool checkMethodError(const cpr::Response& response, Json::Value& val) const;
-    Json::Reader* reader;
+    bool checkMethodError(const cpr::Response &response, Json::Value &val) const;
+    Json::Reader *reader;
+    cpr::Session *connection;
     void processUpdates();
 };
 

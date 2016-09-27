@@ -18,8 +18,10 @@ TelegramBot::TelegramBot(const string &api_token, const bool &background,
                          const string &filename, const uid_32 &timeout, const uid_32 &limit)
         : bot_token(api_token), updateId(0),
           timeout(timeout), update_limit(limit),
-          reader(Singleton::getInstance()->getReader())
+          reader(Singleton::getInstance()->getReader()),
+          connection(new cpr::Session())
 {
+
     if (background) {
         int bg = osutil::backgroundProcess();
         if (bg == OSUTIL_NEWPROC_NOTSUPPORTED) {
@@ -68,10 +70,11 @@ void TelegramBot::processUpdates()
     //runOnce, needed in order to get the initial update_id offset
     //this will not be executed more than 1 time, after the first update
     do {
-        const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"},
-                                                cpr::Parameters{{"timeout", to_string(timeout)},
-                                                                {"limit", to_string(update_limit)},
-                                                                {"offset", to_string(updateId)}});
+        connection->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"});
+        connection->SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
+                                                  {"limit", to_string(update_limit)},
+                                                  {"offset", to_string(updateId)}});
+        const cpr::Response response = connection->Get();
 
         Json::Value valroot;
         if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
@@ -82,10 +85,7 @@ void TelegramBot::processUpdates()
     } while (updateId == 0);
 
     while (1) {
-        const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"},
-                                                cpr::Parameters{{"timeout", to_string(timeout)},
-                                                                {"limit", to_string(update_limit)},
-                                                                {"offset", to_string(updateId)}});
+        const cpr::Response response = connection->Get();
 
         Json::Value valroot;
         if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
@@ -107,12 +107,14 @@ void TelegramBot::processUpdates()
     }
 }
 
-bool TelegramBot::getUpdates(Json::Value& val,const uid_32 &offset, const uid_32 &limit, const uid_32 &timeout)
+bool TelegramBot::getUpdates(Json::Value &val, const uid_32 &offset, const uid_32 &limit, const uid_32 &timeout)
 {
-    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"},
-                                            cpr::Parameters{{"timeout", to_string(timeout)},
-                                                            {"limit", to_string(limit)},
-                                                            {"offset", to_string(offset + 1)}});
+    connection->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"});
+    connection->SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
+                                              {"limit", to_string(limit)},
+                                              {"offset", to_string(offset + 1)}});
+    const cpr::Response response = connection->Get();
+
     if (!checkMethodError(response, val))
         return false;
 
@@ -132,12 +134,13 @@ bool TelegramBot::editMessageText(const string &inline_message_id,
     else if (parse_mode == ParseMode::Markdown)
         parseMode = "Markdown";
 
-    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageText"},
-                                            cpr::Parameters{{"inline_message_id", inline_message_id},
-                                                            {"text", text},
-                                                            {"parse_mode", parseMode},
-                                                            {"disable_web_page_preview", disable_web_page_preview},
-                                                            {"reply_markup", reply_markup}});
+    connection->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageText"});
+    connection->SetParameters(cpr::Parameters{{"inline_message_id", inline_message_id},
+                                              {"text", text},
+                                              {"parse_mode", parseMode},
+                                              {"disable_web_page_preview", disable_web_page_preview},
+                                              {"reply_markup", reply_markup}});
+    const cpr::Response response = connection->Get();
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
@@ -149,9 +152,10 @@ bool TelegramBot::editMessageText(const string &inline_message_id,
 bool TelegramBot::editMessageReplyMarkup(const string &inline_message_id,
                                          const string &reply_markup) const
 {
-    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageReplyMarkup"},
-                                            cpr::Parameters{{"inline_message_id", inline_message_id},
-                                                            {"reply_markup", reply_markup}});
+    connection->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageReplyMarkup"});
+    connection->SetParameters(cpr::Parameters{{"inline_message_id", inline_message_id},
+                                              {"reply_markup", reply_markup}});
+    const cpr::Response response = connection->Get();
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
@@ -164,10 +168,11 @@ bool TelegramBot::editMessageCaption(const string &inline_message_id,
                                      const string &caption,
                                      const string &reply_markup) const
 {
-    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "editMessageCaption"},
-                                            cpr::Parameters{{"inline_message_id", inline_message_id},
-                                                            {"caption", caption},
-                                                            {"reply_markup", reply_markup}});
+    connection->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "editMessageCaption"});
+    connection->SetParameters(cpr::Parameters{{"inline_message_id", inline_message_id},
+                                              {"caption", caption},
+                                              {"reply_markup", reply_markup}});
+    const cpr::Response response = connection->Get();
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
@@ -184,14 +189,15 @@ bool TelegramBot::answerInlineQuery(const string &inline_query_id,
                                     const string &switch_pm_text,
                                     const string &switch_pm_paramter) const
 {
-    const cpr::Response response = cpr::Get(cpr::Url{TELEGRAMAPI + bot_token + "/answerInlineQuery"},
-                                            cpr::Parameters{{"inline_query_id", inline_query_id},
-                                                            {"results", results},
-                                                            {"cache_time", to_string(cache_time)},
-                                                            {"is_personal", is_personal},
-                                                            {"next_offset", next_offset},
-                                                            {"switch_pm_text", switch_pm_paramter},
-                                                            {"switch_pm_parameter", switch_pm_paramter}});
+    connection->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/answerInlineQuery"});
+    connection->SetParameters(cpr::Parameters{{"inline_query_id", inline_query_id},
+                                              {"results", results},
+                                              {"cache_time", to_string(cache_time)},
+                                              {"is_personal", is_personal},
+                                              {"next_offset", next_offset},
+                                              {"switch_pm_text", switch_pm_paramter},
+                                              {"switch_pm_parameter", switch_pm_paramter}});
+    const cpr::Response response = connection->Get();
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
