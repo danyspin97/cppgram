@@ -4,6 +4,7 @@ before_script:
    - which cmake || apt-get -y install cmake 
    - which make
    - which g++ || apt-get -y install g++
+   - which doxygen || apt-get -y install doxygen
    - cmake ../cppgram -DCMAKE_CXX_COMPILER="g++"
 
 rspec:
