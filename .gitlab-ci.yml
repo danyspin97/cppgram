@@ -1,10 +1,9 @@
 before_script:
    - apt-get update
-   - mkdir ../build && cd ../build 
    - which cmake || apt-get -y install cmake 
    - which make
    - which g++ || apt-get -y install g++
-   - cmake ../cppgram -DCMAKE_CXX_COMPILER="g++"
+   - cmake . -DCMAKE_CXX_COMPILER="g++"
 
 rspec:
    script:
@@ -14,9 +13,10 @@ pages:
    script:
       - which doxygen || apt-get -y install doxygen
       - make gendoc
-      - mv ../cppgram/doc/html public/ 
+      - mkdir -pv public
+      - mv doc/html public/ 
    artifacts:
       paths:
-         - ../build/public
+         - public
            #only:
       #      - master
