@@ -78,12 +78,11 @@
  *
  * We reccomend to use make with the --jobs=N / -jN option: best value for 'N' is you CPU's cores + 1
  *
- * So, my CPU is Quad-Core, i use --jobs=5 / -j5
+ * So, my CPU is Quad-Core, I use --jobs=5 / -j5
  */
 
 namespace Json
 {
-class Reader;
 class Value;
 }
 
@@ -125,7 +124,6 @@ public:
                 const std::string &filename = "tgbot.log",
                 const uid_32 &limit = 50,
                 const uid_32 &timeout = 60);
-    ~TelegramBot();
 
     /*! \fn void TelegramBot::run()
      * \brief runs infinite loop which handles updates (HTTP long polling "getUpdates" API method)
@@ -197,7 +195,6 @@ private:
     const std::string bot_token;
     uid_32 updateId;
     const uid_32 timeout, update_limit;
-    Json::Reader* reader;
     void processUpdates();
 };
 

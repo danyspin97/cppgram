@@ -10,11 +10,6 @@ class FastWriter;
 class Value;
 }
 
-namespace cpr
-{
-class Response;
-}
-
 namespace cppgram
 {
 

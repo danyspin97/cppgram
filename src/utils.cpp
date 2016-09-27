@@ -8,9 +8,14 @@
 #include <mutex>
 
 #include <cpr/cpr.h>
+#include <json/json.h>
 
 #include "cppgram/utils.h"
 #include "cppgram/singleton.h"
+#include "cppgram/exceptions.h"
+
+using cppgram::Singleton;
+using cppgram::JsonParseError;
 
 std::mutex mtx;
 cpr::Session session;
@@ -113,7 +118,7 @@ const cpr::Response cppgram::util::request(const cpr::Url & url, const cpr::Para
     return r;
 }
 
-bool cppgram::util::checkMethodError(const cpr::Response &response, Json::Value &val) const
+bool cppgram::util::checkMethodError(const cpr::Response &response, Json::Value &val)
 {
     // If there was an error in the connection print it
     if (response.error.code != cpr::ErrorCode::OK) {

@@ -36,7 +36,7 @@ class MyBot : public TelegramBot
     }
 
     // Every time a user press a bot button of type CallbackQuery this function will be called
-    /*  void processCallbackQuery(const callbackQuery &callbackQuery) override final
+    void processCallbackQuery(const callbackQuery &callbackQuery) override final
     {
         // Did the user called a button with callback_data as edit?
         if (callbackQuery.data == "edit") {
@@ -60,7 +60,7 @@ class MyBot : public TelegramBot
                                 callbackQuery.data);
             }
         }
-    }*/
+    }
 };
 
 int main()

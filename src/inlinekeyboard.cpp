@@ -9,16 +9,11 @@
 using namespace cppgram;
 using namespace std;
 
-std::mutex mtx;
+std::mutex mtx1;
 
 InlineKeyboard::InlineKeyboard()
-        : writer(Singleton::getInstance()->getWriter()),column(0), row(0)
+        : column(0), row(0)
 {}
-
-InlineKeyboard::~InlineKeyboard()
-{
-    delete writer;
-}
 
 Json::Value InlineKeyboard::getKeyboard() const
 {
@@ -74,9 +69,9 @@ void InlineKeyboard::clearKeyboard()
 
 void InlineKeyboard::getKeyboard(std::string& reply_markup, const bool &clearKeyboard)
 {
-    mtx.lock();
-    reply_markup = writer->write(inline_keyboard);
-    mtx.unlock();
+    mtx1.lock();
+    reply_markup = Singleton::getInstance()->getWriter()->write(inline_keyboard);
+    mtx1.unlock();
 
     if (clearKeyboard)
         inline_keyboard.clear();
