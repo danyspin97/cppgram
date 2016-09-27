@@ -14,10 +14,10 @@ pages:
    stage: deploy
    script:
       - which doxygen || apt-get -y install doxygen
-      - cd ../build 
       - make gendoc
+      - mv doc/html public/ 
    artifacts:
       paths:
-         - ../cppgram/doc/html
+         - public
            #only:
       #      - master
