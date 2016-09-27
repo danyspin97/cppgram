@@ -13,7 +13,6 @@ pages:
    script:
       - which doxygen || apt-get -y install doxygen
       - make gendoc
-      - mkdir -pv public
       - mv doc/html public/ 
    artifacts:
       paths:
