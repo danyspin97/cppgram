@@ -4,7 +4,6 @@ before_script:
    - which cmake || apt-get -y install cmake 
    - which make
    - which g++ || apt-get -y install g++
-   - which doxygen || apt-get -y install doxygen
    - cmake ../cppgram -DCMAKE_CXX_COMPILER="g++"
 
 rspec:
@@ -14,10 +13,11 @@ rspec:
 pages:
    stage: deploy
    script:
+      - which doxygen || apt-get -y install doxygen
       - cd ../build 
       - make gendoc
       - mkdir public 
-      - mv ../cppgram/doc/html/* public -rfv
+      - mv ../cppgram/doc/html/* public -v
    artifacts:
       paths:
          - public
