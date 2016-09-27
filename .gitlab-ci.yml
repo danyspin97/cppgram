@@ -12,11 +12,14 @@ rspec:
       - make --jobs=5
 
 pages:
+   stage: deploy
    script:
       - cd ../build 
       - make gendoc
+      - mkdir public 
+      - mv ../cppgram/doc/html/* public -rfv
    artifacts:
       paths:
-         - ../cppgram/doc/html
+         - public
            #only:
       #      - master
