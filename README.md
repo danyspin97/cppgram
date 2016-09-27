@@ -15,8 +15,10 @@ Easy C++ wrapper for Telegram Bot API
  libcurl is required in order to use libcpr
 
 ## Documentation and guide
+
+ Documentation: [here](https://wisedragonstd.gitlab.io/cppgram)
  
- Documentation and guide are on the way
+ Guide: is coming soon
 
 ## Examples 
  
