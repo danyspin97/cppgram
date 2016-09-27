@@ -17,5 +17,5 @@ pages:
    artifacts:
       paths:
          - ../cppgram/doc/html
-   only:
-      - master
+           #only:
+      #      - master
