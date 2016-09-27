@@ -90,6 +90,7 @@ public:
                 const std::string &filename = "tgbot.log",
                 const uid_32 &limit = 50,
                 const uid_32 &timeout = 60);
+    ~TelegramBot();
 
     /*! \fn void TelegramBot::run()
      * \brief runs infinite loop which handles updates (HTTP long polling "getUpdates" API method)

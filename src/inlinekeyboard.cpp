@@ -15,6 +15,11 @@ InlineKeyboard::InlineKeyboard()
         : writer(Singleton::getInstance()->getWriter()),column(0), row(0)
 {}
 
+InlineKeyboard::~InlineKeyboard()
+{
+    delete writer;
+}
+
 Json::Value InlineKeyboard::getKeyboard() const
 {
     return inline_keyboard;

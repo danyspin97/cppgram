@@ -21,10 +21,6 @@ Singleton::~Singleton()
 {
     delete reader;
     delete writer;
-    
-    if(instance != NULL) {
-        delete instance;
-    }
 }
 
 Singleton* Singleton::getInstance()

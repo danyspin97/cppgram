@@ -33,6 +33,11 @@ TelegramBot::TelegramBot(const string &api_token, const bool &background,
     Singleton::getInstance()->setLogFilename(filename);
 }
 
+TelegramBot::~TelegramBot()
+{
+    delete reader;
+}
+
 void TelegramBot::run()
 {
     processUpdates();

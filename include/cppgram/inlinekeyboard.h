@@ -25,6 +25,7 @@ public:
      * \brief InlineKeyboard constructor
      */
     InlineKeyboard();
+    ~InlineKeyboard();
 
     bool addButton(const std::string& text, const std::string& data, const InlineKeyboardButtonType& buttonType);
     bool addButton(const struct inlineKeyboardButton& newButton);
