@@ -16,10 +16,8 @@ pages:
       - which doxygen || apt-get -y install doxygen
       - cd ../build 
       - make gendoc
-      - mkdir public 
-      - mv ../cppgram/doc/html/* public -v
    artifacts:
       paths:
-         - public
+         - ../cppgram/doc/html
            #only:
       #      - master
