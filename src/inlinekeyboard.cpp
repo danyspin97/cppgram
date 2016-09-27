@@ -1,4 +1,5 @@
 #include <json/json.h>
+#include <mutex>
 
 #include "cppgram/inlinekeyboard.h"
 #include "cppgram/exceptions.h"
@@ -8,8 +9,10 @@
 using namespace cppgram;
 using namespace std;
 
+std::mutex mtx;
+
 InlineKeyboard::InlineKeyboard()
-        : column(0), row(0)
+        : writer(Singleton::getInstance()->getWriter()),column(0), row(0)
 {}
 
 Json::Value InlineKeyboard::getKeyboard() const
@@ -66,7 +69,10 @@ void InlineKeyboard::clearKeyboard()
 
 void InlineKeyboard::getKeyboard(std::string& reply_markup, const bool &clearKeyboard)
 {
-    reply_markup = Singleton::getInstance()->getWriter()->write(inline_keyboard);
+    mtx.lock();
+    reply_markup = writer->write(inline_keyboard);
+    mtx.unlock();
+
     if (clearKeyboard)
         inline_keyboard.clear();
 }

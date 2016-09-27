@@ -48,14 +48,8 @@
 
 namespace Json
 {
-class Value;
 class Reader;
-}
-
-namespace cpr
-{
-class Response;
-class Session;
+class Value;
 }
 
 /*! \namespace cppgram
@@ -78,7 +72,7 @@ typedef long long id_64;
  */
 class TelegramBot
 {
-    public:
+public:
     /*! \fn TelegramBot::TelegramBot(const std::string &api_token,
                 const bool &background = false,
                 const std::string &filename = "tgbot.log",
@@ -157,19 +151,17 @@ class TelegramBot
                     const uid_32 &timeout = 10);
 
     // end of Telegram Bot API methods
-    protected:
+protected:
     virtual void processMessage(const struct message &message);
     virtual void processEditedMessage(const struct message &editedMessage);
     virtual void processInlineQuery(const struct inlineQuery &inlineQuery);
     virtual void processChosenInlineResult(const struct choosenInlineResult &choosenInlineResult);
     virtual void processCallbackQuery(const struct callbackQuery &callbackQuery);
-    private:
+private:
     const std::string bot_token;
     uid_32 updateId;
     const uid_32 timeout, update_limit;
-    bool checkMethodError(const cpr::Response &response, Json::Value &val) const;
-    Json::Reader *reader;
-    cpr::Session *connection;
+    Json::Reader* reader;
     void processUpdates();
 };
 

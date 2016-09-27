@@ -6,6 +6,18 @@
 
 #include "defines.h"
 
+namespace cpr
+{
+typedef std::string Url;
+class Parameters;
+class Response;
+}
+
+namespace Json
+{
+class Value;
+}
+
 namespace cppgram
 {
 
@@ -53,6 +65,21 @@ const std::string getTime(const std::string& timeformat="%a %F %r");
  */
 void log(const Log& l, const std::string& message, const std::string& filename=FILENAME_DEFAULT);
 
+/*!
+ * \brief makes an HTTP GET request
+ * \param url: the URL
+ * \param params: pass a cpr::Parameters object
+ * \return a cpr::Response (HTTP GET)
+ */
+const cpr::Response request(const cpr::Url & url, const cpr::Parameters & params);
+
+/*!
+ * \brief parses response's JSON and checks for error codes
+ * \param response : the cpr::Response object
+ * \param val : the target Json::Value 's reference
+ * \return true if everything OK, else: false
+ */
+bool checkMethodError(const cpr::Response &response, Json::Value &val);
 }
 
 }

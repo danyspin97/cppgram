@@ -1,6 +1,6 @@
 #include <cppgram/cppgram.h>
 
-#define TOKEN "242493633:AAGSdyV1lEwF85N5qMN_-ndPs0o5tcytaWA"
+#define TOKEN "token"
 
 using namespace cppgram;
 

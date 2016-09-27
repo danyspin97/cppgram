@@ -10,16 +10,13 @@
 
 using namespace cppgram;
 using namespace std;
-
-using util::Log;
-using util::log;
+using namespace util;
 
 TelegramBot::TelegramBot(const string &api_token, const bool &background,
                          const string &filename, const uid_32 &timeout, const uid_32 &limit)
         : bot_token(api_token), updateId(0),
           timeout(timeout), update_limit(limit),
-          reader(Singleton::getInstance()->getReader()),
-          connection(new cpr::Session())
+          reader(Singleton::getInstance()->getReader())
 {
 
     if (background) {
@@ -41,40 +38,16 @@ void TelegramBot::run()
     processUpdates();
 }
 
-bool TelegramBot::checkMethodError(const cpr::Response &response, Json::Value &val) const
-{
-    // If there was an error in the connection print it
-    if (response.error.code != cpr::ErrorCode::OK) {
-        log(Log::Error, "HTTP Error:" + response.error.message);
-        return false;
-    }
-
-    if (!reader->parse(response.text, val)) {
-        log(Log::Error, "JSON Parser: Error while parsing JSON document!");
-        throw new JsonParseError;
-    }
-
-    // Print method error
-    if (response.status_code != 200) {
-        log(Log::Error,
-            "Telegram Error: " + val["error_code"].asString() + ", Description: " + val["description"].asString());
-        return false;
-    }
-
-    return true;
-}
-
 // Ask telegram to send all updates that need to be parsed
 void TelegramBot::processUpdates()
 {
     //runOnce, needed in order to get the initial update_id offset
     //this will not be executed more than 1 time, after the first update
     do {
-        connection->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"});
-        connection->SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
-                                                  {"limit", to_string(update_limit)},
-                                                  {"offset", to_string(updateId)}});
-        const cpr::Response response = connection->Get();
+        const cpr::Response response = request(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"},
+                                               cpr::Parameters{{"timeout", to_string(timeout)},
+                                                  {"limit", to_string(update_limit)}});
+
 
         Json::Value valroot;
         if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
@@ -85,7 +58,10 @@ void TelegramBot::processUpdates()
     } while (updateId == 0);
 
     while (1) {
-        const cpr::Response response = connection->Get();
+        const cpr::Response response = request(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"},
+                                               cpr::Parameters{{"timeout", to_string(timeout)},
+                                                  {"limit", to_string(update_limit)},
+                                                  {"offset", to_string(updateId)}});
 
         Json::Value valroot;
         if (checkMethodError(response, valroot) && !valroot["result"].empty()) {

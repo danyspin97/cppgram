@@ -5,9 +5,16 @@
 
 #include <sstream>
 #include <fstream>
+#include <mutex>
+
+#include <cpr/cpr.h>
 
 #include "cppgram/utils.h"
 #include "cppgram/singleton.h"
+
+std::mutex mtx;
+cpr::Session session;
+Json::Reader* reader = Singleton::getInstance()->getReader();
 
 int cppgram::osutil::backgroundProcess()
 {
@@ -93,4 +100,40 @@ void cppgram::util::log(const Log& l, const std::string& message, const std::str
     const std::string fmtStr = logType+"["+getTime()+"] "+message+'\n';
     out.write(fmtStr.c_str(),fmtStr.length());
     out.close();
+}
+
+const cpr::Response cppgram::util::request(const cpr::Url & url, const cpr::Parameters & params)
+{
+    mtx.lock();
+    session.SetUrl(url);
+    session.SetParameters(params);
+    const cpr::Response r = session.Get();
+    mtx.unlock();
+
+    return r;
+}
+
+bool cppgram::util::checkMethodError(const cpr::Response &response, Json::Value &val) const
+{
+    // If there was an error in the connection print it
+    if (response.error.code != cpr::ErrorCode::OK) {
+        log(Log::Error, "HTTP Error:" + response.error.message);
+        return false;
+    }
+
+    mtx.lock();
+    if (!reader->parse(response.text, val)) {
+        log(Log::Error, "JSON Parser: Error while parsing JSON document!");
+        throw new JsonParseError;
+    }
+    mtx.unlock();
+
+    // Print method error
+    if (response.status_code != 200) {
+        log(Log::Error,
+            "Telegram Error: " + val["error_code"].asString() + ", Description: " + val["description"].asString());
+        return false;
+    }
+
+    return true;
 }

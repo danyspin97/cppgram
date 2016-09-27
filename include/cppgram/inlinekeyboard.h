@@ -6,6 +6,7 @@
 
 namespace Json
 {
+class Writer;
 class Value;
 }
 
@@ -36,6 +37,7 @@ public:
     Json::Value getKeyboard() const;
 
 private:
+    Json::Writer *writer;
     Json::Value inline_keyboard;
     short column;
     short row;

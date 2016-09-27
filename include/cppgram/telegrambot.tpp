@@ -6,8 +6,10 @@
 #include "types.h"
 #include "singleton.h"
 #include "structures.h"
+#include "utils.h"
 
 using namespace cppgram;
+using namespace cppgram::util;
 
 using std::string;
 using std::to_string;
@@ -32,8 +34,8 @@ uid_32 TelegramBot::sendMessage(const T &id, const std::string &text,
     else if (parse_mode == ParseMode::Markdown)
         parseMode = "Markdown";
 
-    connection->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/sendMessage"});
-    connection->SetParameters(cpr::Parameters{{"chat_id", fid},
+    const cpr::Response response = request(cpr::Url{TELEGRAMAPI + bot_token + "/sendMessage"},
+                                           cpr::Parameters{{"chat_id", fid},
                                               {"text", text},
                                               {"parse_mode", parseMode},
                                               {"disable_web_page_preview",
@@ -41,7 +43,6 @@ uid_32 TelegramBot::sendMessage(const T &id, const std::string &text,
                                               {"disable_notification", to_string(disable_notification)},
                                               {"reply_to_message_id", to_string(reply_to_message_id)},
                                               {"reply_markup", reply_markup}});
-    const cpr::Response response = connection->Get();
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
@@ -70,15 +71,14 @@ uid_32 TelegramBot::editMessageText(const T &id,
     else if (parse_mode == ParseMode::Markdown)
         parseMode = "Markdown";
 
-    connection->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageText"});
-    connection->SetParameters(cpr::Parameters{{"chat_id", fid},
-                                              {"message_id", to_string(message_id)},
-                                              {"text", text},
-                                              {"parse_mode", parseMode},
-                                              {"disable_web_page_preview",
-                                               to_string(disable_web_page_preview)},
-                                              {"reply_markup", reply_markup}});
-    const cpr::Response response = connection->Get();
+    const cpr::Response response = request(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageText"},
+                                           cpr::Parameters{{"chat_id", fid},
+                                                           {"message_id", to_string(message_id)},
+                                                           {"text", text},
+                                                           {"parse_mode", parseMode},
+                                                           {"disable_web_page_preview",
+                                                            to_string(disable_web_page_preview)},
+                                                           {"reply_markup", reply_markup}});
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
@@ -98,11 +98,10 @@ uid_32 TelegramBot::editMessageReplyMarkup(const T &id,
     else
         fid = to_string(id);
 
-    connection->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageReplyMarkup"});
-    connection->SetParameters(cpr::Parameters{{"chat_id", fid},
-                                              {"message_id", to_string(message_id)},
-                                              {"reply_markup", reply_markup}});
-    const cpr::Response response = connection->Get();
+    const cpr::Response response = request(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageReplyMarkup"},
+                                           cpr::Parameters{{"chat_id", fid},
+                                                           {"message_id", to_string(message_id)},
+                                                           {"reply_markup", reply_markup}});
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
@@ -123,12 +122,11 @@ uid_32 TelegramBot::editMessageCaption(const T &id,
     else
         fid = to_string(id);
 
-    connection->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageCaption"});
-    connection->SetParameters(cpr::Parameters{{"chat_id", fid},
-                                              {"message_id", to_string(message_id)},
-                                              {"caption", caption},
-                                              {"reply_markup", reply_markup}});
-    const cpr::Response response = connection->Get();
+    const cpr::Response response = request(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageCaption"},
+                                           cpr::Parameters{{"chat_id", fid},
+                                                           {"message_id", to_string(message_id)},
+                                                           {"caption", caption},
+                                                           {"reply_markup", reply_markup}});
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
@@ -136,5 +134,4 @@ uid_32 TelegramBot::editMessageCaption(const T &id,
 
     return valroot["result"]["message_id"].asUInt();
 }
-
 
