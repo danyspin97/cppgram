@@ -4,24 +4,32 @@
 #include <string>
 
 /*! \mainpage Reference
- * \authors Stefano Belli, Danilo Spinella
+ * \section What What is CppGram
+ * CppGram is a wrapper for Telegram Messanger Bot API.
+ * Designed to be fast and easy, ensures the developer to build a bot in less time without having to learn Telegram Bot API.
+ * The bot class (cppgram::TelegramBot) has a method for each API method, so the only thing you have to do is extend this class and start developing you bot!
  *
- * \section WhereToGet
+ * \subsection Features
+ * - Getting udpdates using long or short polling (webhook support coming soon)
+ * - Support for the most important API methods
+ * - Easy inline keyboard creation
+ * - Article creation for inline query
  *
- * \subsection GitRepository
+ * \section Install
+ * \subsection Cloning repository
+ * Clone the repo, build cppgram and then link your own bot:
  *
- * <a href="https://gitlab.com/WiseDragonStd/cppgram" target="_blank">GitLab - CppGram</a>
+ *     $ git clone https://gitlab.com/WiseDragonStd/cppgram.git
+ *     $ cd cppgram
+ *     $ mkdir build
+ *     $ cd build
+ *     $ cmake ..
+ *     $ make
  *
- * Cloning repository:
+ * This code will download CppGram, its dependency and will build it.
+ * Then link you own bot using:
  *
- * $ <tt>git clone https://gitlab.com/WiseDragonStd/cppgram.git</tt>
- *
- * \subsection Branches
- *
- *  - master : main "stable" branch
- *  - dev    : development branch
- *
- * \section DevelopmentInfos
+ *     $ g++ main.cpp lib/*.a -lcurl -o bot -Iinclude -std=c++14
  *
  * \subsection Dependencies
  *
@@ -30,43 +38,52 @@
  *  - cpr
  *  - curl
  *
- * \subsection BuildTools
+ * \section How How to use it
  *
- *  - CMake
- *  - Make
- *  - GCC / Clang are preferred (tested with GCC 6.2.1)
+ * \subsection processMessage
+ * This function will be called everytime your bot receive a message.
+ * Override the function adding:
  *
- * \subsection StaticAnalyzer
+ *     virtual void processMessage(const cppgram::message &message) override;
  *
- * We <3 CppCheck, analyze using this command:
+ * Put here what your bot answer to messages. Parameter message contains all data about the message received
  *
- * $ <tt>cd src/</tt>
+ * \subsection Inline Keyboards
+ * Inline keyboard represent a button below a message.
+ * To send a message with a button use this sintax:
  *
- * $ <tt>cppcheck *.cpp --enable=all --language=c++ --report-progress --verbose -I../include -I/usr/include --force 2>cppgram.log</tt>
+ *     // Create the class and add a button
+ *     auto keyboard = new InlineKeyboard();
+ *     keyboard->addButton("CppGram Documentation", "http://wisedragonstd.gitlab.io/cppgram/", InlineKeyboardButtonType::Url);
+ *     // Get the keyboard
+ *     string button_string;
+ *     keyboard->getKeyboard(button_string);
+ *     // Call the api to send a message
+ *     sendMessage(chat_id, "Test bot for Cppgram wrapper", button_string);
  *
- * \section HowToCompile
+ * \section CompileOptions
  *
  * \subsection CMakeConfigureOptions
  *
  * You can configure the project with various options
  *
- * $ <tt> cmake $CPPGRAM_PATH $OPTIONS </tt>
+ *     $ cmake $CPPGRAM_PATH $OPTIONS>
  *
  * Availible options are:
  *
- *  - -DNOGET_DEPS : possible values - "yes" or "no" <tt>-DNOGET:DEPS="yes"</tt> - says that you don't want <tt>make</tt> to download for you any dependency ( default: no)
- *  - -DNATIVE : possible values - "yes" or "no" <tt>-DNATIVE="yes"</tt> - says that you want a natively-built static library for your CPU (default: no) (reccomended) (MAY not work on other CPU)
- *  - -DARCH : possible values - "-m32" or "-m64" <tt>-DARCH="-m64"</tt> - if your compiler has multi-libs, than, if required, you can build lib32/64 libraries (default: nothing, depends on compiler)
- *  - -DOPTIMIZATION_LEVEL : possible values - "2" , "3" , "4", "fast"... - <tt>-DOPTIMIZATION_LEVEL="2"</tt> - says the compiler the optimization level, if desired. (HIGHLY reccomended: 2) (default: nothing)
+ *      - -DNOGET_DEPS : possible values - "yes" or "no" <tt>-DNOGET:DEPS="yes"</tt> - says that you don't want <tt>make</tt> to download for you any dependency ( default: no)
+ *      - -DNATIVE : possible values - "yes" or "no" <tt>-DNATIVE="yes"</tt> - says that you want a natively-built static library for your CPU (default: no) (reccomended) (MAY not work on other CPU)
+ *      - -DARCH : possible values - "-m32" or "-m64" <tt>-DARCH="-m64"</tt> - if your compiler has multi-libs, than, if required, you can build lib32/64 libraries (default: nothing, depends on compiler)
+ *      - -DOPTIMIZATION_LEVEL : possible values - "2" , "3" , "4", "fast"... - <tt>-DOPTIMIZATION_LEVEL="2"</tt> - says the compiler the optimization level, if desired. (HIGHLY reccomended: 2) (default: nothing)
  *
  *  CMake useful options
  *
- *  - -DCMAKE_CXX_COMPILER : says what compiler you want to use (CppGram is fully working with GCC-C++ {aka g++})
- *  - -DCMAKE_BUILD_TYPE : possible values - "Debug" or "Release" - (default: "Release") <tt>-DCMAKE_BUILD_TYPE="Debug"</tt>
+ *      - -DCMAKE_CXX_COMPILER : says what compiler you want to use (CppGram is fully working with GCC-C++ {aka g++})
+ *      - -DCMAKE_BUILD_TYPE : possible values - "Debug" or "Release" - (default: "Release") <tt>-DCMAKE_BUILD_TYPE="Debug"</tt>
  *
  * A great CMake project configuration command is:
  *
- * $ <tt>cmake ../cppgram -DCMAKE_CXX_COMPILER="/usr/bin/g++" -DNATIVE="yes" -DOPTIMIZATION_LEVEL="2"</tt>
+ *      $ cmake ../cppgram -DCMAKE_CXX_COMPILER="/usr/bin/g++" -DNATIVE="yes" -DOPTIMIZATION_LEVEL="2"
  *
  * \subsection MakeRules
  *
@@ -106,7 +123,7 @@ typedef long long id_64;
  */
 class TelegramBot
 {
-public:
+    public:
     /*! \fn TelegramBot::TelegramBot(const std::string &api_token,
                 const bool &background = false,
                 const std::string &filename = "tgbot.log",
@@ -185,13 +202,13 @@ public:
                     const uid_32 &timeout = 10);
 
     // end of Telegram Bot API methods
-protected:
+    protected:
     virtual void processMessage(const struct message &message);
     virtual void processEditedMessage(const struct message &editedMessage);
     virtual void processInlineQuery(const struct inlineQuery &inlineQuery);
     virtual void processChosenInlineResult(const struct choosenInlineResult &choosenInlineResult);
     virtual void processCallbackQuery(const struct callbackQuery &callbackQuery);
-private:
+    private:
     const std::string bot_token;
     uid_32 updateId;
     const uid_32 timeout, update_limit;
