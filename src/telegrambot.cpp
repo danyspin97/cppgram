@@ -3,8 +3,6 @@
 
 #include <future>
 #include <chrono>
-#include <thread>
-#include <mutex>
 
 #include "cppgram/defines.h"
 #include "cppgram/telegrambot.h"
@@ -16,8 +14,6 @@
 using namespace cppgram;
 using namespace std;
 using namespace util;
-
-std::mutex mtx2;
 
 TelegramBot::TelegramBot(const string &api_token, const bool &background,
                          const string &filename, const uid_32 &timeout, const uid_32 &limit)
