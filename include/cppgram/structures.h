@@ -44,7 +44,7 @@ struct chat {
     std::string title, username,
             first_name, last_name;
     explicit chat(Json::Value &val);
-    chat(const struct chat& prev) = delete;
+    chat();
 };
 
 //identify user
@@ -53,7 +53,7 @@ struct user {
     std::string first_name, last_name,
             username;
     explicit user(Json::Value& val);
-    user(const struct user& prev) = delete;
+    user();
 };
 
 struct messageEntity {
@@ -62,39 +62,42 @@ struct messageEntity {
     int offset,
         lenght;
     std::string url;
-    const struct user* from;
+    struct user* from;
     
     explicit messageEntity(Json::Value &val);
     ~messageEntity();
-    messageEntity(const struct messageEntity& prev) = delete;
+    messageEntity(const struct messageEntity& prev);
+    messageEntity();
 };
 
 //get message data
 struct message {
     //TODO
-    uid_32 message_id;
-    const struct user* from;
+    uid_32 id;
+    struct user* from;
     date_unix date;
-    const struct chat* chat;
-    const struct user* forward_from;
-    const struct chat* forward_from_chat;
+    struct chat* chat;
+    struct user* forward_from;
+    struct chat* forward_from_chat;
     date_unix forward_date;
-    const struct message* reply_to_message;
+    struct message* reply_to_message;
     date_unix edit_date;
     std::string text;
     //struct messageEntity (*entities)[];
     //struct attachment* message_data;
                                                         
     explicit message(Json::Value &val);
-    message(const struct message& prev) = delete;
+    message(const struct message& prev);
     ~message();
+    message();
 };
 
 struct inlineKeyboardButton {
     std::string text, data;
     enum InlineKeyboardButtonType button_type;
-    inlineKeyboardButton(const std::string& text, const std::string& data, const InlineKeyboardButtonType &button_type);
-    inlineKeyboardButton(const inlineKeyboardButton& prev) = delete;
+    inlineKeyboardButton(const std::string& text, const std::string& data,
+                         const InlineKeyboardButtonType &button_type);
+    inlineKeyboardButton(const inlineKeyboardButton& prev);
 };
 
 //get location data
@@ -106,38 +109,41 @@ struct location {
 //get inline query data
 struct inlineQuery {
     std::string id, query, offset;
-    const struct user* from;
-    const struct location* location;
+    struct user* from;
+    struct location* location;
 
     explicit inlineQuery(Json::Value& val);
-    inlineQuery(const struct inlineQuery& prev) = delete;
+    inlineQuery(const struct inlineQuery& prev);
     ~inlineQuery();
+    inlineQuery();
 };
 
 //get the choosen result from inline query 
 struct choosenInlineResult {
     std::string result_id;
-    const struct user* from;
-    const struct location* location;
+    struct user* from;
+    struct location* location;
     uid_32 inline_message_id;
     std::string query;
 
     explicit choosenInlineResult(Json::Value &val);
-    choosenInlineResult(const struct choosenInlineResult& prev) = delete;
+    choosenInlineResult(const struct choosenInlineResult& prev);
     ~choosenInlineResult();
+    choosenInlineResult();
 };
 
 //get callback query data
 struct callbackQuery {
     std::string id;
-    const struct user* from;
-    const struct message* message;
+    struct user* from;
+    struct message* message;
     std::string inline_message_id;
     std::string data;
 
     explicit callbackQuery(Json::Value &val);
-    callbackQuery(const struct callbackQuery& prev) = delete;
+    callbackQuery(const struct callbackQuery& prev);
     ~callbackQuery();
+    callbackQuery();
 };
 
 }

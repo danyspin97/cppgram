@@ -196,6 +196,7 @@ private:
     uid_32 updateId;
     const uid_32 timeout, update_limit;
     void processUpdates();
+    void parseUpdate(const Json::Value valroot);
 };
 
 }

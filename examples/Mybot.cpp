@@ -47,7 +47,7 @@ class MyBot : public TelegramBot
             } else {
                 // else modify it by sending the chat id and the message id
                 editMessageText(callbackQuery.message->chat->id,
-                                callbackQuery.message->message_id,
+                                callbackQuery.message->id,
                                 "This is a message sent by the bot");
             }
             // Then change the message with the data of the button the user pressed
@@ -56,7 +56,7 @@ class MyBot : public TelegramBot
                 editMessageText(callbackQuery.inline_message_id, callbackQuery.data);
             } else {
                 editMessageText(callbackQuery.message->chat->id,
-                                callbackQuery.message->message_id,
+                                callbackQuery.message->id,
                                 callbackQuery.data);
             }
         }

@@ -29,7 +29,7 @@ chat::chat(Json::Value &val) : id(val["id"].asInt64()) //ITS DONE!!
         last_name = val["last_name"].asString();
 }
 
-message::message(Json::Value &val) : message_id(val["message_id"].asUInt()),
+message::message(Json::Value &val) : id(val["message_id"].asUInt()),
                                                                   from(new struct user(val["from"])),
                                                                   date(val["date"].asUInt()),
                                                                   chat(new struct chat(val["chat"])),
@@ -103,6 +103,13 @@ inlineKeyboardButton::inlineKeyboardButton(const std::string &text,
     : text(text),data(data),button_type(button_type)
 {}
 
+user::user() {}
+message::message() {}
+chat::chat() {}
+messageEntity::messageEntity() {}
+choosenInlineResult::choosenInlineResult() {}
+callbackQuery::callbackQuery() {}
+
 
 /* destructors */
 
@@ -146,3 +153,74 @@ messageEntity::~messageEntity()
     if(from != NULL)
         delete from;
 }
+
+/* copy constructors */
+message::message(const message &prev)
+{
+    chat = new struct chat;
+    from = new struct user;
+    forward_from = new struct user;
+    forward_from_chat = new struct chat;
+    reply_to_message = new struct message;
+
+    *chat = *(prev.chat);
+    *from = *(prev.from);
+    *forward_from = *(prev.forward_from);
+    *forward_from_chat = *(prev.forward_from_chat);
+    *reply_to_message = *(prev.reply_to_message);
+
+    date = prev.date;
+    text = prev.text;
+    edit_date = prev.edit_date;
+    id = prev.id;
+}
+
+messageEntity::messageEntity(const messageEntity &prev)
+{
+    from = new struct user;
+
+    *from = *(prev.from);
+
+    url = prev.url;
+    offset = prev.offset;
+    lenght = prev.lenght;
+}
+
+callbackQuery::callbackQuery(const callbackQuery &prev)
+{
+    from = new struct user;
+
+    *from = *(prev.from);
+    *message = *(prev.message);
+
+    id = prev.id;
+    inline_message_id = prev.inline_message_id;
+    data = prev.data;
+}
+
+inlineQuery::inlineQuery(const inlineQuery &prev)
+{
+    from = new struct user;
+    location = new struct location;
+
+    *from = *(prev.from);
+    *location = *(prev.location);
+
+    id = prev.id;
+    query = prev.query;
+    offset = prev.offset;
+}
+
+choosenInlineResult::choosenInlineResult(const choosenInlineResult &prev)
+{
+    from = new struct user;
+    location = new struct location;
+
+    *from = *(prev.from);
+    *location = *(prev.location);
+
+    result_id = prev.result_id;
+    inline_message_id = prev.inline_message_id;
+    query = prev.query;
+}
+

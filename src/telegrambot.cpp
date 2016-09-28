@@ -1,6 +1,11 @@
 #include <cpr/cpr.h>
 #include <json/json.h>
 
+#include <future>
+#include <chrono>
+#include <thread>
+#include <mutex>
+
 #include "cppgram/defines.h"
 #include "cppgram/telegrambot.h"
 #include "cppgram/exceptions.h"
@@ -11,6 +16,8 @@
 using namespace cppgram;
 using namespace std;
 using namespace util;
+
+std::mutex mtx2;
 
 TelegramBot::TelegramBot(const string &api_token, const bool &background,
                          const string &filename, const uid_32 &timeout, const uid_32 &limit)
@@ -37,48 +44,46 @@ void TelegramBot::run()
     processUpdates();
 }
 
+void TelegramBot::parseUpdate(Json::Value valroot)
+{
+    if (!valroot["result"][0]["message"].isNull()) {
+        processMessage(message(valroot["result"][0]["message"]));
+    } else if (!valroot["result"][0]["edited_message"].isNull()) {
+        processEditedMessage(message(valroot["result"][0]["edited_message"]));
+    } else if (!valroot["result"][0]["inline_query"].isNull()) {
+        processInlineQuery(inlineQuery(valroot["result"][0]["inline_query"]));
+    } else if (!valroot["result"][0]["choosen_inline_result"].isNull()) {
+        processChosenInlineResult(choosenInlineResult(valroot["result"][0]["choosen_inline_result"]));
+    } else if (!valroot["result"][0]["callback_query"].isNull()) {
+        processCallbackQuery(callbackQuery(valroot["result"][0]["callback_query"]));
+    }
+}
+
 // Ask telegram to send all updates that need to be parsed
 void TelegramBot::processUpdates()
 {
-    //runOnce, needed in order to get the initial update_id offset
-    //this will not be executed more than 1 time, after the first update
-    do {
-        const cpr::Response response = request(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"},
-                                               cpr::Parameters{{"timeout", to_string(timeout)},
-                                                  {"limit", to_string(update_limit)}});
-
-
-        Json::Value valroot;
-        if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
-            //sets the initial offset
-            updateId = valroot["result"][0]["update_id"].asUInt();
-        }
-
-    } while (updateId == 0);
+    vector<future<void>> vecfuts;
 
     while (1) {
         const cpr::Response response = request(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"},
                                                cpr::Parameters{{"timeout", to_string(timeout)},
                                                   {"limit", to_string(update_limit)},
-                                                  {"offset", to_string(updateId)}});
+                                                  {"offset", to_string(updateId+1)}});
 
         Json::Value valroot;
         if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
-            for (Json::Value &val: valroot["result"]) {
-                if (!val["message"].isNull()) {
-                    processMessage(message(val["message"]));
-                } else if (!val["edited_message"].isNull()) {
-                    processEditedMessage(message(val["edited_message"]));
-                } else if (!val["inline_query"].isNull()) {
-                    processInlineQuery(inlineQuery(val["inline_query"]));
-                } else if (!val["choosen_inline_result"].isNull()) {
-                    processChosenInlineResult(choosenInlineResult(val["choosen_inline_result"]));
-                } else if (!val["callback_query"].isNull()) {
-                    processCallbackQuery(callbackQuery(val["callback_query"]));
+            vecfuts.push_back(async(launch::async,&TelegramBot::parseUpdate,this,valroot));
+            updateId = valroot["result"][0]["update_id"].asUInt();
+        }
+
+        async(launch::async, [&vecfuts] {
+        for(uid_32 i=0;i<=vecfuts.size()-1;i++) {
+                if(vecfuts.at(i).wait_for(chrono::seconds(0)) == future_status::ready) {
+                    vecfuts.erase(vecfuts.begin() + i);
                 }
             }
-            updateId += valroot["result"].size();
-        }
+        });
+        this_thread::sleep_for(chrono::milliseconds(1));
     }
 }
 
