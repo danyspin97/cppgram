@@ -5,18 +5,22 @@
 
 /*! \mainpage Reference
  * \section What What is CppGram
+ *
  * CppGram is a wrapper for Telegram Messanger Bot API.
  * Designed to be fast and easy, ensures the developer to build a bot in less time without having to learn Telegram Bot API.
  * The bot class (cppgram::TelegramBot) has a method for each API method, so the only thing you have to do is extend this class and start developing you bot!
  *
  * \subsection Features
+ *
  * - Getting udpdates using long or short polling (webhook support coming soon)
  * - Support for the most important API methods
  * - Easy inline keyboard creation
  * - Article creation for inline query
  *
  * \section Install
+ *
  * \subsection Cloning repository
+ *
  * Clone the repo, build cppgram and then link your own bot:
  *
  *     $ git clone https://gitlab.com/WiseDragonStd/cppgram.git
@@ -41,14 +45,16 @@
  * \section How How to use it
  *
  * \subsection processMessage
+ *
  * This function will be called everytime your bot receive a message.
  * Override the function adding:
  *
- *     virtual void processMessage(const cppgram::message &message) override;
+ *     void processMessage(const cppgram::message &message) override;
  *
  * Put here what your bot answer to messages. Parameter message contains all data about the message received
  *
  * \subsection Inline Keyboards
+ *
  * Inline keyboard represent a button below a message.
  * To send a message with a button use this sintax:
  *
@@ -61,9 +67,9 @@
  *     // Call the api to send a message
  *     sendMessage(chat_id, "Test bot for Cppgram wrapper", button_string);
  *
- * \section CompileOptions
+ * \section Compile Compile Options
  *
- * \subsection CMakeConfigureOptions
+ * \subsection CMake CMake Configure Options
  *
  * You can configure the project with various options
  *
@@ -96,6 +102,16 @@
  * We reccomend to use make with the --jobs=N / -jN option: best value for 'N' is you CPU's cores + 1
  *
  * So, my CPU is Quad-Core, I use --jobs=5 / -j5
+ *
+ * \section Gurrantee Gurrantee of working wrapper
+*
+ * This wrapper is TESTED AND WORKS with:
+ * 
+ *  - Compiler: <tt>GCC-C++ {aka G++} v6.2.1</tt>
+ *  - Standard: <tt>C++14</tt>
+ *  - CMake version: <tt>v3.6.2</tt>
+ *  - Platform: <tt>GNU/Linux (Arch Linux)</tt>
+ *  - Doxygen version (docs) : <tt>1.8.12/1.8.x</tt>
  */
 
 namespace Json
@@ -123,7 +139,7 @@ typedef long long id_64;
  */
 class TelegramBot
 {
-    public:
+public:
     /*! \fn TelegramBot::TelegramBot(const std::string &api_token,
                 const bool &background = false,
                 const std::string &filename = "tgbot.log",
@@ -202,13 +218,13 @@ class TelegramBot
                     const uid_32 &timeout = 10);
 
     // end of Telegram Bot API methods
-    protected:
+protected:
     virtual void processMessage(const struct message &message);
     virtual void processEditedMessage(const struct message &editedMessage);
     virtual void processInlineQuery(const struct inlineQuery &inlineQuery);
     virtual void processChosenInlineResult(const struct choosenInlineResult &choosenInlineResult);
     virtual void processCallbackQuery(const struct callbackQuery &callbackQuery);
-    private:
+private:
     const std::string bot_token;
     uid_32 updateId;
     const uid_32 timeout, update_limit;
