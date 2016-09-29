@@ -58,14 +58,21 @@ void TelegramBot::parseUpdate(Json::Value valroot)
 // Ask telegram to send all updates that need to be parsed
 void TelegramBot::processUpdates()
 {
-    vector<future<void>> vecfuts;
+    const std::string &botok = bot_token;
+    thread keepAliveTimer([&botok] {
+        while(1) {
+            request(cpr::Url {TELEGRAMAPI+botok});
+            this_thread::sleep_for(chrono::seconds(68));
+        }
+    });
+    keepAliveTimer.detach();
 
+    vector<future<void>> vecfuts;
     while (1) {
         const cpr::Response response = request(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"},
                                                cpr::Parameters{{"timeout", to_string(timeout)},
                                                   {"limit", to_string(update_limit)},
                                                   {"offset", to_string(updateId+1)}});
-
         Json::Value valroot;
         if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
             vecfuts.push_back(async(launch::async,&TelegramBot::parseUpdate,this,valroot));
@@ -73,12 +80,13 @@ void TelegramBot::processUpdates()
         }
 
         async(launch::async, [&vecfuts] {
-        for(uid_32 i=0;i<=vecfuts.size()-1;i++) {
+            for(uid_32 i=0;i<=vecfuts.size()-1;i++) {
                 if(vecfuts.at(i).wait_for(chrono::seconds(0)) == future_status::ready) {
                     vecfuts.erase(vecfuts.begin() + i);
                 }
             }
         });
+
         this_thread::sleep_for(chrono::milliseconds(1));
     }
 }
