@@ -1,4 +1,6 @@
 #include <cppgram/cppgram.h>
+#include <thread>
+#include <chrono>
 
 #define TOKEN "token"
 
@@ -33,6 +35,8 @@ class MyBot : public TelegramBot
 
         // Call the api
         sendMessage(message.chat->id, "Test bot for Cppgram wrapper", gen_button);
+
+		  std::this_thread::sleep_for(std::chrono::seconds(5));
     }
 
     // Every time a user press a bot button of type CallbackQuery this function will be called

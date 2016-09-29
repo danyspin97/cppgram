@@ -225,7 +225,7 @@ protected:
     virtual void processChosenInlineResult(const struct choosenInlineResult &choosenInlineResult);
     virtual void processCallbackQuery(const struct callbackQuery &callbackQuery);
 private:
-    const std::string bot_token;
+    std::string bot_token;
     uid_32 updateId;
     const uid_32 timeout, update_limit;
     void processUpdates();

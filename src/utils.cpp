@@ -17,8 +17,8 @@
 using cppgram::Singleton;
 using cppgram::JsonParseError;
 
-std::mutex mtx;
 cpr::Session session;
+std::mutex mtx;
 Json::Reader* reader = Singleton::getInstance()->getReader();
 
 int cppgram::osutil::backgroundProcess()
@@ -112,6 +112,16 @@ const cpr::Response cppgram::util::request(const cpr::Url & url, const cpr::Para
     mtx.lock();
     session.SetUrl(url);
     session.SetParameters(params);
+    const cpr::Response r = session.Get();
+    mtx.unlock();
+
+    return r;
+}
+
+const cpr::Response cppgram::util::request(const cpr::Url &url)
+{
+    mtx.lock();
+    session.SetUrl(url);
     const cpr::Response r = session.Get();
     mtx.unlock();
 

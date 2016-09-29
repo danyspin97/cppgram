@@ -1,4 +1,4 @@
-set(COMPILER_WARNINGS "-W -Wall -Wextra -Wno-unused-parameter") #brutal
+set(COMPILER_WARNINGS "-W -Wall -Wextra -Wno-unused-parameter -Wno-comment") #brutal
 set(JSONCPP_STATICLIB libjsoncpp.a)
 set(CPR_STATICLIB libcpr.a)
 
@@ -6,7 +6,8 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-#find_package(Threads REQUIRED)
+find_package(Threads REQUIRED)
+find_package(CURL REQUIRED)
 
 file(GLOB_RECURSE SOURCES *.cpp)
 
@@ -47,7 +48,6 @@ endif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
 message("Note: you are building static library, you have to link your executable manually with this and other static libraries (libcppgram.a , libcpr.a , libjsoncpp.a)")
 add_library(cppgram STATIC ${SOURCES})
-#target_link_libraries(cppgram ${CMAKE_LIBS_INIT_THREADS})
 
 install(TARGETS cppgram
 	ARCHIVE DESTINATION lib
