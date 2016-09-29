@@ -73,7 +73,7 @@ struct messageEntity {
 //get message data
 struct message {
     //TODO
-    uid_32 id;
+    uid_32 message_id;
     struct user* from;
     date_unix date;
     struct chat* chat;

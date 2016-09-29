@@ -19,9 +19,17 @@
  *
  * \section Install
  *
- * \subsection Cloning repository
+ * \subsection Requirements
  *
- * Clone the repo, build cppgram and then link your own bot:
+ * This library requires:
+ *  - jsoncpp
+ *  - cpr, curl
+ *  - gcc
+ * This wrapper has been tested using g++ version 6.2.1. This wrapper haven't been tested with version below.
+ *
+ * \subsection Cloning Cloning repository
+ *
+ * This code will download CppGram, its dependency and will build it:
  *
  *     $ git clone https://gitlab.com/WiseDragonStd/cppgram.git
  *     $ cd cppgram
@@ -30,17 +38,9 @@
  *     $ cmake ..
  *     $ make
  *
- * This code will download CppGram, its dependency and will build it.
  * Then link you own bot using:
  *
  *     $ g++ main.cpp lib/*.a -lcurl -o bot -Iinclude -std=c++14
- *
- * \subsection Dependencies
- *
- * This library requires:
- *  - jsoncpp
- *  - cpr
- *  - curl
  *
  * \section How How to use it
  *
@@ -51,7 +51,7 @@
  *
  *     void processMessage(const cppgram::message &message) override;
  *
- * Put here what your bot answer to messages. Parameter message contains all data about the message received
+ * Put here what your bot answer to messages. Parameter message contains all data about the message received.
  *
  * \subsection Inline Keyboards
  *
@@ -67,51 +67,37 @@
  *     // Call the api to send a message
  *     sendMessage(chat_id, "Test bot for Cppgram wrapper", button_string);
  *
+ * For a complete list of methods check the documentation.
+ *
  * \section Compile Compile Options
  *
  * \subsection CMake CMake Configure Options
  *
  * You can configure the project with various options
  *
- *     $ cmake $CPPGRAM_PATH $OPTIONS>
+ *     $ cmake $CPPGRAM_PATH $OPTIONS
  *
  * Availible options are:
  *
- *      - -DNOGET_DEPS : possible values - "yes" or "no" <tt>-DNOGET:DEPS="yes"</tt> - says that you don't want <tt>make</tt> to download for you any dependency ( default: no)
- *      - -DNATIVE : possible values - "yes" or "no" <tt>-DNATIVE="yes"</tt> - says that you want a natively-built static library for your CPU (default: no) (reccomended) (MAY not work on other CPU)
- *      - -DARCH : possible values - "-m32" or "-m64" <tt>-DARCH="-m64"</tt> - if your compiler has multi-libs, than, if required, you can build lib32/64 libraries (default: nothing, depends on compiler)
- *      - -DOPTIMIZATION_LEVEL : possible values - "2" , "3" , "4", "fast"... - <tt>-DOPTIMIZATION_LEVEL="2"</tt> - says the compiler the optimization level, if desired. (HIGHLY reccomended: 2) (default: nothing)
+ * - -DNOGET_DEPS="yes"/"no" (default: "no"): download dependencies (jsoncpp, cpr)
+ * - -DNATIVE="yes"/"no" (default: "no", reccomended: "yes"): build a natively-built static library for your CPU (MAY NOT work on all cpu)
+ * - -DARCH=/"-m32"/"-m64" (default: not defined): compile the library in a particulary architecture
+ * - -DOPTIMIZATION_LEVEL="2"/"3"/"4"/"fast" (default: not defined, reccomended: "2"): set the compiler optmization
  *
- *  CMake useful options
- *
- *      - -DCMAKE_CXX_COMPILER : says what compiler you want to use (CppGram is fully working with GCC-C++ {aka g++})
- *      - -DCMAKE_BUILD_TYPE : possible values - "Debug" or "Release" - (default: "Release") <tt>-DCMAKE_BUILD_TYPE="Debug"</tt>
- *
- * A great CMake project configuration command is:
- *
+ * Sugggested building options
  *      $ cmake ../cppgram -DCMAKE_CXX_COMPILER="/usr/bin/g++" -DNATIVE="yes" -DOPTIMIZATION_LEVEL="2"
  *
- * \subsection MakeRules
+ * \section Extra
  *
- * possible make rules are:
+ * \subsection Authors
  *
- *  - make : builds the library
- *  - make install : installs headers and static library in PREFIX (choosen by CMake, you can change the prefix using -DCMAKE_INSTALL_PREFIX="/pre/fix" option)
- *  - make gendoc : makes the documentation with doxygen (in ../cppgram/doc)
+ * This wrapper has been developed by <a href="https://gitlab.com/groups/WiseDragonStd" target="_blank">WiseDragonStd</a> (Danilo Spinella, Stefano Belli).
  *
- * We reccomend to use make with the --jobs=N / -jN option: best value for 'N' is you CPU's cores + 1
+ * \subsection License
  *
- * So, my CPU is Quad-Core, I use --jobs=5 / -j5
+ * This software has been released under the <a href="https://gitlab.com/WiseDragonStd/cppgram/blob/master/LICENSE" target="_blank">GNU LGLPv3</a>.
  *
- * \section Gurrantee Gurrantee of working wrapper
-*
- * This wrapper is TESTED AND WORKS with:
- * 
- *  - Compiler: <tt>GCC-C++ {aka G++} v6.2.1</tt>
- *  - Standard: <tt>C++14</tt>
- *  - CMake version: <tt>v3.6.2</tt>
- *  - Platform: <tt>GNU/Linux (Arch Linux)</tt>
- *  - Doxygen version (docs) : <tt>1.8.12/1.8.x</tt>
+ *
  */
 
 namespace Json

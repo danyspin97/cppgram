@@ -29,7 +29,7 @@ chat::chat(Json::Value &val) : id(val["id"].asInt64()) //ITS DONE!!
         last_name = val["last_name"].asString();
 }
 
-message::message(Json::Value &val) : id(val["message_id"].asUInt()),
+message::message(Json::Value &val) : message_id(val["message_id"].asUInt()),
                                                                   from(new struct user(val["from"])),
                                                                   date(val["date"].asUInt()),
                                                                   chat(new struct chat(val["chat"])),
@@ -172,7 +172,7 @@ message::message(const message &prev)
     date = prev.date;
     text = prev.text;
     edit_date = prev.edit_date;
-    id = prev.id;
+    message_id = prev.message_id;
 }
 
 messageEntity::messageEntity(const messageEntity &prev)
