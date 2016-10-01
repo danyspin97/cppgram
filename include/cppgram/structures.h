@@ -37,6 +37,14 @@ enum InlineKeyboardButtonType : short {
     SwitchInlineQuery = 2
 };
 
+enum UpdateType : short {
+    Message = 0,
+    EditedMessage = 1,
+    InlineQuery = 2,
+    ChoosenInlineResult = 3,
+    CallbackQuery = 4
+};
+
 //identify chat
 struct chat {
     id_64 id;
@@ -144,6 +152,20 @@ struct callbackQuery {
     callbackQuery(const struct callbackQuery& prev);
     ~callbackQuery();
     callbackQuery();
+};
+
+struct update {
+    enum UpdateType type;
+    union {
+        struct message* message;
+        struct message* editedMessage;
+        struct inlineQuery* inlineQuery;
+        struct choosenInlineResult* choosenInlineResult;
+        struct callbackQuery* callbackQuery;
+    };
+    explicit update(Json::Value& update);
+    ~update();
+    update();
 };
 
 }

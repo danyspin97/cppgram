@@ -2,6 +2,9 @@
 #define __CPPGRAM_COREBOT_H
 
 #include <string>
+#include <vector>
+#include <deque>
+#include "structures.h"
 
 /*! \mainpage Reference
  * \section What What is CppGram
@@ -105,6 +108,11 @@ namespace Json
 class Value;
 }
 
+namespace cpr
+{
+class Session;
+}
+
 /*! \namespace cppgram
  *
  * \brief main namespace for CppGram
@@ -114,7 +122,6 @@ namespace cppgram
 {
 
 //forwards
-enum ParseMode : short;
 typedef unsigned long uid_32;
 typedef long long id_64;
 
@@ -125,7 +132,7 @@ typedef long long id_64;
  */
 class TelegramBot
 {
-public:
+    public:
     /*! \fn TelegramBot::TelegramBot(const std::string &api_token,
                 const bool &background = false,
                 const std::string &filename = "tgbot.log",
@@ -204,17 +211,21 @@ public:
                     const uid_32 &timeout = 10);
 
     // end of Telegram Bot API methods
-protected:
+    protected:
     virtual void processMessage(const struct message &message);
     virtual void processEditedMessage(const struct message &editedMessage);
     virtual void processInlineQuery(const struct inlineQuery &inlineQuery);
     virtual void processChosenInlineResult(const struct choosenInlineResult &choosenInlineResult);
     virtual void processCallbackQuery(const struct callbackQuery &callbackQuery);
-private:
+    private:
     std::string bot_token;
     uid_32 updateId;
+    std::deque<update> updates_queue;
     const uid_32 timeout, update_limit;
+    std::vector<cpr::Session*> sessions;
     void processUpdates();
+    void queueUpdates();
+    void processUpdateSingleThread();
     void parseUpdate(const Json::Value valroot);
 };
 

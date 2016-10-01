@@ -34,15 +34,20 @@ uid_32 TelegramBot::sendMessage(const T &id, const std::string &text,
     else if (parse_mode == ParseMode::Markdown)
         parseMode = "Markdown";
 
-    const cpr::Response response = request(cpr::Url{TELEGRAMAPI + bot_token + "/sendMessage"},
-                                           cpr::Parameters{{"chat_id", fid},
-                                              {"text", text},
-                                              {"parse_mode", parseMode},
-                                              {"disable_web_page_preview",
-                                               to_string(disable_web_page_preview)},
-                                              {"disable_notification", to_string(disable_notification)},
-                                              {"reply_to_message_id", to_string(reply_to_message_id)},
-                                              {"reply_markup", reply_markup}});
+    int cpu_id = sched_getcpu();
+
+    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/sendMessage"});
+    sessions[cpu_id]->SetParameters(cpr::Parameters{{"chat_id", fid},
+                                                           {"text", text},
+                                                           {"parse_mode", parseMode},
+                                                           {"disable_web_page_preview",
+                                                            to_string(disable_web_page_preview)},
+                                                           {"disable_notification",
+                                                            to_string(disable_notification)},
+                                                           {"reply_to_message_id",
+                                                            to_string(reply_to_message_id)},
+                                                           {"reply_markup", reply_markup}});
+    const cpr::Response response = sessions[cpu_id]->Get();
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))

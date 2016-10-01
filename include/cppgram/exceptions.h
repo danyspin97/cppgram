@@ -6,6 +6,19 @@
 namespace cppgram
 {
 
+/*! \class ThreadException
+ * \inherits std::exception
+ * \brief raises if thread could not start (fatal)
+ */
+class ThreadException : public std::exception
+{
+public:
+    /*! \fn ThreadException::what() const throw()
+     * \return exception message
+     */
+    virtual const char* what() const throw();
+};
+
 /*! \class JsonParseError
  * \inherits std::exception
  * \brief raises if jsoncpp can't parse the JSON document (critical)
