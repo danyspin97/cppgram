@@ -42,7 +42,7 @@ struct chat
     {
         const char *mystr[] = {"private", "group", "supergroup", "channel"};
 
-        int i = 10;
+        int i = 3;
 
         const char *chat_type = chat["type"].asCString();
         while (i > 0 && strcmp(mystr[i], chat_type) != 0)
