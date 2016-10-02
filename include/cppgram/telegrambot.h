@@ -4,7 +4,8 @@
 #include <string>
 #include <vector>
 #include <deque>
-#include "structures.h"
+#include <mutex>
+#include "types/update.h"
 
 /*! \mainpage Reference
  * \section What What is CppGram
@@ -17,6 +18,7 @@
  *
  * - Getting udpdates using long or short polling (webhook support coming soon)
  * - Support for the most important API methods
+ * - Multithread support
  * - Easy inline keyboard creation
  * - Article creation for inline query
  *
@@ -43,7 +45,7 @@
  *
  * Then link you own bot using:
  *
- *     $ g++ main.cpp lib/*.a -lcurl -o bot -Iinclude -std=c++14
+ *     $ g++ main.cpp lib/*.a -lcurl -o bot -Iinclude -std=c++14 -pthread
  *
  * \section How How to use it
  *
@@ -156,8 +158,33 @@ class TelegramBot
      */
     void run();
 
-    // Telegram Bot API methods
+    /*! \addtogroup Telegram API methods
+     * @{
+     */
 
+    /**
+     * Receive incoming updates using polling (short or long polling based on timeout)
+     * @param updates Fill a JSON with the updates received
+     * @param offset Identifier of the first update to be returned. Must be greater by one than the highest among the identifiers of previously received updates. By default, updates starting with the earliest unconfirmed update are returned. An update is considered confirmed as soon as getUpdates is called with an offset higher than its update_id. The negative offset can be specified to retrieve updates starting from -offset update from the end of the updates queue. All previous updates will forgotten.
+     * @param limit Limits the number of updates to be retrieved. Values between 1—100 are accepted.
+     * @param timeout Timeout in seconds for long polling.
+     * @return True if there are new updates, false otherwise
+     */
+    bool getUpdates(Json::Value &updates, const uid_32 &offset = 0,
+                    const uid_32 &limit = 100,
+                    const uid_32 &timeout = 10);
+
+    /**
+     * Send a message to a specified chat. (https://core.telegram.org/bots/api#sendmessage)
+     * @param id Unique identifier for the target chat or username of the target channel (in the format <code>@channelusername</code>)
+     * @param text Text of the message to be sent
+     * @param reply_markup Additional interface options. Use InlineKeyboard class to create a reply markup
+     * @param parse_mode Send an enum of type ParseMode
+     * @param disable_web_page_preview Disables link previews for links in this message
+     * @param disable_notification Sends the message silently.
+     * @param reply_to_message_id If the message is a reply, ID of the original message
+     * @return On success, message_id of the message sent, 0 otherwise
+     */
     template<typename T>
     uid_32 sendMessage(const T &id,
                        const std::string &text,
@@ -167,38 +194,95 @@ class TelegramBot
                        const bool &disable_notification = false,
                        const uid_32 &reply_to_message_id = 0) const;
 
+    /**
+     * Edit text (and reply markup) of a message sent by the bot. Leaving reply_markup empty remove it from the message edited. (https://core.telegram.org/bots/api#editmessagetext)
+     * @param chat_id Unique identifier for the target chat or username of the target channel (in the format <code>\@channelusername</code>)
+     * @param message_id Unique identifier of the sent message
+     * @param text New text of the message
+     * @param reply_markup Inline keyboard object
+     * @param parse_mode Send an enum of type ParseMode
+     * @param disable_web_page_preview Disables link previews for links in this message
+     * @return On success, message_id of the message edited, 0 otherwise
+     */
     template<typename T>
-    uid_32 editMessageText(const T &id,
+    uid_32 editMessageText(const T &chat_id,
                            const uid_32 &message_id,
                            const std::string &text,
                            const std::string &reply_markup = "",
                            const ParseMode &parse_mode = static_cast<ParseMode>(1),
                            const bool &disable_web_page_preview = true) const;
 
-    template<typename T>
-    uid_32 editMessageReplyMarkup(const T &id,
-                                  const uid_32 &message_id,
-                                  const std::string &reply_markup = "") const;
-
-    template<typename T>
-    uid_32 editMessageCaption(const T &id,
-                              const uid_32 &message_id,
-                              const std::string &caption,
-                              const std::string &reply_markup = "") const;
-
+    /**
+     * Edit text (and reply markup) of a message sent via the bot (using inline queries). Leaving reply_markup empty remove it from the message edited. (https://core.telegram.org/bots/api#editmessagetext)
+     * @param inline_message_id Identifier of the inline message
+     * @param text New text of the message
+     * @param reply_markup Inline keyboard object
+     * @param parse_mode Send an enum of type ParseMode
+     * @param disable_web_page_preview Disables link previews for links in this message
+     * @return True on success, false otherwise
+     */
     bool editMessageText(const std::string &inline_message_id,
                          const std::string &text,
                          const std::string &reply_markup = "",
                          const ParseMode &parse_mode = static_cast<ParseMode>(1),
                          const bool &disable_web_page_preview = true) const;
 
-    bool editMessageReplyMarkup(const std::string &inline_message_id,
-                                const std::string &reply_markup = "") const;
+    /**
+     * Edit captions of messages sent by the bot. Leaving reply_markup empty remove it from the message edited. (https://core.telegram.org/bots/api#editmessagecaption)
+     * @param chat_id Unique identifier for the target chat or username of the target channel (in the format <code>\@channelusername</code>)
+     * @param caption New caption of the message
+     * @param reply_markup Inline keyboard object
+     * @return On success, message_id of the message edited, 0 otherwise
+     */
+    template<typename T>
+    uid_32 editMessageCaption(const T &chat_id,
+                              const uid_32 &message_id,
+                              const std::string &caption,
+                              const std::string &reply_markup = "") const;
 
+    /**
+     * Edit captions of messages sent via the bot (using inline_queries). Leaving reply_markup empty remove it from the message edited. (https://core.telegram.org/bots/api#editmessagecaption)
+     * @param inline_message_id Identifier of the inline message
+     * @param caption New caption of the message
+     * @param reply_markup Inline Keyboard object
+     * @return True on success, false otherwise
+     */
     bool editMessageCaption(const std::string &inline_message_id,
                             const std::string &caption,
                             const std::string &reply_markup = "") const;
 
+    /**
+     * Edit only the reply markup of a message sent by the the bot. Leaving reply_markup empty remove it from the message edited. (https://core.telegram.org/bots/api#editmessagereplymarkup)
+     * @param chat_id Unique identifier for the target chat or username of the target channel (in the format <code>\@channelusername</code>)
+     * @param message_id Unique identifier of the sent message
+     * @param reply_markup New inline keyboard object
+     * @return On success, message_id of the message edited, 0 otherwise
+     */
+    template<typename T>
+    uid_32 editMessageReplyMarkup(const T &chat_id,
+                                  const uid_32 &message_id,
+                                  const std::string &reply_markup = "") const;
+
+    /**
+     * Edit only the reply markup of a message sent via the the bot (using inline queries). Leaving reply_markup empty remove it from the message edited. (https://core.telegram.org/bots/api#editmessagereplymarkup)
+     * @param inline_message_id Identifier of the inline message
+     * @param reply_markup New inline keyboard object
+     * @return True on success, false otherwise
+     */
+    bool editMessageReplyMarkup(const std::string &inline_message_id,
+                                const std::string &reply_markup = "") const;
+
+    /**
+     * Answer an inline query. (https://core.telegram.org/bots/api#answerinlinequery
+     * @param inline_query_id Unique identifier for the answered query
+     * @param results JSON serialized array of the results for the inline query. Use InlineQuery ti create them
+     * @param cache_time The maximum amount of time in seconds that the result of the inline query may be cached on the server
+     * @param is_personal Pass True, if results may be cached on the server side only for the user that sent the query
+     * @param next_offset Pass the offset that a client should send in the next query with the same text to receive more results. Pass an empty string if there are no more results or if you don‘t support pagination
+     * @param switch_pm_text If passed, clients will display a button with specified text that switches the user to a private chat with the bot and sends the bot a start message with the parameter switch_pm_parameter
+     * @param switch_pm_paramter Parameter for the start message sent to the bot when user presses the switch button
+     * @return True on success, false otherwise
+     */
     bool answerInlineQuery(const std::string &inline_query_id,
                            const std::string &results,
                            const int &cache_time = 300,
@@ -206,11 +290,8 @@ class TelegramBot
                            const std::string &next_offset = "",
                            const std::string &switch_pm_text = "",
                            const std::string &switch_pm_paramter = "") const;
-    bool getUpdates(Json::Value &val, const uid_32 &offset = 0,
-                    const uid_32 &limit = 100,
-                    const uid_32 &timeout = 10);
 
-    // end of Telegram Bot API methods
+    /** @} */
     protected:
     virtual void processMessage(const struct message &message);
     virtual void processEditedMessage(const struct message &editedMessage);
@@ -218,15 +299,26 @@ class TelegramBot
     virtual void processChosenInlineResult(const struct choosenInlineResult &choosenInlineResult);
     virtual void processCallbackQuery(const struct callbackQuery &callbackQuery);
     private:
+    /** Bot token. Contains the token of the bot */
     std::string bot_token;
+    /** Update id. Contains the id of the last updates ricevuto */
     uid_32 updateId;
-    std::deque<update> updates_queue;
-    const uid_32 timeout, update_limit;
-    std::vector<cpr::Session*> sessions;
+    /** Queue container. Each update received goes here after it has been parsed */
+    std::deque<update *> updates_queue;
+    /** Data for getUpdates method, instantiated in the constructor */
+    const uid_32 timeout,
+    /** Get udpdate data */
+            update_limit;
+    /** Curl session. Store a session for each thread */
+    std::vector<cpr::Session *> sessions;
+    /** This function is spawned in each core (except the first) by run() and process an update at a time */
     void processUpdates();
+    /** Get bot updates using getUpdates, parse them and put them in the queue (updates_queue). Called by run() */
     void queueUpdates();
+    /** Get update and parse them in sequence, using a single core. Automatically called by run if the cpu is single-core */
     void processUpdateSingleThread();
-    void parseUpdate(const Json::Value valroot);
+    /** Mutex to control queue access */
+    std::mutex mutex;
 };
 
 }

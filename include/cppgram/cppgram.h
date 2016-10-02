@@ -3,12 +3,12 @@
 
 #include "defines.h"
 #include "emoji.h"
-#include "types.h"
+#include "cppgram/types/integers.h"
 #include "telegrambot.h"
-#include "structures.h"
+#include "types/update.h"
 #include "exceptions.h"
 #include "utils.h"
-#include "inlinekeyboard.h"
-#include "inlinequeryresult.h"
+#include "inline_keyboard.h"
+#include "inline_query_result.h"
 
 #endif //CPPGRAM_CPPGRAM_H

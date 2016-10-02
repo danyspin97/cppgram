@@ -14,6 +14,10 @@ namespace cppgram
 {
 
 enum InlineKeyboardButtonType : short;
+struct inlineKeyboardButton;
+
+
+enum InlineKeyboardButtonType : short;
 
 /*! \class InlineKeyboard
  * \brief represents an InlineKeyboard which will be generated later (see getKeyboard() member)

@@ -1,15 +1,17 @@
 #include <json/json.h>
-#include <mutex>
 
-#include "cppgram/inlinekeyboard.h"
+#include "cppgram/inline_keyboard.h"
+#include "cppgram/types/enums.h"
 #include "cppgram/exceptions.h"
-#include "cppgram/structures.h"
+#include "cppgram/types/inline_keyboard_button.h"
 #include "cppgram/singleton.h"
 
-using namespace cppgram;
-using namespace std;
+using std::string;
+using std::vector;
 
-std::mutex mtx1;
+using cppgram::InlineKeyboard;
+using cppgram::inlineKeyboardButton;
+using cppgram::InlineKeyboardButtonType;
 
 InlineKeyboard::InlineKeyboard()
         : column(0), row(0)
@@ -69,9 +71,7 @@ void InlineKeyboard::clearKeyboard()
 
 void InlineKeyboard::getKeyboard(std::string& reply_markup, const bool &clearKeyboard)
 {
-    mtx1.lock();
     reply_markup = Singleton::getInstance()->getWriter()->write(inline_keyboard);
-    mtx1.unlock();
 
     if (clearKeyboard)
         inline_keyboard.clear();
