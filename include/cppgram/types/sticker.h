@@ -15,27 +15,28 @@ namespace cppgram
  * @{
  */
 
-/** This object represents a sticker. (https://core.telegram.org/bots/api#sticker) */
+/** \brief A sticker
+ * \details This object represents a sticker. (https://core.telegram.org/bots/api#sticker) */
 struct sticker
 {
     /** @} */
 
-    /** Unique identifier for this file */
+    /** \brief Unique identifier for this file */
     std::string file_id;
 
-    /** Sticker width */
+    /** \brief Sticker width */
     uid_32 width,
 
-    /** Sticker height */
+    /** \brief Sticker height */
             height;
 
-    /** <i>Optional</i>. Sticker thumbnail in .webbp or .jpg format */
+    /** \brief <i>Optional</i>. Sticker thumbnail in .webbp or .jpg format */
     struct photoSize *thumb;
 
-    /** <i>Optional</i>. Emoj associated with the sticker */
+    /** \brief <i>Optional</i>. Emoj associated with the sticker */
     std::string emoj;
 
-    /** <i>Optional</i>. File size */
+    /** \brief <i>Optional</i>. File size */
     uid_32 file_size;
 
     sticker(Json::Value &sticker)

@@ -49,6 +49,21 @@
  *
  * \section How How to use it
  *
+ *     using namespace cppgram;
+ *
+ *     class MyBot : public TelegramBot {
+ *         public:
+ *         MyBot() : TelegramBot(TOKEN) {} // Inherit constructor
+ *         void processMessage(const message &message) override final {}
+ *         void processCallbackQuery(const callbackQuery &callbackQuery) override final {}
+ *     };
+ *
+ *     int main() {
+ *         MyBot bot; // Istantiate the bot
+ *         bot.run(); // Start getting updates
+ *         return 0;
+ *     }
+ *
  * \subsection processMessage
  *
  * This function will be called everytime your bot receive a message.

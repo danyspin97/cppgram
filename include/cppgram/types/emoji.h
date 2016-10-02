@@ -8,13 +8,19 @@
 namespace cppgram
 {
 
-/*! \class Emoji
- * \brief Contains static emoji strings members
+/**
+ * \addtogroup Types
+ * @{
  */
+
+/**
+ * \brief Contains static emoji. */
 class Emoji
 {
+    /** @} */
+
 public:
-    //faces 
+    //faces
     static const std::string smileGrinning,
                              smileLaughTearsOfJoy,
                              smileOpenMouthEyes,

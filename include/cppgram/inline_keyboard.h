@@ -19,14 +19,19 @@ struct inlineKeyboardButton;
 
 enum InlineKeyboardButtonType : short;
 
+/**
+ * \addtogroup Inline Keyboard
+ */
+
 /*! \class InlineKeyboard
- * \brief represents an InlineKeyboard which will be generated later (see getKeyboard() member)
+ * \brief This object in an helper class to easy create inline keyboard and pass them as reply markup
  */
 class InlineKeyboard
 {
 public:
-    /*! \fn InlineKeyboard::InlineKeyboard()
-     * \brief InlineKeyboard constructor
+    /**
+     * \brief Default constructor for the function
+     * @return An empty InlineKeyboard object
      */
     InlineKeyboard();
 
@@ -47,6 +52,8 @@ private:
     short row;
 
 };
+
+/** @} */
 
 }
 

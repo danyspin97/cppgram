@@ -12,21 +12,23 @@ namespace cppgram
  * @{
  */
 
-/** This object represents one button of an inline keyboard, used in InlineKeyboard. (https://core.telegram.org/bots/api#inlinekeyboardbutton) */
+/** \brief Class for creating Inline keyboard button
+ * \details This object represents one button of an inline keyboard, used in InlineKeyboard. (https://core.telegram.org/bots/api#inlinekeyboardbutton) */
 struct inlineKeyboardButton
 {
     /** @} */
 
-    /** Label text of the button */
+    /** \brief Label text of the button */
     std::string text,
-    /** Data of the button (depends on type) */
+
+    /** \brief Data of the button (depends on type) */
             data;
 
-    /** Type of the button */
+    /** \brief Type of the button */
     enum InlineKeyboardButtonType button_type;
 
     /**
-     * inlineKeyboardButton constructor by parameters.
+     * \brief Constructor by parameters.
      * @param text Label text of the button
      * @param data Data of the button (depends on the type)
      * @param button_type Type of the button to create
@@ -35,11 +37,13 @@ struct inlineKeyboardButton
     inlineKeyboardButton(const std::string &text,
                          const std::string &data,
                          const InlineKeyboardButtonType &button_type)
-            : text(text), data(data), button_type(button_type)
+            : text(text),
+              data(data),
+              button_type(button_type)
     {}
 
     /**
-     * inlineKeyboardButton constructor by JSON.
+     * \brief Constructor by JSON.
      * @param button JSON-serialized button
      * @return Returns a new inlineKeyboardButton
      */

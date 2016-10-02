@@ -1,5 +1,7 @@
 #include <json/json.h>
-#include "cppgram/cppgram.h"
+
+#include "cppgram/inline_query_result.h"
+#include "cppgram/types/update.h"
 
 using namespace cppgram;
 using std::string;

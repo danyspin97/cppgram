@@ -13,21 +13,22 @@ namespace cppgram
  * @{
  */
 
-/** This object represents one size of a photo or a file / sticker thumbnail. (https://core.telegram.org/bots/api#photosize) */
+/** \brief A photo or thumbnail
+ * \details This object represents one size of a photo or a file / sticker thumbnail. (https://core.telegram.org/bots/api#photosize) */
 struct photoSize
 {
     /** @} */
 
-    /** Unique identifier for this file */
+    /** \brief Unique identifier for this file */
     std::string file_id;
 
-    /** Photo width */
+    /** \brief Photo width */
     uid_32 width,
 
-    /** Photo height */
+    /** \brief Photo height */
             height,
 
-    /** <i>Optional</i>. File size */
+    /** \brief <i>Optional</i>. File size */
             file_size;
 
     photoSize(Json::Value &photoSize)
@@ -39,8 +40,10 @@ struct photoSize
             file_size = photoSize["file_size"].asUInt();
 
     };
+
     photoSize()
     {};
+
     ~photoSize()
     {};
 };

@@ -2,7 +2,10 @@
 #define CPPGRAM_CHAT_H
 
 #include <string>
+#include <cstring>
+
 #include <json/json.h>
+
 #include "integers.h"
 #include "enums.h"
 
@@ -13,34 +16,39 @@ namespace cppgram
  * @{
  */
 
-/** This object represents a chat. (https://core.telegram.org/bots/api#user) */
+/** \brief Chat object.
+ * \details This object represents a chat. (https://core.telegram.org/bots/api#user) */
 struct chat
 {
     /** @} */
 
-    /** Unique identifier for this chat. */
+    /** \brief Unique identifier for this chat. */
     id_64 id;
-    /** Type of chat */
+
+    /** \brief Type of chat */
     ChatType type;
-    /** <i>Optional</i>. Title, for supergroups, channels and group chats */
+
+    /** \brief <i>Optional</i>. Title, for supergroups, channels and group chats */
     std::string title,
-    /** <i>Optional</i>. Username, for private chats, supergroups and channels if available */
+
+    /** \brief <i>Optional</i>. Username, for private chats, supergroups and channels if available */
             username,
-    /** <i>Optional</i>. First name of the other party in a private chat */
+    /** \brief <i>Optional</i>. First name of the other party in a private chat */
             first_name,
-    /** <i>Optional</i>. Last name of the other party in a private chat */
+    /** \brief <i>Optional</i>. Last name of the other party in a private chat */
             last_name;
+
     chat(Json::Value &chat) : id(chat["id"].asInt64())
     {
-        std::string typechat = chat["type"].asString();
-        if (typechat == "private")
-            type = ChatType::Private;
-        else if (typechat == "group")
-            type = ChatType::Group;
-        else if (typechat == "supergroup")
-            type = ChatType::Supergroup;
-        else if (typechat == "channel")
-            type = ChatType::Channel;
+        const char *mystr[] = {"private", "group", "supergroup", "channel"};
+
+        int i = 10;
+
+        const char *chat_type = chat["type"].asCString();
+        while (i > 0 && strcmp(mystr[i], chat_type) != 0)
+            i--;
+
+        type = static_cast<ChatType>(i);
 
         if (!chat["title"].isNull())
             title = chat["title"].asString();

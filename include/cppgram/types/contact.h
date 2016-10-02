@@ -13,21 +13,22 @@ namespace cppgram
  * @{
  */
 
-/** This object represents a phone contact. (https://core.telegram.org/bots/api#contact */
+/** \brief Contact send by a user
+ * \details This object represents a phone contact. (https://core.telegram.org/bots/api#contact */
 struct contact
 {
     /** @} */
 
-    /** Contact's phone number */
+    /** \brief Contact's phone number */
     std::string phone_number,
 
-    /** Contact's first name */
+    /** \brief Contact's first name */
             first_name,
 
-    /** <i>Optional</i>. Contact's last name */
+    /** \brief <i>Optional</i>. Contact's last name */
             last_name;
 
-    /** <i>Optional</i>. Contact's user identifier in Telegram */
+    /** \brief <i>Optional</i>. Contact's user identifier in Telegram */
     uid_32 user_id;
 
     contact(Json::Value &contact)
@@ -39,8 +40,10 @@ struct contact
         if (!contact["user_id"].isNull())
             user_id = contact["user_id"].asUInt();
     }
+
     contact()
     {};
+
     ~contact()
     {};
 };

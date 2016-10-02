@@ -14,26 +14,28 @@ namespace cppgram
  * @{
  */
 
-/** This object represents an audio file to be treated as music by the Telegram clients. (https://core.telegram.org/bots/api#audio) */
+/** \brief Audio message sent by a user.
+ * \details This object represents an audio file to be treated as music by the Telegram clients. (https://core.telegram.org/bots/api#audio) */
 struct audio
 {
     /** @} */
 
-    /** Unique identifier for this file */
+    /** \brief Unique identifier for this file */
     std::string file_id;
 
-    /** Duration of the audio in seconds as defined by sender */
+    /** \brief Duration of the audio in seconds as defined by sender */
     uid_32 duration;
 
-    /** <i>Optional</i>. Performer of the audio as defined by sender or by audio tags */
+    /** \brief <i>Optional</i>. Performer of the audio as defined by sender or by audio tags */
     std::string performer,
-    /** <i>Optional</i>. Title of the audio as defined by sender or by audio tags */
+
+    /** \brief <i>Optional</i>. Title of the audio as defined by sender or by audio tags */
             title,
 
-    /** <i>Optional</i>. MIME type of the file as defined by sender */
+    /** \brief <i>Optional</i>. MIME type of the file as defined by sender */
             mime_type;
 
-    /** <i>Optional</i>. File size */
+    /** \brief <i>Optional</i>. File size */
     uid_32 file_size;
 
     audio(Json::Value &audio) : file_id(audio["file_id"].asString()),
@@ -52,8 +54,10 @@ struct audio
         if (!audio["file_size"].isNull())
             file_size = audio["file_size"].asUInt();
     };
+
     audio()
     {};
+
     ~audio()
     {};
 };

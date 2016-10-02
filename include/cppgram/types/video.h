@@ -15,30 +15,31 @@ namespace cppgram
  * @{
  */
 
-/** This object represents a video file. (https://core.telegram.org/bots/api#video) */
+/** \brief A video sent by user.
+ * \details This object represents a video file. (https://core.telegram.org/bots/api#video) */
 struct video
 {
     /** @} */
 
-    /** Unique identifier for this file */
+    /** \brief Unique identifier for this file */
     std::string file_id;
 
-    /** Video width as defined by sender */
+    /** \brief Video width as defined by sender */
     uid_32 width,
 
-    /** Video height as defined by sender */
+    /** \brief Video height as defined by sender */
             height,
 
-    /** Duration of the video in seconds as defined by sender */
+    /** \brief Duration of the video in seconds as defined by sender */
             duration;
 
-    /** <i>Optional</i>. Video thumbnail */
+    /** \brief <i>Optional</i>. Video thumbnail */
     struct photoSize *thumb;
 
-    /** <i>Optional</i>. Mime type of a file as defined by sender */
+    /** \brief <i>Optional</i>. Mime type of a file as defined by sender */
     std::string mime_type;
 
-    /** <i>Optional</i>. File size */
+    /** \brief <i>Optional</i>. File size */
     uid_32 file_size;
 
     video(Json::Value &video)

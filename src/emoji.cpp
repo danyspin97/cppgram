@@ -1,4 +1,4 @@
-#include "cppgram/emoji.h"
+#include "cppgram/types/emoji.h"
 
 using namespace cppgram;
 

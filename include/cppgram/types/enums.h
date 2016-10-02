@@ -8,7 +8,7 @@ namespace cppgram
  * @{
  */
 
-/** Type of the chat */
+/** \brief Type of the chat */
 enum ChatType
         : short
 {
@@ -25,7 +25,8 @@ enum ChatType
             Channel = 3
 };
 
-/** Type of the entity. (https://core.telegram.org/bots/api#messageentity) */
+/** \brief Type of the entity.
+ * \details (https://core.telegram.org/bots/api#messageentity) */
 enum MessageEntityType
         : short
 {
@@ -63,7 +64,8 @@ enum MessageEntityType
     text_mention = 10
 };
 
-/** Formattation options (https://core.telegram.org/bots/api#formatting-options) */
+/** \brief Formattation options.
+ * \details (https://core.telegram.org/bots/api#formatting-options) */
 enum ParseMode
         : short
 {
@@ -77,7 +79,8 @@ enum ParseMode
             Markdown = 2
 };
 
-/** Type of the inlineKeyboardButton to add in the reply markup (https://core.telegram.org/bots/api#inlinekeyboardbutton) */
+/** \brief Type of the inlineKeyboardButton to add in the reply markup
+ * \details (https://core.telegram.org/bots/api#inlinekeyboardbutton) */
 enum InlineKeyboardButtonType
         : short
 {

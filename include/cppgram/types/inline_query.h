@@ -16,36 +16,41 @@ namespace cppgram
  * @{
  */
 
-/** This object represents an incoming inline query. (https://core.telegram.org/bots/api#inlinequery) */
+/** \brief Incoming inline query.
+ * \details This object represents an incoming inline query. (https://core.telegram.org/bots/api#inlinequery) */
 struct inlineQuery
 {
     /** @} */
 
-    /** Unique identifier for this query */
+    /** \brief Unique identifier for this query */
     std::string id;
 
-    /** Sender */
+    /** \brief Sender */
     struct user *from;
 
-    /** <i>Optional</i>. Sender location, only for bots that request user location */
+    /** \brief <i>Optional</i>. Sender location, only for bots that request user location */
     struct location *location;
 
-    /** Text of the query (up to 512 characters) */
+    /** \brief Text of the query, up to 512 characters. */
     std::string query,
 
-    /** Offset of the results to be returned, can be controlled by the bot */
+    /** \brief Offset of the results to be returned, can be controlled by the bot */
             offset;
 
     inlineQuery(Json::Value &inlineQuery)
-            : id(inlineQuery["id"].asString()), query(inlineQuery["query"].asString()),
-              offset(inlineQuery["offset"].asString()), from(new struct user(inlineQuery["from"])),
-              location(nullptr)
+            : id(inlineQuery["id"].asString()),
+              query(inlineQuery["query"].asString()),
+              offset(inlineQuery["offset"].asString()),
+              from(new struct user(inlineQuery["from"]))
     {
         if (!inlineQuery["location"].isNull())
         {
             location = new struct location(inlineQuery["location"]);
         }
     }
+
+    inlineQuery()
+    {}
 
     ~inlineQuery()
     {
@@ -54,9 +59,6 @@ struct inlineQuery
         if (location != NULL)
             delete location;
     }
-
-    inlineQuery()
-    {}
 
     inlineQuery(const inlineQuery &prev)
     {

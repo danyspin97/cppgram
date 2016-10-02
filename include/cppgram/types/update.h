@@ -22,12 +22,17 @@ struct update
     /** @} */
 
     enum UpdateType type;
+
     union
     {
         struct message *message;
+
         struct message *editedMessage;
+
         struct inlineQuery *inlineQuery;
+
         struct choosenInlineResult *choosenInlineResult;
+
         struct callbackQuery *callbackQuery;
     };
 

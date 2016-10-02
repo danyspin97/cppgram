@@ -14,15 +14,16 @@ namespace cppgram
  * @{
  */
 
-/** This object represents a point on the map. (https://core.telegram.org/bots/api#location) */
+/** \brief A location send by a user.
+ * \details This object represents a point on the map. (https://core.telegram.org/bots/api#location) */
 struct location
 {
     /** @} */
 
-    /** Longitude as defined by sender */
+    /** \brief Longitude as defined by sender */
     float longitude,
 
-    /** Latitude as defined by sender */
+    /** \brief Latitude as defined by sender */
             latidute;
 
     location(Json::Value &location)

@@ -42,6 +42,7 @@ struct voice
 
     voice()
     {};
+
     ~voice()
     {};
 };

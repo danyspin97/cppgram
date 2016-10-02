@@ -8,11 +8,14 @@
 #include "structures.h"
 #include "utils.h"
 
+using std::string;
+using std::to_string;
+
+using cpr::Session;
+
 using namespace cppgram;
 using namespace cppgram::util;
 
-using std::string;
-using std::to_string;
 
 template<typename T>
 uid_32 TelegramBot::sendMessage(const T &chat_id,

@@ -2,8 +2,7 @@
 #define CPPGRAM_CPPGRAM_H
 
 #include "defines.h"
-#include "emoji.h"
-#include "cppgram/types/integers.h"
+#include "types/emoji.h"
 #include "telegrambot.h"
 #include "types/update.h"
 #include "exceptions.h"

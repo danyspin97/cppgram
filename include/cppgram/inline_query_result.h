@@ -9,7 +9,8 @@ namespace cppgram
 enum ParseMode : short;
 
 /*! \class InlineQueryResult
- * \brief represents an InlineQueryResult object
+ * \brief Create articles to send as inlineQuery result
+ * \details Helper class to create articles and pass the results to answerInlineQuery
  */
 class InlineQueryResult
 {
