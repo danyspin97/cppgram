@@ -18,12 +18,15 @@ namespace cppgram
  */
 class Singleton
 {
+
 public:
+
     /*! \fn Singleton::Singleton(const Singleton &prev) = delete
      * \brief disable copy constructor
      * \param prev: the copied class
      */
     Singleton(const Singleton &prev) = delete;
+
     /*! \fn Singleton::~Singleton()
      * \brief public Singleton destroyer
      */

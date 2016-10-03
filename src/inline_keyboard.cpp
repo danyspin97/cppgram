@@ -17,20 +17,15 @@ InlineKeyboard::InlineKeyboard()
         : column(0), row(0)
 {}
 
-Json::Value InlineKeyboard::getKeyboard() const
+unsigned short InlineKeyboard::changeRow()
 {
-    return inline_keyboard;
-}
-
-void InlineKeyboard::changeRow()
-{
-    row++;
     column = 0;
+    return row++;
 }
 
 bool InlineKeyboard::addButton(const string& text, const string& data, const InlineKeyboardButtonType& buttonType)
 {
-    if (text == "" || data == "")
+    if (text.empty() || data.empty())
         throw new InlineKeyboardNotValid;
 
     if (column == 8)
@@ -58,15 +53,10 @@ bool InlineKeyboard::addButton(const struct inlineKeyboardButton &newButton)
 bool InlineKeyboard::addButton(const vector<inlineKeyboardButton>& newButtons)
 {
     for (const inlineKeyboardButton& button: newButtons) {
-        if (addButton(button.text, button.data, button.button_type) == false)
+        if (!addButton(button.text, button.data, button.button_type))
             return false;
     }
     return true;
-}
-
-void InlineKeyboard::clearKeyboard()
-{
-    inline_keyboard.clear();
 }
 
 void InlineKeyboard::getKeyboard(std::string& reply_markup, const bool &clearKeyboard)
@@ -76,3 +66,4 @@ void InlineKeyboard::getKeyboard(std::string& reply_markup, const bool &clearKey
     if (clearKeyboard)
         inline_keyboard.clear();
 }
+

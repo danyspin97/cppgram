@@ -4,6 +4,9 @@
 #include <vector>
 #include <string>
 
+#include <sys/time.h>
+
+#include "types/integers.h"
 #include "defines.h"
 
 namespace cpr
@@ -72,8 +75,27 @@ void log(const Log& l, const std::string& message, const std::string& filename=F
  * \return true if everything OK, else: false
  */
 bool checkMethodError(const cpr::Response &response, Json::Value &val);
+
+inline uid_64 getMicroTime()
+{
+    struct timeval tv;
+
+    gettimeofday(&tv, NULL);
+
+    uid_64 ret = tv.tv_usec;
+    /* Convert from micro seconds (10^-6) to milliseconds (10^-3) */
+    ret /= 1000;
+
+    /* Adds the seconds (10^0) after converting them to milliseconds (10^-3) */
+    ret += (tv.tv_sec * 1000);
+
+    return ret;
+}
 }
 
+
+
 }
+
 
 #endif //CPPGRAM_UTILS_H

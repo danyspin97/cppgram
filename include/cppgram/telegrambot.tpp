@@ -5,7 +5,6 @@
 #include "telegrambot.h"
 #include "cppgram/types/integers.h"
 #include "singleton.h"
-#include "structures.h"
 #include "utils.h"
 
 using std::string;

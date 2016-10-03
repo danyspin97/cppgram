@@ -21,15 +21,20 @@ TelegramBot::TelegramBot(const string &api_token, const bool &background,
         : bot_token(api_token), updateId(0),
           timeout(timeout), update_limit(limit)
 {
-    if (background) {
+    if (background)
+    {
         int bg = osutil::backgroundProcess();
-        if (bg == OSUTIL_NEWPROC_NOTSUPPORTED) {
+        if (bg == OSUTIL_NEWPROC_NOTSUPPORTED)
+        {
             log(Log::Error, "Your operating system is not supported (not yet) for background process");
             throw new BgProcessOSNotSupported;
-        } else if (bg == OSUTIL_NEWPROC_FAILED) {
+        }
+        else if (bg == OSUTIL_NEWPROC_FAILED)
+        {
             log(Log::Error, "Error while creating background process");
             throw new BgProcessFailed;
-        } else if (bg == OSUTIL_NEWPROC_SUCCESS)
+        }
+        else if (bg == OSUTIL_NEWPROC_SUCCESS)
             log(Log::Event, "New background process created!!");
     }
     Singleton::getInstance()->setLogFilename(filename);
@@ -123,7 +128,7 @@ bool TelegramBot::editMessageReplyMarkup(const string &inline_message_id,
 }
 
 bool TelegramBot::answerInlineQuery(const string &inline_query_id,
-                                    const string &results,
+                                    const Json::Value &results,
                                     const int &cache_time,
                                     const bool &is_personal,
                                     const string &next_offset,
@@ -134,7 +139,7 @@ bool TelegramBot::answerInlineQuery(const string &inline_query_id,
 
     sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/answerInlineQuery"});
     sessions[cpu_id]->SetParameters(cpr::Parameters{{"inline_query_id", inline_query_id},
-                                                    {"results", results},
+                                                    {"results", Singleton::getInstance()->getWriter()->write(results)},
                                                     {"cache_time", to_string(cache_time)},
                                                     {"is_personal", is_personal},
                                                     {"next_offset", next_offset},
@@ -152,10 +157,12 @@ bool TelegramBot::answerInlineQuery(const string &inline_query_id,
 void TelegramBot::run()
 {
     unsigned num_cps = thread::hardware_concurrency();
-    if (num_cps > 1) {
+    if (num_cps > 1)
+    {
         sessions.push_back(new cpr::Session);
         vector<thread> threads(num_cps - 1);
-        for (unsigned i = 1; i < num_cps; i++) {
+        for (unsigned i = 1; i < num_cps; i++)
+        {
             sessions.push_back(new cpr::Session);
             threads[i - 1] = thread(&TelegramBot::processUpdates, this);
             cpu_set_t cpuset_updates;
@@ -163,16 +170,29 @@ void TelegramBot::run()
             CPU_SET(i, &cpuset_updates);
             int tf = pthread_setaffinity_np(threads[i - 1].native_handle(),
                                             sizeof(cpu_set_t), &cpuset_updates);
-            if (tf != 0) {
+            if (tf != 0)
+            {
                 throw new ThreadException;
             }
         }
         queueUpdates();
-        for (auto &t : threads) {
+        for (auto &t : threads)
+        {
             t.join();
         }
-    } else {
-        processUpdateSingleThread();
+    }
+    else
+    {
+        thread single_thread(&TelegramBot::processUpdateSingleThread, this);
+        cpu_set_t cpuset_updates;
+        CPU_ZERO(&cpuset_updates);
+        CPU_SET(0, &cpuset_updates);
+        int tf = pthread_setaffinity_np(single_thread.native_handle(),
+                                        sizeof(cpu_set_t), &cpuset_updates);
+        if (tf != 0)
+        {
+            throw new ThreadException;
+        }
     }
 }
 // Ask telegram to send all updates that need to be parsed
@@ -180,7 +200,8 @@ void TelegramBot::queueUpdates()
 {
     //runOnce, needed in order to get the initial update_id offset
     //this will not be executed more than 1 time, after the first update
-    do {
+    do
+    {
         sessions[0]->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"});
         sessions[0]->SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
                                                    {"limit", to_string(update_limit)},
@@ -188,14 +209,18 @@ void TelegramBot::queueUpdates()
         const cpr::Response response = sessions[0]->Get();
 
         Json::Value valroot;
-        if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
+        if (checkMethodError(response, valroot) && !valroot["result"].empty())
+        {
             //sets the initial offset
             updateId = valroot["result"][0]["update_id"].asUInt();
         }
 
     } while (updateId == 0);
 
-    while (1) {
+    unsigned short time_last_connection = 0;
+    unsigned short time = 0;
+    while (1)
+    {
         sessions[0]->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"});
         sessions[0]->SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
                                                    {"limit", to_string(update_limit)},
@@ -204,9 +229,11 @@ void TelegramBot::queueUpdates()
         const cpr::Response response = sessions[0]->Get();
 
         Json::Value valroot;
-        if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
+        if (checkMethodError(response, valroot) && !valroot["result"].empty())
+        {
 
-            for (Json::Value &val: valroot["result"]) {
+            for (Json::Value &val: valroot["result"])
+            {
                 update *new_update = new update(val);
                 mutex.lock();
                 updates_queue.push_back(new_update);
@@ -215,20 +242,41 @@ void TelegramBot::queueUpdates()
             updateId += valroot["result"].size();
 
         }
+        else
+        {
+            if (time_last_connection != 0 && time_last_connection != 60)
+            {
+                for (unsigned int i = thread::hardware_concurrency() - 1; i != 1; i--)
+                {
+                    sessions[i]->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/getMe"});
+                    sessions[i]->Get();
+                }
+                time_last_connection = time - getMicroTime();
+                time = getMicroTime();
+            }
+            else
+            {
+                time_last_connection += time - getMicroTime();
+                time = getMicroTime();
+            }
+        }
     }
 }
 
 void TelegramBot::processUpdates()
 {
-    while (1) {
+    while (1)
+    {
 
         mutex.lock();
-        if (updates_queue.size() > 0) {
+        if (updates_queue.size() > 0)
+        {
 
             const update new_update = *updates_queue.front();
             updates_queue.pop_front();
             mutex.unlock();
-            switch (new_update.type) {
+            switch (new_update.type)
+            {
                 case UpdateType::Message:processMessage(*new_update.message);
                     break;
                 case UpdateType::CallbackQuery:processCallbackQuery(*new_update.callbackQuery);
@@ -240,7 +288,9 @@ void TelegramBot::processUpdates()
                 case UpdateType::ChoosenInlineResult: processChosenInlineResult(*new_update.choosenInlineResult);
                     break;
             }
-        } else {
+        }
+        else
+        {
             mutex.unlock();
         }
 
@@ -249,22 +299,26 @@ void TelegramBot::processUpdates()
 
 void TelegramBot::processUpdateSingleThread()
 {
-    for (unsigned i = 0; i < thread::hardware_concurrency(); i++) {
+    for (unsigned i = 0; i < thread::hardware_concurrency(); i++)
+    {
         sessions.push_back(new cpr::Session);
     }
-    do {
+    do
+    {
         sessions[0]->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"});
         sessions[0]->SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
                                                    {"limit", to_string(update_limit)},
                                                    {"offset", to_string(updateId)}});
         const cpr::Response response = sessions[0]->Get();
         Json::Value valroot;
-        if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
+        if (checkMethodError(response, valroot) && !valroot["result"].empty())
+        {
             //sets the initial offset
             updateId = valroot["result"][0]["update_id"].asUInt();
         }
     } while (updateId == 0);
-    while (1) {
+    while (1)
+    {
         sessions[0]->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/getUpdates"});
         sessions[0]->SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
                                                    {"limit", to_string(update_limit)},
@@ -272,17 +326,28 @@ void TelegramBot::processUpdateSingleThread()
         const cpr::Response response = sessions[0]->Get();
 
         Json::Value valroot;
-        if (checkMethodError(response, valroot) && !valroot["result"].empty()) {
-            for (Json::Value &val: valroot["result"]) {
-                if (!val["message"].isNull()) {
+        if (checkMethodError(response, valroot) && !valroot["result"].empty())
+        {
+            for (Json::Value &val: valroot["result"])
+            {
+                if (!val["message"].isNull())
+                {
                     processMessage(message(val["message"]));
-                } else if (!val["edited_message"].isNull()) {
+                }
+                else if (!val["edited_message"].isNull())
+                {
                     processEditedMessage(message(val["edited_message"]));
-                } else if (!val["inline_query"].isNull()) {
+                }
+                else if (!val["inline_query"].isNull())
+                {
                     processInlineQuery(inlineQuery(val["inline_query"]));
-                } else if (!val["choosen_inline_result"].isNull()) {
+                }
+                else if (!val["choosen_inline_result"].isNull())
+                {
                     processChosenInlineResult(choosenInlineResult(val["choosen_inline_result"]));
-                } else if (!val["callback_query"].isNull()) {
+                }
+                else if (!val["callback_query"].isNull())
+                {
                     processCallbackQuery(callbackQuery(val["callback_query"]));
                 }
             }

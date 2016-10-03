@@ -290,7 +290,7 @@ class TelegramBot
     /**
      * Answer an inline query. (https://core.telegram.org/bots/api#answerinlinequery
      * @param inline_query_id Unique identifier for the answered query
-     * @param results JSON serialized array of the results for the inline query. Use InlineQuery ti create them
+     * @param results JSON serialized array of the results for the inline query. Use InlineQuery to create them
      * @param cache_time The maximum amount of time in seconds that the result of the inline query may be cached on the server
      * @param is_personal Pass True, if results may be cached on the server side only for the user that sent the query
      * @param next_offset Pass the offset that a client should send in the next query with the same text to receive more results. Pass an empty string if there are no more results or if you don‘t support pagination
@@ -299,7 +299,7 @@ class TelegramBot
      * @return True on success, false otherwise
      */
     bool answerInlineQuery(const std::string &inline_query_id,
-                           const std::string &results,
+                           const Json::Value &results,
                            const int &cache_time = 300,
                            const bool &is_personal = false,
                            const std::string &next_offset = "",
