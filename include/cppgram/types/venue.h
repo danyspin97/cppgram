@@ -32,11 +32,11 @@ struct venue
     /** \brief <i>Optional</i>. Foursquare identifier of the venue */
             foursquare_id;
 
-    venue(Json::Value &venue)
-            : location(new struct location(venue["location"])),
-              title(venue["title"].asString()),
-              address(venue["address"].asString()),
-              foursquare_id(venue["foursquare_id"].asString())
+    venue(Json::Value &jsonVenue)
+            : location(new struct location(jsonVenue["location"])),
+              title(jsonVenue["title"].asString()),
+              address(jsonVenue["address"].asString()),
+              foursquare_id(jsonVenue["foursquare_id"].asString())
     {}
 
     venue()

@@ -4,8 +4,6 @@
 
 #include <json/json.h>
 
-#include "integers.h"
-
 namespace cppgram
 {
 
@@ -29,16 +27,14 @@ struct contact
             last_name;
 
     /** \brief <i>Optional</i>. Contact's user identifier in Telegram */
-    uid_32 user_id;
+    int_fast32_t user_id;
 
-    contact(Json::Value &contact)
-            : phone_number(contact["phone_number"].asString()), first_name(contact["first_name"].asString())
+    contact(Json::Value &jsonContact)
+            : phone_number(jsonContact["phone_number"].asString()), first_name(jsonContact["first_name"].asString())
     {
-        if (!contact["last_name"].isNull())
-            last_name = contact["last_name"].asString();
+        last_name = !jsonContact["last_name"].isNull() ? jsonContact["last_name"].asString() : "";
 
-        if (!contact["user_id"].isNull())
-            user_id = contact["user_id"].asUInt();
+        user_id = !jsonContact["user_id"].isNull() ? jsonContact["user_id"].asUInt() : int_fast32_t();
     }
 
     contact()

@@ -24,7 +24,8 @@ Singleton::~Singleton()
 
 Singleton* Singleton::getInstance()
 {
-    if(instance == NULL) {
+    if(instance == NULL)
+    {
         instance = new Singleton;
     }
     

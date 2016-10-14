@@ -3,8 +3,6 @@
 
 #include <string>
 
-#include "types/integers.h"
-
 namespace cppgram
 {
 
@@ -49,8 +47,8 @@ public:
                      const std::string &url = "",
                      const bool &hide_url = false,
                      const std::string &thumb_url = "",
-                     const uid_32 &thumb_width = 0,
-                     const uid_32 &thumb_height = 0);
+                     const int_fast32_t &thumb_width = 0,
+                     const int_fast32_t &thumb_height = 0);
 
     /**
      * \brief Get results to send in answerInlineQuery

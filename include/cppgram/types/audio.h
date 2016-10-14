@@ -5,8 +5,6 @@
 
 #include <json/json.h>
 
-#include "integers.h"
-
 namespace cppgram
 {
 
@@ -24,7 +22,7 @@ struct audio
     std::string file_id;
 
     /** \brief Duration of the audio in seconds as defined by sender */
-    uid_32 duration;
+    int_fast32_t duration;
 
     /** \brief <i>Optional</i>. Performer of the audio as defined by sender or by audio tags */
     std::string performer,
@@ -36,23 +34,19 @@ struct audio
             mime_type;
 
     /** \brief <i>Optional</i>. File size */
-    uid_32 file_size;
+    int_fast32_t file_size;
 
-    audio(Json::Value &audio) : file_id(audio["file_id"].asString()),
-                                duration(audio["duration"].asUInt())
+    audio(Json::Value &jsonAudio) : file_id(jsonAudio["file_id"].asString()),
+                                duration(jsonAudio["duration"].asUInt())
     {
 
-        if (!audio["performer"].isNull())
-            performer = audio["performer"].asString();
+        performer = !jsonAudio["performer"].isNull() ? jsonAudio["performer"].asString() : "";
 
-        if (!audio["title"].isNull())
-            title = audio["title"].asString();
+        title = !jsonAudio["title"].isNull() ? jsonAudio["title"].asString() : "";
 
-        if (!audio["mime_type"].isNull())
-            mime_type = audio["mime_type"].asString();
+        mime_type = !jsonAudio["mime_type"].isNull() ? jsonAudio["mime_type"].asString() : "";
 
-        if (!audio["file_size"].isNull())
-            file_size = audio["file_size"].asUInt();
+        file_size = !jsonAudio["file_size"].isNull() ? jsonAudio["file_size"].asUInt() : int_least32_t();
     };
 
     audio()
@@ -65,3 +59,4 @@ struct audio
 }
 
 #endif //CPPGRAM_AUDIO_H
+

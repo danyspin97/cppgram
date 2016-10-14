@@ -5,7 +5,6 @@
 
 #include <json/json.h>
 
-#include "integers.h"
 #include "photo_size.h"
 
 namespace cppgram
@@ -25,7 +24,7 @@ struct video
     std::string file_id;
 
     /** \brief Video width as defined by sender */
-    uid_32 width,
+    int_fast32_t width,
 
     /** \brief Video height as defined by sender */
             height,
@@ -40,22 +39,21 @@ struct video
     std::string mime_type;
 
     /** \brief <i>Optional</i>. File size */
-    uid_32 file_size;
+    int_fast32_t file_size;
 
-    video(Json::Value &video)
-            : file_id(video["file_id"].asString()),
-              width(video["width"].asUInt()),
-              height(video["height"].asUInt()),
-              duration(video["duration"].asUInt())
+    video(Json::Value &jsonVideo)
+            : file_id(jsonVideo["file_id"].asString()),
+              width(jsonVideo["width"].asUInt()),
+              height(jsonVideo["height"].asUInt()),
+              duration(jsonVideo["duration"].asUInt())
     {
-        if (!video["thumb"].isNull())
-            thumb = new photoSize(video["thumb"]);
+        thumb = !jsonVideo["thumb"].isNull() ? new photoSize(jsonVideo["thumb"]) : nullptr;
 
-        if (!video["mime_type"].isNull())
-            mime_type = video["mime_type"].asString();
 
-        if (!video["file_size"].isNull())
-            file_size = video["file_size"].asUInt();
+        mime_type = !jsonVideo["mime_type"].isNull() ? jsonVideo["mime_type"].asString() : "";
+
+
+        file_size = !jsonVideo["file_size"].isNull() ? jsonVideo["file_size"].asUInt() : int_fast32_t();
     }
 
     video()

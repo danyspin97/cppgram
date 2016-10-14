@@ -84,15 +84,22 @@ void cppgram::util::log(const Log &l, const std::string &message, const std::str
 {
     std::string logType, fname;
 
-    (filename == FILENAME_DEFAULT) ? fname = Singleton::getInstance()->getLogFilename() : fname = filename;
+    fname = filename == FILENAME_DEFAULT ? Singleton::getInstance()->getLogFilename() : filename;
 
     if (l == Log::Error)
+    {
         logType = "[ERROR]";
+    }
     else if (l == Log::Event)
+    {
         logType = "[EVENT]";
+    }
     else if (l == Log::Warning)
+    {
         logType = "[WARNING]";
+    }
 
+    // TODO Keep stream open
     std::ofstream out;
     out.open(fname, std::ios::app | std::ios::out);
     const std::string fmtStr = logType + "[" + getTime() + "] " + message + '\n';
@@ -103,20 +110,22 @@ void cppgram::util::log(const Log &l, const std::string &message, const std::str
 bool cppgram::util::checkMethodError(const cpr::Response &response, Json::Value &val)
 {
     // If there was an error in the connection print it
-    if (response.error.code != cpr::ErrorCode::OK) {
+    if (response.error.code != cpr::ErrorCode::OK)
+    {
         log(Log::Error, "HTTP Error:" + response.error.message);
         return false;
     }
 
-    if (!reader->parse(response.text, val)) {
+    if (!reader->parse(response.text, val))
+    {
         log(Log::Error, "JSON Parser: Error while parsing JSON document!");
-        throw new JsonParseError;
+        throw JsonParseError();
     }
 
     // Print method error
-    if (response.status_code != 200) {
-        log(Log::Error,
-            "Telegram Error: " + val["error_code"].asString() + ", Description: " + val["description"].asString());
+    if (response.status_code != 200)
+    {
+        log(Log::Error, "Telegram Error: " + val["error_code"].asString() + ", Description: " + val["description"].asString());
         return false;
     }
 

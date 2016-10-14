@@ -5,7 +5,6 @@
 
 #include <json/json.h>
 
-#include "integers.h"
 #include "photo_size.h"
 
 namespace cppgram
@@ -34,24 +33,21 @@ struct document
             mime_type;
 
     /** \brief <i>Optional</i>. File size */
-    uid_32 file_size;
+    int_fast32_t file_size;
 
-    document(Json::Value &document) : file_id(document["file_id"].asString())
+    document(Json::Value &jsonDocument) : file_id(jsonDocument["file_id"].asString())
     {
-        if (!document["thumb"].isNull())
-            thumb = new photoSize(document["thumb"]);
+        thumb = !jsonDocument["thumb"].isNull() ? new photoSize(jsonDocument["thumb"]) : nullptr;
 
-        if (!document["file_name"].isNull())
-            file_name = document["file_name"].asString();
+        file_name = !jsonDocument["file_name"].isNull() ? jsonDocument["file_name"].asString() : "";
 
-        if (!document["mime_type"].isNull())
-            mime_type  = document["mime_type"].asString();
+        mime_type  = !jsonDocument["mime_type"].isNull() ? jsonDocument["mime_type"].asString() : "";
 
-        if (!document["file_size"].isNull())
-            file_size = document["file_size"].asUInt();
+        file_size = !jsonDocument["file_size"].isNull() ? jsonDocument["file_size"].asUInt() : int_fast32_t();
     }
 
-    document();
+    document()
+    {};
 
     ~document()
     { if (thumb != NULL) delete thumb; };

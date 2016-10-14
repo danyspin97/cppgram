@@ -5,8 +5,6 @@
 
 #include <json/json.h>
 
-#include "integers.h"
-
 namespace cppgram
 {
 
@@ -21,7 +19,7 @@ struct user
     /** @} */
 
     /** \brief Unique identifier for this user or bot */
-    uid_32 id;
+    int_fast32_t id;
 
     /** \brief User‘s or bot’s first name */
     std::string first_name,
@@ -32,14 +30,12 @@ struct user
     /** \brief <i>Optional</i>. User‘s or bot’s username */
             username;
 
-    explicit user(Json::Value &user) : id(user["id"] . asUInt()), first_name(user["first_name"] . asString())
+    explicit user(Json::Value &jsonUser) : id(jsonUser["id"].asUInt()), first_name(jsonUser["first_name"].asString())
     {
 
-        if (! user["last_name"] . isNull())
-            last_name = user["last_name"] . asString();
+        last_name = !jsonUser["last_name"].isNull() ? jsonUser["last_name"].asString() : "";
 
-        if (! user["username"] . isNull())
-            username = user["username"] . asString();
+        username = !jsonUser["username"].isNull() ? jsonUser["username"] . asString() : "";
     }
 
     user()

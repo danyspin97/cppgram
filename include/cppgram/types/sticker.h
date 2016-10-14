@@ -5,7 +5,6 @@
 
 #include <json/json.h>
 
-#include "integers.h"
 #include "photo_size.h"
 
 namespace cppgram
@@ -25,7 +24,7 @@ struct sticker
     std::string file_id;
 
     /** \brief Sticker width */
-    uid_32 width,
+    int_fast32_t width,
 
     /** \brief Sticker height */
             height;
@@ -37,21 +36,18 @@ struct sticker
     std::string emoj;
 
     /** \brief <i>Optional</i>. File size */
-    uid_32 file_size;
+    int_fast32_t file_size;
 
     sticker(Json::Value &sticker)
             : file_id(sticker["file_id"].asString()),
               width(sticker["width"].asUInt()),
               height(sticker["height"].asUInt())
     {
-        if (!sticker["thumb"].isNull())
-            thumb = new photoSize(sticker["thumb"]);
+        thumb = !sticker["thumb"].isNull() ? new photoSize(sticker["thumb"]) : nullptr;
 
-        if (!sticker["emoj"].isNull())
-            emoj = sticker["emoj"].asString();
+        emoj = !sticker["emoj"].isNull() ? sticker["emoj"].asString() : "";
 
-        if (!sticker["file_size"].isNull())
-            file_size = sticker["file_size"].asUInt();
+        file_size = !sticker["file_size"].isNull() ? sticker["file_size"].asUInt() : int_fast32_t();
     }
 
     sticker()

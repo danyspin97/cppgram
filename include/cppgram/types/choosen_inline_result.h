@@ -5,7 +5,6 @@
 
 #include <json/json.h>
 
-#include "integers.h"
 #include "user.h"
 #include "location.h"
 
@@ -33,20 +32,18 @@ struct choosenInlineResult
 
     /** \brief <i>Optional</i>. Identifier of the sent inline message.
      * \details Available only if there is an inline keyboard attached to the message. Will be also received in callback queries and can be used to edit the message. */
-    uid_32 inline_message_id;
+    int_fast32_t inline_message_id;
 
     /** \brief The query that was used to obtain the result */
     std::string query;
 
-    choosenInlineResult(Json::Value &choosenInlineResult) : result_id(choosenInlineResult["result_id"].asString()),
-                                                            from(new struct user(choosenInlineResult["from"])),
-                                                            query(choosenInlineResult["query"].asString())
+    choosenInlineResult(Json::Value &jsonChoosenInlineResult) : result_id(jsonChoosenInlineResult["result_id"].asString()),
+                                                            from(new struct user(jsonChoosenInlineResult["from"])),
+                                                            query(jsonChoosenInlineResult["query"].asString())
     {
-        if (!choosenInlineResult["location"].isNull())
-            location = new struct location(choosenInlineResult["location"]);
+        location = !jsonChoosenInlineResult["location"].isNull() ? new struct location(jsonChoosenInlineResult["location"]) : nullptr;
 
-        if (!choosenInlineResult["inline_message_id"].isNull())
-            inline_message_id = choosenInlineResult["inline_message_id"].asUInt();
+        inline_message_id = !jsonChoosenInlineResult["inline_message_id"].isNull() ? jsonChoosenInlineResult["inline_message_id"].asUInt() : int_fast32_t();
     }
 
     choosenInlineResult()
@@ -57,7 +54,9 @@ struct choosenInlineResult
         delete from;
 
         if (location != NULL)
+        {
             delete location;
+        }
     }
 
     choosenInlineResult(const choosenInlineResult &prev)

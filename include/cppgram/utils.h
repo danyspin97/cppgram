@@ -6,7 +6,6 @@
 
 #include <sys/time.h>
 
-#include "types/integers.h"
 #include "defines.h"
 
 namespace cpr
@@ -27,7 +26,7 @@ namespace cppgram
 //this will not be documented
 namespace osutil
 {
-int backgroundProcess();    
+int backgroundProcess();
 }
 // ...
 
@@ -40,7 +39,7 @@ namespace util
 /*! \enum Log
  * \brief used inside the log() function, can be used to specify the log type
  */
-enum Log 
+enum Log
 {
     Event,
     Error,
@@ -76,13 +75,13 @@ void log(const Log& l, const std::string& message, const std::string& filename=F
  */
 bool checkMethodError(const cpr::Response &response, Json::Value &val);
 
-inline uid_64 getMicroTime()
+inline int_fast64_t getMicroTime()
 {
     struct timeval tv;
 
     gettimeofday(&tv, NULL);
 
-    uid_64 ret = tv.tv_usec;
+    int_fast64_t ret = tv.tv_usec;
     /* Convert from micro seconds (10^-6) to milliseconds (10^-3) */
     ret /= 1000;
 

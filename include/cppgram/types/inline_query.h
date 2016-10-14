@@ -5,7 +5,6 @@
 
 #include <json/json.h>
 
-#include "integers.h"
 #include "user.h"
 #include "location.h"
 
@@ -37,16 +36,14 @@ struct inlineQuery
     /** \brief Offset of the results to be returned, can be controlled by the bot */
             offset;
 
-    inlineQuery(Json::Value &inlineQuery)
-            : id(inlineQuery["id"].asString()),
-              query(inlineQuery["query"].asString()),
-              offset(inlineQuery["offset"].asString()),
-              from(new struct user(inlineQuery["from"]))
+    inlineQuery(Json::Value &jsonInlineQuery)
+            : id(jsonInlineQuery["id"].asString()),
+              from(new struct user(jsonInlineQuery["from"])),
+              query(jsonInlineQuery["query"].asString()),
+              offset(jsonInlineQuery["offset"].asString())
+
     {
-        if (!inlineQuery["location"].isNull())
-        {
-            location = new struct location(inlineQuery["location"]);
-        }
+        location = !jsonInlineQuery["location"].isNull() ? new struct location(jsonInlineQuery["location"]) : nullptr;
     }
 
     inlineQuery()
@@ -57,7 +54,9 @@ struct inlineQuery
         delete from;
 
         if (location != NULL)
+        {
             delete location;
+        }
     }
 
     inlineQuery(const inlineQuery &prev)

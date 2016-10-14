@@ -1,9 +1,9 @@
 #include <cpr/cpr.h>
 #include <json/json.h>
 
-#include "defines.h"
 #include "telegrambot.h"
-#include "cppgram/types/integers.h"
+#include "types/enums.h"
+#include "defines.h"
 #include "singleton.h"
 #include "utils.h"
 
@@ -17,13 +17,13 @@ using namespace cppgram::util;
 
 
 template<typename T>
-uid_32 TelegramBot::sendMessage(const T &chat_id,
+int_fast32_t TelegramBot::sendMessage(const T &chat_id,
                                 const std::string &text,
                                 const string &reply_markup,
                                 const ParseMode &parse_mode,
                                 const bool &disable_web_page_preview,
                                 const bool &disable_notification,
-                                const uid_32 &reply_to_message_id) const
+                                const int_fast32_t &reply_to_message_id) const
 {
     string parseMode = "", string_id;
 
@@ -60,8 +60,8 @@ uid_32 TelegramBot::sendMessage(const T &chat_id,
 }
 
 template<typename T>
-uid_32 TelegramBot::editMessageText(const T &chat_id,
-                                    const uid_32 &message_id,
+int_fast32_t TelegramBot::editMessageText(const T &chat_id,
+                                    const int_fast32_t &message_id,
                                     const string &text,
                                     const string &reply_markup,
                                     const ParseMode &parse_mode,
@@ -99,8 +99,8 @@ uid_32 TelegramBot::editMessageText(const T &chat_id,
 }
 
 template<typename T>
-uid_32 TelegramBot::editMessageReplyMarkup(const T &chat_id,
-                                           const uid_32 &message_id,
+int_fast32_t TelegramBot::editMessageReplyMarkup(const T &chat_id,
+                                           const int_fast32_t &message_id,
                                            const string &reply_markup) const
 {
     string string_id;
@@ -126,8 +126,8 @@ uid_32 TelegramBot::editMessageReplyMarkup(const T &chat_id,
 }
 
 template<typename T>
-uid_32 TelegramBot::editMessageCaption(const T &chat_id,
-                                       const uid_32 &message_id,
+int_fast32_t TelegramBot::editMessageCaption(const T &chat_id,
+                                       const int_fast32_t &message_id,
                                        const string &caption,
                                        const string &reply_markup) const
 {

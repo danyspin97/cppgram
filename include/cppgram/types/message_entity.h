@@ -36,24 +36,22 @@ struct messageEntity
     /** \brief <i>Optional</i>. For “text_mention” only, the mentioned user */
     struct user *from;
 
-    messageEntity(Json::Value &messageEntity)
-            : offset(messageEntity["offset"].asInt()), lenght(messageEntity["length"].asInt())
+    messageEntity(Json::Value &jsonMessageEntity)
+            : offset(jsonMessageEntity["offset"].asInt()), lenght(jsonMessageEntity["length"].asInt())
     {
-        const char *mystr[] = {"mention", "hashtag", "bot_command", "url", "email", "bold", "italic", "code", "pre", "text_link", "text_mention"};
-
-        int i = 10;
-
-        const char* entity_type = messageEntity["type"].asCString();
-        while (i > 0 && strcmp(mystr[i], entity_type) != 0)
+        std::vector<std::string> entity_strings = {"mention", "hashtag", "bot_command", "url", "email", "bold", "italic", "code", "pre", "text_link", "text_mention"};
+        int i = 10; // entity_strings.size() - 1
+        std::string entity_type = jsonMessageEntity["type"].asString();
+        while (i > 0 && entity_type.compare(entity_strings[i]) != 0)
+        {
             i--;
+        }
 
         type = static_cast<MessageEntityType>(i);
 
-        if (!messageEntity["url"].isNull())
-            url = messageEntity["url"].asString();
+        url = !jsonMessageEntity["url"].isNull() ? jsonMessageEntity["url"].asString() : "";
 
-        if (!messageEntity["user"].isNull())
-            from = new user(messageEntity["user"]);
+        from = !jsonMessageEntity["user"].isNull() ? new user(jsonMessageEntity["user"]) : nullptr;
 
     }
 

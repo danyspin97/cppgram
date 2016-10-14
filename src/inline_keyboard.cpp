@@ -26,19 +26,29 @@ unsigned short InlineKeyboard::changeRow()
 bool InlineKeyboard::addButton(const string& text, const string& data, const InlineKeyboardButtonType& buttonType)
 {
     if (text.empty() || data.empty())
-        throw new InlineKeyboardNotValid;
+    {
+        throw InlineKeyboardNotValid();
+    }
 
     if (column == 8)
+    {
         changeRow();
+    }
 
     inline_keyboard["inline_keyboard"][row][column]["text"] = text;
 
     if (buttonType == InlineKeyboardButtonType::CallbackData)
+    {
         inline_keyboard["inline_keyboard"][row][column]["callback_data"] = data;
+    }
     else if (buttonType == InlineKeyboardButtonType::URL)
+    {
         inline_keyboard["inline_keyboard"][row][column]["url"] = data;
+    }
     else
+    {
         inline_keyboard["inline_keyboard"][row][column]["switch_inline_query"] = data;
+    }
 
     column++;
 
@@ -52,9 +62,12 @@ bool InlineKeyboard::addButton(const struct inlineKeyboardButton &newButton)
 
 bool InlineKeyboard::addButton(const vector<inlineKeyboardButton>& newButtons)
 {
-    for (const inlineKeyboardButton& button: newButtons) {
+    for (const inlineKeyboardButton& button: newButtons)
+    {
         if (!addButton(button.text, button.data, button.button_type))
+        {
             return false;
+        }
     }
     return true;
 }
@@ -64,6 +77,8 @@ void InlineKeyboard::getKeyboard(std::string& reply_markup, const bool &clearKey
     reply_markup = Singleton::getInstance()->getWriter()->write(inline_keyboard);
 
     if (clearKeyboard)
+    {
         inline_keyboard.clear();
+    }
 }
 

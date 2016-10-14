@@ -24,9 +24,13 @@ short InlineQueryResult::newArticle(const std::string &title,
 {
     string mode = "";
     if (parse_mode == ParseMode::HTML)
+    {
         mode = "HTML";
+    }
     else if (parse_mode == ParseMode::Markdown)
+    {
         mode = "markdown";
+    }
 
     results[articleId]["type"] = Json::StaticString("article");
     results[articleId]["id"] = to_string(articleId);
@@ -34,6 +38,7 @@ short InlineQueryResult::newArticle(const std::string &title,
     results[articleId]["message_text"] = message_text;
     results[articleId]["description"] = description;
     results[articleId]["parse_mode"] = mode;
+
     // TODO Deep copy of reply_markup
     /*if (!reply_markup.empty())
     {
@@ -63,7 +68,10 @@ short InlineQueryResult::newArticle(const std::string &title,
 
     }*/
     if (!reply_markup.empty())
+    {
         results[articleId]["reply_markup"] = reply_markup;
+    }
+
     results[articleId]["disable_web_page_preview"] = disable_web_page_preview;
 
     articleId++;

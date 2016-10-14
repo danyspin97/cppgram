@@ -5,7 +5,6 @@
 
 #include <json/json.h>
 
-#include "integers.h"
 #include "user.h"
 #include "message.h"
 
@@ -39,15 +38,13 @@ struct callbackQuery
      * \details Be aware that a bad client can send arbitrary data in this field */
     std::string data;
 
-    callbackQuery(Json::Value &callbackQuery) : id(callbackQuery["id"].asString()),
-                                                from(new struct user(callbackQuery["from"])),
-                                                data(callbackQuery["data"].asString())
+    callbackQuery(Json::Value &jsonCallbackQuery) : id(jsonCallbackQuery["id"].asString()),
+        from(new struct user(jsonCallbackQuery["from"])),
+        data(jsonCallbackQuery["data"].asString())
     {
-        if (!callbackQuery["message"].isNull())
-            message = new struct message(callbackQuery["message"]);
+        message = !jsonCallbackQuery["message"].isNull() ? new struct message(jsonCallbackQuery["message"]) : nullptr;
 
-        if (!callbackQuery["inline_message_id"].isNull())
-            inline_message_id = callbackQuery["inline_message_id"].asUInt();
+        inline_message_id = (!jsonCallbackQuery["inline_message_id"].isNull()) ? jsonCallbackQuery["inline_message_id"].asUInt() : int_fast32_t();
     }
 
     ~callbackQuery()
@@ -73,3 +70,5 @@ struct callbackQuery
 }
 
 #endif //CPPGRAM_CALLBACK_QUERY_H
+
+

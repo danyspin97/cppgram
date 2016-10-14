@@ -5,7 +5,6 @@
 
 #include <json/json.h>
 
-#include "integers.h"
 #include "chat.h"
 #include "user.h"
 #include "audio.h"
@@ -33,13 +32,13 @@ struct message
     /** @} */
 
     /** \brief Unique message identifier */
-    uid_32 message_id;
+    int_fast32_t message_id;
 
     /** \brief <i>Optional</i>. Sender, can be empty for messages sent to channels */
     struct user *from;
 
     /** \brief Date the message was sent in Unix time */
-    date_unix date;
+    int_fast32_t date;
 
     /** \brief Conversation the message belongs to */
     struct chat *chat;
@@ -51,13 +50,13 @@ struct message
     struct chat *forward_from_chat;
 
     /** \brief <i>Optional</i>. For forwarded messages, date the original message was sent in Unix time */
-    date_unix forward_date;
+    int_fast32_t forward_date;
 
     /** \brief <i>Optional</i>. For replies, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply. */
     struct message *reply_to_message;
 
     /** \brief <i>Optional</i>. Date the message was last edited in Unix time */
-    date_unix edit_date;
+    int_fast32_t edit_date;
 
     /** \brief <i>Optional</i>. For text messages, the actual UTF-8 text of the message, 0-4096 characters. */
     std::string text;
@@ -99,64 +98,77 @@ struct message
     /** \brief <i>Optional</i>. Caption for the document, photo or video, 0-200 characters */
     std::string caption;
 
-    message(Json::Value &message) : message_id(message["message_id"].asUInt()),
-                                    date(message["date"].asUInt()),
-                                    chat(new struct chat(message["chat"])),
-                                    forward_from(nullptr),
-                                    forward_from_chat(nullptr),
-                                    reply_to_message(nullptr)
+    message(Json::Value &jsonMessage) : message_id(jsonMessage["message_id"].asUInt()),
+                                    date(jsonMessage["date"].asUInt()),
+                                    chat(new struct chat(jsonMessage["chat"]))
     {
-        if (!message["from"].isNull())
-            from = new struct user(message["from"]);
+        from = !jsonMessage["from"].isNull() ? new struct user(jsonMessage["from"]) : nullptr;
 
-        if (!message["forward_from"].isNull())
+        if (!jsonMessage["forward_from"].isNull())
         {
-            forward_from = new struct user(message["forward_from"]);
-            forward_from_chat = new struct chat(message["forward_from_chat"]);
-            forward_date = message["forward_date"].asUInt();
+            forward_from = new struct user(jsonMessage["forward_from"]);
+            forward_from_chat = new struct chat(jsonMessage["forward_from_chat"]);
+            forward_date = jsonMessage["forward_date"].asUInt();
         }
 
-        if (!message["reply_to_message"].isNull())
-            reply_to_message = new struct message(message["reply_to_message"]);
+        reply_to_message = !jsonMessage["reply_to_message"].isNull() ? new struct message(jsonMessage["reply_to_jsonMessage"]) : nullptr;
 
-        if (!message["edit_date"].isNull())
-            edit_date = message["edit_date"].asUInt();
 
-        if (!message["text"].isNull())
+        edit_date = !jsonMessage["edit_date"].isNull() ? jsonMessage["edit_date"].asUInt() : int_fast32_t();
+
+        text = !jsonMessage["text"].isNull() ? jsonMessage["text"].asString() : "";
+
+        if (!jsonMessage["entities"].isNull())
         {
-            text = message["text"].asString();
-        }
-
-        if (!message["entities"].isNull())
-        {
-            for (Json::Value &entity: message["entities"])
+            for (Json::Value &entity: jsonMessage["entities"])
             {
                 entities.push_back(new struct messageEntity(entity));
             }
         }
 
-        if (!message["audio"].isNull())
-            audio = new struct audio(message["audio"]);
-        else if (!message["document"].isNull())
-            document = new struct document(message["document"]);
-        else if (!message["photo"].isNull())
-            for (Json::Value &photo_json : message["photo"])
+        if (!jsonMessage["audio"].isNull())
+        {
+            audio = new struct audio(jsonMessage["audio"]);
+        }
+        else if(!jsonMessage["document"].isNull())
+        {
+            document = new struct document(jsonMessage["document"]);
+        }
+        else if (!jsonMessage["photo"].isNull())
+        {
+            for (Json::Value &photo_json : jsonMessage["photo"])
+            {
                 photo.push_back(new struct photoSize(photo_json));
-        else if (!message["sticker"].isNull())
-            sticker = new struct sticker(message["sticker"]);
-        else if (!message["video"].isNull())
-            video = new struct video(message["video"]);
-        else if (!message["voice"].isNull())
-            voice = new struct voice(message["voice"]);
-        else if (!message["contact"].isNull())
-            contact = new struct contact(message["contact"]);
-        else if (!message["location"].isNull())
-            location = new struct location(message["location"]);
-        else if (!message["venue"].isNull())
-            venue = new struct venue(message["venue"]);
-
-        if (!message["caption"].isNull())
-            caption = message["caption"].asString();
+            }
+        }
+        else if (!jsonMessage["sticker"].isNull())
+        {
+            sticker = new struct sticker(jsonMessage["sticker"]);
+        }
+        else if (!jsonMessage["video"].isNull())
+        {
+            video = new struct video(jsonMessage["video"]);
+        }
+        else if (!jsonMessage["voice"].isNull())
+        {
+            voice = new struct voice(jsonMessage["voice"]);
+        }
+        else if (!jsonMessage["contact"].isNull())
+        {
+            contact = new struct contact(jsonMessage["contact"]);
+        }
+        else if (!jsonMessage["location"].isNull())
+        {
+            location = new struct location(jsonMessage["location"]);
+        }
+        else if (!jsonMessage["venue"].isNull())
+        {
+            venue = new struct venue(jsonMessage["venue"]);
+        }
+        if (!jsonMessage["caption"].isNull())
+        {
+            caption = jsonMessage["caption"].asString();
+        }
     }
 
     message()

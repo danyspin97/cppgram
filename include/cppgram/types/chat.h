@@ -6,7 +6,6 @@
 
 #include <json/json.h>
 
-#include "integers.h"
 #include "enums.h"
 
 namespace cppgram
@@ -23,7 +22,7 @@ struct chat
     /** @} */
 
     /** \brief Unique identifier for this chat. */
-    id_64 id;
+    int_fast64_t id;
 
     /** \brief Type of chat */
     ChatType type;
@@ -38,29 +37,28 @@ struct chat
     /** \brief <i>Optional</i>. Last name of the other party in a private chat */
             last_name;
 
-    chat(Json::Value &chat) : id(chat["id"].asInt64())
+    chat(Json::Value &jsonChat) : id(jsonChat["id"].asInt64())
     {
-        const char *mystr[] = {"private", "group", "supergroup", "channel"};
+        title = !jsonChat["title"].isNull() ? jsonChat["title"].asString() : "";
 
-        int i = 3;
+        username = !jsonChat["username"].isNull() ? jsonChat["username"].asString() : "";
 
-        const char *chat_type = chat["type"].asCString();
-        while (i > 0 && strcmp(mystr[i], chat_type) != 0)
-            i--;
+        first_name = !jsonChat["first_name"] ? jsonChat["first_name"].asString() : "";
 
-        type = static_cast<ChatType>(i);
+        last_name = !jsonChat["last_name"] ? jsonChat["last_name"].asString() : "";
 
-        if (!chat["title"].isNull())
-            title = chat["title"].asString();
+        if (!jsonChat["type"].isNull())
+        {
+            std::vector<std::string> type_strings = {"private", "group", "supergroup", "channel"};
+            int i = 3; // type_strings.size() - 1
+            std::string chat_type = jsonChat["type"].asString();
+            while (i > 0 && chat_type.compare(type_strings[i]) != 0)
+            {
+                i--;
+            }
 
-        if (!chat["username"].isNull())
-            username = chat["username"].asString();
-
-        if (!chat["first_name"])
-            first_name = chat["first_name"].asString();
-
-        if (!chat["last_name"])
-            last_name = chat["last_name"].asString();
+            type = static_cast<ChatType>(i);
+        }
     }
 
     chat()

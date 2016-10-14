@@ -1,11 +1,10 @@
-﻿#ifndef __CPPGRAM_COREBOT_H
+#ifndef __CPPGRAM_COREBOT_H
 #define __CPPGRAM_COREBOT_H
 
 #include <string>
 #include <vector>
 #include <deque>
 #include <mutex>
-#include "types/update.h"
 
 /*! \mainpage Reference
  * \section What What is CppGram
@@ -19,7 +18,7 @@
  * - Getting udpdates using long or short polling (webhook support coming soon)
  * - Support for the most important API methods
  * - Multithread support
- * - Easy inline keyboard creation
+ * - Easy inline keyboard ceation
  * - Article creation for inline query
  *
  * \section Install
@@ -37,11 +36,8 @@
  * This code will download CppGram, its dependency and will build it:
  *
  *     $ git clone https://gitlab.com/WiseDragonStd/cppgram.git
- *     $ cd cppgram
- *     $ mkdir build
- *     $ cd build
- *     $ cmake ..
- *     $ make
+ *     $ cmake -Hcppgram -Bbuild-cppgram
+ *     $ make -C build-cppgram
  *
  * Then link you own bot using:
  *
@@ -99,13 +95,14 @@
  *
  * Availible options are:
  *
- * - -DNOGET_DEPS="yes"/"no" (default: "no"): download dependencies (jsoncpp, cpr)
- * - -DNATIVE="yes"/"no" (default: "no", reccomended: "yes"): build a natively-built static library for your CPU (MAY NOT work on all cpu)
- * - -DARCH=/"-m32"/"-m64" (default: not defined): compile the library in a particulary architecture
- * - -DOPTIMIZATION_LEVEL="2"/"3"/"4"/"fast" (default: not defined, reccomended: "2"): set the compiler optmization
+ * - -<code>DNOGET_DEPS="yes"/"no" (default: "no"): download dependencies (jsoncpp, cpr)</code>
+ * - -<code>DNATIVE="yes"/"no" (default: "no", reccomended: "yes"): build a natively-built static library for your CPU (MAY NOT work on all cpu)</code>
+ * - -<code>DARCH=/"-m32"/"-m64" (default: not defined): compile the library in a particulary architecture</code>
+ * - -<code>DOPTIMIZATION_LEVEL="2"/"3"/"4"/"fast" (default: not defined, reccomended: "2"): set the compiler optmization</code>
  *
  * Sugggested building options
- *      $ cmake ../cppgram -DCMAKE_CXX_COMPILER="/usr/bin/g++" -DNATIVE="yes" -DOPTIMIZATION_LEVEL="2"
+ *
+ *     $ cmake ../cppgram -DCMAKE_CXX_COMPILER="/usr/bin/g++" -DNATIVE="yes" -DOPTIMIZATION_LEVEL="2"
  *
  * \section Extra
  *
@@ -138,9 +135,8 @@ class Session;
 namespace cppgram
 {
 
-//forwards
-typedef unsigned long uid_32;
-typedef long long id_64;
+enum ParseMode : short;
+struct update;
 
 /*! \class TelegramBot
  *
@@ -153,8 +149,8 @@ class TelegramBot
     /*! \fn TelegramBot::TelegramBot(const std::string &api_token,
                 const bool &background = false,
                 const std::string &filename = "tgbot.log",
-                const uid_32 &limit = 50,
-                const uid_32 &timeout = 60)
+                const int_fast32_t &limit = 50,
+                const int_fast32_t &timeout = 60)
      * \brief TelegramBot constructor
      * \param api_token: the Bot API token (REQUIRED)
      * \param background: tries to fork the process and put the new in background (default: false)
@@ -165,8 +161,8 @@ class TelegramBot
     TelegramBot(const std::string &api_token,
                 const bool &background = false,
                 const std::string &filename = "tgbot.log",
-                const uid_32 &limit = 50,
-                const uid_32 &timeout = 60);
+                const int_fast32_t &limit = 50,
+                const int_fast32_t &timeout = 60);
 
     /*! \fn void TelegramBot::run()
      * \brief runs infinite loop which handles updates (HTTP long polling "getUpdates" API method)
@@ -185,9 +181,9 @@ class TelegramBot
      * @param timeout Timeout in seconds for long polling.
      * @return True if there are new updates, false otherwise
      */
-    bool getUpdates(Json::Value &updates, const uid_32 &offset = 0,
-                    const uid_32 &limit = 100,
-                    const uid_32 &timeout = 10);
+    bool getUpdates(Json::Value &updates, const int_fast32_t &offset = 0,
+                    const int_fast32_t &limit = 100,
+                    const int_fast32_t &timeout = 10);
 
     /**
      * Send a message to a specified chat. (https://core.telegram.org/bots/api#sendmessage)
@@ -201,13 +197,13 @@ class TelegramBot
      * @return On success, message_id of the message sent, 0 otherwise
      */
     template<typename T>
-    uid_32 sendMessage(const T &id,
+    int_fast32_t sendMessage(const T &id,
                        const std::string &text,
                        const std::string &reply_markup = "",
                        const ParseMode &parse_mode = static_cast<ParseMode>(1),
                        const bool &disable_web_page_preview = true,
                        const bool &disable_notification = false,
-                       const uid_32 &reply_to_message_id = 0) const;
+                       const int_fast32_t &reply_to_message_id = 0) const;
 
     /**
      * Edit text (and reply markup) of a message sent by the bot. Leaving reply_markup empty remove it from the message edited. (https://core.telegram.org/bots/api#editmessagetext)
@@ -220,8 +216,8 @@ class TelegramBot
      * @return On success, message_id of the message edited, 0 otherwise
      */
     template<typename T>
-    uid_32 editMessageText(const T &chat_id,
-                           const uid_32 &message_id,
+    int_fast32_t editMessageText(const T &chat_id,
+                           const int_fast32_t &message_id,
                            const std::string &text,
                            const std::string &reply_markup = "",
                            const ParseMode &parse_mode = static_cast<ParseMode>(1),
@@ -250,8 +246,8 @@ class TelegramBot
      * @return On success, message_id of the message edited, 0 otherwise
      */
     template<typename T>
-    uid_32 editMessageCaption(const T &chat_id,
-                              const uid_32 &message_id,
+    int_fast32_t editMessageCaption(const T &chat_id,
+                              const int_fast32_t &message_id,
                               const std::string &caption,
                               const std::string &reply_markup = "") const;
 
@@ -274,8 +270,8 @@ class TelegramBot
      * @return On success, message_id of the message edited, 0 otherwise
      */
     template<typename T>
-    uid_32 editMessageReplyMarkup(const T &chat_id,
-                                  const uid_32 &message_id,
+    int_fast32_t editMessageReplyMarkup(const T &chat_id,
+                                  const int_fast32_t &message_id,
                                   const std::string &reply_markup = "") const;
 
     /**
@@ -317,11 +313,11 @@ class TelegramBot
     /** Bot token. Contains the token of the bot */
     std::string bot_token;
     /** Update id. Contains the id of the last updates ricevuto */
-    uid_32 updateId;
+    int_fast32_t updateId;
     /** Queue container. Each update received goes here after it has been parsed */
     std::deque<update *> updates_queue;
     /** Data for getUpdates method, instantiated in the constructor */
-    const uid_32 timeout,
+    const int_fast32_t timeout,
     /** Get udpdate data */
             update_limit;
     /** Curl session. Store a session for each thread */

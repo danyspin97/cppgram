@@ -36,28 +36,32 @@ struct update
         struct callbackQuery *callbackQuery;
     };
 
-    update(Json::Value &update)
+    update(Json::Value &jsonUpdate)
     {
-        if (!update["message"].isNull())
+        if (!jsonUpdate["message"].isNull())
         {
             type = UpdateType::Message;
-            message = new struct message(update["message"]);
-        } else if (!update["callback_query"].isNull())
+            message = new struct message(jsonUpdate["message"]);
+        }
+        else if (!jsonUpdate["callback_query"].isNull())
         {
             type = UpdateType::CallbackQuery;
-            callbackQuery = new struct callbackQuery(update["callback_query"]);
-        } else if (!update["edited_message"].isNull())
+            callbackQuery = new struct callbackQuery(jsonUpdate["callback_query"]);
+        }
+        else if (!jsonUpdate["edited_message"].isNull())
         {
             type = UpdateType::EditedMessage;
-            message = new struct message(update["edited_message"]);
-        } else if (!update["inline_query"].isNull())
+            message = new struct message(jsonUpdate["edited_message"]);
+        }
+        else if (!jsonUpdate["inline_query"].isNull())
         {
             type = UpdateType::InlineQuery;
-            inlineQuery = new struct inlineQuery(update["inline_query"]);
-        } else if (!update["choosen_inline_result"].isNull())
+            inlineQuery = new struct inlineQuery(jsonUpdate["inline_query"]);
+        }
+        else if (!jsonUpdate["choosen_inline_result"].isNull())
         {
             type = UpdateType::ChoosenInlineResult;
-            choosenInlineResult = new struct choosenInlineResult(update["choosen_inline_result"]);
+            choosenInlineResult = new struct choosenInlineResult(jsonUpdate["choosen_inline_result"]);
         }
     }
 

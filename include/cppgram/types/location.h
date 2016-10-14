@@ -5,8 +5,6 @@
 
 #include <json/json.h>
 
-#include "integers.h"
-
 namespace cppgram
 {
 
@@ -26,8 +24,8 @@ struct location
     /** \brief Latitude as defined by sender */
             latidute;
 
-    location(Json::Value &location)
-            : longitude(location["longitude"].asFloat()), latidute(location["latidute"].asFloat())
+    location(Json::Value &jsonLocation)
+            : longitude(jsonLocation["longitude"].asFloat()), latidute(jsonLocation["latidute"].asFloat())
     {}
 
     location()

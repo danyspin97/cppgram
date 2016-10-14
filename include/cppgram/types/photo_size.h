@@ -4,8 +4,6 @@
 #include <string>
 #include <json/json.h>
 
-#include "integers.h"
-
 namespace cppgram
 {
 
@@ -23,7 +21,7 @@ struct photoSize
     std::string file_id;
 
     /** \brief Photo width */
-    uid_32 width,
+    int_fast32_t width,
 
     /** \brief Photo height */
             height,
@@ -31,13 +29,12 @@ struct photoSize
     /** \brief <i>Optional</i>. File size */
             file_size;
 
-    photoSize(Json::Value &photoSize)
-            : file_id(photoSize["file_id"].asString()),
-              width(photoSize["width"].asUInt()),
-              height(photoSize["height"].asUInt())
+    photoSize(Json::Value &jsonPhotoSize)
+            : file_id(jsonPhotoSize["file_id"].asString()),
+              width(jsonPhotoSize["width"].asUInt()),
+              height(jsonPhotoSize["height"].asUInt())
     {
-        if (!photoSize["file_size"].isNull())
-            file_size = photoSize["file_size"].asUInt();
+        file_size = !jsonPhotoSize["file_size"].isNull() ? jsonPhotoSize["file_size"].asUInt() : int_fast32_t();
 
     };
 

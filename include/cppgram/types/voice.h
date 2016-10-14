@@ -5,8 +5,6 @@
 
 #include <json/json.h>
 
-#include "integers.h"
-
 namespace cppgram
 {
 
@@ -23,21 +21,21 @@ struct voice
     std::string file_id;
 
     /** Duration of the audio in seconds as defined by sender */
-    uid_32 duration;
+    int_fast32_t duration;
 
     /** <i>Optional</i>. MIME type of the file as defined by sender */
     std::string mime_type;
 
     /** <i>Optional</i>. File size */
-    uid_32 file_size;
+    int_fast32_t file_size;
 
-    voice(Json::Value &voice) : file_id(voice["file_id"].asString()), duration(voice["duration"].asUInt())
+    voice(Json::Value &jsonVoice)
+            : file_id(jsonVoice["file_id"].asString()),
+              duration(jsonVoice["duration"].asUInt())
     {
-        if (!voice["mime_type"].isNull())
-            mime_type = voice["mime_type"].asString();
+        mime_type = !jsonVoice["mime_type"].isNull() ? jsonVoice["mime_type"].asString() : "";
 
-        if (!voice["file_size"].isNull())
-            file_size = voice["file_size"].asUInt();
+        file_size = !jsonVoice["file_size"].isNull() ? jsonVoice["file_size"].asUInt() : int_fast32_t();
     };
 
     voice()

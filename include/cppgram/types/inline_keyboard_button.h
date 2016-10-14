@@ -54,11 +54,13 @@ struct inlineKeyboardButton
         {
             data = button["callback_data"].asString();
             button_type = InlineKeyboardButtonType::CallbackData;
-        } else if (!button["url"].isNull())
+        }
+        else if (!button["url"].isNull())
         {
             data = button["url"].asString();
             button_type = InlineKeyboardButtonType::URL;
-        } else if (!button["switch_inline_query"].isNull())
+        }
+        else if (!button["switch_inline_query"].isNull())
         {
             data = button["switch_inline_query"].asString();
             button_type = InlineKeyboardButtonType::SwitchInlineQuery;
