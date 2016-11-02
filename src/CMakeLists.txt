@@ -23,19 +23,16 @@ endif(NOT SOURCES)
 
 if(NATIVE STREQUAL "no" OR NOT NATIVE)
 	set(NATIVE "")
-	message("Note: You can build an optimized static library -DNATIVE=\"yes\"")
 elseif(NATIVE STREQUAL "yes")
 	set(NATIVE "-march=native -mtune=native")
 endif(NATIVE STREQUAL "no" OR NOT NATIVE)
 
 if(NOT ARCH)
 	set(ARCH "")
-	message("Note: You can specify 64 or 32 bits -DARCH=\"-m32\" -DARCH=\"-m64\"")
 endif(NOT ARCH)
 
 if(NOT OPTIMIZATION_LEVEL OR OPTIMIZATION_LEVEL STREQUAL "no")
     set(OPTIMIZATION_LEVEL "")
-    message("Note: You can set an optimization level by using -DOPTIMIZATION_LEVEL=\"INTEGER_LEVEL\" ")
 else()
     set(OPTIMIZATION_LEVEL "-O${OPTIMIZATION_LEVEL}")
 endif()
@@ -58,5 +55,5 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/cppgram
 	DESTINATION /usr/include)
 
 if(NOGET_DEPS STREQUAL "no")
-	add_dependencies(cppgram cpr jsoncpp)
+        add_dependencies(cppgram cpr)
 endif()

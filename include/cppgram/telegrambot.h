@@ -18,7 +18,7 @@
  * - Getting udpdates using long or short polling (webhook support coming soon)
  * - Support for the most important API methods
  * - Multithread support
- * - Easy inline keyboard ceation
+ * - Easy inline keyboard creation
  * - Article creation for inline query
  *
  * \section Install
