@@ -45,3 +45,6 @@ install(TARGETS cppgram
 	COMPONENT library)
 
 add_dependencies(cppgram cpr)
+
+set(CPPGRAM_LIBRARIES lib)
+set(CPPGRAM_INLCUDE_DIRS include)
