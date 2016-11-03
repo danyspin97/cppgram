@@ -7,7 +7,7 @@ CppGram is a lighweight framework for Telegram Bot API that provides support for
 
 ~~~c++
 
-~~~c
+~~~
 
 ## Features
 - Designed to handle many updates at a time
