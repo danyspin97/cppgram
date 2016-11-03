@@ -1,89 +1,62 @@
 # CppGram
-![CppGram build](https://gitlab.com/WiseDragonStd/CppGram/badges/master/build.svg)
+[![Build Status](https://travis-ci.org/DanySpin97/cppgram.svg?branch=master)](https://travis-ci.org/DanySpin97/cppgram)
 
-Easy C++ wrapper for Telegram Bot API
+CppGram is a lighweight framework for Telegram Bot API that provides support for the most important api methods and basic features a user need ensuring speed and stability.
 
-## Required libraries
+## Usage
 
- * jsoncpp
- * cpr
+~~~c++
 
- CMake will get these libraries and will configure them (once) for you
+~~~c
 
- Git is required in order to get the libraries
+## Features
+- Designed to handle many updates at a time
+- getUpdates support
+- Update type based processing
+- Inline keyboard support
+- Inline query support
+- Highly documented
 
- libcurl is required in order to use libcpr
+## Dependencies
 
-## Documentation and guide
+* jsoncpp (_included_)
+* cpr (downloaded if missing)
 
- Documentation: [here](https://wisedragonstd.gitlab.io/cppgram)
- 
- Guide: is coming soon
+## Installation
+The primary way to include this library in your project is to use git submodule.
 
-## Examples 
- 
- Full explained in the docs, you can find examples in the examples/ directory.
- 
- EchoBot example is coming with an useful CMakeLists.txt sample for larger projects with CppGram
+~~~
+git submodule add https://github.com/DanySpin97/CppGram.git
+git submodule update --init --recursive
+~~~
 
-## How to compile the static library?
+Then add the directory in your cmake configuration:
 
+~~~
+add_subdirectory(cppgram)
+~~~
 
- * Make a new directory OUTSIDE the source directory
- ~~~
- $ mkdir ../cppgram-build
- ~~~
+CppGram will be compiled, libraries and include needs to be included by the project:
 
- * cd to the new directory
- ~~~
- $ cd ../cppgram-build
- ~~~
-
- * Run CMake to configure the Makefile (you must have CMake 2.8 at least)
- ~~~
- $ cmake ../cppgram-build
- ~~~
-
- * After running CMake, you have to run make in order to compile the library and its dependencies
- ~~~
- $ make
- ~~~
-
- This will download required dependencies and configure them in order to compile our library.
-
- * You will find out all the static libraries in ../CppGram/lib
-
- You can find in the documentation all availible CMake configuration options
-
-## Cleaning 
-
- * In the build directory to clean (then you need to rebuild the libraries)
-
- ~~~
- $ make clean
- $ make clean_gitrepo
- ~~~
-
- * In the source directory to remove useless headers (after building)
-
- ~~~
- $ ./clean-extra-headers.sh
- ~~~
+~~~
+include_directories(${CPPGRAM_INCLUDE_DIRS})
+target_link_libraries( your_target_name ${CPPGRAM_LIBRARIES})
+~~~
 
 ## How do I link to my own bot?
 
- *assuming you are using g++ or clang++*
+*assuming you are using g++ or clang++*
 
- ~~~
- $ g++ mysrc.cpp -o mybot libcpr.a libjsoncpp.a libcppgram.a -lcurl
- ~~~
+~~~
+$ g++ mysrc.cpp -o mybot libcpr.a libjsoncpp.a libcppgram.a -lcurl
+~~~
 
- ---
+## Documentation
 
- We reccomend to build YOUR bot on YOUR own computer to get better performance, using these flags:
+Documentation: [here](https://danyspin97.github.io/cppgram)
 
- ~~~
- -O2 -march=native -mtune=native -Wall -std=c++14
- ~~~
+## Authors
+CppGram is developed and mantained by [Danilo Spinella](github.com/DanySpin97).
 
-
+## [License](https://www.gnu.org/licenses/lgpl-3.0.en.html)
+CppGram is released under GNU Lesser General Public License. You may copy, distribute and modify the software provided that modifications are described and licensed for free under LGPL-3. Derivatives works (including modifications) can only be redistributed under LGPL-3, but applications that use the framework don't have to be.
