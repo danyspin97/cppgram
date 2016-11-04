@@ -46,5 +46,3 @@ install(TARGETS cppgram
 
 add_dependencies(cppgram cpr)
 
-set(CPPGRAM_LIBRARIES lib CACHE INTERNAL "")
-set(CPPGRAM_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "")

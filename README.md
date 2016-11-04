@@ -26,7 +26,7 @@ CppGram is a lighweight framework for Telegram Bot API that provides support for
 The primary way to include this library in your project is to use git submodule.
 
 ~~~
-git submodule add https://github.com/DanySpin97/cppgram.git
+git submodule add git://github.com/DanySpin97/cppgram.git
 git submodule update --init --recursive
 ~~~
 
