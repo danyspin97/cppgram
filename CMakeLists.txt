@@ -3,10 +3,7 @@ project(cppgram)
 
 include_directories(include)
 
-find_package(CPR)
-if (NOT CPR_FOUND)
-  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/opt/cpr)
-endif()
+add_subdirectory(opt)
 add_subdirectory(src)
 
 set(CPPGRAM_LIBRARIES cppgram CACHE INTERNAL "")
