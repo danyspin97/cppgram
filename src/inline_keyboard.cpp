@@ -4,7 +4,6 @@
 #include "cppgram/types/enums.h"
 #include "cppgram/exceptions.h"
 #include "cppgram/types/inline_keyboard_button.h"
-#include "cppgram/singleton.h"
 
 using std::string;
 using std::vector;
@@ -74,7 +73,8 @@ bool InlineKeyboard::addButton(const vector<inlineKeyboardButton>& newButtons)
 
 void InlineKeyboard::getKeyboard(std::string& reply_markup, const bool &clearKeyboard)
 {
-    reply_markup = Singleton::getInstance()->getWriter()->write(inline_keyboard);
+    Json::FastWriter writer;
+    reply_markup = writer.write(inline_keyboard);
 
     if (clearKeyboard)
     {

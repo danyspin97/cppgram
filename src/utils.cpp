@@ -1,6 +1,6 @@
 #ifdef __unix__
-#include<unistd.h>
-#include<stdlib.h>
+#include <unistd.h>
+#include <stdlib.h>
 #endif
 
 #include <sstream>
@@ -10,13 +10,11 @@
 #include <json/json.h>
 
 #include "cppgram/utils.h"
-#include "cppgram/singleton.h"
 #include "cppgram/exceptions.h"
 
-using cppgram::Singleton;
-using cppgram::JsonParseError;
+using namespace cppgram;
 
-Json::Reader *reader = Singleton::getInstance()->getReader();
+Json::Reader reader;
 
 int cppgram::osutil::backgroundProcess()
 {
@@ -44,7 +42,7 @@ int cppgram::osutil::backgroundProcess()
 #endif
 }
 
-const std::vector<std::string> cppgram::util::split(const std::string &str, const char &splchr)
+const std::vector<std::string> cppgram::split(const std::string &str, const char &splchr)
 {
     std::vector<std::string> vecstrs;
     std::stringstream ss;
@@ -59,7 +57,7 @@ const std::vector<std::string> cppgram::util::split(const std::string &str, cons
     return vecstrs;
 }
 
-const std::string cppgram::util::getTime(const std::string &timeformat)
+const std::string cppgram::getTime(const std::string &timeformat)
 {
     char finalTime[256];
 
@@ -80,34 +78,32 @@ const std::string cppgram::util::getTime(const std::string &timeformat)
     return std::string(finalTime);
 }
 
-void cppgram::util::log(const Log &l, const std::string &message, const std::string &filename)
+void cppgram::log(const Log &logType, const std::string &message, const std::string &filename)
 {
-    std::string logType, fname;
+    std::string logTypeString;
 
-    fname = filename == FILENAME_DEFAULT ? Singleton::getInstance()->getLogFilename() : filename;
-
-    if (l == Log::Error)
+    switch(logType)
     {
-        logType = "[ERROR]";
-    }
-    else if (l == Log::Event)
-    {
-        logType = "[EVENT]";
-    }
-    else if (l == Log::Warning)
-    {
-        logType = "[WARNING]";
+        case Error:
+            logTypeString = "[ERROR]";
+            break;
+        case Event:
+            logTypeString = "[EVENT]";
+            break;
+        case Warning:
+            break;
+            logTypeString = "[WARNING]";
     }
 
     // TODO Keep stream open
     std::ofstream out;
-    out.open(fname, std::ios::app | std::ios::out);
-    const std::string fmtStr = logType + "[" + getTime() + "] " + message + '\n';
+    out.open(filename, std::ios::app | std::ios::out);
+    const std::string fmtStr = logTypeString + "[" + getTime() + "] " + message + '\n';
     out.write(fmtStr.c_str(), fmtStr.length());
     out.close();
 }
 
-bool cppgram::util::checkMethodError(const cpr::Response &response, Json::Value &val)
+bool cppgram::checkMethodError(const cpr::Response &response, Json::Value &val)
 {
     // If there was an error in the connection print it
     if (response.error.code != cpr::ErrorCode::OK)
@@ -116,7 +112,7 @@ bool cppgram::util::checkMethodError(const cpr::Response &response, Json::Value 
         return false;
     }
 
-    if (!reader->parse(response.text, val))
+    if (!reader.parse(response.text, val))
     {
         log(Log::Error, "JSON Parser: Error while parsing JSON document!");
         throw JsonParseError();

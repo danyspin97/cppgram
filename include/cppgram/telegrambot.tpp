@@ -4,7 +4,6 @@
 #include "telegrambot.h"
 #include "types/enums.h"
 #include "defines.h"
-#include "singleton.h"
 #include "utils.h"
 
 using std::string;
@@ -12,9 +11,8 @@ using std::to_string;
 
 using cpr::Session;
 
-using namespace cppgram;
-using namespace cppgram::util;
-
+using cppgram::ParseMode;
+using cppgram::TelegramBot;
 
 template<typename T>
 int_fast32_t TelegramBot::sendMessage(const T &chat_id,
@@ -39,7 +37,7 @@ int_fast32_t TelegramBot::sendMessage(const T &chat_id,
 
     int cpu_id = sched_getcpu();
 
-    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/sendMessage"});
+    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/sendMessage"});
     sessions[cpu_id]->SetParameters(cpr::Parameters{{"chat_id", string_id},
                                                     {"text", text},
                                                     {"parse_mode", parseMode},
@@ -54,7 +52,9 @@ int_fast32_t TelegramBot::sendMessage(const T &chat_id,
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
+    {
         return 1;
+    }
 
     return valroot["result"]["message_id"].asUInt();
 }
@@ -81,7 +81,7 @@ int_fast32_t TelegramBot::editMessageText(const T &chat_id,
 
     int cpu_id = sched_getcpu();
 
-    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageText"});
+    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageText"});
     sessions[cpu_id]->SetParameters(cpr::Parameters{{"chat_id", string_id},
                                                     {"message_id", to_string(message_id)},
                                                     {"text", text},
@@ -111,7 +111,7 @@ int_fast32_t TelegramBot::editMessageReplyMarkup(const T &chat_id,
 
     int cpu_id = sched_getcpu();
 
-    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageReplyMarkup"});
+    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageReplyMarkup"});
     sessions[cpu_id]->SetParameters(cpr::Parameters{{"chat_id", string_id},
                                                     {"message_id", to_string(message_id)},
                                                     {"reply_markup", reply_markup}});
@@ -139,7 +139,7 @@ int_fast32_t TelegramBot::editMessageCaption(const T &chat_id,
 
     int cpu_id = sched_getcpu();
 
-    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + bot_token + "/editMessageCaption"});
+    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageCaption"});
     sessions[cpu_id]->SetParameters(cpr::Parameters{{"chat_id", string_id},
                     {"message_id", to_string(message_id)},
                     {"caption", caption},

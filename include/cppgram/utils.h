@@ -30,12 +30,6 @@ int backgroundProcess();
 }
 // ...
 
-/*! \namespace cppgram::util
- * \brief User-availible utilities :)
- */
-namespace util
-{
-
 /*! \enum Log
  * \brief used inside the log() function, can be used to specify the log type
  */
@@ -65,7 +59,7 @@ const std::string getTime(const std::string& timeformat="%a %F %r");
  * \param message: specify the message to be logged
  * \param filename: specify a custom filenames
  */
-void log(const Log& l, const std::string& message, const std::string& filename=FILENAME_DEFAULT);
+void log(const Log& logType, const std::string& message, const std::string& filename = FILENAME_DEFAULT);
 
 /*!
  * \brief parses response's JSON and checks for error codes
@@ -91,10 +85,5 @@ inline int_fast64_t getMicroTime()
     return ret;
 }
 }
-
-
-
-}
-
 
 #endif //CPPGRAM_UTILS_H

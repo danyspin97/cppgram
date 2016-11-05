@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <deque>
-#include <mutex>
 
 /*! \mainpage Reference
  * \section What What is CppGram
@@ -138,6 +137,8 @@ namespace cppgram
 enum ParseMode : short;
 struct update;
 
+typedef void (*MessageScript)(class TelegramBot*, const struct message*);
+
 /*! \class TelegramBot
  *
  *  \brief contains api methods, update handlers and listener
@@ -146,6 +147,7 @@ struct update;
 class TelegramBot
 {
     public:
+
     /*! \fn TelegramBot::TelegramBot(const std::string &api_token,
                 const bool &background = false,
                 const std::string &filename = "tgbot.log",
@@ -158,9 +160,8 @@ class TelegramBot
      * \param message_limit: max update limit (default: 50)
      * \param timeout: max timeout for HTTP long polling (default: 100s)
      */
-    TelegramBot(const std::string &api_token,
+    TelegramBot(const std::string &apiToken,
                 const bool &background = false,
-                const std::string &filename = "tgbot.log",
                 const int_fast32_t &limit = 50,
                 const int_fast32_t &timeout = 60);
 
@@ -303,33 +304,45 @@ class TelegramBot
                            const std::string &switch_pm_paramter = "") const;
 
     /** @} */
+
+    void addMessageCommand(std::string& command, MessageScript script);
+
     protected:
+
     virtual void processMessage(const struct message &message);
     virtual void processEditedMessage(const struct message &editedMessage);
     virtual void processInlineQuery(const struct inlineQuery &inlineQuery);
     virtual void processChosenInlineResult(const struct choosenInlineResult &choosenInlineResult);
     virtual void processCallbackQuery(const struct callbackQuery &callbackQuery);
+
     private:
+
     /** Bot token. Contains the token of the bot */
-    std::string bot_token;
-    /** Update id. Contains the id of the last updates ricevuto */
-    int_fast32_t updateId;
+    std::string botToken;
+
     /** Queue container. Each update received goes here after it has been parsed */
-    std::deque<update *> updates_queue;
+    std::deque<update *> updatesQueue;
+
     /** Data for getUpdates method, instantiated in the constructor */
     const int_fast32_t timeout,
+
     /** Get udpdate data */
-            update_limit;
+            updateLimit;
+
     /** Curl session. Store a session for each thread */
     std::vector<cpr::Session *> sessions;
+
+    std::vector<std::pair<std::string&, MessageScript>> messageCommands;
+
     /** This function is spawned in each core (except the first) by run() and process an update at a time */
     void processUpdates();
+
     /** Get bot updates using getUpdates, parse them and put them in the queue (updates_queue). Called by run() */
     void queueUpdates();
+
     /** Get update and parse them in sequence, using a single core. Automatically called by run if the cpu is single-core */
     void processUpdateSingleThread();
-    /** Mutex to control queue access */
-    std::mutex mutex;
+
 };
 
 }
