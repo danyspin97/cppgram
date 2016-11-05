@@ -5,12 +5,14 @@
 #include <thread>
 #include <chrono>
 #include <mutex>
+#include <algorithm>
 
 #include "cppgram/telegrambot.h"
 #include "cppgram/types/update.h"
 #include "cppgram/defines.h"
 #include "cppgram/exceptions.h"
 #include "cppgram/utils.h"
+#include "cppgram/commands/messagecommands.h"
 
 using std::thread;
 using std::vector;
@@ -21,7 +23,8 @@ std::mutex mutex;
 
 TelegramBot::TelegramBot(const string &apiToken, const bool &background,
                          const int_fast32_t &timeout, const int_fast32_t &limit)
-        : botToken(apiToken), timeout(timeout), updateLimit(limit)
+        : botToken(apiToken), timeout(timeout), updateLimit(limit),
+          messageCommands_set(false)
 {
     if (background)
     {
@@ -290,9 +293,14 @@ void TelegramBot::queueUpdates()
     }
 }
 
+void TelegramBot::initBot()
+{
+    messageCommands_set = (messageCommands.size() > 0) ? true : false;
+}
+
 void TelegramBot::addMessageCommand(std::string& command, MessageScript script)
 {
-    messageCommands.push_back(std::pair<std::string&, MessageScript>(command, script));
+    messageCommands.push_back(new MessageCommand(command, script));
 }
 
 void TelegramBot::processUpdates()
@@ -310,6 +318,19 @@ void TelegramBot::processUpdates()
             switch (new_update->type)
             {
                 case UpdateType::Message:
+                    if (new_update->message->entities.size() > 0 && new_update->message->entities[0]->type == MessageEntityType::bot_command)
+                    {
+                        messageEntity* commandReceived = new_update->message->entities[0];
+
+                        for (auto currentCommand: messageCommands)
+                        {
+                            if (currentCommand->length == commandReceived->lenght && new_update->message->text.compare(commandReceived->offset, commandReceived->lenght, currentCommand->command) == 0)
+                            {
+                                currentCommand->script(this, new_update->message);
+                                break;
+                            }
+                        }
+                    }
                     processMessage(*new_update->message);
                     break;
                 case UpdateType::CallbackQuery:

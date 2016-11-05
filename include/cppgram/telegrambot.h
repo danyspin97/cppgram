@@ -134,8 +134,10 @@ class Session;
 namespace cppgram
 {
 
+// Forward declaration
 enum ParseMode : short;
 struct update;
+class MessageCommand;
 
 typedef void (*MessageScript)(class TelegramBot*, const struct message*);
 
@@ -305,6 +307,8 @@ class TelegramBot
 
     /** @} */
 
+    void initBot();
+
     void addMessageCommand(std::string& command, MessageScript script);
 
     protected:
@@ -332,7 +336,9 @@ class TelegramBot
     /** Curl session. Store a session for each thread */
     std::vector<cpr::Session *> sessions;
 
-    std::vector<std::pair<std::string&, MessageScript>> messageCommands;
+    std::vector<MessageCommand*> messageCommands;
+
+    bool messageCommands_set;
 
     /** This function is spawned in each core (except the first) by run() and process an update at a time */
     void processUpdates();

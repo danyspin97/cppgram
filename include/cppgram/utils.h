@@ -59,7 +59,7 @@ const std::string getTime(const std::string& timeformat="%a %F %r");
  * \param message: specify the message to be logged
  * \param filename: specify a custom filenames
  */
-void log(const Log& logType, const std::string& message, const std::string& filename = FILENAME_DEFAULT);
+void log(const Log& logType, const std::string& message, const std::string& filename = "tg_bot.log");
 
 /*!
  * \brief parses response's JSON and checks for error codes
