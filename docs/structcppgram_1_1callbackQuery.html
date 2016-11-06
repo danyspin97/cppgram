@@ -92,50 +92,74 @@ Public Attributes</h2></td></tr>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcppgram_1_1callbackQuery.html#afd0d68c6d31ff249f3ae8662162663c3">id</a></td></tr>
 <tr class="memdesc:afd0d68c6d31ff249f3ae8662162663c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique identifier for this query. <br /></td></tr>
 <tr class="separator:afd0d68c6d31ff249f3ae8662162663c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c540b2c8ddb673c6adc07ae443fb59a"><td class="memItemLeft" align="right" valign="top"><a id="a0c540b2c8ddb673c6adc07ae443fb59a"></a>
-struct <a class="el" href="structcppgram_1_1user.html">user</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcppgram_1_1callbackQuery.html#a0c540b2c8ddb673c6adc07ae443fb59a">from</a></td></tr>
-<tr class="memdesc:a0c540b2c8ddb673c6adc07ae443fb59a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sender. <br /></td></tr>
-<tr class="separator:a0c540b2c8ddb673c6adc07ae443fb59a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeaf2433e2f036d54029646eab2fb86f8"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structcppgram_1_1message.html">message</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcppgram_1_1callbackQuery.html#aeaf2433e2f036d54029646eab2fb86f8">message</a></td></tr>
-<tr class="memdesc:aeaf2433e2f036d54029646eab2fb86f8"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>Optional</em>. Message with the callback button that originated the query.  <a href="#aeaf2433e2f036d54029646eab2fb86f8">More...</a><br /></td></tr>
-<tr class="separator:aeaf2433e2f036d54029646eab2fb86f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06192da53963cbc025cb00ff7f7083ab"><td class="memItemLeft" align="right" valign="top"><a id="a06192da53963cbc025cb00ff7f7083ab"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcppgram_1_1callbackQuery.html#a06192da53963cbc025cb00ff7f7083ab">inline_message_id</a></td></tr>
-<tr class="memdesc:a06192da53963cbc025cb00ff7f7083ab"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>Optional</em>. Identifier of the message sent via the bot in inline mode, that originated the query <br /></td></tr>
-<tr class="separator:a06192da53963cbc025cb00ff7f7083ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a036d3167ef9d3099cafcac54e25c72"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcppgram_1_1callbackQuery.html#a8a036d3167ef9d3099cafcac54e25c72">data</a></td></tr>
-<tr class="memdesc:a8a036d3167ef9d3099cafcac54e25c72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data associated with the callback button.  <a href="#a8a036d3167ef9d3099cafcac54e25c72">More...</a><br /></td></tr>
-<tr class="separator:a8a036d3167ef9d3099cafcac54e25c72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac84b41d7eeb44e1a5d3ddedf1f1f769c"><td class="memItemLeft" align="right" valign="top"><a id="ac84b41d7eeb44e1a5d3ddedf1f1f769c"></a>
+struct <a class="el" href="structcppgram_1_1user.html">user</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcppgram_1_1callbackQuery.html#ac84b41d7eeb44e1a5d3ddedf1f1f769c">from</a></td></tr>
+<tr class="memdesc:ac84b41d7eeb44e1a5d3ddedf1f1f769c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sender. <br /></td></tr>
+<tr class="separator:ac84b41d7eeb44e1a5d3ddedf1f1f769c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d0f36f4e251c0c55769626dc8f559fb"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; <a class="el" href="structcppgram_1_1message.html">cppgram::message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcppgram_1_1callbackQuery.html#a1d0f36f4e251c0c55769626dc8f559fb">message</a></td></tr>
+<tr class="memdesc:a1d0f36f4e251c0c55769626dc8f559fb"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>Optional</em>. Message with the callback button that originated the query.  <a href="#a1d0f36f4e251c0c55769626dc8f559fb">More...</a><br /></td></tr>
+<tr class="separator:a1d0f36f4e251c0c55769626dc8f559fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10557ebcdebbb73a06665e451887310a"><td class="memItemLeft" align="right" valign="top"><a id="a10557ebcdebbb73a06665e451887310a"></a>
+std::experimental::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcppgram_1_1callbackQuery.html#a10557ebcdebbb73a06665e451887310a">inline_message_id</a></td></tr>
+<tr class="memdesc:a10557ebcdebbb73a06665e451887310a"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>Optional</em>. Identifier of the message sent via the bot in inline mode, that originated the query <br /></td></tr>
+<tr class="separator:a10557ebcdebbb73a06665e451887310a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada3123a48bb02c33958089cfb104e728"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcppgram_1_1callbackQuery.html#ada3123a48bb02c33958089cfb104e728">chat_instance</a></td></tr>
+<tr class="memdesc:ada3123a48bb02c33958089cfb104e728"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifier, uniquely corresponding to the chat to which the message with the callback button was sent.  <a href="#ada3123a48bb02c33958089cfb104e728">More...</a><br /></td></tr>
+<tr class="separator:ada3123a48bb02c33958089cfb104e728"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3848c0f89a696125dbd419cca85eedf5"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcppgram_1_1callbackQuery.html#a3848c0f89a696125dbd419cca85eedf5">data</a></td></tr>
+<tr class="memdesc:a3848c0f89a696125dbd419cca85eedf5"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>Optional</em>. Data associated with the callback button.  <a href="#a3848c0f89a696125dbd419cca85eedf5">More...</a><br /></td></tr>
+<tr class="separator:a3848c0f89a696125dbd419cca85eedf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0435f4b6f6196a13c2d0c5bce16689ff"><td class="memItemLeft" align="right" valign="top"><a id="a0435f4b6f6196a13c2d0c5bce16689ff"></a>
+std::experimental::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcppgram_1_1callbackQuery.html#a0435f4b6f6196a13c2d0c5bce16689ff">game_short_name</a></td></tr>
+<tr class="memdesc:a0435f4b6f6196a13c2d0c5bce16689ff"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>Optional</em>. Short name of a <a href="https://core.telegram.org/bots/api/#games">Game</a> to be returned, serves as the unique identifier for the game <br /></td></tr>
+<tr class="separator:a0435f4b6f6196a13c2d0c5bce16689ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Data from an inline keyboard button pressed. </p>
 <p>This object represents an incoming callback query from a callback button in an inline keyboard. (<a href="https://core.telegram.org/bots/api#callbackquery">https://core.telegram.org/bots/api#callbackquery</a>) </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="a8a036d3167ef9d3099cafcac54e25c72"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a036d3167ef9d3099cafcac54e25c72">&sect;&nbsp;</a></span>data</h2>
+<a id="ada3123a48bb02c33958089cfb104e728"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada3123a48bb02c33958089cfb104e728">&sect;&nbsp;</a></span>chat_instance</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string data</td>
+          <td class="memname">std::string chat_instance</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Data associated with the callback button. </p>
-<p>Be aware that a bad client can send arbitrary data in this field </p>
+<p>Identifier, uniquely corresponding to the chat to which the message with the callback button was sent. </p>
+<p>Useful for high scores in <a href="https://core.telegram.org/bots/api/#games">games</a>. </p>
 
 </div>
 </div>
-<a id="aeaf2433e2f036d54029646eab2fb86f8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeaf2433e2f036d54029646eab2fb86f8">&sect;&nbsp;</a></span>message</h2>
+<a id="a3848c0f89a696125dbd419cca85eedf5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3848c0f89a696125dbd419cca85eedf5">&sect;&nbsp;</a></span>data</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct <a class="el" href="structcppgram_1_1message.html">message</a>* <a class="el" href="structcppgram_1_1message.html">message</a></td>
+          <td class="memname">std::experimental::optional&lt;std::string&gt; data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><em>Optional</em>. Data associated with the callback button. </p>
+<p>Be aware that a bad client can send arbitrary data in this field </p>
+
+</div>
+</div>
+<a id="a1d0f36f4e251c0c55769626dc8f559fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d0f36f4e251c0c55769626dc8f559fb">&sect;&nbsp;</a></span>message</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::experimental::optional&lt;<a class="el" href="structcppgram_1_1message.html">cppgram::message</a>&gt; <a class="el" href="structcppgram_1_1message.html">message</a></td>
         </tr>
       </table>
 </div><div class="memdoc">

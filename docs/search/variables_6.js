@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['height',['height',['../structcppgram_1_1photoSize.html#aaec610c48a611ab6118ab36c3424d888',1,'cppgram::photoSize::height()'],['../structcppgram_1_1sticker.html#aaec610c48a611ab6118ab36c3424d888',1,'cppgram::sticker::height()'],['../structcppgram_1_1video.html#aaec610c48a611ab6118ab36c3424d888',1,'cppgram::video::height()']]]
+  ['game_5fshort_5fname',['game_short_name',['../structcppgram_1_1callbackQuery.html#a0435f4b6f6196a13c2d0c5bce16689ff',1,'cppgram::callbackQuery']]]
 ];

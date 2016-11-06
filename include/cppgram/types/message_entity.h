@@ -28,7 +28,7 @@ struct messageEntity
     /** \brief Offset in UTF-16 code units to the start of the entity */
     int offset,
     /** \brief Length of the entity in UTF-16 code units */
-            lenght;
+            length;
 
     /** \brief <i>Optional</i>. For “text_link” only, url that will be opened after user taps on the text */
     std::string url;
@@ -37,7 +37,7 @@ struct messageEntity
     struct user *from;
 
     messageEntity(Json::Value &jsonMessageEntity)
-            : offset(jsonMessageEntity["offset"].asInt()), lenght(jsonMessageEntity["length"].asInt())
+            : offset(jsonMessageEntity["offset"].asInt()), length(jsonMessageEntity["length"].asInt())
     {
         std::vector<std::string> entity_strings = {"mention", "hashtag", "bot_command", "url", "email", "bold", "italic", "code", "pre", "text_link", "text_mention"};
         int i = 10; // entity_strings.size() - 1
@@ -64,7 +64,7 @@ struct messageEntity
 
         url = prev.url;
         offset = prev.offset;
-        lenght = prev.lenght;
+        length = prev.length;
 
     }
 

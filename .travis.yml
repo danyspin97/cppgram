@@ -11,10 +11,8 @@ env:
     - COMPILER=g++-4.9 CCOMPILER=gcc-4.9
     - COMPILER=g++-5 CCOMPILER=gcc-5
     - COMPILER=g++-6 CCOMPILER=gcc-6
-    - COMPILER=g++-6.2 CCOMPILER=gcc-6.2
     - COMPILER=clang++-3.6 CCOMPILER=clang-3.6
     - COMPILER=clang++-3.7 CCOMPILER=clang-3.7
-    - COMPILER=clang++-3.8 CCOMPILER=clang-3.8
 
 matrix:
   allow_failures:

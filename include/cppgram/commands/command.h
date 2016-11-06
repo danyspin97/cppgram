@@ -17,7 +17,7 @@ class Command
 
     Command() {};
 
-    Command(std::string& command)
+    Command(std::string command)
         : command(command), length(command.size())
     {
     }

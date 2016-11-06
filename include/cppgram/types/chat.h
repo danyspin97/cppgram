@@ -2,7 +2,7 @@
 #define CPPGRAM_CHAT_H
 
 #include <string>
-#include <cstring>
+#include <experimental/optional>
 
 #include <json/json.h>
 
@@ -28,7 +28,7 @@ struct chat
     ChatType type;
 
     /** \brief <i>Optional</i>. Title, for supergroups, channels and group chats */
-    std::string title,
+    std::experimental::optional<std::string> title,
 
     /** \brief <i>Optional</i>. Username, for private chats, supergroups and channels if available */
             username,
@@ -37,18 +37,21 @@ struct chat
     /** \brief <i>Optional</i>. Last name of the other party in a private chat */
             last_name;
 
-    chat(Json::Value &jsonChat) : id(jsonChat["id"].asInt64())
+    chat(Json::Value &jsonChat)
+        : id(jsonChat["id"].asInt64())
     {
-        title = !jsonChat["title"].isNull() ? jsonChat["title"].asString() : "";
 
-        username = !jsonChat["username"].isNull() ? jsonChat["username"].asString() : "";
+        title.emplace(jsonChat["title"].asString());
 
-        first_name = !jsonChat["first_name"] ? jsonChat["first_name"].asString() : "";
+        username.emplace(jsonChat["username"].asString());
 
-        last_name = !jsonChat["last_name"] ? jsonChat["last_name"].asString() : "";
+        first_name.emplace(jsonChat["first_name"].asString());
+
+        last_name.emplace(jsonChat["last_name"].asString());
 
         if (!jsonChat["type"].isNull())
         {
+
             std::vector<std::string> type_strings = {"private", "group", "supergroup", "channel"};
             int i = 3; // type_strings.size() - 1
             std::string chat_type = jsonChat["type"].asString();
@@ -58,14 +61,20 @@ struct chat
             }
 
             type = static_cast<ChatType>(i);
+
         }
+        else
+        {
+
+            type = ChatType::Private;
+
+        }
+
     }
 
     chat()
     {}
 
-    ~chat()
-    {}
 };
 
 }

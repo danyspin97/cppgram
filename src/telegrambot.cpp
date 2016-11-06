@@ -298,7 +298,7 @@ void TelegramBot::initBot()
     messageCommands_set = (messageCommands.size() > 0) ? true : false;
 }
 
-void TelegramBot::addMessageCommand(std::string& command, MessageScript script)
+void TelegramBot::addMessageCommand(std::string command, MessageScript script)
 {
     messageCommands.push_back(new MessageCommand(command, script));
 }
@@ -324,14 +324,18 @@ void TelegramBot::processUpdates()
 
                         for (auto currentCommand: messageCommands)
                         {
-                            if (currentCommand->length == commandReceived->lenght && new_update->message->text.compare(commandReceived->offset, commandReceived->lenght, currentCommand->command) == 0)
+
+                            if (currentCommand->length == commandReceived->length && new_update->message->text.compare(commandReceived->offset, commandReceived->length, currentCommand->command) == 0)
                             {
                                 currentCommand->script(this, new_update->message);
                                 break;
                             }
                         }
                     }
-                    processMessage(*new_update->message);
+                    else
+                    {
+                        processMessage(*new_update->message);
+                    }
                     break;
                 case UpdateType::CallbackQuery:
                     processCallbackQuery(*new_update->callbackQuery);

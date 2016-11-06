@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['log',['log',['../namespacecppgram_1_1util.html#ab599d5edef72f6c180150819bbc6dea5',1,'cppgram::util']]]
+  ['log',['log',['../namespacecppgram.html#ae470bd479087d74b35d634563702fa3d',1,'cppgram']]]
 ];

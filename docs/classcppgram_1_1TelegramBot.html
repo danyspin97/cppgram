@@ -90,9 +90,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:abf00bbfbb8bf0627b67e7795300067e3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcppgram_1_1TelegramBot.html#abf00bbfbb8bf0627b67e7795300067e3">TelegramBot</a> (const std::string &amp;api_token, const bool &amp;background=false, const std::string &amp;filename=&quot;tgbot.log&quot;, const int_fast32_t &amp;limit=50, const int_fast32_t &amp;<a class="el" href="classcppgram_1_1TelegramBot.html#a250b2d67cd24a7e96abe46c227ebf7cf">timeout</a>=60)</td></tr>
-<tr class="memdesc:abf00bbfbb8bf0627b67e7795300067e3"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classcppgram_1_1TelegramBot.html" title="contains api methods, update handlers and listener ">TelegramBot</a> constructor.  <a href="#abf00bbfbb8bf0627b67e7795300067e3">More...</a><br /></td></tr>
-<tr class="separator:abf00bbfbb8bf0627b67e7795300067e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49a62a7a2753b3d89e819195751e704c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcppgram_1_1TelegramBot.html#a49a62a7a2753b3d89e819195751e704c">TelegramBot</a> (const std::string &amp;apiToken, const bool &amp;background=false, const int_fast32_t &amp;limit=50, const int_fast32_t &amp;<a class="el" href="classcppgram_1_1TelegramBot.html#a250b2d67cd24a7e96abe46c227ebf7cf">timeout</a>=60)</td></tr>
+<tr class="memdesc:a49a62a7a2753b3d89e819195751e704c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classcppgram_1_1TelegramBot.html" title="contains api methods, update handlers and listener ">TelegramBot</a> constructor.  <a href="#a49a62a7a2753b3d89e819195751e704c">More...</a><br /></td></tr>
+<tr class="separator:a49a62a7a2753b3d89e819195751e704c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13a43e6d814de94978c515cb084873b1"><td class="memItemLeft" align="right" valign="top"><a id="a13a43e6d814de94978c515cb084873b1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcppgram_1_1TelegramBot.html#a13a43e6d814de94978c515cb084873b1">run</a> ()</td></tr>
 <tr class="memdesc:a13a43e6d814de94978c515cb084873b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">runs infinite loop which handles updates (HTTP long polling "getUpdates" API method) <br /></td></tr>
@@ -131,26 +131,22 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:ac0c2f5e049a34ff7f44fd7f873f825b1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcppgram_1_1TelegramBot.html#ac0c2f5e049a34ff7f44fd7f873f825b1">bot_token</a></td></tr>
-<tr class="separator:ac0c2f5e049a34ff7f44fd7f873f825b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5d6de461797993f9de21fa7a19ad1c5"><td class="memItemLeft" align="right" valign="top">int_fast32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcppgram_1_1TelegramBot.html#ae5d6de461797993f9de21fa7a19ad1c5">updateId</a></td></tr>
-<tr class="separator:ae5d6de461797993f9de21fa7a19ad1c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba6e9fac48bfa39e56cde0a70b01b0e7"><td class="memItemLeft" align="right" valign="top">std::deque&lt; update * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcppgram_1_1TelegramBot.html#aba6e9fac48bfa39e56cde0a70b01b0e7">updates_queue</a></td></tr>
-<tr class="separator:aba6e9fac48bfa39e56cde0a70b01b0e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a796708f71e78c35a5eeb8af50ddb53cb"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcppgram_1_1TelegramBot.html#a796708f71e78c35a5eeb8af50ddb53cb">botToken</a></td></tr>
+<tr class="separator:a796708f71e78c35a5eeb8af50ddb53cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2be4a9cb09c53daa763b3026b1ac28eb"><td class="memItemLeft" align="right" valign="top">std::deque&lt; update * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcppgram_1_1TelegramBot.html#a2be4a9cb09c53daa763b3026b1ac28eb">updatesQueue</a></td></tr>
+<tr class="separator:a2be4a9cb09c53daa763b3026b1ac28eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a250b2d67cd24a7e96abe46c227ebf7cf"><td class="memItemLeft" align="right" valign="top">const int_fast32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcppgram_1_1TelegramBot.html#a250b2d67cd24a7e96abe46c227ebf7cf">timeout</a></td></tr>
 <tr class="separator:a250b2d67cd24a7e96abe46c227ebf7cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb02923aff665b24f910e2f849cead8c"><td class="memItemLeft" align="right" valign="top">const int_fast32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcppgram_1_1TelegramBot.html#acb02923aff665b24f910e2f849cead8c">update_limit</a></td></tr>
-<tr class="separator:acb02923aff665b24f910e2f849cead8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac03600c6aca9f150eeedad0070a48110"><td class="memItemLeft" align="right" valign="top">const int_fast32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcppgram_1_1TelegramBot.html#ac03600c6aca9f150eeedad0070a48110">updateLimit</a></td></tr>
+<tr class="separator:ac03600c6aca9f150eeedad0070a48110"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af43f28d1a9694635b562be9b0a3c347b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; cpr::Session * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcppgram_1_1TelegramBot.html#af43f28d1a9694635b562be9b0a3c347b">sessions</a></td></tr>
 <tr class="separator:af43f28d1a9694635b562be9b0a3c347b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1be3f7fa26e4521098de5f1ec0f865f3"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcppgram_1_1TelegramBot.html#a1be3f7fa26e4521098de5f1ec0f865f3">mutex</a></td></tr>
-<tr class="separator:a1be3f7fa26e4521098de5f1ec0f865f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>contains api methods, update handlers and listener </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="abf00bbfbb8bf0627b67e7795300067e3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf00bbfbb8bf0627b67e7795300067e3">&sect;&nbsp;</a></span>TelegramBot()</h2>
+<a id="a49a62a7a2753b3d89e819195751e704c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49a62a7a2753b3d89e819195751e704c">&sect;&nbsp;</a></span>TelegramBot()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -159,19 +155,13 @@ Private Attributes</h2></td></tr>
           <td class="memname"><a class="el" href="classcppgram_1_1TelegramBot.html">TelegramBot</a> </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>api_token</em>, </td>
+          <td class="paramname"><em>apiToken</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const bool &amp;&#160;</td>
           <td class="paramname"><em>background</em> = <code>false</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>filename</em> = <code>&quot;tgbot.log&quot;</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -287,8 +277,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ac0c2f5e049a34ff7f44fd7f873f825b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac0c2f5e049a34ff7f44fd7f873f825b1">&sect;&nbsp;</a></span>bot_token</h2>
+<a id="a796708f71e78c35a5eeb8af50ddb53cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a796708f71e78c35a5eeb8af50ddb53cb">&sect;&nbsp;</a></span>botToken</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -297,7 +287,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string bot_token</td>
+          <td class="memname">std::string botToken</td>
         </tr>
       </table>
   </td>
@@ -307,29 +297,6 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Bot token. Contains the token of the bot </p>
-
-</div>
-</div>
-<a id="a1be3f7fa26e4521098de5f1ec0f865f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1be3f7fa26e4521098de5f1ec0f865f3">&sect;&nbsp;</a></span>mutex</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::mutex mutex</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Mutex to control queue access </p>
 
 </div>
 </div>
@@ -379,8 +346,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="acb02923aff665b24f910e2f849cead8c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb02923aff665b24f910e2f849cead8c">&sect;&nbsp;</a></span>update_limit</h2>
+<a id="ac03600c6aca9f150eeedad0070a48110"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac03600c6aca9f150eeedad0070a48110">&sect;&nbsp;</a></span>updateLimit</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -389,7 +356,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int_fast32_t update_limit</td>
+          <td class="memname">const int_fast32_t updateLimit</td>
         </tr>
       </table>
   </td>
@@ -402,8 +369,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ae5d6de461797993f9de21fa7a19ad1c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae5d6de461797993f9de21fa7a19ad1c5">&sect;&nbsp;</a></span>updateId</h2>
+<a id="a2be4a9cb09c53daa763b3026b1ac28eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2be4a9cb09c53daa763b3026b1ac28eb">&sect;&nbsp;</a></span>updatesQueue</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -412,30 +379,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int_fast32_t updateId</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Update id. Contains the id of the last updates ricevuto </p>
-
-</div>
-</div>
-<a id="aba6e9fac48bfa39e56cde0a70b01b0e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba6e9fac48bfa39e56cde0a70b01b0e7">&sect;&nbsp;</a></span>updates_queue</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::deque&lt;update *&gt; updates_queue</td>
+          <td class="memname">std::deque&lt;update *&gt; updatesQueue</td>
         </tr>
       </table>
   </td>

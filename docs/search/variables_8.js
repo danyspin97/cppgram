@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['last_5fname',['last_name',['../structcppgram_1_1chat.html#a2c3f0861eaff6bbfa588392d80c13252',1,'cppgram::chat::last_name()'],['../structcppgram_1_1contact.html#a2c3f0861eaff6bbfa588392d80c13252',1,'cppgram::contact::last_name()'],['../structcppgram_1_1user.html#a2c3f0861eaff6bbfa588392d80c13252',1,'cppgram::user::last_name()']]],
-  ['latidute',['latidute',['../structcppgram_1_1location.html#a77ce2680ef02cecf56ac3140eecd0ca5',1,'cppgram::location']]],
-  ['lenght',['lenght',['../structcppgram_1_1messageEntity.html#abf755936f91db3e22274097e7aa89ae4',1,'cppgram::messageEntity']]],
-  ['location',['location',['../structcppgram_1_1choosenInlineResult.html#a2a3156d684c58c6748b3a0ce40c78c01',1,'cppgram::choosenInlineResult::location()'],['../structcppgram_1_1inlineQuery.html#a2a3156d684c58c6748b3a0ce40c78c01',1,'cppgram::inlineQuery::location()'],['../structcppgram_1_1message.html#a2a3156d684c58c6748b3a0ce40c78c01',1,'cppgram::message::location()'],['../structcppgram_1_1venue.html#a2a3156d684c58c6748b3a0ce40c78c01',1,'cppgram::venue::location()']]],
-  ['longitude',['longitude',['../structcppgram_1_1location.html#a006303577d6adb772761727538b74f80',1,'cppgram::location']]]
+  ['id',['id',['../structcppgram_1_1callbackQuery.html#afd0d68c6d31ff249f3ae8662162663c3',1,'cppgram::callbackQuery::id()'],['../structcppgram_1_1chat.html#afcdba3197b6c21a657c42812c00c528a',1,'cppgram::chat::id()'],['../structcppgram_1_1inlineQuery.html#afd0d68c6d31ff249f3ae8662162663c3',1,'cppgram::inlineQuery::id()'],['../structcppgram_1_1user.html#a8378a42f8a51af65a00d8b55ea0c7b00',1,'cppgram::user::id()']]],
+  ['inline_5fmessage_5fid',['inline_message_id',['../structcppgram_1_1callbackQuery.html#a10557ebcdebbb73a06665e451887310a',1,'cppgram::callbackQuery::inline_message_id()'],['../structcppgram_1_1choosenInlineResult.html#a34107cd110e954906fdeca49f0ba7695',1,'cppgram::choosenInlineResult::inline_message_id()']]]
 ];

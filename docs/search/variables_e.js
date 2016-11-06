@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['sessions',['sessions',['../classcppgram_1_1TelegramBot.html#af43f28d1a9694635b562be9b0a3c347b',1,'cppgram::TelegramBot']]],
-  ['sticker',['sticker',['../structcppgram_1_1message.html#a76e28fb715d5bda7cf2dd9d11ac063e3',1,'cppgram::message']]]
+  ['reply_5fto_5fmessage',['reply_to_message',['../structcppgram_1_1message.html#a4cb516933854fe410290e2064fe77540',1,'cppgram::message']]],
+  ['result_5fid',['result_id',['../structcppgram_1_1choosenInlineResult.html#a5c3253c006b21ea6fa96c7b1a9236466',1,'cppgram::choosenInlineResult']]]
 ];

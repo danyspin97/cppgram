@@ -17,7 +17,7 @@ class MessageCommand : public Command
     MessageCommand() { script = 0; }
 
     MessageCommand(std::string& command, MessageScript script)
-        : Command(command), script(script)
+        : Command("/" + command), script(script)
     {
     }
 

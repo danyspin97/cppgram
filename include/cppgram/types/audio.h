@@ -2,6 +2,7 @@
 #define CPPGRAM_AUDIO_H
 
 #include <string>
+#include <experimental/optional>
 
 #include <json/json.h>
 
@@ -25,7 +26,7 @@ struct audio
     int_fast32_t duration;
 
     /** \brief <i>Optional</i>. Performer of the audio as defined by sender or by audio tags */
-    std::string performer,
+    std::experimental::optional<std::string> performer,
 
     /** \brief <i>Optional</i>. Title of the audio as defined by sender or by audio tags */
             title,
@@ -34,26 +35,25 @@ struct audio
             mime_type;
 
     /** \brief <i>Optional</i>. File size */
-    int_fast32_t file_size;
+    std::experimental::optional<int_fast32_t> file_size;
 
     audio(Json::Value &jsonAudio) : file_id(jsonAudio["file_id"].asString()),
                                 duration(jsonAudio["duration"].asUInt())
     {
 
-        performer = !jsonAudio["performer"].isNull() ? jsonAudio["performer"].asString() : "";
+        performer.emplace(jsonAudio["performer"].asString());
 
-        title = !jsonAudio["title"].isNull() ? jsonAudio["title"].asString() : "";
+        title.emplace(jsonAudio["title"].asString());
 
-        mime_type = !jsonAudio["mime_type"].isNull() ? jsonAudio["mime_type"].asString() : "";
+        mime_type.emplace(jsonAudio["mime_type"].asString());
 
-        file_size = !jsonAudio["file_size"].isNull() ? jsonAudio["file_size"].asUInt() : int_least32_t();
+        file_size.emplace(jsonAudio["file_size"].asUInt());
+
     };
 
     audio()
     {};
 
-    ~audio()
-    {};
 };
 
 }

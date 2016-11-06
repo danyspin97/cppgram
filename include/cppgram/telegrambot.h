@@ -309,7 +309,7 @@ class TelegramBot
 
     void initBot();
 
-    void addMessageCommand(std::string& command, MessageScript script);
+    void addMessageCommand(std::string command, MessageScript script);
 
     protected:
 
