@@ -25,7 +25,7 @@ struct callbackQuery
     std::string id;
 
     /** \brief Sender */
-    struct user from;
+    cppgram::user from;
 
     /** \brief <i>Optional</i>. Message with the callback button that originated the query.
      * \details Note that message content and message date will not be available if the message is too old */

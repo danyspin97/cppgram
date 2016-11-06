@@ -12,7 +12,7 @@ namespace cppgram
  */
 
 /** \brief Contact send by a user
- * \details This object represents a phone contact. (https://core.telegram.org/bots/api#contact */
+ * \details This object represents a phone contact. [Api reference](https://core.telegram.org/bots/api#contact */
 struct contact
 {
     /** @} */
@@ -21,27 +21,27 @@ struct contact
     std::string phone_number,
 
     /** \brief Contact's first name */
-            first_name,
+            first_name;
 
     /** \brief <i>Optional</i>. Contact's last name */
-            last_name;
+    std::experimental::optional<std::string> last_name;
 
     /** \brief <i>Optional</i>. Contact's user identifier in Telegram */
-    int_fast32_t user_id;
+    std::experimental::optional<int_fast32_t> user_id;
 
     contact(Json::Value &jsonContact)
             : phone_number(jsonContact["phone_number"].asString()), first_name(jsonContact["first_name"].asString())
     {
-        last_name = !jsonContact["last_name"].isNull() ? jsonContact["last_name"].asString() : "";
 
-        user_id = !jsonContact["user_id"].isNull() ? jsonContact["user_id"].asUInt() : int_fast32_t();
+        last_name.emplace(jsonContact["last_name"].asString());
+
+        user_id.emplace(jsonContact["user_id"].asUInt());
+
     }
 
     contact()
     {};
 
-    ~contact()
-    {};
 };
 
 }

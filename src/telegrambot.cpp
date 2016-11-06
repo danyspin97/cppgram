@@ -318,14 +318,14 @@ void TelegramBot::processUpdates()
             switch (new_update->type)
             {
                 case UpdateType::Message:
-                    if (new_update->message->entities.size() > 0 && new_update->message->entities[0]->type == MessageEntityType::bot_command)
+                    /*if (new_update->message->entities.size() > 0 && new_update->message->entities[0].type == MessageEntityType::bot_command)
                     {
-                        messageEntity* commandReceived = new_update->message->entities[0];
+                        messageEntity commandReceived = new_update->message->entities[0];
 
                         for (auto currentCommand: messageCommands)
                         {
 
-                            if (currentCommand->length == commandReceived->length && new_update->message->text.compare(commandReceived->offset, commandReceived->length, currentCommand->command) == 0)
+                            if (currentCommand->length == commandReceived.length && new_update->message->text.value().compare(commandReceived.offset, commandReceived.length, currentCommand->command) == 0)
                             {
                                 currentCommand->script(this, new_update->message);
                                 break;
@@ -333,9 +333,9 @@ void TelegramBot::processUpdates()
                         }
                     }
                     else
-                    {
+                    {*/
                         processMessage(*new_update->message);
-                    }
+                    //}
                     break;
                 case UpdateType::CallbackQuery:
                     processCallbackQuery(*new_update->callbackQuery);

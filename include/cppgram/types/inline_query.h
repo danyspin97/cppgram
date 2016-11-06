@@ -25,10 +25,10 @@ struct inlineQuery
     std::string id;
 
     /** \brief Sender */
-    struct user *from;
+    user from;
 
     /** \brief <i>Optional</i>. Sender location, only for bots that request user location */
-    struct location *location;
+    std::experimental::optional<cppgram::location> location;
 
     /** \brief Text of the query, up to 512 characters. */
     std::string query,
@@ -36,38 +36,19 @@ struct inlineQuery
     /** \brief Offset of the results to be returned, can be controlled by the bot */
             offset;
 
+    inlineQuery()
+    {}
+
     inlineQuery(Json::Value &jsonInlineQuery)
             : id(jsonInlineQuery["id"].asString()),
-              from(new struct user(jsonInlineQuery["from"])),
+              from(user(jsonInlineQuery["from"])),
               query(jsonInlineQuery["query"].asString()),
               offset(jsonInlineQuery["offset"].asString())
 
     {
-        location = !jsonInlineQuery["location"].isNull() ? new struct location(jsonInlineQuery["location"]) : nullptr;
+        location.emplace(cppgram::location(jsonInlineQuery["location"]));
     }
 
-    inlineQuery()
-    {}
-
-    ~inlineQuery()
-    {
-        delete from;
-
-        if (location != NULL)
-        {
-            delete location;
-        }
-    }
-
-    inlineQuery(const inlineQuery &prev)
-    {
-        *from = *(prev.from);
-        *location = *(prev.location);
-
-        id = prev.id;
-        query = prev.query;
-        offset = prev.offset;
-    }
 };
 
 }

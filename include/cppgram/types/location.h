@@ -25,14 +25,13 @@ struct location
             latidute;
 
     location(Json::Value &jsonLocation)
-            : longitude(jsonLocation["longitude"].asFloat()), latidute(jsonLocation["latidute"].asFloat())
+            : longitude(jsonLocation["longitude"].asFloat()),
+              latidute(jsonLocation["latidute"].asFloat())
     {}
 
     location()
     {}
 
-    ~location()
-    {}
 };
 
 }

@@ -37,8 +37,9 @@ struct audio
     /** \brief <i>Optional</i>. File size */
     std::experimental::optional<int_fast32_t> file_size;
 
-    audio(Json::Value &jsonAudio) : file_id(jsonAudio["file_id"].asString()),
-                                duration(jsonAudio["duration"].asUInt())
+    audio(Json::Value &jsonAudio)
+        : file_id(jsonAudio["file_id"].asString()),
+          duration(jsonAudio["duration"].asUInt())
     {
 
         performer.emplace(jsonAudio["performer"].asString());
