@@ -64,35 +64,32 @@ struct message
     /** \brief <i>Optional</i>. For text messages, an array of messageEntinty */
     std::vector<messageEntity> entities;
 
-    union
-    {
-        /** \brief <i>Optional</i>. Message is an audio file, information about the file */
-        std::experimental::optional<cppgram::audio> audio;
+    /** \brief <i>Optional</i>. Message is an audio file, information about the file */
+    std::experimental::optional<cppgram::audio> audio;
 
-        /** \brief <i>Optional</i>. Message is a general file, information about the file */
-        std::experimental::optional<cppgram::document> document;
+    /** \brief <i>Optional</i>. Message is a general file, information about the file */
+    std::experimental::optional<cppgram::document> document;
 
-        /** \brief <i>Optional</i>. Message is a photo, available sizes of the photo */
-        std::vector<photoSize> photo;
+    /** \brief <i>Optional</i>. Message is a photo, available sizes of the photo */
+    std::vector<photoSize> photo;
 
-        /** \brief<i>Optional</i>. Message is a sticker, information about the sticker */
-        std::experimental::optional<cppgram::sticker> sticker;
+    /** \brief<i>Optional</i>. Message is a sticker, information about the sticker */
+    std::experimental::optional<cppgram::sticker> sticker;
 
-        /** \brief <i>Optional</i>. Message is a video, information about the video */
-        std::experimental::optional<cppgram::video> video;
+    /** \brief <i>Optional</i>. Message is a video, information about the video */
+    std::experimental::optional<cppgram::video> video;
 
-        /** \brief <i>Optional</i>. Message is a voice message, information about the file */
-        std::experimental::optional<cppgram::voice> voice;
+    /** \brief <i>Optional</i>. Message is a voice message, information about the file */
+    std::experimental::optional<cppgram::voice> voice;
 
-        /** \brief <i>Optional</i>. Message is a shared contact, information about the contact */
-        std::experimental::optional<cppgram::contact> contact;
+    /** \brief <i>Optional</i>. Message is a shared contact, information about the contact */
+    std::experimental::optional<cppgram::contact> contact;
 
-        /** \brief <i>Optional</i>. Message is a shared location, information about the location */
-        std::experimental::optional<cppgram::location> location;
+    /** \brief <i>Optional</i>. Message is a shared location, information about the location */
+    std::experimental::optional<cppgram::location> location;
 
-        /** \brief <i>Optional</i>. Message is a venue, information about the venue */
-        std::experimental::optional<cppgram::venue> venue;
-    };
+    /** \brief <i>Optional</i>. Message is a venue, information about the venue */
+    std::experimental::optional<cppgram::venue> venue;
 
     /** \brief <i>Optional</i>. Caption for the document, photo or video, 0-200 characters */
     std::experimental::optional<std::string> caption;
@@ -104,9 +101,7 @@ struct message
 
         if (!jsonMessage["from"].isNull())
         {
-
             from.emplace(user(jsonMessage["from"]));
-
         }
 
         if (!jsonMessage["forward_from"].isNull())
@@ -118,73 +113,78 @@ struct message
 
         if (!jsonMessage["reply_to_message"].isNull())
         {
-
-            //reply_to_message.emplace(cppgram::message(jsonMessage["reply_to_jsonMessage"]));
-
+            reply_to_message = new cppgram::message(jsonMessage["reply_to_message"]);
         }
 
-        /*edit_date.emplace() = !jsonMessage["edit_date"].isNull() ? jsonMessage["edit_date"].asUInt() : int_fast32_t();
+        if (!jsonMessage["edit_date"].isNull())
+        {
+            edit_date.emplace(jsonMessage["edit_date"].asUInt());
+        }
 
         text.emplace(jsonMessage["text"].asString());
 
-        if (!jsonMessage["entities"].isNull())
+        /*if (!jsonMessage["entities"].isNull())
         {
             for (Json::Value &entity: jsonMessage["entities"])
             {
                 entities.push_back(new struct messageEntity(entity));
             }
-        }
+        } */
 
         if (!jsonMessage["audio"].isNull())
         {
-            audio = new struct audio(jsonMessage["audio"]);
+            audio.emplace(cppgram::audio(jsonMessage["audio"]));
         }
         else if(!jsonMessage["document"].isNull())
         {
-            document = new struct document(jsonMessage["document"]);
+            document.emplace(cppgram::document(jsonMessage["document"]));
         }
         else if (!jsonMessage["photo"].isNull())
         {
             for (Json::Value &photo_json : jsonMessage["photo"])
             {
-                photo.push_back(new struct photoSize(photo_json));
+                photo.push_back(photoSize(photo_json));
             }
         }
         else if (!jsonMessage["sticker"].isNull())
         {
-            sticker = new struct sticker(jsonMessage["sticker"]);
+            sticker.emplace(cppgram::sticker(jsonMessage["sticker"]));
         }
         else if (!jsonMessage["video"].isNull())
         {
-            video = new struct video(jsonMessage["video"]);
+            video.emplace(cppgram::video(jsonMessage["video"]));
         }
         else if (!jsonMessage["voice"].isNull())
         {
-            voice = new struct voice(jsonMessage["voice"]);
+            voice.emplace(cppgram::voice(jsonMessage["voice"]));
         }
         else if (!jsonMessage["contact"].isNull())
         {
-            contact = new struct contact(jsonMessage["contact"]);
+            contact.emplace(cppgram::contact(jsonMessage["contact"]));
         }
         else if (!jsonMessage["location"].isNull())
         {
-            location = new struct location(jsonMessage["location"]);
+            location.emplace(cppgram::location(jsonMessage["location"]));
         }
         else if (!jsonMessage["venue"].isNull())
         {
-            venue = new struct venue(jsonMessage["venue"]);
+            venue.emplace(cppgram::venue(jsonMessage["venue"]));
         }
+
         if (!jsonMessage["caption"].isNull())
         {
             caption = jsonMessage["caption"].asString();
-        } */
+        }
+
     }
 
     message()
     {};
 
     ~message()
-    {};
+    {
+        delete reply_to_message;
+    };
 
 };
 
