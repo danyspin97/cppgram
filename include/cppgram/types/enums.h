@@ -90,8 +90,14 @@ enum InlineKeyboardButtonType
     /** The button will contain data that will be sent back to the bot when pressed */
             CallbackData = 1,
 
-    /** Prompt the chat selection, open that chat and insert an inline query */
-            SwitchInlineQuery = 2
+    /** Prompt the chat selection, open that chat and insert an inline query. */
+            SwitchInlineQuery = 2,
+
+    /** Pressing the button will insert the bot‘s username and the specified inline query in the current chat's input field. Can be empty, in which case only the bot’s username will be inserted */
+            SwitchInlineQueryCurrentChat = 3,
+
+    /** Add description of the game that will be launched when the user presses the button */
+            CallbackGame = 4
 };
 
 /** @} */
@@ -101,9 +107,11 @@ enum UpdateType
 {
     Message = 0,
     EditedMessage = 1,
-    InlineQuery = 2,
-    ChoosenInlineResult = 3,
-    CallbackQuery = 4
+    ChannelPost = 2,
+    EditedChannelPost = 3,
+    InlineQuery = 4,
+    ChoosenInlineResult = 5,
+    CallbackQuery = 6
 };
 
 }

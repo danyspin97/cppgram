@@ -47,7 +47,10 @@ struct choosenInlineResult
             location.emplace(cppgram::location(jsonChoosenInlineResult["location"]));
         }
 
-        inline_message_id.emplace(jsonChoosenInlineResult["inline_message_id"].asUInt());
+        if (!jsonChoosenInlineResult["inline_message_id"].isNull())
+        {
+            inline_message_id.emplace(jsonChoosenInlineResult["inline_message_id"].asUInt());
+        }
 
     }
 

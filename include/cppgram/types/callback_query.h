@@ -51,13 +51,25 @@ struct callbackQuery
           chat_instance(jsonCallbackQuery["chat_instance"].asString())
     {
 
-        message.emplace(jsonCallbackQuery["message"]);
+        if (!jsonCallbackQuery["message"].isNull())
+        {
+            message.emplace(cppgram::message(jsonCallbackQuery["message"]));
+        }
 
-        inline_message_id.emplace(jsonCallbackQuery["inline_message_id"].asString());
+        if (!jsonCallbackQuery["inline_message_id"].isNull())
+        {
+            inline_message_id.emplace(jsonCallbackQuery["inline_message_id"].asString());
+        }
 
-        data.emplace(jsonCallbackQuery["data"].asString());
+        if (!jsonCallbackQuery["data"].isNull())
+        {
+            data.emplace(jsonCallbackQuery["data"].asString());
+        }
 
-        game_short_name.emplace(jsonCallbackQuery["game_short_name"].asString());
+        if (!jsonCallbackQuery["game_short_name"].isNull())
+        {
+            game_short_name.emplace(jsonCallbackQuery["game_short_name"].asString());
+        }
 
     }
 

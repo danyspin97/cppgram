@@ -42,13 +42,25 @@ struct audio
           duration(jsonAudio["duration"].asUInt())
     {
 
-        performer.emplace(jsonAudio["performer"].asString());
+        if (!jsonAudio["performer"].isNull())
+        {
+            performer.emplace(jsonAudio["performer"].asString());
+        }
 
-        title.emplace(jsonAudio["title"].asString());
+        if (!jsonAudio["title"].isNull())
+        {
+            title.emplace(jsonAudio["title"].asString());
+        }
 
-        mime_type.emplace(jsonAudio["mime_type"].asString());
+        if (!jsonAudio["mime_type"].isNull())
+        {
+            mime_type.emplace(jsonAudio["mime_type"].asString());
+        }
 
-        file_size.emplace(jsonAudio["file_size"].asUInt());
+        if (!jsonAudio["file_size"].isNull())
+        {
+            file_size.emplace(jsonAudio["file_size"].asUInt());
+        }
 
     };
 

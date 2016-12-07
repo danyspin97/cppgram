@@ -41,13 +41,25 @@ struct document
     document(Json::Value &jsonDocument) : file_id(jsonDocument["file_id"].asString())
     {
 
-        thumb.emplace(photoSize(jsonDocument["thumb"]));
+        if (!jsonDocument["thumb"].isNull())
+        {
+            thumb.emplace(photoSize(jsonDocument["thumb"]));
+        }
 
-        file_name.emplace(jsonDocument["file_name"].asString());
+        if (!jsonDocument["file_name"].isNull())
+        {
+            file_name.emplace(jsonDocument["file_name"].asString());
+        }
 
-        mime_type.emplace(jsonDocument["mime_type"].asString());
+        if (!jsonDocument["mime_type"].isNull())
+        {
+            mime_type.emplace(jsonDocument["mime_type"].asString());
+        }
 
-        file_size.emplace(jsonDocument["file_size"].asUInt());
+        if (!jsonDocument["file_size"].isNull())
+        {
+            file_size.emplace(jsonDocument["file_size"].asUInt());
+        }
 
     }
 

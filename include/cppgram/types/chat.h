@@ -41,13 +41,25 @@ struct chat
         : id(jsonChat["id"].asInt64())
     {
 
-        title.emplace(jsonChat["title"].asString());
+        if (!jsonChat["title"].isNull())
+        {
+            title.emplace(jsonChat["title"].asString());
+        }
 
-        username.emplace(jsonChat["username"].asString());
+        if (!jsonChat["username"].isNull())
+        {
+            username.emplace(jsonChat["username"].asString());
+        }
 
-        first_name.emplace(jsonChat["first_name"].asString());
+        if (!jsonChat["first_name"].isNull())
+        {
+            first_name.emplace(jsonChat["first_name"].asString());
+        }
 
-        last_name.emplace(jsonChat["last_name"].asString());
+        if (!jsonChat["last_name"].isNull())
+        {
+            last_name.emplace(jsonChat["last_name"].asString());
+        }
 
         if (!jsonChat["type"].isNull())
         {

@@ -33,9 +33,15 @@ struct contact
             : phone_number(jsonContact["phone_number"].asString()), first_name(jsonContact["first_name"].asString())
     {
 
-        last_name.emplace(jsonContact["last_name"].asString());
+        if (!jsonContact["last_name"].isNull())
+        {
+            last_name.emplace(jsonContact["last_name"].asString());
+        }
 
-        user_id.emplace(jsonContact["user_id"].asUInt());
+        if (!jsonContact["user_id"].isNull())
+        {
+            user_id.emplace(jsonContact["user_id"].asUInt());
+        }
 
     }
 
