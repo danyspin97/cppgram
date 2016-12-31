@@ -4,7 +4,6 @@
 #include <future>
 #include <thread>
 #include <chrono>
-#include <mutex>
 #include <algorithm>
 
 #include "cppgram/telegrambot.h"
@@ -17,14 +16,12 @@
 using std::thread;
 using std::vector;
 
-using namespace cppgram;
-
-std::mutex mutex;
+using cppgram::TelegramBot;
 
 TelegramBot::TelegramBot(const string &apiToken, const bool &background,
                          const int_fast32_t &timeout, const int_fast32_t &limit)
         : botToken(apiToken), timeout(timeout), updateLimit(limit),
-          messageCommands_set(false)
+          messageCommands_set(false), _sessions(thread::hardware_concurrency())
 {
     if (background)
     {
@@ -50,12 +47,12 @@ bool TelegramBot::getUpdates(Json::Value &updates, const int_fast32_t &offset, c
 {
     int cpu_id = sched_getcpu();
 
-    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/getUpdates"});
-    sessions[cpu_id]->SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
+    _sessions[cpu_id].SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/getUpdates"});
+    _sessions[cpu_id].SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
                                                     {"limit", to_string(limit)},
                                                     {"offset", to_string(offset + 1)}});
 
-    const cpr::Response response = sessions[cpu_id]->Get();
+    const cpr::Response response = _sessions[cpu_id].Get();
     if (!checkMethodError(response, updates))
     {
         return false;
@@ -75,7 +72,7 @@ bool TelegramBot::editMessageText(const string &inline_message_id,
                                   const string &text,
                                   const string &reply_markup,
                                   const ParseMode &parse_mode,
-                                  const bool &disable_web_page_preview) const
+                                  const bool &disable_web_page_preview)
 {
     string parseMode = "";
 
@@ -90,14 +87,14 @@ bool TelegramBot::editMessageText(const string &inline_message_id,
 
     int cpu_id = sched_getcpu();
 
-    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageText"});
-    sessions[cpu_id]->SetParameters(cpr::Parameters{{"inline_message_id", inline_message_id},
+    _sessions[cpu_id].SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageText"});
+    _sessions[cpu_id].SetParameters(cpr::Parameters{{"inline_message_id", inline_message_id},
                                                     {"text", text},
                                                     {"parse_mode", parseMode},
                                                     {"disable_web_page_preview", disable_web_page_preview},
                                                     {"reply_markup", reply_markup}});
 
-    const cpr::Response response = sessions[cpu_id]->Get();
+    const cpr::Response response = _sessions[cpu_id].Get();
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
@@ -110,16 +107,16 @@ bool TelegramBot::editMessageText(const string &inline_message_id,
 
 bool TelegramBot::editMessageCaption(const string &inline_message_id,
                                      const string &caption,
-                                     const string &reply_markup) const
+                                     const string &reply_markup)
 {
     int cpu_id = sched_getcpu();
 
-    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageCaption"});
-    sessions[cpu_id]->SetParameters(cpr::Parameters{{"inline_message_id", inline_message_id},
+    _sessions[cpu_id].SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageCaption"});
+    _sessions[cpu_id].SetParameters(cpr::Parameters{{"inline_message_id", inline_message_id},
                                                     {"caption", caption},
                                                     {"reply_markup", reply_markup}});
 
-    const cpr::Response response = sessions[cpu_id]->Get();
+    const cpr::Response response = _sessions[cpu_id].Get();
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
@@ -131,14 +128,14 @@ bool TelegramBot::editMessageCaption(const string &inline_message_id,
 }
 
 bool TelegramBot::editMessageReplyMarkup(const string &inline_message_id,
-                                         const string &reply_markup) const
+                                         const string &reply_markup)
 {
     int cpu_id = sched_getcpu();
 
-    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageReplyMarkup"});
-    sessions[cpu_id]->SetParameters(cpr::Parameters{{"inline_message_id", inline_message_id},
+    _sessions[cpu_id].SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageReplyMarkup"});
+    _sessions[cpu_id].SetParameters(cpr::Parameters{{"inline_message_id", inline_message_id},
                                                     {"reply_markup", reply_markup}});
-    const cpr::Response response = sessions[cpu_id]->Get();
+    const cpr::Response response = _sessions[cpu_id].Get();
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
@@ -155,21 +152,21 @@ bool TelegramBot::answerInlineQuery(const string &inline_query_id,
                                     const bool &is_personal,
                                     const string &next_offset,
                                     const string &switch_pm_text,
-                                    const string &switch_pm_paramter) const
+                                    const string &switch_pm_paramter)
 {
     int cpu_id = sched_getcpu();
 
     Json::FastWriter writer;
 
-    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/answerInlineQuery"});
-    sessions[cpu_id]->SetParameters(cpr::Parameters{{"inline_query_id", inline_query_id},
+    _sessions[cpu_id].SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/answerInlineQuery"});
+    _sessions[cpu_id].SetParameters(cpr::Parameters{{"inline_query_id", inline_query_id},
                                                     {"results", writer.write(results)},
                                                     {"cache_time", to_string(cache_time)},
                                                     {"is_personal", is_personal},
                                                     {"next_offset", next_offset},
                                                     {"switch_pm_text", switch_pm_paramter},
                                                     {"switch_pm_parameter", switch_pm_paramter}});
-    const cpr::Response response = sessions[cpu_id]->Get();
+    const cpr::Response response = _sessions[cpu_id].Get();
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
@@ -185,16 +182,14 @@ void TelegramBot::run()
     unsigned num_cps = thread::hardware_concurrency();
     if (num_cps > 1)
     {
-        sessions.push_back(new cpr::Session);
         vector<thread> threads(num_cps - 1);
-        for (unsigned i = 1; i < num_cps; i++)
+        for (unsigned i = 0; i < num_cps - 1; i++)
         {
-            sessions.push_back(new cpr::Session);
-            threads[i - 1] = thread(&TelegramBot::processUpdates, this);
+            threads[i] = thread(&TelegramBot::processUpdates, this);
             cpu_set_t cpuset_updates;
             CPU_ZERO(&cpuset_updates);
-            CPU_SET(i, &cpuset_updates);
-            int tf = pthread_setaffinity_np(threads[i - 1].native_handle(),
+            CPU_SET(i + 1, &cpuset_updates);
+            int tf = pthread_setaffinity_np(threads[i].native_handle(),
                                             sizeof(cpu_set_t), &cpuset_updates);
             if (tf != 0)
             {
@@ -209,7 +204,7 @@ void TelegramBot::run()
     }
     else
     {
-        thread single_thread(&TelegramBot::processUpdateSingleThread, this);
+        thread single_thread(&TelegramBot::processUpdatesSingleThread, this);
         cpu_set_t cpuset_updates;
         CPU_ZERO(&cpuset_updates);
         CPU_SET(0, &cpuset_updates);
@@ -228,13 +223,12 @@ void TelegramBot::queueUpdates()
 
     //runOnce, needed in order to get the initial update_id offset
     //this will not be executed more than 1 time, after the first update
-    do
-    {
-        sessions[0]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/getUpdates"});
-        sessions[0]->SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
+    do {
+        _sessions[0].SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/getUpdates"});
+        _sessions[0].SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
                                                    {"limit", to_string(updateLimit)},
                                                    {"offset", to_string(updateId)}});
-        const cpr::Response response = sessions[0]->Get();
+        const cpr::Response response = _sessions[0].Get();
 
         Json::Value valroot;
         if (checkMethodError(response, valroot) && !valroot["result"].empty())
@@ -245,16 +239,18 @@ void TelegramBot::queueUpdates()
 
     } while (updateId == 0);
 
+    // Time last connection for cpr::Sessions
     uint_fast32_t time_last_connection = 0, time = 0;
 
-    while (1)
+    while (true)
     {
-        sessions[0]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/getUpdates"});
-        sessions[0]->SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
+        _sessions[0].SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/getUpdates"});
+        _sessions[0].SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
                                                    {"limit", to_string(updateLimit)},
                                                    {"offset", to_string(updateId)}});
 
-        const cpr::Response response = sessions[0]->Get();
+        const cpr::Response response = _sessions[0].Get();
+
 
         Json::Value valroot;
         if (checkMethodError(response, valroot) && !valroot["result"].empty())
@@ -262,34 +258,31 @@ void TelegramBot::queueUpdates()
 
             for (Json::Value &val: valroot["result"])
             {
-                update *new_update = new update(val);
-                mutex.lock();
-                updatesQueue.push_back(new_update);
-                mutex.unlock();
+                update new_update(val);
+                updatesQueue.enqueue(new_update);
             }
 
-            updateId += valroot["result"].size();
+            updateId += valroot["results"].size();
 
+        }
+
+        if (time_last_connection != 0 && time_last_connection != 60)
+        {
+            for (unsigned int i = thread::hardware_concurrency() - 1; i != 1; i--)
+            {
+                _sessions[i].SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/getMe"});
+                _sessions[i].Get();
+            }
+
+            time_last_connection = time - getMicroTime();
+            time = getMicroTime();
         }
         else
         {
-            if (time_last_connection != 0 && time_last_connection != 60)
-            {
-                for (unsigned int i = thread::hardware_concurrency() - 1; i != 1; i--)
-                {
-                    sessions[i]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/getMe"});
-                    sessions[i]->Get();
-                }
-
-                time_last_connection = time - getMicroTime();
+            time_last_connection += time - getMicroTime();
                 time = getMicroTime();
-            }
-            else
-            {
-                time_last_connection += time - getMicroTime();
-                time = getMicroTime();
-            }
         }
+
     }
 }
 
@@ -305,17 +298,16 @@ void TelegramBot::addMessageCommand(std::string command, MessageScript script)
 
 void TelegramBot::processUpdates()
 {
+
+    update new_update;
+
     while (1)
     {
 
-        mutex.lock();
-        if (updatesQueue.size() > 0)
+        if (updatesQueue.try_dequeue(new_update) != false)
         {
 
-            const update* new_update = updatesQueue.front();
-            updatesQueue.pop_front();
-            mutex.unlock();
-            switch (new_update->type)
+            switch (new_update.type)
             {
                 case UpdateType::Message:
                     /*if (new_update->message->entities.size() > 0 && new_update->message->entities[0].type == MessageEntityType::bot_command)
@@ -334,49 +326,39 @@ void TelegramBot::processUpdates()
                     }
                     else
                     {*/
-                        processMessage(*new_update->message);
+                        processMessage(new_update.message.value());
                     //}
                     break;
                 case UpdateType::CallbackQuery:
-                    processCallbackQuery(*new_update->callbackQuery);
+                    processCallbackQuery(*new_update.callbackQuery);
                     break;
                 case UpdateType::EditedMessage:
-                    processEditedMessage(*new_update->message);
+                    processEditedMessage(*new_update.message);
                     break;
                 case UpdateType::InlineQuery:
-                    processInlineQuery(*new_update->inlineQuery);
+                    processInlineQuery(*new_update.inlineQuery);
                     break;
                 case UpdateType::ChoosenInlineResult:
-                    processChosenInlineResult(*new_update->choosenInlineResult);
+                    processChosenInlineResult(*new_update.choosenInlineResult);
                     break;
             }
 
-            delete new_update;
-        }
-        else
-        {
-            mutex.unlock();
         }
 
     }
 }
 
-void TelegramBot::processUpdateSingleThread()
+void TelegramBot::processUpdatesSingleThread()
 {
     uint_fast32_t updateId = 0;
 
-    for (unsigned i = 0; i < thread::hardware_concurrency(); i++)
-    {
-        sessions.push_back(new cpr::Session);
-    }
-
     do
     {
-        sessions[0]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/getUpdates"});
-        sessions[0]->SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
+        _sessions[0].SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/getUpdates"});
+        _sessions[0].SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
                                                    {"limit", to_string(updateLimit)},
                                                    {"offset", to_string(updateId)}});
-        const cpr::Response response = sessions[0]->Get();
+        const cpr::Response response = _sessions[0].Get();
         Json::Value valroot;
         if (checkMethodError(response, valroot) && !valroot["result"].empty())
         {
@@ -387,11 +369,11 @@ void TelegramBot::processUpdateSingleThread()
 
     while (1)
     {
-        sessions[0]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/getUpdates"});
-        sessions[0]->SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
+        _sessions[0].SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/getUpdates"});
+        _sessions[0].SetParameters(cpr::Parameters{{"timeout", to_string(timeout)},
                                                    {"limit", to_string(updateLimit)},
                                                    {"offset", to_string(updateId)}});
-        const cpr::Response response = sessions[0]->Get();
+        const cpr::Response response = _sessions[0].Get();
 
         Json::Value valroot;
         if (checkMethodError(response, valroot) && !valroot["result"].empty())

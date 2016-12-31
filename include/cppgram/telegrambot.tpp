@@ -21,7 +21,7 @@ int_fast32_t TelegramBot::sendMessage(const T &chat_id,
                                 const ParseMode &parse_mode,
                                 const bool &disable_web_page_preview,
                                 const bool &disable_notification,
-                                const int_fast32_t &reply_to_message_id) const
+                                const int_fast32_t &reply_to_message_id)
 {
     string parseMode = "", string_id;
 
@@ -37,8 +37,8 @@ int_fast32_t TelegramBot::sendMessage(const T &chat_id,
 
     int cpu_id = sched_getcpu();
 
-    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/sendMessage"});
-    sessions[cpu_id]->SetParameters(cpr::Parameters{{"chat_id", string_id},
+    _sessions[cpu_id].SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/sendMessage"});
+    _sessions[cpu_id].SetParameters(cpr::Parameters{{"chat_id", string_id},
                                                     {"text", text},
                                                     {"parse_mode", parseMode},
                                                     {"disable_web_page_preview",
@@ -48,7 +48,7 @@ int_fast32_t TelegramBot::sendMessage(const T &chat_id,
                                                     {"reply_to_message_id",
                                                      to_string(reply_to_message_id)},
                                                     {"reply_markup", reply_markup}});
-    const cpr::Response response = sessions[cpu_id]->Get();
+    const cpr::Response response = _sessions[cpu_id].Get();
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
@@ -65,7 +65,7 @@ int_fast32_t TelegramBot::editMessageText(const T &chat_id,
                                     const string &text,
                                     const string &reply_markup,
                                     const ParseMode &parse_mode,
-                                    const bool &disable_web_page_preview) const
+                                    const bool &disable_web_page_preview)
 {
     string parseMode = "", string_id;
 
@@ -81,8 +81,8 @@ int_fast32_t TelegramBot::editMessageText(const T &chat_id,
 
     int cpu_id = sched_getcpu();
 
-    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageText"});
-    sessions[cpu_id]->SetParameters(cpr::Parameters{{"chat_id", string_id},
+    _sessions[cpu_id].SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageText"});
+    _sessions[cpu_id].SetParameters(cpr::Parameters{{"chat_id", string_id},
                                                     {"message_id", to_string(message_id)},
                                                     {"text", text},
                                                     {"parse_mode", parseMode},
@@ -90,7 +90,7 @@ int_fast32_t TelegramBot::editMessageText(const T &chat_id,
                                                      to_string(disable_web_page_preview)},
                                                     {"reply_markup", reply_markup}});
 
-    const cpr::Response response = sessions[cpu_id]->Get();
+    const cpr::Response response = _sessions[cpu_id].Get();
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
         return 1;
@@ -101,7 +101,7 @@ int_fast32_t TelegramBot::editMessageText(const T &chat_id,
 template<typename T>
 int_fast32_t TelegramBot::editMessageReplyMarkup(const T &chat_id,
                                            const int_fast32_t &message_id,
-                                           const string &reply_markup) const
+                                           const string &reply_markup)
 {
     string string_id;
     if (typeid(chat_id) == typeid(string_id))
@@ -111,12 +111,12 @@ int_fast32_t TelegramBot::editMessageReplyMarkup(const T &chat_id,
 
     int cpu_id = sched_getcpu();
 
-    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageReplyMarkup"});
-    sessions[cpu_id]->SetParameters(cpr::Parameters{{"chat_id", string_id},
+    _sessions[cpu_id].SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageReplyMarkup"});
+    _sessions[cpu_id].SetParameters(cpr::Parameters{{"chat_id", string_id},
                                                     {"message_id", to_string(message_id)},
                                                     {"reply_markup", reply_markup}});
 
-    const cpr::Response response = sessions[cpu_id]->Get();
+    const cpr::Response response = _sessions[cpu_id].Get();
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))
@@ -129,7 +129,7 @@ template<typename T>
 int_fast32_t TelegramBot::editMessageCaption(const T &chat_id,
                                        const int_fast32_t &message_id,
                                        const string &caption,
-                                       const string &reply_markup) const
+                                       const string &reply_markup)
 {
     string string_id;
     if (typeid(chat_id) == typeid(string_id))
@@ -139,13 +139,13 @@ int_fast32_t TelegramBot::editMessageCaption(const T &chat_id,
 
     int cpu_id = sched_getcpu();
 
-    sessions[cpu_id]->SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageCaption"});
-    sessions[cpu_id]->SetParameters(cpr::Parameters{{"chat_id", string_id},
+    _sessions[cpu_id].SetUrl(cpr::Url{TELEGRAMAPI + botToken + "/editMessageCaption"});
+    _sessions[cpu_id].SetParameters(cpr::Parameters{{"chat_id", string_id},
                     {"message_id", to_string(message_id)},
                     {"caption", caption},
                     {"reply_markup", reply_markup}});
 
-    const cpr::Response response = sessions[cpu_id]->Get();
+    const cpr::Response response = _sessions[cpu_id].Get();
 
     Json::Value valroot;
     if (!checkMethodError(response, valroot))

@@ -3,7 +3,10 @@
 
 #include <string>
 #include <vector>
-#include <deque>
+#include <cppgram/types/update.h>
+#include <concurrentqueue.h>
+
+#include <cpr/session.h>
 
 /*! \mainpage Reference
  * \section What What is CppGram
@@ -206,7 +209,7 @@ class TelegramBot
                        const ParseMode &parse_mode = static_cast<ParseMode>(1),
                        const bool &disable_web_page_preview = true,
                        const bool &disable_notification = false,
-                       const int_fast32_t &reply_to_message_id = 0) const;
+                       const int_fast32_t &reply_to_message_id = 0);
 
     /**
      * Edit text (and reply markup) of a message sent by the bot. Leaving reply_markup empty remove it from the message edited. (https://core.telegram.org/bots/api#editmessagetext)
@@ -224,7 +227,7 @@ class TelegramBot
                            const std::string &text,
                            const std::string &reply_markup = "",
                            const ParseMode &parse_mode = static_cast<ParseMode>(1),
-                           const bool &disable_web_page_preview = true) const;
+                           const bool &disable_web_page_preview = true);
 
     /**
      * Edit text (and reply markup) of a message sent via the bot (using inline queries). Leaving reply_markup empty remove it from the message edited. (https://core.telegram.org/bots/api#editmessagetext)
@@ -239,7 +242,7 @@ class TelegramBot
                          const std::string &text,
                          const std::string &reply_markup = "",
                          const ParseMode &parse_mode = static_cast<ParseMode>(1),
-                         const bool &disable_web_page_preview = true) const;
+                         const bool &disable_web_page_preview = true);
 
     /**
      * Edit captions of messages sent by the bot. Leaving reply_markup empty remove it from the message edited. (https://core.telegram.org/bots/api#editmessagecaption)
@@ -252,7 +255,7 @@ class TelegramBot
     int_fast32_t editMessageCaption(const T &chat_id,
                               const int_fast32_t &message_id,
                               const std::string &caption,
-                              const std::string &reply_markup = "") const;
+                              const std::string &reply_markup = "");
 
     /**
      * Edit captions of messages sent via the bot (using inline_queries). Leaving reply_markup empty remove it from the message edited. (https://core.telegram.org/bots/api#editmessagecaption)
@@ -263,7 +266,7 @@ class TelegramBot
      */
     bool editMessageCaption(const std::string &inline_message_id,
                             const std::string &caption,
-                            const std::string &reply_markup = "") const;
+                            const std::string &reply_markup = "");
 
     /**
      * Edit only the reply markup of a message sent by the the bot. Leaving reply_markup empty remove it from the message edited. (https://core.telegram.org/bots/api#editmessagereplymarkup)
@@ -275,7 +278,7 @@ class TelegramBot
     template<typename T>
     int_fast32_t editMessageReplyMarkup(const T &chat_id,
                                   const int_fast32_t &message_id,
-                                  const std::string &reply_markup = "") const;
+                                  const std::string &reply_markup = "");
 
     /**
      * Edit only the reply markup of a message sent via the the bot (using inline queries). Leaving reply_markup empty remove it from the message edited. (https://core.telegram.org/bots/api#editmessagereplymarkup)
@@ -284,7 +287,7 @@ class TelegramBot
      * @return True on success, false otherwise
      */
     bool editMessageReplyMarkup(const std::string &inline_message_id,
-                                const std::string &reply_markup = "") const;
+                                const std::string &reply_markup = "");
 
     /**
      * Answer an inline query. (https://core.telegram.org/bots/api#answerinlinequery
@@ -303,7 +306,7 @@ class TelegramBot
                            const bool &is_personal = false,
                            const std::string &next_offset = "",
                            const std::string &switch_pm_text = "",
-                           const std::string &switch_pm_paramter = "") const;
+                           const std::string &switch_pm_paramter = "");
 
     /** @} */
 
@@ -324,8 +327,9 @@ class TelegramBot
     /** Bot token. Contains the token of the bot */
     std::string botToken;
 
-    /** Queue container. Each update received goes here after it has been parsed */
-    std::deque<update *> updatesQueue;
+    /** Queue container. Each update received goes here after it has been
+     * parsed */
+    moodycamel::ConcurrentQueue<update> updatesQueue;
 
     /** Data for getUpdates method, instantiated in the constructor */
     const int_fast32_t timeout,
@@ -334,9 +338,9 @@ class TelegramBot
             updateLimit;
 
     /** Curl session. Store a session for each thread */
-    std::vector<cpr::Session *> sessions;
+    std::vector<cpr::Session> _sessions;
 
-    std::vector<MessageCommand*> messageCommands;
+    std::vector<MessageCommand *> messageCommands;
 
     bool messageCommands_set;
 
@@ -347,7 +351,7 @@ class TelegramBot
     void queueUpdates();
 
     /** Get update and parse them in sequence, using a single core. Automatically called by run if the cpu is single-core */
-    void processUpdateSingleThread();
+    void processUpdatesSingleThread();
 
 };
 
