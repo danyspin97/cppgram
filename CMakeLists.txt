@@ -2,9 +2,6 @@ cmake_minimum_required(VERSION 2.8)
 project(cppgram)
 
 set( CMAKE_EXPORT_COMPILE_COMMANDS 1 )
-
-include_directories(include)
-
 add_subdirectory(opt)
 add_subdirectory(src)
 

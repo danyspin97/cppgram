@@ -7,7 +7,7 @@ file(GLOB_RECURSE SOURCES *.cpp)
 #fix for Qt Creator not showing cppgram's includes
 file(GLOB_RECURSE HEADERS ../include/cppgram/*.h)
 file(GLOB_RECURSE TEMPLATES ../include/cppgram/*.tpp)
-file(GLOB_RECURSE TEMPLATES ../include/json/*.h)
+file(GLOB_RECURSE HEADERS ../include/json/*.h)
 add_custom_target(headers SOURCES ${HEADERS})
 add_custom_target(templates SOURCES ${TEMPLATES})
 
@@ -33,16 +33,19 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         set(CMAKE_CXX_FLAGS_DEBUG "-g ${NATIVE} ${COMPILER_WARNINGS}")
 endif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
-message("Note: you are building static library, you have to link your executable manually")
-include_directories(${CPR_INCLUDE_DIRS})
-
+message(${CPPGRAM_INCLUDE_DIRS})
 add_library(cppgram STATIC ${SOURCES})
-target_link_libraries(cppgram ${CPR_LIBRARIES})
+target_include_directories(cppgram
+    PUBLIC ${CPR_INCLUDE_DIRS}
+    PUBLIC ${CPPGRAM_INCLUDE_DIRS}
+    PUBLIC ${CPPGRAM_INCLUDE_DIRS}/types
+    PUBLIC ${BSTRLIB_INCLUDE_DIRS})
+target_link_libraries(cppgram ${CPR_LIBRARIES} ${BSTRLIB_LIBRARIES})
 
 install(TARGETS cppgram
 	ARCHIVE DESTINATION lib
 	LIBRARY DESTINATION lib
 	COMPONENT library)
 
-add_dependencies(cppgram cpr)
+add_dependencies(cppgram cpr bstrlib)
 

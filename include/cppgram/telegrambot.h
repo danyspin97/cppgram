@@ -1,12 +1,7 @@
-#ifndef __CPPGRAM_COREBOT_H
-#define __CPPGRAM_COREBOT_H
+#ifndef __CPPGRAM_TELEGRAM_BOT_HPP
+#define __CPPGRAM_TELEGRAM_BOT_HPP
 
-#include <string>
-#include <vector>
-#include <cppgram/types/update.h>
-#include <concurrentqueue.h>
-
-#include <cpr/session.h>
+#include "cppgram/core_bot.h"
 
 /*! \mainpage Reference
  * \section What What is CppGram
@@ -139,7 +134,6 @@ namespace cppgram
 
 // Forward declaration
 enum ParseMode : short;
-struct update;
 class MessageCommand;
 
 typedef void (*MessageScript)(class TelegramBot*, const struct message*);
@@ -323,9 +317,6 @@ class TelegramBot
     virtual void processCallbackQuery(const struct callbackQuery &callbackQuery);
 
     private:
-
-    /** Bot token. Contains the token of the bot */
-    std::string botToken;
 
     /** Queue container. Each update received goes here after it has been
      * parsed */
