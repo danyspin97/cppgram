@@ -1,3 +1,6 @@
 [submodule "opt/cpr"]
 	path = opt/cpr
 	url = https://github.com/whoshuu/cpr.git
+[submodule "opt/bstrlib"]
+	path = opt/bstrlib
+	url = https://github.com/DanySpin97/bstrlib.git
