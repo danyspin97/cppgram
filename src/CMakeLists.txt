@@ -39,6 +39,7 @@ target_include_directories(cppgram
     PUBLIC ${CPR_INCLUDE_DIRS}
     PUBLIC ${CPPGRAM_INCLUDE_DIRS}
     PUBLIC ${CPPGRAM_INCLUDE_DIRS}/types
+    PUBLIC ${CPPGRAM_INCLUDE_DIRS}/commands
     PUBLIC ${BSTRLIB_INCLUDE_DIRS})
 target_link_libraries(cppgram ${CPR_LIBRARIES} ${BSTRLIB_LIBRARIES})
 
