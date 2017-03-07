@@ -5,6 +5,7 @@ find_package(Threads REQUIRED)
 file(GLOB_RECURSE SOURCES *.cpp)
 
 #fix for Qt Creator not showing cppgram's includes
+file(GLOB_RECURSE HEADERS ../include/cppgram/*.hpp)
 file(GLOB_RECURSE HEADERS ../include/cppgram/*.h)
 file(GLOB_RECURSE TEMPLATES ../include/cppgram/*.tpp)
 file(GLOB_RECURSE HEADERS ../include/json/*.h)
@@ -12,13 +13,13 @@ add_custom_target(headers SOURCES ${HEADERS})
 add_custom_target(templates SOURCES ${TEMPLATES})
 
 if(NOT SOURCES)
-	message(FATAL_ERROR "Cannot find sources! Aborting...")
+    message(FATAL_ERROR "Cannot find sources! Aborting...")
 endif(NOT SOURCES)
 
 if(NATIVE STREQUAL "no" OR NOT NATIVE)
-	set(NATIVE "")
+    set(NATIVE "")
 elseif(NATIVE STREQUAL "yes")
-	set(NATIVE "-march=native -mtune=native")
+    set(NATIVE "-march=native -mtune=native")
 endif(NATIVE STREQUAL "no" OR NOT NATIVE)
 
 if(NOT OPTIMIZATION_LEVEL OR OPTIMIZATION_LEVEL STREQUAL "no")
@@ -28,25 +29,22 @@ else()
 endif()
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-        set(CMAKE_CXX_FLAGS "-std=c++14")
-        set(CMAKE_CXX_FLAGS_RELEASE "${OPTIMIZATION_LEVEL} ${NATIVE} ${ARCH} ${COMPILER_WARNINGS}")
-        set(CMAKE_CXX_FLAGS_DEBUG "-g ${NATIVE} ${COMPILER_WARNINGS}")
+    set(CMAKE_CXX_FLAGS "-std=c++14")
+    set(CMAKE_CXX_FLAGS_RELEASE "${OPTIMIZATION_LEVEL} ${NATIVE} ${ARCH} ${COMPILER_WARNINGS}")
+    set(CMAKE_CXX_FLAGS_DEBUG "-g ${NATIVE} ${COMPILER_WARNINGS}")
 endif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
-message(${CPPGRAM_INCLUDE_DIRS})
 add_library(cppgram STATIC ${SOURCES})
 target_include_directories(cppgram
     PUBLIC ${CPR_INCLUDE_DIRS}
     PUBLIC ${CPPGRAM_INCLUDE_DIRS}
-    PUBLIC ${CPPGRAM_INCLUDE_DIRS}/types
-    PUBLIC ${CPPGRAM_INCLUDE_DIRS}/commands
-    PUBLIC ${BSTRLIB_INCLUDE_DIRS})
-target_link_libraries(cppgram ${CPR_LIBRARIES} ${BSTRLIB_LIBRARIES})
+    PUBLIC ${CPPGRAM_INCLUDE_DIRS}/cppgram)
+target_link_libraries(cppgram ${CPR_LIBRARIES})
 
 install(TARGETS cppgram
-	ARCHIVE DESTINATION lib
-	LIBRARY DESTINATION lib
-	COMPONENT library)
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    COMPONENT library)
 
-add_dependencies(cppgram cpr bstrlib)
+add_dependencies(cppgram cpr)
 

@@ -6,8 +6,6 @@
 
 #include <sys/time.h>
 
-#include "defines.h"
-
 namespace cpr
 {
 typedef std::string Url;
@@ -22,13 +20,6 @@ class Value;
 
 namespace cppgram
 {
-
-//this will not be documented
-namespace osutil
-{
-int backgroundProcess();
-}
-// ...
 
 /*! \enum Log
  * \brief used inside the log() function, can be used to specify the log type
@@ -61,13 +52,6 @@ const std::string getTime(const std::string& timeformat="%a %F %r");
  */
 void log(const Log& logType, const std::string& message, const std::string& filename = "tg_bot.log");
 
-/*!
- * \brief parses response's JSON and checks for error codes
- * \param response : the cpr::Response object
- * \param val : the target Json::Value 's reference
- * \return true if everything OK, else: false
- */
-bool checkMethodError(const cpr::Response &response, Json::Value &val);
 
 inline int_fast64_t getMicroTime()
 {

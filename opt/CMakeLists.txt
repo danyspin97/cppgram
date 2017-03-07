@@ -6,4 +6,3 @@ if(CURL_FOUND)
 endif()
 
 add_subdirectory(cpr)
-add_subdirectory(bstrlib)
