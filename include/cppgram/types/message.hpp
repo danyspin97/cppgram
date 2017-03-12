@@ -1,36 +1,36 @@
-#ifndef CPPGRAM_MESSAGE_H
-#define CPPGRAM_MESSAGE_H
+#ifndef CPPGRAM_MESSAGE_HPP
+#define CPPGRAM_MESSAGE_HPP
 
 #include <string>
 
 #include <json/json.h>
 
-#include "chat.h"
-#include "user.h"
 #include "audio.h"
+#include "chat.h"
 #include "contact.h"
 #include "document.h"
+#include "location.h"
 #include "message_entity.h"
 #include "message_entity.h"
 #include "sticker.h"
+#include "user.h"
 #include "venue.h"
 #include "video.h"
 #include "voice.h"
-#include "location.h"
 
 namespace cppgram
 {
-
 /** \addtogroup Types
  * @{
  */
 
 /** \brief A message send by user.
  * \details This object represents a message. (https://core.telegram.org/bots/api#message) */
-struct message
+class message
 {
     /** @} */
 
+    public:
     /** \brief Unique message identifier */
     int_fast32_t message_id;
 
@@ -46,19 +46,23 @@ struct message
     /** \brief <i>Optional</i>. For forwarded messages, sender of the original message */
     std::experimental::optional<user> forward_from;
 
-    /** \brief <i>Optional</i>. For messages forwarded from a channel, information about the original channel */
+    /** \brief <i>Optional</i>. For messages forwarded from a channel, information about the
+     * original channel */
     std::experimental::optional<cppgram::chat> forward_from_chat;
 
-    /** \brief <i>Optional</i>. For forwarded messages, date the original message was sent in Unix time */
+    /** \brief <i>Optional</i>. For forwarded messages, date the original message was sent in Unix
+     * time */
     std::experimental::optional<int_fast32_t> forward_date;
 
-    /** \brief <i>Optional</i>. For replies, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply. */
+    /** \brief <i>Optional</i>. For replies, the original message. Note that the Message object in
+     * this field will not contain further reply_to_message fields even if it itself is a reply. */
     cppgram::message *reply_to_message;
 
     /** \brief <i>Optional</i>. Date the message was last edited in Unix time */
     std::experimental::optional<int_fast32_t> edit_date;
 
-    /** \brief <i>Optional</i>. For text messages, the actual UTF-8 text of the message, 0-4096 characters. */
+    /** \brief <i>Optional</i>. For text messages, the actual UTF-8 text of the message, 0-4096
+     * characters. */
     std::experimental::optional<std::string> text;
 
     /** \brief <i>Optional</i>. For text messages, an array of messageEntinty */
@@ -94,100 +98,93 @@ struct message
     /** \brief <i>Optional</i>. Caption for the document, photo or video, 0-200 characters */
     std::experimental::optional<std::string> caption;
 
-    message(Json::Value &jsonMessage) : message_id(jsonMessage["message_id"].asUInt()),
-                                    date(jsonMessage["date"].asUInt()),
-                                    chat(jsonMessage["chat"])
+    message( Json::Value &json_message )
+        : message_id( jsonMessage["message_id"].asUInt() )
+        , date( json_message["date"].asUInt() )
+        , chat( json_message["chat"] )
     {
-
-        if (!jsonMessage["from"].isNull())
+        if ( !json_message["from"].isNull() )
         {
-            from.emplace(user(jsonMessage["from"]));
+            from.emplace( user( json_message["from"] ) );
         }
 
-        if (!jsonMessage["forward_from"].isNull())
+        if ( !json_message["forward_from"].isNull() )
         {
-            forward_from.emplace(user(jsonMessage["forward_from"]));
-            forward_from_chat.emplace(cppgram::chat(jsonMessage["forward_from_chat"]));
-            forward_date.emplace(jsonMessage["forward_date"].asUInt());
+            forward_from.emplace( user( json_message["forward_from"] ) );
+            forward_from_chat.emplace( cppgram::chat( json_message["forward_from_chat"] ) );
+            forward_date.emplace( json_message["forward_date"].asUInt() );
         }
 
-        if (!jsonMessage["reply_to_message"].isNull())
+        if ( !json_message["reply_to_message"].isNull() )
         {
-            reply_to_message = new cppgram::message(jsonMessage["reply_to_message"]);
+            reply_to_message = new cppgram::message( json_message["reply_to_message"] );
         }
 
-        if (!jsonMessage["edit_date"].isNull())
+        if ( !json_message["edit_date"].isNull() )
         {
-            edit_date.emplace(jsonMessage["edit_date"].asUInt());
+            edit_date.emplace( json_message["edit_date"].asUInt() );
         }
 
-        text.emplace(jsonMessage["text"].asString());
+        text.emplace( json_message["text"].asString() );
 
-        /*if (!jsonMessage["entities"].isNull())
+        /*if (!json_message["entities"].isNull())
         {
-            for (Json::Value &entity: jsonMessage["entities"])
+            for (Json::Value &entity: json_message["entities"])
             {
                 entities.push_back(new struct messageEntity(entity));
             }
         } */
 
-        if (!jsonMessage["audio"].isNull())
+        if ( !json_message["audio"].isNull() )
         {
-            audio.emplace(cppgram::audio(jsonMessage["audio"]));
+            audio.emplace( cppgram::audio( json_message["audio"] ) );
         }
-        else if(!jsonMessage["document"].isNull())
+        else if ( !json_message["document"].isNull() )
         {
-            document.emplace(cppgram::document(jsonMessage["document"]));
+            document.emplace( cppgram::document( json_message["document"] ) );
         }
-        else if (!jsonMessage["photo"].isNull())
+        else if ( !json_message["photo"].isNull() )
         {
-            for (Json::Value &photo_json : jsonMessage["photo"])
+            for ( Json::Value &photo_json : json_message["photo"] )
             {
-                photo.push_back(photoSize(photo_json));
+                photo.push_back( photoSize( photo_json ) );
             }
         }
-        else if (!jsonMessage["sticker"].isNull())
+        else if ( !json_message["sticker"].isNull() )
         {
-            sticker.emplace(cppgram::sticker(jsonMessage["sticker"]));
+            sticker.emplace( cppgram::sticker( json_message["sticker"] ) );
         }
-        else if (!jsonMessage["video"].isNull())
+        else if ( !json_message["video"].isNull() )
         {
-            video.emplace(cppgram::video(jsonMessage["video"]));
+            video.emplace( cppgram::video( json_message["video"] ) );
         }
-        else if (!jsonMessage["voice"].isNull())
+        else if ( !json_message["voice"].isNull() )
         {
-            voice.emplace(cppgram::voice(jsonMessage["voice"]));
+            voice.emplace( cppgram::voice( json_message["voice"] ) );
         }
-        else if (!jsonMessage["contact"].isNull())
+        else if ( !json_message["contact"].isNull() )
         {
-            contact.emplace(cppgram::contact(jsonMessage["contact"]));
+            contact.emplace( cppgram::contact( json_message["contact"] ) );
         }
-        else if (!jsonMessage["location"].isNull())
+        else if ( !json_message["location"].isNull() )
         {
-            location.emplace(cppgram::location(jsonMessage["location"]));
+            location.emplace( cppgram::location( json_message["location"] ) );
         }
-        else if (!jsonMessage["venue"].isNull())
+        else if ( !json_message["venue"].isNull() )
         {
-            venue.emplace(cppgram::venue(jsonMessage["venue"]));
-        }
-
-        if (!jsonMessage["caption"].isNull())
-        {
-            caption = jsonMessage["caption"].asString();
+            venue.emplace( cppgram::venue( json_message["venue"] ) );
         }
 
+        if ( !json_message["caption"].isNull() )
+        {
+            caption = json_message["caption"].asString();
+        }
     }
 
-    message()
-    {};
+    message(){};
 
-    ~message()
-    {
-        delete reply_to_message;
-    };
-
+    ~message() { delete reply_to_message; };
 };
-
 }
 
-#endif //CPPGRAM_MESSAGE_H
+#endif // CPPGRAM_MESSAGE_H

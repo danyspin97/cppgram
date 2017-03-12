@@ -9,9 +9,9 @@ using cppgram::ParseMode;
 
 bool
 CoreBot::getUpdates( Json::Value &       updates,
-                     const int_fast32_t &offset,
-                     const int_fast32_t &limit,
-                     const int_fast32_t &timeout )
+                     const uint_fast32_t offset,
+                     const uint_fast32_t limit,
+                     const uint_fast32_t timeout )
 {
     auto response = executeRequest( "getUpdates",
                                     cpr::Parameters{{"timeout", to_string( timeout )},
@@ -54,7 +54,7 @@ CoreBot::sendMessage( const std::string &text,
 
     auto response = executeRequest(
         "sendMessage",
-        cpr::Parameters{{"chat_id", _chat_id},
+        cpr::Parameters{{"chat_id", chat_id},
                         {"text", text},
                         {"parse_mode", parseMode},
                         {"disable_web_page_preview", to_string( disable_web_page_preview )},
@@ -71,25 +71,14 @@ CoreBot::sendMessage( const std::string &text,
     return message( valroot["result"] );
 }
 
-template <typename T>
 message
-CoreBot::editMessageText( const T &          chat_id,
-                          const int_fast32_t message_id,
+CoreBot::editMessageText( const int_fast32_t message_id,
                           const string &     text,
                           const string &     reply_markup,
                           const ParseMode    parse_mode,
                           const bool         disable_web_page_preview )
 {
-    string parseMode = "", string_id;
-
-    if ( typeid( chat_id ) == typeid( string_id ) )
-    {
-        string_id = chat_id;
-    }
-    else
-    {
-        string_id = to_string( chat_id );
-    }
+    string parseMode = "";
 
     if ( parse_mode == ParseMode::HTML )
     {
@@ -102,7 +91,7 @@ CoreBot::editMessageText( const T &          chat_id,
 
     auto response = executeRequest(
         "editMessageText",
-        cpr::Parameters{{"chat_id", string_id},
+        cpr::Parameters{{"chat_id", chat_id},
                         {"message_id", to_string( message_id )},
                         {"text", text},
                         {"parse_mode", parseMode},
@@ -153,25 +142,13 @@ CoreBot::editMessageText( const string &  inline_message_id,
     return valroot["result"].asBool();
 }
 
-template <typename T>
 message
-CoreBot::editMessageCaption( const T &          chat_id,
-                             const int_fast32_t message_id,
+CoreBot::editMessageCaption( const int_fast32_t message_id,
                              const string &     caption,
                              const string &     reply_markup )
 {
-    string string_id;
-    if ( typeid( chat_id ) == typeid( string_id ) )
-    {
-        string_id = chat_id;
-    }
-    else
-    {
-        string_id = to_string( chat_id );
-    }
-
     auto response = executeRequest( "editMessageCaption",
-                                    cpr::Parameters{{"chat_id", string_id},
+                                    cpr::Parameters{{"chat_id", chat_id},
                                                     {"message_id", to_string( message_id )},
                                                     {"caption", caption},
                                                     {"reply_markup", reply_markup}} );
@@ -202,24 +179,11 @@ CoreBot::editMessageCaption( const string &inline_message_id,
     return valroot["result"].asBool();
 }
 
-template <typename T>
 message
-CoreBot::editMessageReplyMarkup( const T &          chat_id,
-                                 const int_fast32_t message_id,
-                                 const string &     reply_markup )
+CoreBot::editMessageReplyMarkup( const int_fast32_t message_id, const string &reply_markup )
 {
-    string string_id;
-    if ( typeid( chat_id ) == typeid( string_id ) )
-    {
-        string_id = chat_id;
-    }
-    else
-    {
-        string_id = to_string( chat_id );
-    }
-
     auto response = executeRequest( "editMessageReplyMarkup",
-                                    cpr::Parameters{{"chat_id", string_id},
+                                    cpr::Parameters{{"chat_id", chat_id},
                                                     {"message_id", to_string( message_id )},
                                                     {"reply_markup", reply_markup}} );
 
@@ -233,8 +197,6 @@ CoreBot::editMessageReplyMarkup( const T &          chat_id,
 bool
 CoreBot::editMessageReplyMarkup( const string &inline_message_id, const string &reply_markup )
 {
-    int cpu_id = sched_getcpu();
-
     auto response = executeRequest(
         "editMessageReplyMarkup",
         cpr::Parameters{{"inline_message_id", inline_message_id}, {"reply_markup", reply_markup}} );
@@ -249,8 +211,7 @@ CoreBot::editMessageReplyMarkup( const string &inline_message_id, const string &
 }
 
 bool
-CoreBot::answerInlineQuery( const string &     inline_query_id,
-                            const Json::Value &results,
+CoreBot::answerInlineQuery( const Json::Value &results,
                             const int          cache_time,
                             const bool         is_personal,
                             const string &     next_offset,

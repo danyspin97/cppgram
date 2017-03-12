@@ -141,7 +141,7 @@ namespace cppgram
  *  \brief contains api methods, update handlers and listener
  *
  */
-class Bot : public CoreBot
+class BasicBot : public CoreBot
 {
     public:
     /*! \fn TelegramBot::TelegramBot(const std::string &api_token,
@@ -157,18 +157,16 @@ class Bot : public CoreBot
      * \param message_limit: max update limit (default: 50)
      * \param timeout: max timeout for HTTP long polling (default: 100s)
      */
-    Bot();
+    BasicBot();
 
-    protected:
-    virtual void processMessage( const struct message &message );
-    virtual void processEditedMessage( const struct message &editedMessage );
-    virtual void processInlineQuery( const struct inlineQuery &inlineQuery );
-    virtual void processChosenInlineResult( const struct choosenInlineResult &choosenInlineResult );
-    virtual void processCallbackQuery( const struct callbackQuery &callbackQuery );
+    void ( *processMessage )( BasicBot &, const cppgram::message & )         = nullptr;
+    void ( *processEditedMessage )( BasicBot &, const cppgram::message & )   = nullptr;
+    void ( *processInlineQuery )( BasicBot &, const cppgram::inlineQuery & ) = nullptr;
+    void ( *processChosenInlineResult )( BasicBot &, const cppgram::choosenInlineResult & )
+        = nullptr;
+    void ( *processCallbackQuery )( BasicBot &, const cppgram::callbackQuery & ) = nullptr;
 
     private:
-    /** This function is spawned in each core (except the first) by run() and
-     * process an update at a time */
     void processUpdate();
 };
 }

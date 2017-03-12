@@ -5,14 +5,13 @@
 
 #include <json/json.h>
 
-#include "message.h"
-#include "inline_query.h"
-#include "choosen_inline_result.h"
-#include "callback_query.h"
+#include "cppgram/types/callback_query.h"
+#include "cppgram/types/choosen_inline_result.h"
+#include "cppgram/types/inline_query.h"
+#include "cppgram/types/message.h"
 
 namespace cppgram
 {
-
 /** \addtogroup Types
  * @{
  */
@@ -23,98 +22,90 @@ struct update
 
     enum UpdateType type;
 
-    std::experimental::optional<struct message> message;
+    std::experimental::optional<cppgra::message> message;
 
-    std::experimental::optional<struct message> editedMessage;
+    std::experimental::optional<cppgram::message> edited_message;
 
-    std::experimental::optional<struct inlineQuery> inlineQuery;
+    std::experimental::optional<cppgram::inlineQuery> inline_query;
 
-    std::experimental::optional<struct choosenInlineResult> choosenInlineResult;
+    std::experimental::optional<cppgram::choosenInlineResult> choosen_inline_result;
 
-    std::experimental::optional<struct callbackQuery> callbackQuery;
+    std::experimental::optional<cppgram::callbackQuery> callback_query;
 
-    update(Json::Value &jsonUpdate)
+    update( Json::Value &jsonUpdate )
     {
-        if (!jsonUpdate["message"].isNull())
+        if ( !jsonUpdate["message"].isNull() )
         {
             type = UpdateType::Message;
-            message.emplace(cppgram::message(jsonUpdate["message"]));
+            message.emplace( cppgram::message( jsonUpdate["message"] ) );
         }
-        else if (!jsonUpdate["callback_query"].isNull())
+        else if ( !jsonUpdate["callback_query"].isNull() )
         {
             type = UpdateType::CallbackQuery;
-            callbackQuery.emplace(cppgram::callbackQuery(jsonUpdate["callback_query"]));
+            callback_query.emplace( cppgram::callbackQuery( jsonUpdate["callback_query"] ) );
         }
-        else if (!jsonUpdate["edited_message"].isNull())
+        else if ( !jsonUpdate["edited_message"].isNull() )
         {
             type = UpdateType::EditedMessage;
-            editedMessage.emplace(cppgram::message(jsonUpdate["edited_message"]));
+            edited_message.emplace( cppgram::message( jsonUpdate["edited_message"] ) );
         }
-        else if (!jsonUpdate["inline_query"].isNull())
+        else if ( !jsonUpdate["inline_query"].isNull() )
         {
             type = UpdateType::InlineQuery;
-            inlineQuery.emplace(cppgram::inlineQuery(jsonUpdate["inline_query"]));
+            inline_query.emplace( cppgram::inlineQuery( jsonUpdate["inline_query"] ) );
         }
-        else if (!jsonUpdate["choosen_inline_result"].isNull())
+        else if ( !jsonUpdate["choosen_inline_result"].isNull() )
         {
             type = UpdateType::ChoosenInlineResult;
-            choosenInlineResult.emplace(cppgram::choosenInlineResult(jsonUpdate["choosen_inline_result"]));
+            choosen_inline_result.emplace(
+                cppgram::choosenInlineResult( jsonUpdate["choosen_inline_result"] ) );
         }
     }
 
-    ~update()
-    {};
+    ~update(){};
 
-    update()
-    {};
+    update(){};
 
-    const update& operator= (const update& u)
+    const update &operator=( const update &u )
     {
-
-        if (&u != this) {
-
+        if ( &u != this )
+        {
             type = u.type;
 
             message = u.message;
 
-            callbackQuery = u.callbackQuery;
+            callback_query = u.callback_query;
 
-            editedMessage = u.editedMessage;
+            edited_message = u.edited_message;
 
-            choosenInlineResult = u.choosenInlineResult;
+            choosen_inline_result = u.choosen_inline_result;
 
-            inlineQuery = u.inlineQuery;
-
+            inline_query = u.inline_query;
         }
 
         return *this;
-
     };
 
-    update& operator= (update& u) {
-
-        if (&u != this) {
-
+    update &operator=( update &u )
+    {
+        if ( &u != this )
+        {
             type = u.type;
 
             message = u.message;
 
-            callbackQuery = u.callbackQuery;
+            callback_query = u.callback_query;
 
-            editedMessage = u.editedMessage;
+            edited_message = u.edited_message;
 
-            choosenInlineResult = u.choosenInlineResult;
+            choosen_inline_result = u.choosen_inline_result;
 
-            inlineQuery = u.inlineQuery;
-
+            inline_query = u.inline_query;
         }
 
         return *this;
-
     };
-
 };
-
 }
 
-#endif //CPPGRAM_UPDATE_H
+#endif // CPPGRAM_UPDATE_H
