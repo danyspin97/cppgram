@@ -1,32 +1,26 @@
 #ifndef __CPPGRAM_CORE_BOT_HPP
 #define __CPPGRAM_CORE_BOT_HPP
 
-#include "Exceptions.hpp"
-#include "types/message.h"
-#include "utils.h"
+#include "cppgram/exception.hpp"
+#include "cppgram/types/message.h"
+#include "cppgram/utils.hpp"
 #include <cpr/cpr.h>
 #include <string>
 
-namespace cppgram {
-
-class Bot;
-
+namespace cppgram
+{
 class CoreBot
 {
-  protected:
-    const std::string  _api_url;
-    std::string        _chat_id;
+    protected:
+    const std::string _api_url;
+    std::string _chat_id;
     const cpr::Session connection;
 
     CoreBot() {}
-
-  public:
+    public:
     std::string getChatID() { return _chat_id; }
-
-    void setChatID(std::string& chat_id) { _chat_id = chat_id; }
-
-    const cpr::Response executeRequest(const std::string&     method,
-                                       const cpr::Parameters& params)
+    void setChatID( std::string &chat_id ) { _chat_id = chat_id; }
+    const cpr::Response executeRequest( const std::string &method, const cpr::Parameters &params )
     {
     }
 
@@ -36,26 +30,29 @@ class CoreBot
      * \param val : the target Json::Value 's reference
      * \return true if everything OK, else: false
      */
-    bool checkMethodError(const cpr::Response& response, Json::Value& val)
+    bool checkMethodError( const cpr::Response &response, Json::Value &val )
     {
         static Json::Reader reader;
 
         // If there was an error in the connection print it
-        if (response.error.code != cpr::ErrorCode::OK) {
-            log(Log::Error, "HTTP Error:" + response.error.message);
+        if ( response.error.code != cpr::ErrorCode::OK )
+        {
+            log( Log::Error, "HTTP Error:" + response.error.message );
             return false;
         }
 
-        if (!reader.parse(response.text, val)) {
-            log(Log::Error, "JSON Parser: Error while parsing JSON document!");
+        if ( !reader.parse( response.text, val ) )
+        {
+            log( Log::Error, "JSON Parser: Error while parsing JSON document!" );
             throw cppgram::JsonParseError();
         }
 
         // Print method error
-        if (response.status_code != 200) {
-            log(Log::Error,
-                "Telegram Error: " + val["error_code"].asString() +
-                        ", Description: " + val["description"].asString());
+        if ( response.status_code != 200 )
+        {
+            log( Log::Error,
+                 "Telegram Error: " + val["error_code"].asString() + ", Description: "
+                     + val["description"].asString() );
             return false;
         }
 
@@ -83,10 +80,10 @@ class CoreBot
      * @param timeout Timeout in seconds for long polling.
      * @return True if there are new updates, false otherwise
      */
-    bool getUpdates(Json::Value&        updates,
-                    const int_fast32_t& offset  = 0,
-                    const int_fast32_t& limit   = 100,
-                    const int_fast32_t& timeout = 10);
+    bool getUpdates( Json::Value &updates,
+                     const int_fast32_t &offset  = 0,
+                     const int_fast32_t &limit   = 100,
+                     const int_fast32_t &timeout = 10 );
 
     /**
      * Send a message to a specified chat.
@@ -104,13 +101,12 @@ class CoreBot
      * message
      * @return On success, message_id of the message sent, 0 otherwise
      */
-    cppgram::message sendMessage(
-            const std::string&       text,
-            const std::string&       reply_markup             = "",
-            const cppgram::ParseMode parse_mode               = ParseMode::HTML,
-            const bool               disable_web_page_preview = true,
-            const bool               disable_notification     = false,
-            const int_fast32_t       reply_to_message_id      = 0);
+    cppgram::message sendMessage( const std::string &text,
+                                  const std::string &reply_markup        = "",
+                                  const cppgram::ParseMode parse_mode    = ParseMode::HTML,
+                                  const bool disable_web_page_preview    = true,
+                                  const bool disable_notification        = false,
+                                  const int_fast32_t reply_to_message_id = 0 );
 
     /**
      * Edit text (and reply markup) of a message sent by the bot. Leaving
@@ -127,13 +123,12 @@ class CoreBot
      * @return On success, message_id of the message edited, 0 otherwise
      */
     template <typename T>
-    cppgram::message editMessageText(
-            const T&           chat_id,
-            const int_fast32_t message_id,
-            const std::string& text,
-            const std::string& reply_markup = "",
-            const ParseMode    parse_mode   = static_cast<ParseMode>(1),
-            const bool         disable_web_page_preview = true);
+    cppgram::message editMessageText( const T &chat_id,
+                                      const int_fast32_t message_id,
+                                      const std::string &text,
+                                      const std::string &reply_markup = "",
+                                      const ParseMode parse_mode      = static_cast<ParseMode>( 1 ),
+                                      const bool disable_web_page_preview = true );
 
     /**
      * Edit text (and reply markup) of a message sent via the bot (using inline
@@ -147,11 +142,11 @@ class CoreBot
      * message
      * @return True on success, false otherwise
      */
-    bool editMessageText(const std::string& inline_message_id,
-                         const std::string& text,
-                         const std::string& reply_markup = "",
-                         const ParseMode parse_mode = static_cast<ParseMode>(1),
-                         const bool      disable_web_page_preview = true);
+    bool editMessageText( const std::string &inline_message_id,
+                          const std::string &text,
+                          const std::string &reply_markup     = "",
+                          const ParseMode parse_mode          = static_cast<ParseMode>( 1 ),
+                          const bool disable_web_page_preview = true );
 
     /**
      * Edit captions of messages sent by the bot. Leaving reply_markup empty
@@ -164,10 +159,10 @@ class CoreBot
      * @return On success, message_id of the message edited, 0 otherwise
      */
     template <typename T>
-    cppgram::message editMessageCaption(const T&           chat_id,
-                                        const int_fast32_t message_id,
-                                        const std::string& caption,
-                                        const std::string& reply_markup = "");
+    cppgram::message editMessageCaption( const T &chat_id,
+                                         const int_fast32_t message_id,
+                                         const std::string &caption,
+                                         const std::string &reply_markup = "" );
 
     /**
      * Edit captions of messages sent via the bot (using inline_queries).
@@ -178,9 +173,9 @@ class CoreBot
      * @param reply_markup Inline Keyboard object
      * @return True on success, false otherwise
      */
-    bool editMessageCaption(const std::string& inline_message_id,
-                            const std::string& caption,
-                            const std::string& reply_markup = "");
+    bool editMessageCaption( const std::string &inline_message_id,
+                             const std::string &caption,
+                             const std::string &reply_markup = "" );
 
     /**
      * Edit only the reply markup of a message sent by the the bot. Leaving
@@ -193,10 +188,9 @@ class CoreBot
      * @return On success, message_id of the message edited, 0 otherwise
      */
     template <typename T>
-    cppgram::message editMessageReplyMarkup(
-            const T&           chat_id,
-            const int_fast32_t message_id,
-            const std::string& reply_markup = "");
+    cppgram::message editMessageReplyMarkup( const T &chat_id,
+                                             const int_fast32_t message_id,
+                                             const std::string &reply_markup = "" );
 
     /**
      * Edit only the reply markup of a message sent via the the bot (using
@@ -206,8 +200,8 @@ class CoreBot
      * @param reply_markup New inline keyboard object
      * @return True on success, false otherwise
      */
-    bool editMessageReplyMarkup(const std::string& inline_message_id,
-                                const std::string& reply_markup = "");
+    bool editMessageReplyMarkup( const std::string &inline_message_id,
+                                 const std::string &reply_markup = "" );
 
     /**
      * Answer an inline query.
@@ -229,18 +223,16 @@ class CoreBot
      * when user presses the switch button
      * @return True on success, false otherwise
      */
-    bool answerInlineQuery(const std::string& inline_query_id,
-                           const Json::Value& results,
-                           const int          cache_time         = 300,
-                           const bool         is_personal        = false,
-                           const std::string& next_offset        = "",
-                           const std::string& switch_pm_text     = "",
-                           const std::string& switch_pm_paramter = "");
+    bool answerInlineQuery( const std::string &inline_query_id,
+                            const Json::Value &results,
+                            const int cache_time                  = 300,
+                            const bool is_personal                = false,
+                            const std::string &next_offset        = "",
+                            const std::string &switch_pm_text     = "",
+                            const std::string &switch_pm_paramter = "" );
 
     /** @} */
 };
 }
-
-#include "core/Edit.tpp"
 
 #endif

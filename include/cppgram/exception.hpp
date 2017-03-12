@@ -1,22 +1,21 @@
 #ifndef __CPPGRAM_EXCEPTIONS_HPP
 #define __CPPGRAM_EXCEPTIONS_HPP
 
-#include<exception>
+#include <exception>
 
 namespace cppgram
 {
-
 /*! \class ThreadException
  * \inherits std::exception
  * \brief raises if thread could not start (fatal)
  */
 class ThreadException : public std::exception
 {
-public:
+    public:
     /*! \fn ThreadException::what() const throw()
      * \return exception message
      */
-    virtual const char* what() const throw();
+    virtual const char *what() const throw();
 };
 
 /*! \class JsonParseError
@@ -25,26 +24,25 @@ public:
  */
 class JsonParseError : public std::exception
 {
-public:
+    public:
     /*! \fn JsonParseError::what() const throw()
      * \return exception message
      */
-    virtual const char* what() const throw();
+    virtual const char *what() const throw();
 };
 
 /*! \class InlineKeyboardNotValid
  * \inherits std::exception
  * \brief raises if InlineKeyboard is not valid (critical)
  */
-class InlineKeyboardNotValid : public  std::exception
+class InlineKeyboardNotValid : public std::exception
 {
-public:
+    public:
     /*! \fn InlineKeyboardNotValid::what() const throw()
      * \return exception message
      */
-    virtual const char* what() const throw();
+    virtual const char *what() const throw();
 };
-
 }
 
 #endif

@@ -5,12 +5,9 @@ find_package(Threads REQUIRED)
 file(GLOB_RECURSE SOURCES *.cpp)
 
 #fix for Qt Creator not showing cppgram's includes
-file(GLOB_RECURSE HEADERS ../include/cppgram/*.hpp)
-file(GLOB_RECURSE HEADERS ../include/cppgram/*.h)
-file(GLOB_RECURSE TEMPLATES ../include/cppgram/*.tpp)
-file(GLOB_RECURSE HEADERS ../include/json/*.h)
+file(GLOB_RECURSE HEADERS ../include/*.hpp)
+file(GLOB_RECURSE HEADERS ../include/*.h)
 add_custom_target(headers SOURCES ${HEADERS})
-add_custom_target(templates SOURCES ${TEMPLATES})
 
 if(NOT SOURCES)
     message(FATAL_ERROR "Cannot find sources! Aborting...")
@@ -37,8 +34,7 @@ endif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 add_library(cppgram STATIC ${SOURCES})
 target_include_directories(cppgram
     PUBLIC ${CPR_INCLUDE_DIRS}
-    PUBLIC ${CPPGRAM_INCLUDE_DIRS}
-    PUBLIC ${CPPGRAM_INCLUDE_DIRS}/cppgram)
+    PUBLIC ${CPPGRAM_INCLUDE_DIRS})
 target_link_libraries(cppgram ${CPR_LIBRARIES})
 
 install(TARGETS cppgram

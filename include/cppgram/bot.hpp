@@ -1,14 +1,16 @@
 #ifndef __CPPGRAM_TELEGRAM_BOT_HPP
 #define __CPPGRAM_TELEGRAM_BOT_HPP
 
-#include "CoreBot.hpp"
+#include "cppgram/core_bot.hpp"
 
 /*! \mainpage Reference
  * \section What What is CppGram
  *
  * CppGram is a wrapper for Telegram Messanger Bot API.
- * Designed to be fast and easy, ensures the developer to build a bot in less time without having to learn Telegram Bot API.
- * The bot class (cppgram::TelegramBot) has a method for each API method, so the only thing you have to do is extend this class and start developing you bot!
+ * Designed to be fast and easy, ensures the developer to build a bot in less
+ * time without having to learn Telegram Bot API.
+ * The bot class (cppgram::TelegramBot) has a method for each API method, so the
+ * only thing you have to do is extend this class and start developing you bot!
  *
  * \subsection Features
  *
@@ -26,7 +28,8 @@
  *  - jsoncpp
  *  - cpr, curl
  *  - gcc
- * This wrapper has been tested using g++ version 6.2.1. This wrapper haven't been tested with version below.
+ * This wrapper has been tested using g++ version 6.2.1. This wrapper haven't
+ * been tested with version below.
  *
  * \subsection Cloning Cloning repository
  *
@@ -48,7 +51,8 @@
  *         public:
  *         MyBot() : TelegramBot(TOKEN) {} // Inherit constructor
  *         void processMessage(const message &message) override final {}
- *         void processCallbackQuery(const callbackQuery &callbackQuery) override final {}
+ *         void processCallbackQuery(const callbackQuery &callbackQuery)
+ * override final {}
  *     };
  *
  *     int main() {
@@ -64,7 +68,8 @@
  *
  *     void processMessage(const cppgram::message &message) override;
  *
- * Put here what your bot answer to messages. Parameter message contains all data about the message received.
+ * Put here what your bot answer to messages. Parameter message contains all
+ * data about the message received.
  *
  * \subsection Inline Keyboards
  *
@@ -73,7 +78,8 @@
  *
  *     // Create the class and add a button
  *     auto keyboard = new InlineKeyboard();
- *     keyboard->addButton("CppGram Documentation", "http://wisedragonstd.gitlab.io/cppgram/", InlineKeyboardButtonType::Url);
+ *     keyboard->addButton("CppGram Documentation",
+ * "http://wisedragonstd.gitlab.io/cppgram/", InlineKeyboardButtonType::Url);
  *     // Get the keyboard
  *     string button_string;
  *     keyboard->getKeyboard(button_string);
@@ -92,24 +98,33 @@
  *
  * Availible options are:
  *
- * - -<code>DNOGET_DEPS="yes"/"no" (default: "no"): download dependencies (jsoncpp, cpr)</code>
- * - -<code>DNATIVE="yes"/"no" (default: "no", reccomended: "yes"): build a natively-built static library for your CPU (MAY NOT work on all cpu)</code>
- * - -<code>DARCH=/"-m32"/"-m64" (default: not defined): compile the library in a particulary architecture</code>
- * - -<code>DOPTIMIZATION_LEVEL="2"/"3"/"4"/"fast" (default: not defined, reccomended: "2"): set the compiler optmization</code>
+ * - -<code>DNOGET_DEPS="yes"/"no" (default: "no"): download dependencies
+ * (jsoncpp, cpr)</code>
+ * - -<code>DNATIVE="yes"/"no" (default: "no", reccomended: "yes"): build a
+ * natively-built static library for your CPU (MAY NOT work on all cpu)</code>
+ * - -<code>DARCH=/"-m32"/"-m64" (default: not defined): compile the library in
+ * a particulary architecture</code>
+ * - -<code>DOPTIMIZATION_LEVEL="2"/"3"/"4"/"fast" (default: not defined,
+ * reccomended: "2"): set the compiler optmization</code>
  *
  * Sugggested building options
  *
- *     $ cmake ../cppgram -DCMAKE_CXX_COMPILER="/usr/bin/g++" -DNATIVE="yes" -DOPTIMIZATION_LEVEL="2"
+ *     $ cmake ../cppgram -DCMAKE_CXX_COMPILER="/usr/bin/g++" -DNATIVE="yes"
+ * -DOPTIMIZATION_LEVEL="2"
  *
  * \section Extra
  *
  * \subsection Authors
  *
- * This wrapper has been developed by <a href="https://gitlab.com/groups/WiseDragonStd" target="_blank">WiseDragonStd</a> (Danilo Spinella, Stefano Belli).
+ * This wrapper has been developed by <a
+ * href="https://gitlab.com/groups/WiseDragonStd"
+ * target="_blank">WiseDragonStd</a> (Danilo Spinella, Stefano Belli).
  *
  * \subsection License
  *
- * This software has been released under the <a href="https://gitlab.com/WiseDragonStd/cppgram/blob/master/LICENSE" target="_blank">GNU LGLPv3</a>.
+ * This software has been released under the <a
+ * href="https://gitlab.com/WiseDragonStd/cppgram/blob/master/LICENSE"
+ * target="_blank">GNU LGLPv3</a>.
  *
  *
  */
@@ -121,7 +136,6 @@
  */
 namespace cppgram
 {
-
 /*! \class TelegramBot
  *
  *  \brief contains api methods, update handlers and listener
@@ -130,7 +144,6 @@ namespace cppgram
 class Bot : public CoreBot
 {
     public:
-
     /*! \fn TelegramBot::TelegramBot(const std::string &api_token,
                 const bool &background = false,
                 const std::string &filename = "tgbot.log",
@@ -138,7 +151,8 @@ class Bot : public CoreBot
                 const int_fast32_t &timeout = 60)
      * \brief TelegramBot constructor
      * \param api_token: the Bot API token (REQUIRED)
-     * \param background: tries to fork the process and put the new in background (default: false)
+     * \param background: tries to fork the process and put the new in background
+     (default: false)
      * \param filename: log output filename/path (default: tgbot.log)
      * \param message_limit: max update limit (default: 50)
      * \param timeout: max timeout for HTTP long polling (default: 100s)
@@ -146,19 +160,17 @@ class Bot : public CoreBot
     Bot();
 
     protected:
-
-    virtual void processMessage(const struct message &message);
-    virtual void processEditedMessage(const struct message &editedMessage);
-    virtual void processInlineQuery(const struct inlineQuery &inlineQuery);
-    virtual void processChosenInlineResult(const struct choosenInlineResult &choosenInlineResult);
-    virtual void processCallbackQuery(const struct callbackQuery &callbackQuery);
+    virtual void processMessage( const struct message &message );
+    virtual void processEditedMessage( const struct message &editedMessage );
+    virtual void processInlineQuery( const struct inlineQuery &inlineQuery );
+    virtual void processChosenInlineResult( const struct choosenInlineResult &choosenInlineResult );
+    virtual void processCallbackQuery( const struct callbackQuery &callbackQuery );
 
     private:
-
-    /** This function is spawned in each core (except the first) by run() and process an update at a time */
+    /** This function is spawned in each core (except the first) by run() and
+     * process an update at a time */
     void processUpdate();
 };
-
 }
 
 #endif
