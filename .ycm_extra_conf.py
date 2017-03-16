@@ -40,7 +40,6 @@ flags = [
     '-Iopt/cpr/include',
     '-Iinclude',
     '-std=c++14',
-    '-std=gnu++11',
 ]
 
 

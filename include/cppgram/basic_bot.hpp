@@ -2,6 +2,7 @@
 #define __CPPGRAM_TELEGRAM_BOT_HPP
 
 #include "cppgram/core_bot.hpp"
+#include "cppgram/types/update.hpp"
 
 /*! \mainpage Reference
  * \section What What is CppGram
@@ -157,17 +158,17 @@ class BasicBot : public CoreBot
      * \param message_limit: max update limit (default: 50)
      * \param timeout: max timeout for HTTP long polling (default: 100s)
      */
-    BasicBot();
+    BasicBot() {};
 
-    void ( *processMessage )( BasicBot &, const cppgram::message & )         = nullptr;
-    void ( *processEditedMessage )( BasicBot &, const cppgram::message & )   = nullptr;
-    void ( *processInlineQuery )( BasicBot &, const cppgram::inlineQuery & ) = nullptr;
-    void ( *processChosenInlineResult )( BasicBot &, const cppgram::choosenInlineResult & )
+    void ( *processMessage )( BasicBot &, const cppgram::Message & )         = nullptr;
+    void ( *processEditedMessage )( BasicBot &, const cppgram::Message & )   = nullptr;
+    void ( *processInlineQuery )( BasicBot &, const cppgram::InlineQuery & ) = nullptr;
+    void ( *processChosenInlineResult )( BasicBot &, const cppgram::ChosenInlineResult & )
         = nullptr;
-    void ( *processCallbackQuery )( BasicBot &, const cppgram::callbackQuery & ) = nullptr;
+    void ( *processCallbackQuery )( BasicBot &, const cppgram::CallbackQuery & ) = nullptr;
 
     private:
-    void processUpdate();
+    void processUpdate( const cppgram::Update &update );
 };
 }
 

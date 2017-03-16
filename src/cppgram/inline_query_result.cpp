@@ -3,7 +3,8 @@
 #include <json/json.h>
 
 #include "cppgram/inline_query_result.hpp"
-#include "cppgram/types/update.h"
+#include "cppgram/types/update.hpp"
+
 
 using namespace cppgram;
 using std::string;

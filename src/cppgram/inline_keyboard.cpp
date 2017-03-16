@@ -2,14 +2,14 @@
 
 #include "cppgram/exception.hpp"
 #include "cppgram/inline_keyboard.hpp"
-#include "cppgram/types/enums.h"
-#include "cppgram/types/inline_keyboard_button.h"
+#include "cppgram/types/enums.hpp"
+#include "cppgram/types/inline_keyboard_button.hpp"
 
 using std::string;
 using std::vector;
 
 using cppgram::InlineKeyboard;
-using cppgram::inlineKeyboardButton;
+using cppgram::InlineKeyboardButton;
 using cppgram::InlineKeyboardButtonType;
 
 InlineKeyboard::InlineKeyboard()
@@ -61,15 +61,15 @@ InlineKeyboard::addButton( const string &text,
 }
 
 bool
-InlineKeyboard::addButton( const struct inlineKeyboardButton &newButton )
+InlineKeyboard::addButton( const struct InlineKeyboardButton &newButton )
 {
     return addButton( newButton.text, newButton.data, newButton.button_type );
 }
 
 bool
-InlineKeyboard::addButton( const vector<inlineKeyboardButton> &newButtons )
+InlineKeyboard::addButton( const vector<InlineKeyboardButton> &newButtons )
 {
-    for ( const inlineKeyboardButton &button : newButtons )
+    for ( const InlineKeyboardButton &button : newButtons )
     {
         if ( !addButton( button.text, button.data, button.button_type ) )
         {

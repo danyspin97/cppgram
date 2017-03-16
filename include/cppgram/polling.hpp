@@ -9,7 +9,7 @@ class Polling
     Polling(){};
 
     Polling( std::vector<cppgram::BasicBot> &bots )
-        : bots( bots )
+        //: bots( bots )
     {
     }
 

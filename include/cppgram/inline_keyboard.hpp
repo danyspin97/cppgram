@@ -13,7 +13,7 @@ class Value;
 namespace cppgram
 {
 enum InlineKeyboardButtonType : short;
-struct inlineKeyboardButton;
+struct InlineKeyboardButton;
 
 enum InlineKeyboardButtonType : short;
 
@@ -53,18 +53,18 @@ class InlineKeyboard
                     const InlineKeyboardButtonType &buttonType );
 
     /**
-     * \brief Add a button by passing a inlineKeyboardButton
+     * \brief Add a button by passing a InlineKeyboardButton
      * @param newButton The button to add
      * @return True on success
      */
-    bool addButton( const struct inlineKeyboardButton &newButton );
+    bool addButton( const struct InlineKeyboardButton &newButton );
 
     /**
-     * \brief Add button by passing a vector of inlineKeyboardButton
+     * \brief Add button by passing a vector of InlineKeyboardButton
      * @param newButtons
      * @return
      */
-    bool addButton( const std::vector<struct inlineKeyboardButton> &newButtons );
+    bool addButton( const std::vector<InlineKeyboardButton> &newButtons );
 
     /**
      * \brief The button will be added to the next row from now on

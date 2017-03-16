@@ -1,34 +1,31 @@
-#ifndef CPPGRAM_ENUMS_H
-#define CPPGRAM_ENUMS_H
+#ifndef CPPGRAM_ENUMS_HPP
+#define CPPGRAM_ENUMS_HPP
 
 namespace cppgram
 {
-
 /** \addtogroup Types
  * @{
  */
 
 /** \brief Type of the chat */
-enum ChatType
-        : short
+enum ChatType : short
 {
     /** Private chats with a user */
-            Private = 0,
+    Private = 0,
 
     /** Group chat (groups with less than 200 members and few admin tools) */
-            Group = 1,
+    Group = 1,
 
     /** Group chat up to 5000 members, shared history, admin tools */
-            Supergroup = 2,
+    Supergroup = 2,
 
     /** Channel */
-            Channel = 3
+    Channel = 3
 };
 
 /** \brief Type of the entity.
  * \details (https://core.telegram.org/bots/api#messageentity) */
-enum MessageEntityType
-        : short
+enum MessageEntityType : short
 {
     /** \@username */
     mention = 0,
@@ -66,54 +63,52 @@ enum MessageEntityType
 
 /** \brief Formattation options.
  * \details (https://core.telegram.org/bots/api#formatting-options) */
-enum ParseMode
-        : short
+enum ParseMode : short
 {
     /** No formattation */
-            None = 0,
+    None = 0,
 
     /** Formattation using html tags (<b><i>) */
-            HTML = 1,
+    HTML = 1,
 
     /** Formattation using markdown (*_) */
-            Markdown = 2
+    Markdown = 2
 };
 
 /** \brief Type of the inlineKeyboardButton to add in the reply markup
  * \details (https://core.telegram.org/bots/api#inlinekeyboardbutton) */
-enum InlineKeyboardButtonType
-        : short
+enum InlineKeyboardButtonType : short
 {
     /** The button will contain a clicable url */
-            URL = 0,
+    URL = 0,
 
     /** The button will contain data that will be sent back to the bot when pressed */
-            CallbackData = 1,
+    CallbackData = 1,
 
     /** Prompt the chat selection, open that chat and insert an inline query. */
-            SwitchInlineQuery = 2,
+    SwitchInlineQuery = 2,
 
-    /** Pressing the button will insert the bot‘s username and the specified inline query in the current chat's input field. Can be empty, in which case only the bot’s username will be inserted */
-            SwitchInlineQueryCurrentChat = 3,
+    /** Pressing the button will insert the bot‘s username and the specified inline query in the
+       current chat's input field. Can be empty, in which case only the bot’s username will be
+       inserted */
+    SwitchInlineQueryCurrentChat = 3,
 
     /** Add description of the game that will be launched when the user presses the button */
-            CallbackGame = 4
+    CallbackGame = 4
 };
 
 /** @} */
 
-enum UpdateType
-        : short
+enum UpdateType : short
 {
-    Message = 0,
-    EditedMessage = 1,
-    ChannelPost = 2,
-    EditedChannelPost = 3,
-    InlineQuery = 4,
-    ChoosenInlineResult = 5,
-    CallbackQuery = 6
+    eMessage            = 0,
+    eEditedMessage      = 1,
+    eChannelPost        = 2,
+    eEditedChannelPost  = 3,
+    eInlineQuery        = 4,
+    eChosenInlineResult = 5,
+    eCallbackQuery      = 6
 };
-
 }
 
-#endif //CPPGRAM_ENUMS_H
+#endif

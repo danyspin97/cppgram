@@ -4,7 +4,7 @@ using std::string;
 using std::to_string;
 
 using cppgram::CoreBot;
-using cppgram::message;
+using cppgram::Message;
 using cppgram::ParseMode;
 
 bool
@@ -33,7 +33,7 @@ CoreBot::getUpdates( Json::Value &       updates,
     }
 }
 
-message
+Message
 CoreBot::sendMessage( const std::string &text,
                       const std::string &reply_markup,
                       const ParseMode    parse_mode,
@@ -53,30 +53,30 @@ CoreBot::sendMessage( const std::string &text,
     }
 
     auto response = executeRequest(
-        "sendMessage",
-        cpr::Parameters{{"chat_id", chat_id},
-                        {"text", text},
-                        {"parse_mode", parseMode},
-                        {"disable_web_page_preview", to_string( disable_web_page_preview )},
-                        {"disable_notification", to_string( disable_notification )},
-                        {"reply_to_message_id", to_string( reply_to_message_id )},
-                        {"reply_markup", reply_markup}} );
+            "sendMessage",
+            cpr::Parameters{{"chat_id", chat_id},
+                            {"text", text},
+                            {"parse_mode", parseMode},
+                            {"disable_web_page_preview", to_string( disable_web_page_preview )},
+                            {"disable_notification", to_string( disable_notification )},
+                            {"reply_to_message_id", to_string( reply_to_message_id )},
+                            {"reply_markup", reply_markup}} );
 
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
     {
-        return message();
+        return Message();
     }
 
-    return message( valroot["result"] );
+    return Message( valroot["result"] );
 }
 
-message
-CoreBot::editMessageText( const int_fast32_t message_id,
-                          const string &     text,
-                          const string &     reply_markup,
-                          const ParseMode    parse_mode,
-                          const bool         disable_web_page_preview )
+Message
+CoreBot::editMessageText( const uint_fast32_t message_id,
+                          const string &      text,
+                          const string &      reply_markup,
+                          const ParseMode     parse_mode,
+                          const bool          disable_web_page_preview )
 {
     string parseMode = "";
 
@@ -90,21 +90,21 @@ CoreBot::editMessageText( const int_fast32_t message_id,
     }
 
     auto response = executeRequest(
-        "editMessageText",
-        cpr::Parameters{{"chat_id", chat_id},
-                        {"message_id", to_string( message_id )},
-                        {"text", text},
-                        {"parse_mode", parseMode},
-                        {"disable_web_page_preview", to_string( disable_web_page_preview )},
-                        {"reply_markup", reply_markup}} );
+            "editMessageText",
+            cpr::Parameters{{"chat_id", chat_id},
+                            {"message_id", to_string( message_id )},
+                            {"text", text},
+                            {"parse_mode", parseMode},
+                            {"disable_web_page_preview", to_string( disable_web_page_preview )},
+                            {"reply_markup", reply_markup}} );
 
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
     {
-        return message();
+        return Message();
     }
 
-    return message( valroot["result"] );
+    return Message( valroot["result"] );
 }
 
 bool
@@ -125,13 +125,13 @@ CoreBot::editMessageText( const string &  inline_message_id,
         parseMode = "Markdown";
     }
 
-    auto response
-        = executeRequest( "editMessageText",
-                          cpr::Parameters{{"inline_message_id", inline_message_id},
-                                          {"text", text},
-                                          {"parse_mode", parseMode},
-                                          {"disable_web_page_preview", disable_web_page_preview},
-                                          {"reply_markup", reply_markup}} );
+    auto response = executeRequest(
+            "editMessageText",
+            cpr::Parameters{{"inline_message_id", inline_message_id},
+                            {"text", text},
+                            {"parse_mode", parseMode},
+                            {"disable_web_page_preview", disable_web_page_preview},
+                            {"reply_markup", reply_markup}} );
 
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
@@ -142,10 +142,10 @@ CoreBot::editMessageText( const string &  inline_message_id,
     return valroot["result"].asBool();
 }
 
-message
-CoreBot::editMessageCaption( const int_fast32_t message_id,
-                             const string &     caption,
-                             const string &     reply_markup )
+Message
+CoreBot::editMessageCaption( const uint_fast32_t message_id,
+                             const string &      caption,
+                             const string &      reply_markup )
 {
     auto response = executeRequest( "editMessageCaption",
                                     cpr::Parameters{{"chat_id", chat_id},
@@ -155,9 +155,9 @@ CoreBot::editMessageCaption( const int_fast32_t message_id,
 
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
-        return message();
+        return Message();
 
-    return message( valroot["result"] );
+    return Message( valroot["result"] );
 }
 
 bool
@@ -179,8 +179,8 @@ CoreBot::editMessageCaption( const string &inline_message_id,
     return valroot["result"].asBool();
 }
 
-message
-CoreBot::editMessageReplyMarkup( const int_fast32_t message_id, const string &reply_markup )
+Message
+CoreBot::editMessageReplyMarkup( const uint_fast32_t message_id, const string &reply_markup )
 {
     auto response = executeRequest( "editMessageReplyMarkup",
                                     cpr::Parameters{{"chat_id", chat_id},
@@ -189,17 +189,17 @@ CoreBot::editMessageReplyMarkup( const int_fast32_t message_id, const string &re
 
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
-        return message();
+        return Message();
 
-    return message( valroot["result"] );
+    return Message( valroot["result"] );
 }
 
 bool
 CoreBot::editMessageReplyMarkup( const string &inline_message_id, const string &reply_markup )
 {
-    auto response = executeRequest(
-        "editMessageReplyMarkup",
-        cpr::Parameters{{"inline_message_id", inline_message_id}, {"reply_markup", reply_markup}} );
+    auto response = executeRequest( "editMessageReplyMarkup",
+                                    cpr::Parameters{{"inline_message_id", inline_message_id},
+                                                    {"reply_markup", reply_markup}} );
 
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
@@ -211,12 +211,12 @@ CoreBot::editMessageReplyMarkup( const string &inline_message_id, const string &
 }
 
 bool
-CoreBot::answerInlineQuery( const Json::Value &results,
-                            const int          cache_time,
-                            const bool         is_personal,
-                            const string &     next_offset,
-                            const string &     switch_pm_text,
-                            const string &     switch_pm_paramter )
+CoreBot::answerInlineQuery( const Json::Value & results,
+                            const uint_fast16_t cache_time,
+                            const bool          is_personal,
+                            const string &      next_offset,
+                            const string &      switch_pm_text,
+                            const string &      switch_pm_paramter )
 {
     Json::FastWriter writer;
 
