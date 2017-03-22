@@ -13,14 +13,15 @@ namespace cppgram
 {
 class CoreBot
 {
+    friend class Polling;
+
     public:
     CoreBot() {}
-    std::string getChatID() { return chat_id; }
+    CoreBot( const CoreBot &c ) { api_url = c.api_url; }
+    std::string             getChatID() { return chat_id; }
     void setChatID( std::string &chat_id ) { this->chat_id = chat_id; }
     void setChatID( uint_fast32_t &chat_id ) { this->chat_id = std::to_string( chat_id ); }
-    const cpr::Response executeRequest( const std::string &method, const cpr::Parameters &params )
-    {
-    }
+    const cpr::Response executeRequest( const std::string &method, const cpr::Parameters &params );
 
     /*!
      * \brief parses response's JSON and checks for error codes
@@ -28,34 +29,7 @@ class CoreBot
      * \param val : the target Json::Value 's reference
      * \return true if everything OK, else: false
      */
-    bool checkMethodError( const cpr::Response &response, Json::Value &val )
-    {
-        static Json::Reader reader;
-
-        // If there was an error in the connection print it
-        if ( response.error.code != cpr::ErrorCode::OK )
-        {
-            log( Log::Error, "HTTP Error:" + response.error.message );
-            return false;
-        }
-
-        if ( !reader.parse( response.text, val ) )
-        {
-            log( Log::Error, "JSON Parser: Error while parsing JSON document!" );
-            throw cppgram::JsonParseError();
-        }
-
-        // Print method error
-        if ( response.status_code != 200 )
-        {
-            log( Log::Error,
-                 "Telegram Error: " + val["error_code"].asString() + ", Description: "
-                         + val["description"].asString() );
-            return false;
-        }
-
-        return true;
-    }
+    bool checkMethodError( const cpr::Response &response, Json::Value &val );
 
     /*! \addtogroup Telegram API methods
      * @{
@@ -231,9 +205,9 @@ class CoreBot
     std::string inline_query_id;
 
     private:
-    void initCoreBot( std::string &token, cpr::Session &connection );
-    const std::string  api_url;
-    const cpr::Session connection;
+    void setToken( std::string &token );
+    std::string  api_url;
+    cpr::Session connection;
 };
 }
 

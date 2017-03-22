@@ -26,9 +26,9 @@ InlineKeyboard::changeRow()
 }
 
 bool
-InlineKeyboard::addButton( const string &text,
-                           const string &data,
-                           const InlineKeyboardButtonType &buttonType )
+InlineKeyboard::addButton( const string &                  text,
+                           const string &                  data,
+                           const InlineKeyboardButtonType &button_type )
 {
     if ( text.empty() || data.empty() )
     {
@@ -42,11 +42,11 @@ InlineKeyboard::addButton( const string &text,
 
     inline_keyboard["inline_keyboard"][row][column]["text"] = text;
 
-    if ( buttonType == InlineKeyboardButtonType::CallbackData )
+    if ( button_type == InlineKeyboardButtonType::CallbackData )
     {
         inline_keyboard["inline_keyboard"][row][column]["callback_data"] = data;
     }
-    else if ( buttonType == InlineKeyboardButtonType::URL )
+    else if ( button_type == InlineKeyboardButtonType::URL )
     {
         inline_keyboard["inline_keyboard"][row][column]["url"] = data;
     }
@@ -61,15 +61,15 @@ InlineKeyboard::addButton( const string &text,
 }
 
 bool
-InlineKeyboard::addButton( const struct InlineKeyboardButton &newButton )
+InlineKeyboard::addButton( const struct InlineKeyboardButton &new_button )
 {
-    return addButton( newButton.text, newButton.data, newButton.button_type );
+    return addButton( new_button.text, new_button.data, new_button.button_type );
 }
 
 bool
-InlineKeyboard::addButton( const vector<InlineKeyboardButton> &newButtons )
+InlineKeyboard::addButton( const vector<InlineKeyboardButton> &new_buttons )
 {
-    for ( const InlineKeyboardButton &button : newButtons )
+    for ( const InlineKeyboardButton &button : new_buttons )
     {
         if ( !addButton( button.text, button.data, button.button_type ) )
         {
@@ -80,12 +80,12 @@ InlineKeyboard::addButton( const vector<InlineKeyboardButton> &newButtons )
 }
 
 void
-InlineKeyboard::getKeyboard( std::string &reply_markup, const bool &clearKeyboard )
+InlineKeyboard::getKeyboard( std::string &reply_markup, const bool &clear_keyboard )
 {
     Json::FastWriter writer;
     reply_markup = writer.write( inline_keyboard );
 
-    if ( clearKeyboard )
+    if ( clear_keyboard )
     {
         inline_keyboard.clear();
     }

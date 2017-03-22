@@ -1,12 +1,13 @@
 set(COMPILER_WARNINGS "-W -Wall -Wextra -Wno-unused-parameter -Wno-comment") #brutal
+set( CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 find_package(Threads REQUIRED)
 
 file(GLOB_RECURSE SOURCES *.cpp)
 
 #fix for Qt Creator not showing cppgram's includes
-file(GLOB_RECURSE HEADERS ../include/*.h)
 file(GLOB_RECURSE HEADERS ../include/*.hpp)
+file(GLOB_RECURSE HEADERS ../include/*.h)
 add_custom_target(headers SOURCES ${HEADERS})
 
 if(NOT SOURCES)
@@ -30,8 +31,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     set(CMAKE_CXX_FLAGS_RELEASE "${OPTIMIZATION_LEVEL} ${NATIVE} ${ARCH} ${COMPILER_WARNINGS}")
     set(CMAKE_CXX_FLAGS_DEBUG "-g ${NATIVE} ${COMPILER_WARNINGS}")
 endif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-
-message(${CPPGRAM_INCLUDE_DIRS})
 
 add_library(cppgram STATIC ${SOURCES})
 target_include_directories(cppgram

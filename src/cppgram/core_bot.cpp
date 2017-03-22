@@ -1,4 +1,5 @@
 #include "cppgram/core_bot.hpp"
+#include "cppgram/defines.hpp"
 
 using std::string;
 using std::to_string;
@@ -6,6 +7,50 @@ using std::to_string;
 using cppgram::CoreBot;
 using cppgram::Message;
 using cppgram::ParseMode;
+
+void
+CoreBot::setToken( string &token )
+{
+    api_url = TELEGRAM_API_URL + token + "/";
+}
+
+const cpr::Response
+CoreBot::executeRequest( const std::string &method, const cpr::Parameters &params )
+{
+    connection.SetUrl( api_url + method );
+    connection.SetParameters( params );
+    return connection.Get();
+}
+
+bool
+CoreBot::checkMethodError( const cpr::Response &response, Json::Value &val )
+{
+    static Json::Reader reader;
+
+    // If there was an error in the connection print it
+    if ( response.error.code != cpr::ErrorCode::OK )
+    {
+        log( Log::Error, "HTTP Error:" + response.error.message );
+        return false;
+    }
+
+    if ( !reader.parse( response.text, val ) )
+    {
+        log( Log::Error, "JSON Parser: Error while parsing JSON document!" );
+        throw cppgram::JsonParseError();
+    }
+
+    // Print method error
+    if ( response.status_code != 200 )
+    {
+        log( Log::Error,
+             "Telegram Error: " + val["error_code"].asString() + ", Description: "
+                     + val["description"].asString() );
+        return false;
+    }
+
+    return true;
+}
 
 bool
 CoreBot::getUpdates( Json::Value &       updates,

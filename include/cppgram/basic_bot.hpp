@@ -1,5 +1,5 @@
-#ifndef __CPPGRAM_TELEGRAM_BOT_HPP
-#define __CPPGRAM_TELEGRAM_BOT_HPP
+#ifndef __CPPGRAM_BASIC_BOT_HPP
+#define __CPPGRAM_BASIC_BOT_HPP
 
 #include "cppgram/core_bot.hpp"
 #include "cppgram/types/update.hpp"
@@ -144,6 +144,8 @@ namespace cppgram
  */
 class BasicBot : public CoreBot
 {
+    friend class Polling;
+
     public:
     /*! \fn TelegramBot::TelegramBot(const std::string &api_token,
                 const bool &background = false,
@@ -158,13 +160,15 @@ class BasicBot : public CoreBot
      * \param message_limit: max update limit (default: 50)
      * \param timeout: max timeout for HTTP long polling (default: 100s)
      */
-    BasicBot() {};
+
+    BasicBot() {}
+    BasicBot( const BasicBot & );
 
     void ( *processMessage )( BasicBot &, const cppgram::Message & )         = nullptr;
     void ( *processEditedMessage )( BasicBot &, const cppgram::Message & )   = nullptr;
     void ( *processInlineQuery )( BasicBot &, const cppgram::InlineQuery & ) = nullptr;
     void ( *processChosenInlineResult )( BasicBot &, const cppgram::ChosenInlineResult & )
-        = nullptr;
+            = nullptr;
     void ( *processCallbackQuery )( BasicBot &, const cppgram::CallbackQuery & ) = nullptr;
 
     private:

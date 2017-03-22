@@ -48,23 +48,23 @@ class InlineKeyboard
      * @param buttonType Type of the button
      * @return True on success
      */
-    bool addButton( const std::string &text,
-                    const std::string &data,
-                    const InlineKeyboardButtonType &buttonType );
+    bool addButton( const std::string &             text,
+                    const std::string &             data,
+                    const InlineKeyboardButtonType &button_type );
 
     /**
      * \brief Add a button by passing a InlineKeyboardButton
      * @param newButton The button to add
      * @return True on success
      */
-    bool addButton( const struct InlineKeyboardButton &newButton );
+    bool addButton( const struct InlineKeyboardButton &new_button );
 
     /**
      * \brief Add button by passing a vector of InlineKeyboardButton
      * @param newButtons
      * @return
      */
-    bool addButton( const std::vector<InlineKeyboardButton> &newButtons );
+    bool addButton( const std::vector<InlineKeyboardButton> &new_buttons );
 
     /**
      * \brief The button will be added to the next row from now on
@@ -82,7 +82,7 @@ class InlineKeyboard
      * @param reply_markup The string that will be filled
      * @param clearKeyboard Clear keyboard after passing it
      */
-    void getKeyboard( std::string &reply_markup, const bool &clearKeyboard = true );
+    void getKeyboard( std::string &reply_markup, const bool &clear_keyboard = true );
 
     /**
      * \brief Get keyboard as Json
@@ -92,8 +92,8 @@ class InlineKeyboard
      */
     inline Json::Value getKeyboard() const { return inline_keyboard; };
     private:
-    Json::Writer *writer;
-    Json::Value inline_keyboard;
+    Json::Writer * writer;
+    Json::Value    inline_keyboard;
     unsigned short column;
     unsigned short row;
 };

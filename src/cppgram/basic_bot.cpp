@@ -10,6 +10,14 @@ using std::vector;
 using cppgram::BasicBot;
 using cppgram::Update;
 
+BasicBot::BasicBot( const BasicBot &b )
+    : CoreBot( b )
+{
+    processMessage       = b.processMessage;
+    processEditedMessage = b.processEditedMessage;
+    processCallbackQuery = b.processCallbackQuery;
+}
+
 void
 BasicBot::processUpdate( const Update &update )
 {
@@ -17,7 +25,7 @@ BasicBot::processUpdate( const Update &update )
     {
         case UpdateType::eMessage:
         {
-            chat_id                  = update.message->chat.id;
+            chat_id = update.message->chat.id;
             processMessage( *this, update.message.value() );
             break;
         }
@@ -31,13 +39,12 @@ BasicBot::processUpdate( const Update &update )
         }
         case UpdateType::eEditedMessage:
         {
-            chat_id        = update.edited_message->chat.id;
+            chat_id = update.edited_message->chat.id;
             processEditedMessage( *this, update.edited_message.value() );
             break;
         }
         case UpdateType::eInlineQuery:
         {
-
             chat_id         = update.inline_query->from.id;
             inline_query_id = update.inline_query->id;
             processInlineQuery( *this, update.inline_query.value() );
