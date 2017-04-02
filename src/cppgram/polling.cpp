@@ -1,4 +1,9 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
 #include <thread>
+// DEBUG
+#include <iostream>
 
 #include "cppgram/polling.hpp"
 
@@ -8,7 +13,7 @@ using cppgram::BasicBot;
 Polling::Polling( std::string &token, std::vector<cppgram::BasicBot> &bots )
     : bots( bots )
 {
-    for ( auto &bot : bots )
+    for ( auto& bot : this->bots )
     {
         bot.setToken( token );
     }
@@ -24,19 +29,24 @@ Polling::run()
     }
     auto &poller = bots.back();
     bots.pop_back();
-    std::vector<std::thread> threads(size - 1);
-    for ( auto i = 0; i < size - 2; ++i )
+    std::vector<std::thread> threads;
+    for ( BasicBot& bot : bots )
     {
-        //threads[i] = std::thread( &Polling::activeBot, bots[i] );
+        threads.push_back( std::thread( &Polling::activeBot, this, &bot ) );
     }
 
-    Json::Value updates;
+    std::vector<Update> updates;
+    uint_fast32_t       updates_offset = firstUpdateID( poller );
     while ( 1 )
     {
-        poller.getUpdates( updates );
-        for ( auto update : updates )
+        uint_fast32_t count;
+        if ( poller.getUpdates( updates, updates_offset ) )
         {
-            updates_queue.try_enqueue( update );
+            std::cout<<"aaaa"<<std::endl;
+            count = updates.size();
+            updates_queue.enqueue_bulk( updates.begin(), count );
+            updates_offset += count;
+            updates.clear();
         }
     }
 
@@ -47,12 +57,24 @@ Polling::run()
 }
 
 void
-Polling::activeBot( BasicBot &bot )
+Polling::activeBot( BasicBot *bot )
 {
+    cpr::Session connection;
+    bot->setConnection( &connection );
     cppgram::Update new_update;
     while ( 1 )
     {
-        updates_queue.wait_dequeue( new_update );
-        bot.processUpdate( new_update );
+        std::cout<<bot->api_url<<std::endl;
+         updates_queue.wait_dequeue( new_update );
+         bot->processUpdate( new_update );
     }
+}
+
+uint_fast32_t
+Polling::firstUpdateID( BasicBot &poller )
+{
+    std::vector<Update> first_update;
+    while ( !poller.getUpdates( first_update, 0, 1 ) )
+        ;
+    return first_update[0].update_id;
 }

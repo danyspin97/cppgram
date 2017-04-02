@@ -1,5 +1,5 @@
-#ifndef CPPGRAM_UTILS_H
-#define CPPGRAM_UTILS_H
+#ifndef CPPGRAM_UTILS_HPP
+#define CPPGRAM_UTILS_HPP
 
 #include <string>
 #include <vector>
@@ -72,4 +72,4 @@ getMicroTime()
 }
 }
 
-#endif // CPPGRAM_UTILS_H
+#endif

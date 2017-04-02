@@ -6,7 +6,7 @@
 #include <cpr/cpr.h>
 
 #include "exception.hpp"
-#include "types/message.hpp"
+#include "types/update.hpp"
 #include "utils.hpp"
 
 namespace cppgram
@@ -52,10 +52,10 @@ class CoreBot
      * @param timeout Timeout in seconds for long polling.
      * @return True if there are new updates, false otherwise
      */
-    bool getUpdates( Json::Value &       updates,
-                     const uint_fast32_t offset  = 0,
-                     const uint_fast32_t limit   = 100,
-                     const uint_fast32_t timeout = 60 );
+    bool getUpdates( std::vector<cppgram::Update> &updates,
+                     const uint_fast32_t           offset  = 0,
+                     const uint_fast32_t           limit   = 100,
+                     const uint_fast32_t           timeout = 60 );
 
     /**
      * Send a message to a specified chat.
@@ -206,8 +206,9 @@ class CoreBot
 
     private:
     void setToken( std::string &token );
-    std::string  api_url;
-    cpr::Session connection;
+    void setConnection( cpr::Session *new_connection );
+    std::string   api_url;
+    cpr::Session *connection;
 };
 }
 

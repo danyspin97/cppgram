@@ -1,8 +1,8 @@
 #ifndef __CPPGRAM_BASIC_BOT_HPP
 #define __CPPGRAM_BASIC_BOT_HPP
 
-#include "cppgram/core_bot.hpp"
-#include "cppgram/types/update.hpp"
+#include "core_bot.hpp"
+#include "types/update.hpp"
 
 /*! \mainpage Reference
  * \section What What is CppGram
@@ -137,6 +137,8 @@
  */
 namespace cppgram
 {
+void
+defaultProcessMessage( class BasicBot &bot, const Message & );
 /*! \class TelegramBot
  *
  *  \brief contains api methods, update handlers and listener
@@ -144,8 +146,6 @@ namespace cppgram
  */
 class BasicBot : public CoreBot
 {
-    friend class Polling;
-
     public:
     /*! \fn TelegramBot::TelegramBot(const std::string &api_token,
                 const bool &background = false,
@@ -164,15 +164,14 @@ class BasicBot : public CoreBot
     BasicBot() {}
     BasicBot( const BasicBot & );
 
-    void ( *processMessage )( BasicBot &, const cppgram::Message & )         = nullptr;
-    void ( *processEditedMessage )( BasicBot &, const cppgram::Message & )   = nullptr;
-    void ( *processInlineQuery )( BasicBot &, const cppgram::InlineQuery & ) = nullptr;
-    void ( *processChosenInlineResult )( BasicBot &, const cppgram::ChosenInlineResult & )
-            = nullptr;
-    void ( *processCallbackQuery )( BasicBot &, const cppgram::CallbackQuery & ) = nullptr;
+    void ( *processMessage )( BasicBot &, const Message & )         = &defaultProcessMessage;
+    void ( *processEditedMessage )( BasicBot &, const Message & )   = nullptr;
+    void ( *processInlineQuery )( BasicBot &, const InlineQuery & ) = nullptr;
+    void ( *processChosenInlineResult )( BasicBot &, const ChosenInlineResult & ) = nullptr;
+    void ( *processCallbackQuery )( BasicBot &, const CallbackQuery & )           = nullptr;
 
-    private:
     void processUpdate( const cppgram::Update &update );
+    std::string lol = "Debug";
 };
 }
 

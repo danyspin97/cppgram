@@ -120,6 +120,10 @@ class Message
         {
             reply_to_message = new Message( json_message["reply_to_message"] );
         }
+        else
+        {
+            reply_to_message = nullptr;
+        }
 
         if ( !json_message["edit_date"].isNull() )
         {
@@ -187,7 +191,13 @@ class Message
 
     Message(){};
 
-    ~Message() { delete reply_to_message; };
+    ~Message()
+    {
+        if ( reply_to_message != nullptr )
+        {
+            delete reply_to_message;
+        }
+    };
 };
 }
 

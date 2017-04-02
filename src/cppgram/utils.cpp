@@ -1,3 +1,6 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
 #ifdef __unix__
 #include <stdlib.h>
 #include <unistd.h>
@@ -11,8 +14,6 @@
 
 #include "cppgram/exception.hpp"
 #include "cppgram/utils.hpp"
-
-using namespace cppgram;
 
 Json::Reader reader;
 
@@ -64,9 +65,9 @@ cppgram::log( const Log &logType, const std::string &message, const std::string 
 
     switch ( logType )
     {
-    case Error: logTypeString          = "[ERROR]"; break;
-    case Event: logTypeString          = "[EVENT]"; break;
-    case Warning: break; logTypeString = "[WARNING]";
+        case Error: logTypeString          = "[ERROR]"; break;
+        case Event: logTypeString          = "[EVENT]"; break;
+        case Warning: break; logTypeString = "[WARNING]";
     }
 
     // TODO Keep stream open

@@ -1,10 +1,17 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
 #include "cppgram/core_bot.hpp"
 #include "cppgram/defines.hpp"
+
+// DEBUGI
+#include <iostream>
 
 using std::string;
 using std::to_string;
 
 using cppgram::CoreBot;
+using cppgram::Update;
 using cppgram::Message;
 using cppgram::ParseMode;
 
@@ -14,12 +21,19 @@ CoreBot::setToken( string &token )
     api_url = TELEGRAM_API_URL + token + "/";
 }
 
+void
+CoreBot::setConnection( cpr::Session *new_connection )
+{
+    connection = new_connection;
+}
+
 const cpr::Response
 CoreBot::executeRequest( const std::string &method, const cpr::Parameters &params )
 {
-    connection.SetUrl( api_url + method );
-    connection.SetParameters( params );
-    return connection.Get();
+    return cpr::Get( cpr::Url{api_url + method}, params );
+    // connection->SetUrl( api_url + method );
+    connection->SetParameters( params );
+    return connection->Get();
 }
 
 bool
@@ -53,29 +67,30 @@ CoreBot::checkMethodError( const cpr::Response &response, Json::Value &val )
 }
 
 bool
-CoreBot::getUpdates( Json::Value &       updates,
-                     const uint_fast32_t offset,
-                     const uint_fast32_t limit,
-                     const uint_fast32_t timeout )
+CoreBot::getUpdates( std::vector<Update> &updates,
+                     const uint_fast32_t  offset,
+                     const uint_fast32_t  limit,
+                     const uint_fast32_t  timeout )
 {
     auto response = executeRequest( "getUpdates",
                                     cpr::Parameters{{"timeout", to_string( timeout )},
                                                     {"limit", to_string( limit )},
                                                     {"offset", to_string( offset + 1 )}} );
 
-    if ( !checkMethodError( response, updates ) )
+    Json::Value json_updates;
+    if ( !checkMethodError( response, json_updates ) || json_updates["result"].empty() )
     {
+        updates = std::vector<Update>();
         return false;
     }
 
-    if ( updates["result"].empty() )
+    u_int8_t count = json_updates["result"].size();
+    for ( uint8_t i = 0; i != count; ++i )
     {
-        return false;
+        std::cout<<"iiiiiii"<<std::endl;
+        updates.push_back( Update( json_updates["result"][i] ) );
     }
-    else
-    {
-        return true;
-    }
+    return true;
 }
 
 Message

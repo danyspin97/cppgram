@@ -22,18 +22,16 @@ class Update
 
     public:
     enum UpdateType type;
+    uint_fast32_t   update_id;
 
-    std::experimental::optional<Message> message;
-
-    std::experimental::optional<Message> edited_message;
-
-    std::experimental::optional<InlineQuery> inline_query;
-
-    std::experimental::optional<ChosenInlineResult> chosen_inline_result;
-
-    std::experimental::optional<CallbackQuery> callback_query;
+    std::experimental::optional<cppgram::Message>            message;
+    std::experimental::optional<cppgram::Message>            edited_message;
+    std::experimental::optional<cppgram::InlineQuery>        inline_query;
+    std::experimental::optional<cppgram::ChosenInlineResult> chosen_inline_result;
+    std::experimental::optional<cppgram::CallbackQuery>      callback_query;
 
     Update( Json::Value &json_update )
+        : update_id( json_update["update_id"].asUInt() )
     {
         if ( !json_update["message"].isNull() )
         {
@@ -71,17 +69,13 @@ class Update
     {
         if ( &u != this )
         {
-            type = u.type;
-
-            message = u.message;
-
-            callback_query = u.callback_query;
-
-            edited_message = u.edited_message;
-
+            update_id            = u.update_id;
+            type                 = u.type;
+            message              = u.message;
+            callback_query       = u.callback_query;
+            edited_message       = u.edited_message;
             chosen_inline_result = u.chosen_inline_result;
-
-            inline_query = u.inline_query;
+            inline_query         = u.inline_query;
         }
 
         return *this;
@@ -91,17 +85,13 @@ class Update
     {
         if ( &u != this )
         {
-            type = u.type;
-
-            message = u.message;
-
-            callback_query = u.callback_query;
-
-            edited_message = u.edited_message;
-
+            update_id            = u.update_id;
+            type                 = u.type;
+            message              = u.message;
+            callback_query       = u.callback_query;
+            edited_message       = u.edited_message;
             chosen_inline_result = u.chosen_inline_result;
-
-            inline_query = u.inline_query;
+            inline_query         = u.inline_query;
         }
 
         return *this;

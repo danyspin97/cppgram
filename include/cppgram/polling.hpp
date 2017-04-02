@@ -15,9 +15,11 @@ class Polling
 
     void run();
 
-    void activeBot( cppgram::BasicBot &bot);
+    void activeBot( cppgram::BasicBot *bot );
 
     private:
+    uint_fast32_t firstUpdateID( BasicBot &poller );
+
     std::vector<cppgram::BasicBot> bots;
 
     moodycamel::BlockingConcurrentQueue<cppgram::Update> updates_queue;

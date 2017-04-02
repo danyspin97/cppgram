@@ -1,8 +1,14 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
 #include <cpr/cpr.h>
 #include <json/json.h>
 
 #include "cppgram/basic_bot.hpp"
 #include "cppgram/types/update.hpp"
+
+// DEBUG
+#include <iostream>
 
 using std::thread;
 using std::vector;
@@ -16,11 +22,13 @@ BasicBot::BasicBot( const BasicBot &b )
     processMessage       = b.processMessage;
     processEditedMessage = b.processEditedMessage;
     processCallbackQuery = b.processCallbackQuery;
+    lol = b.lol;
 }
 
 void
 BasicBot::processUpdate( const Update &update )
 {
+    std::cout<<"FAN"<<std::endl;
     switch ( update.type )
     {
         case UpdateType::eMessage:
@@ -58,4 +66,13 @@ BasicBot::processUpdate( const Update &update )
             break;
         }
     }
+}
+
+void
+cppgram::defaultProcessMessage( class BasicBot &bot, const Message & )
+{
+    std::cout<<"FAN"<<std::endl;
+    std::string chat("24203883");
+    bot.setChatID(chat);
+    bot.sendMessage("CIAO");
 }
