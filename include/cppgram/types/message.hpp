@@ -195,7 +195,7 @@ class Message
     {
         if ( reply_to_message != nullptr )
         {
-            delete reply_to_message;
+            //delete reply_to_message;
         }
     };
 };

@@ -9,6 +9,7 @@
 
 using std::thread;
 using std::vector;
+using std::to_string;
 
 using cppgram::BasicBot;
 using cppgram::Update;
@@ -29,13 +30,13 @@ BasicBot::processUpdate( const Update &update )
     {
         case UpdateType::eMessage:
         {
-            chat_id = update.message->chat.id;
+            chat_id = to_string(update.message->chat.id);
             processMessage( *this, update.message.value() );
             break;
         }
         case UpdateType::eCallbackQuery:
         {
-            chat_id           = update.callback_query->message->chat.id;
+            chat_id           = to_string(update.callback_query->message->chat.id);
             callback_query_id = update.callback_query->id;
             processCallbackQuery( *this, update.callback_query.value() );
             callback_query_id = "";
@@ -43,13 +44,13 @@ BasicBot::processUpdate( const Update &update )
         }
         case UpdateType::eEditedMessage:
         {
-            chat_id = update.edited_message->chat.id;
+            chat_id = to_string(update.edited_message->chat.id);
             processEditedMessage( *this, update.edited_message.value() );
             break;
         }
         case UpdateType::eInlineQuery:
         {
-            chat_id         = update.inline_query->from.id;
+            chat_id         = to_string(update.inline_query->from.id);
             inline_query_id = update.inline_query->id;
             processInlineQuery( *this, update.inline_query.value() );
             inline_query_id = "";
@@ -57,7 +58,7 @@ BasicBot::processUpdate( const Update &update )
         }
         case UpdateType::eChosenInlineResult:
         {
-            chat_id = update.chosen_inline_result->from.id;
+            chat_id = to_string(update.chosen_inline_result->from.id);
             processChosenInlineResult( *this, update.chosen_inline_result.value() );
             break;
         }
@@ -67,7 +68,4 @@ BasicBot::processUpdate( const Update &update )
 void
 cppgram::defaultProcessMessage( class BasicBot &bot, const Message & )
 {
-    std::string chat("24203883");
-    bot.setChatID(chat);
-    bot.sendMessage("CIAO");
 }
