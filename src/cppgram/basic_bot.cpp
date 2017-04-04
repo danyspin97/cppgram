@@ -7,9 +7,6 @@
 #include "cppgram/basic_bot.hpp"
 #include "cppgram/types/update.hpp"
 
-// DEBUG
-#include <iostream>
-
 using std::thread;
 using std::vector;
 
@@ -28,7 +25,6 @@ BasicBot::BasicBot( const BasicBot &b )
 void
 BasicBot::processUpdate( const Update &update )
 {
-    std::cout<<"FAN"<<std::endl;
     switch ( update.type )
     {
         case UpdateType::eMessage:
@@ -71,7 +67,6 @@ BasicBot::processUpdate( const Update &update )
 void
 cppgram::defaultProcessMessage( class BasicBot &bot, const Message & )
 {
-    std::cout<<"FAN"<<std::endl;
     std::string chat("24203883");
     bot.setChatID(chat);
     bot.sendMessage("CIAO");

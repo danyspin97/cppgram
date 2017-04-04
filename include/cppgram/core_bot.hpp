@@ -16,7 +16,7 @@ class CoreBot
     friend class Polling;
 
     public:
-    CoreBot() {}
+    CoreBot(std::string token);
     CoreBot( const CoreBot &c ) { api_url = c.api_url; }
     std::string             getChatID() { return chat_id; }
     void setChatID( std::string &chat_id ) { this->chat_id = chat_id; }
@@ -205,7 +205,6 @@ class CoreBot
     std::string inline_query_id;
 
     private:
-    void setToken( std::string &token );
     void setConnection( cpr::Session *new_connection );
     std::string   api_url;
     cpr::Session *connection;

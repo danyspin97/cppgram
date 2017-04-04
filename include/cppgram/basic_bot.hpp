@@ -161,7 +161,7 @@ class BasicBot : public CoreBot
      * \param timeout: max timeout for HTTP long polling (default: 100s)
      */
 
-    BasicBot() {}
+    BasicBot(std::string token) : CoreBot(token){}
     BasicBot( const BasicBot & );
 
     void ( *processMessage )( BasicBot &, const Message & )         = &defaultProcessMessage;

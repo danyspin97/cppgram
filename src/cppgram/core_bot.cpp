@@ -4,9 +4,6 @@
 #include "cppgram/core_bot.hpp"
 #include "cppgram/defines.hpp"
 
-// DEBUGI
-#include <iostream>
-
 using std::string;
 using std::to_string;
 
@@ -15,10 +12,12 @@ using cppgram::Update;
 using cppgram::Message;
 using cppgram::ParseMode;
 
-void
-CoreBot::setToken( string &token )
+std::mutex mutex;
+CoreBot::CoreBot( string token )
 {
-    api_url = TELEGRAM_API_URL + token + "/";
+    std::string endpoint( TELEGRAM_API_URL );
+    std::string end("/");
+    api_url = endpoint + token + end;
 }
 
 void
@@ -87,7 +86,6 @@ CoreBot::getUpdates( std::vector<Update> &updates,
     u_int8_t count = json_updates["result"].size();
     for ( uint8_t i = 0; i != count; ++i )
     {
-        std::cout<<"iiiiiii"<<std::endl;
         updates.push_back( Update( json_updates["result"][i] ) );
     }
     return true;

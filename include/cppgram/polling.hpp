@@ -11,14 +11,14 @@ class Polling
     public:
     Polling(){};
 
-    Polling( std::string &token, std::vector<cppgram::BasicBot> &bots );
+    Polling( std::vector<cppgram::BasicBot> bots );
 
     void run();
 
     void activeBot( cppgram::BasicBot *bot );
 
     private:
-    uint_fast32_t firstUpdateID( BasicBot &poller );
+    uint_fast32_t firstUpdateID( BasicBot *poller );
 
     std::vector<cppgram::BasicBot> bots;
 
