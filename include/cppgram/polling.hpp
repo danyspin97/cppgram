@@ -16,16 +16,16 @@ template <class T> class Polling
 
     private:
     uint_fast32_t firstUpdateID( T &poller );
-
-    std::vector<T> bots;
-
-    moodycamel::BlockingConcurrentQueue<cppgram::Update> updates_queue;
-
     void runMultithread();
     void runSinglethread();
     void setThreadAffinity( std::vector<std::thread> &threads );
     void loopBot( T bot );
     void initLogging();
+
+    std::vector<T>                                       bots;
+    moodycamel::BlockingConcurrentQueue<cppgram::Update> updates_queue;
+    std::shared_ptr<spdlog::logger> console_stderr;
+    std::shared_ptr<spdlog::logger> console_stdout;
 };
 }
 

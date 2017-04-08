@@ -4,7 +4,9 @@
 
 template <class T> cppgram::Polling<T>::Polling( T bot, u_int8_t threads_number )
 {
-    bots = std::vector<T>( threads_number, bot );
+    bots           = std::vector<T>( threads_number, bot );
+    console_stdout = spdlog::stdout_color_mt( "console" );
+    console_stderr = spdlog::stderr_color_mt( "error_console" );
 }
 
 template <class T>
@@ -47,6 +49,7 @@ cppgram::Polling<T>::runMultithread()
 
     setThreadAffinity( threads );
 
+    console_stdout->info( "Bots started" );
     std::vector<Update> updates;
     uint_fast32_t       updates_offset = firstUpdateID( poller );
     while ( 1 )
@@ -71,12 +74,45 @@ template <class T>
 void
 cppgram::Polling<T>::runSinglethread()
 {
+    console_stdout->info( "Bots started" );
+    auto bot = bots.back();
+    uint_fast32_t updates_offset = firstUpdateID( bot );
+    while ( 1 )
+    {
+        std::vector<Update> updates;
+        if ( bot.getUpdates( updates, updates_offset ) )
+        {
+            for ( auto update : updates )
+            {
+                bot.processUpdate(std::move(update));
+            }
+            updates_offset += updates.size();
+            updates.clear();
+        }
+    }
 }
 
 template <class T>
 void
 cppgram::Polling<T>::setThreadAffinity( std::vector<std::thread> &threads )
 {
+    u_int8_t cores = std::thread::hardware_concurrency();
+    if ( threads.size() < cores )
+    {
+        for ( auto i = 0; i < threads.size(); i++ )
+        {
+            cpu_set_t cpuset;
+            CPU_ZERO( &cpuset );
+            CPU_SET( i, &cpuset );
+            int rc = pthread_setaffinity_np(
+                    threads[i].native_handle(), sizeof( cpu_set_t ), &cpuset );
+            if ( rc != 0 )
+            {
+                console_stderr->critical( "Error calling pthread_setaffinity_np: "
+                                          + std::to_string( rc ) );
+            }
+        }
+    }
 }
 
 template <class T>

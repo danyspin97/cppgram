@@ -22,9 +22,7 @@ using cppgram::ParseMode;
 
 BasicBot::BasicBot( string &token )
 {
-    string endpoint( TELEGRAM_API_URL );
-    string end( "/" );
-    api_url = endpoint + token + end;
+    api_url = TELEGRAM_API_URL + token + "/";
 }
 
 BasicBot::BasicBot( const BasicBot &b )
