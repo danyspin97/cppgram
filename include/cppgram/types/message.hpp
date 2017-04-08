@@ -2,6 +2,7 @@
 #define CPPGRAM_MESSAGE_HPP
 
 #include <experimental/optional>
+#include <memory>
 #include <string>
 
 #include <json/json.h>
@@ -57,7 +58,7 @@ class Message
 
     /** \brief <i>Optional</i>. For replies, the original message. Note that the Message object in
      * this field will not contain further reply_to_message fields even if it itself is a reply. */
-    Message *reply_to_message;
+    std::shared_ptr<Message> reply_to_message;
 
     /** \brief <i>Optional</i>. Date the message was last edited in Unix time */
     std::experimental::optional<uint_fast32_t> edit_date;
@@ -118,7 +119,8 @@ class Message
 
         if ( !json_message["reply_to_message"].isNull() )
         {
-            reply_to_message = new Message( json_message["reply_to_message"] );
+            reply_to_message
+                    = std::make_shared<Message>( Message( json_message["reply_to_message"] ) );
         }
         else
         {
@@ -190,14 +192,6 @@ class Message
     }
 
     Message(){};
-
-    ~Message()
-    {
-        if ( reply_to_message != nullptr )
-        {
-            //delete reply_to_message;
-        }
-    };
 };
 }
 

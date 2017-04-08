@@ -40,7 +40,7 @@ cppgram::Polling<T>::runMultithread()
     T poller = bots.back();
     bots.pop_back();
     std::vector<std::thread> threads;
-    for ( T& bot : bots )
+    for ( T &bot : bots )
     {
         threads.push_back( std::thread( &Polling::loopBot, this, bot ) );
     }
@@ -87,7 +87,7 @@ cppgram::Polling<T>::loopBot( T bot )
     while ( 1 )
     {
         updates_queue.wait_dequeue( new_update );
-        bot.processUpdate( new_update );
+        bot.processUpdate( std::move( new_update ) );
     }
 }
 
