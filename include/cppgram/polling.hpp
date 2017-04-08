@@ -6,24 +6,29 @@
 
 namespace cppgram
 {
-class Polling
+template <class T> class Polling
 {
     public:
-    Polling(){};
-
-    Polling( std::vector<cppgram::BasicBot> bots );
+    Polling( T bot, uint8_t threads_number );
+    Polling( std::vector<T> bots );
 
     void run();
 
-    void activeBot( cppgram::BasicBot *bot );
-
     private:
-    uint_fast32_t firstUpdateID( BasicBot *poller );
+    uint_fast32_t firstUpdateID( T &poller );
 
-    std::vector<cppgram::BasicBot> bots;
+    std::vector<T> bots;
 
     moodycamel::BlockingConcurrentQueue<cppgram::Update> updates_queue;
+
+    void runMultithread();
+    void runSinglethread();
+    void setThreadAffinity( std::vector<std::thread> &threads );
+    void loopBot( T bot );
+    void initLogging();
 };
 }
+
+#include "polling_templates.hpp"
 
 #endif

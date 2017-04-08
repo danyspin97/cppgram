@@ -4,6 +4,8 @@
 #include "cppgram/core_bot.hpp"
 #include "cppgram/defines.hpp"
 
+#include <spdlog/spdlog.h>
+
 using std::string;
 using std::to_string;
 
@@ -15,24 +17,17 @@ using cppgram::ParseMode;
 std::mutex mutex;
 CoreBot::CoreBot( string token )
 {
-    std::string endpoint( TELEGRAM_API_URL );
-    std::string end("/");
+    string endpoint( TELEGRAM_API_URL );
+    string end("/");
     api_url = endpoint + token + end;
-}
-
-void
-CoreBot::setConnection( cpr::Session *new_connection )
-{
-    connection = new_connection;
 }
 
 const cpr::Response
 CoreBot::executeRequest( const std::string &method, const cpr::Parameters &params )
 {
-    return cpr::Get( cpr::Url{api_url + method}, params );
-    // connection->SetUrl( api_url + method );
-    connection->SetParameters( params );
-    return connection->Get();
+    connection.SetUrl( api_url + method );
+    connection.SetParameters( params );
+    return connection.Get();
 }
 
 bool
@@ -43,22 +38,22 @@ CoreBot::checkMethodError( const cpr::Response &response, Json::Value &val )
     // If there was an error in the connection print it
     if ( response.error.code != cpr::ErrorCode::OK )
     {
-        log( Log::Error, "HTTP Error:" + response.error.message );
+        //log( Log::Error, "HTTP Error:" + response.error.message );
         return false;
     }
 
     if ( !reader.parse( response.text, val ) )
     {
-        log( Log::Error, "JSON Parser: Error while parsing JSON document!" );
+        //log( Log::Error, "JSON Parser: Error while parsing JSON document!" );
         throw cppgram::JsonParseError();
     }
 
     // Print method error
     if ( response.status_code != 200 )
     {
-        log( Log::Error,
-             "Telegram Error: " + val["error_code"].asString() + ", Description: "
-                     + val["description"].asString() );
+        //log( Log::Error,
+             //"Telegram Error: " + val["error_code"].asString() + ", Description: "
+                     //+ val["description"].asString() );
         return false;
     }
 

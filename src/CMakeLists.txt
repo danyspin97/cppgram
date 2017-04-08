@@ -47,11 +47,11 @@ add_dependencies(cppgram cpr)
 
 include(../PVS-Studio.cmake)
 pvs_studio_add_target(TARGET analyze ALL
-                      OUTPUT FORMAT errorfile
-                      PREPROCESSOR gcc
-                      LOG "${CMAKE_BINARY_DIR}/report.tasks"
-                      ANALYZE cppgram
-                      CXX_FLAGS ${PREPROCESSOR_ADDITIONAL_FLAGS}
-                      C_FLAGS ${PREPROCESSOR_ADDITIONAL_FLAGS}
-                      CONFIG "${CMAKE_CURRENT_SOURCE_DIR}/PVS-Studio.cfg")
+    OUTPUT FORMAT errorfile
+    PREPROCESSOR gcc
+    LOG "${CMAKE_BINARY_DIR}/report.tasks"
+    ANALYZE cppgram
+    CXX_FLAGS ${PREPROCESSOR_ADDITIONAL_FLAGS}
+    C_FLAGS ${PREPROCESSOR_ADDITIONAL_FLAGS}
+    CONFIG "${CMAKE_CURRENT_SOURCE_DIR}/PVS-Studio.cfg")
 

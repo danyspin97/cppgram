@@ -20,7 +20,6 @@ BasicBot::BasicBot( const BasicBot &b )
     processMessage       = b.processMessage;
     processEditedMessage = b.processEditedMessage;
     processCallbackQuery = b.processCallbackQuery;
-    lol = b.lol;
 }
 
 void

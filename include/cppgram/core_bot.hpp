@@ -4,23 +4,21 @@
 #include <string>
 
 #include <cpr/cpr.h>
+#include <spdlog/spdlog.h>
 
 #include "exception.hpp"
 #include "types/update.hpp"
-#include "utils.hpp"
 
 namespace cppgram
 {
 class CoreBot
 {
-    friend class Polling;
-
     public:
-    CoreBot(std::string token);
-    CoreBot( const CoreBot &c ) { api_url = c.api_url; }
-    std::string             getChatID() { return chat_id; }
-    void setChatID( std::string &chat_id ) { this->chat_id = chat_id; }
-    void setChatID( uint_fast32_t &chat_id ) { this->chat_id = std::to_string( chat_id ); }
+    CoreBot( std::string token );
+    inline CoreBot( const CoreBot &c ) { api_url = c.api_url; }
+    inline std::string             getChatID() { return chat_id; }
+    inline void setChatID( std::string &chat_id ) { this->chat_id = chat_id; }
+    inline void setChatID( uint_fast32_t &chat_id ) { this->chat_id = std::to_string( chat_id ); }
     const cpr::Response executeRequest( const std::string &method, const cpr::Parameters &params );
 
     /*!
@@ -199,15 +197,17 @@ class CoreBot
 
     /** @} */
 
+    spdlog::sink_ptr sink = nullptr;
+    std::shared_ptr<spdlog::logger> logger;
+
+    cpr::Session connection;
+    std::string   api_url;
     protected:
     std::string chat_id;
     std::string callback_query_id;
     std::string inline_query_id;
 
     private:
-    void setConnection( cpr::Session *new_connection );
-    std::string   api_url;
-    cpr::Session *connection;
 };
 }
 
