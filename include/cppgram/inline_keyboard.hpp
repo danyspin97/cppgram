@@ -4,11 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace Json
-{
-class Writer;
-class Value;
-}
+#include <json/json.h>
 
 namespace cppgram
 {
@@ -82,7 +78,7 @@ class InlineKeyboard
      * @param reply_markup The string that will be filled
      * @param clearKeyboard Clear keyboard after passing it
      */
-    void getKeyboard( std::string &reply_markup, const bool &clear_keyboard = true );
+    void get( std::string &reply_markup, const bool &clear_keyboard = true );
 
     /**
      * \brief Get keyboard as Json
@@ -90,12 +86,12 @@ class InlineKeyboard
      * only non JSON-serialized value
      * @return The keyboard as JSON
      */
-    inline Json::Value getKeyboard() const { return inline_keyboard; };
+    //inline Json::Value get() const { return inline_keyboard; };
     private:
-    Json::Writer * writer;
-    Json::Value    inline_keyboard;
-    unsigned short column;
-    unsigned short row;
+    Json::FastWriter writer;
+    Json::Value      inline_keyboard;
+    unsigned short   column;
+    unsigned short   row;
 };
 
 /** @} */

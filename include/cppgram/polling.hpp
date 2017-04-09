@@ -9,8 +9,11 @@ namespace cppgram
 template <class T> class Polling
 {
     public:
-    Polling( T bot, uint8_t threads_number );
-    Polling( std::vector<T> bots );
+    Polling( T             bot,
+             uint_fast8_t  threads_number,
+             uint_fast32_t limit   = 100,
+             uint_fast32_t timeout = 60 );
+    Polling( std::vector<T> bots, uint_fast32_t limit = 100, uint_fast32_t timeout = 60 );
 
     void run();
 
@@ -24,8 +27,12 @@ template <class T> class Polling
 
     std::vector<T>                                       bots;
     moodycamel::BlockingConcurrentQueue<cppgram::Update> updates_queue;
-    std::shared_ptr<spdlog::logger> console_stderr;
-    std::shared_ptr<spdlog::logger> console_stdout;
+    moodycamel::ProducerToken                            producer_token;
+    std::shared_ptr<spdlog::logger>                      console_stderr;
+    std::shared_ptr<spdlog::logger>                      console_stdout;
+
+    uint_fast32_t limit;
+    uint_fast32_t timeout;
 };
 }
 

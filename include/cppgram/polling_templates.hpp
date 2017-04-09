@@ -2,7 +2,15 @@
 
 #include "polling.hpp"
 
-template <class T> cppgram::Polling<T>::Polling( T bot, u_int8_t threads_number )
+template <class T>
+cppgram::Polling<T>::Polling( T             bot,
+                              uint_fast8_t  threads_number,
+                              uint_fast32_t limit,
+                              uint_fast32_t timeout )
+    : limit( limit )
+    , timeout( timeout )
+    , updates_queue( 150 )
+    , producer_token( updates_queue )
 {
     bots           = std::vector<T>( threads_number, bot );
     console_stdout = spdlog::stdout_color_mt( "console" );
@@ -10,8 +18,12 @@ template <class T> cppgram::Polling<T>::Polling( T bot, u_int8_t threads_number 
 }
 
 template <class T>
-cppgram::Polling<T>::Polling( std::vector<T> bots )
+cppgram::Polling<T>::Polling( std::vector<T> bots, uint_fast32_t limit, uint_fast32_t timeout )
     : bots( bots )
+    , limit( limit )
+    , timeout( timeout )
+    , updates_queue( 150 )
+    , producer_token( updates_queue )
 {
 }
 
@@ -49,7 +61,7 @@ cppgram::Polling<T>::runMultithread()
 
     setThreadAffinity( threads );
 
-    console_stdout->info( "Bots started" );
+    console_stdout->info( "Bots started." );
     std::vector<Update> updates;
     uint_fast32_t       updates_offset = firstUpdateID( poller );
     while ( 1 )
@@ -58,7 +70,7 @@ cppgram::Polling<T>::runMultithread()
         if ( poller.getUpdates( updates, updates_offset ) )
         {
             count = updates.size();
-            updates_queue.enqueue_bulk( updates.begin(), count );
+            updates_queue.enqueue_bulk( producer_token, updates.begin(), count );
             updates_offset += count;
             updates.clear();
         }
@@ -74,8 +86,8 @@ template <class T>
 void
 cppgram::Polling<T>::runSinglethread()
 {
-    console_stdout->info( "Bots started" );
-    auto bot = bots.back();
+    console_stdout->info( "Bots started." );
+    auto          bot            = bots.back();
     uint_fast32_t updates_offset = firstUpdateID( bot );
     while ( 1 )
     {
@@ -84,7 +96,7 @@ cppgram::Polling<T>::runSinglethread()
         {
             for ( auto update : updates )
             {
-                bot.processUpdate(std::move(update));
+                bot.processUpdate( std::move( update ) );
             }
             updates_offset += updates.size();
             updates.clear();
@@ -97,7 +109,7 @@ void
 cppgram::Polling<T>::setThreadAffinity( std::vector<std::thread> &threads )
 {
     u_int8_t cores = std::thread::hardware_concurrency();
-    if ( threads.size() < cores )
+    if ( threads.size() <= cores )
     {
         for ( auto i = 0; i < threads.size(); i++ )
         {
@@ -112,6 +124,7 @@ cppgram::Polling<T>::setThreadAffinity( std::vector<std::thread> &threads )
                                           + std::to_string( rc ) );
             }
         }
+        console_stdout->info( "Thread affinity per cpu set." );
     }
 }
 
@@ -134,7 +147,7 @@ cppgram::Polling<T>::firstUpdateID( T &poller )
     std::vector<Update> first_update;
     while ( !poller.getUpdates( first_update, 0, 1 ) )
         ;
-    return first_update[0].update_id;
+    return first_update[0].update_id -1 ;
 }
 
 template <class T>

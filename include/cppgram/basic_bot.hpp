@@ -161,22 +161,10 @@ defaultProcessCallbackQuery( BasicBot &bot, const CallbackQuery & );
 class BasicBot
 {
     public:
-    /*! \fn TelegramBot::TelegramBot(const std::string &api_token,
-                const bool &background = false,
-                const std::string &filename = "tgbot.log",
-                const int_fast32_t &limit = 50,
-                const int_fast32_t &timeout = 60)
-     * \brief TelegramBot constructor
-     * \param api_token: the Bot API token (REQUIRED)
-     * \param background: tries to fork the process and put the new in background
-     (default: false)
-     * \param filename: log output filename/path (default: tgbot.log)
-     * \param message_limit: max update limit (default: 50)
-     * \param timeout: max timeout for HTTP long polling (default: 100s)
-     */
-
     BasicBot( std::string &token );
     BasicBot( const BasicBot & );
+
+    BasicBot operator= (const BasicBot& b);
 
     void ( *processMessage )( BasicBot &, const Message & )         = &defaultProcessMessage;
     void ( *processEditedMessage )( BasicBot &, const Message & )   = &defaultProcessEditedMessage;
@@ -242,12 +230,12 @@ class BasicBot
      * message
      * @return On success, message_id of the message sent, 0 otherwise
      */
-    class cppgram::Message sendMessage( const std::string &      text,
-                                        const std::string &      reply_markup = "",
-                                        const cppgram::ParseMode parse_mode   = ParseMode::HTML,
-                                        const bool               disable_web_page_preview = true,
-                                        const bool               disable_notification     = false,
-                                        const int_fast32_t       reply_to_message_id      = 0 );
+    const class cppgram::Message sendMessage( const std::string &      text,
+                                              const std::string &      reply_markup = "",
+                                              const cppgram::ParseMode parse_mode = ParseMode::HTML,
+                                              const bool         disable_web_page_preview = true,
+                                              const bool         disable_notification     = false,
+                                              const int_fast32_t reply_to_message_id      = 0 );
 
     /**
      * Edit text (and reply markup) of a message sent by the bot. Leaving
@@ -263,12 +251,12 @@ class BasicBot
      * message
      * @return On success, message_id of the message edited, 0 otherwise
      */
-    class cppgram::Message editMessageText( const uint_fast32_t message_id,
-                                            const std::string & text,
-                                            const std::string & reply_markup = "",
-                                            const ParseMode     parse_mode
-                                            = static_cast<ParseMode>( 1 ),
-                                            const bool disable_web_page_preview = true );
+    const class cppgram::Message editMessageText( const uint_fast32_t message_id,
+                                                  const std::string & text,
+                                                  const std::string & reply_markup = "",
+                                                  const ParseMode     parse_mode
+                                                  = static_cast<ParseMode>( 1 ),
+                                                  const bool disable_web_page_preview = true );
 
     /**
      * Edit text (and reply markup) of a message sent via the bot (using inline
@@ -298,9 +286,9 @@ class BasicBot
      * @param reply_markup Inline keyboard object
      * @return On success, message_id of the message edited, 0 otherwise
      */
-    class cppgram::Message editMessageCaption( const uint_fast32_t message_id,
-                                               const std::string & caption,
-                                               const std::string & reply_markup = "" );
+    const class cppgram::Message editMessageCaption( const uint_fast32_t message_id,
+                                                     const std::string & caption,
+                                                     const std::string & reply_markup = "" );
 
     /**
      * Edit captions of messages sent via the bot (using inline_queries).
@@ -325,7 +313,7 @@ class BasicBot
      * @param reply_markup New inline keyboard object
      * @return On success, message_id of the message edited, 0 otherwise
      */
-    class cppgram::Message editMessageReplyMarkup( const uint_fast32_t message_id,
+    const class cppgram::Message editMessageReplyMarkup( const uint_fast32_t message_id,
                                                    const std::string & reply_markup = "" );
 
     /**
@@ -369,7 +357,7 @@ class BasicBot
     /** @} */
 
     public:
-    spdlog::sink_ptr sink = nullptr;
+    spdlog::sink_ptr                sink = nullptr;
     std::shared_ptr<spdlog::logger> logger;
 
     protected:

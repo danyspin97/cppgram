@@ -1,8 +1,6 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
-#include <json/json.h>
-
 #include "cppgram/exception.hpp"
 #include "cppgram/inline_keyboard.hpp"
 #include "cppgram/types/enums.hpp"
@@ -19,6 +17,7 @@ InlineKeyboard::InlineKeyboard()
     : column( 0 )
     , row( 0 )
 {
+    writer.omitEndingLineFeed();
 }
 
 unsigned short
@@ -83,9 +82,8 @@ InlineKeyboard::addButton( const vector<InlineKeyboardButton> &new_buttons )
 }
 
 void
-InlineKeyboard::getKeyboard( std::string &reply_markup, const bool &clear_keyboard )
+InlineKeyboard::get( string &reply_markup, const bool &clear_keyboard )
 {
-    Json::FastWriter writer;
     reply_markup = writer.write( inline_keyboard );
 
     if ( clear_keyboard )

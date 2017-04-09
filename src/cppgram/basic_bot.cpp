@@ -20,17 +20,33 @@ using cppgram::Update;
 using cppgram::Message;
 using cppgram::ParseMode;
 
-BasicBot::BasicBot( string &token )
-{
-    api_url = TELEGRAM_API_URL + token + "/";
-}
-
+BasicBot::BasicBot( string &token ) { api_url = TELEGRAM_API_URL + token + "/"; }
 BasicBot::BasicBot( const BasicBot &b )
 {
-    processMessage       = b.processMessage;
-    processEditedMessage = b.processEditedMessage;
-    processCallbackQuery = b.processCallbackQuery;
-    api_url              = b.api_url;
+    processMessage            = b.processMessage;
+    processEditedMessage      = b.processEditedMessage;
+    processInlineQuery        = b.processInlineQuery;
+    processChosenInlineResult = b.processChosenInlineResult;
+    processCallbackQuery      = b.processCallbackQuery;
+
+    api_url = b.api_url;
+}
+
+BasicBot
+BasicBot::operator=( const BasicBot &b )
+{
+    api_url = b.api_url;
+
+    processMessage            = b.processMessage;
+    processEditedMessage      = b.processEditedMessage;
+    processInlineQuery        = b.processInlineQuery;
+    processChosenInlineResult = b.processChosenInlineResult;
+    processCallbackQuery      = b.processCallbackQuery;
+
+    sink   = b.sink;
+    logger = b.logger;
+
+    return *this;
 }
 
 const cpr::Response
@@ -95,7 +111,7 @@ BasicBot::getUpdates( std::vector<Update> &updates,
     return true;
 }
 
-Message
+const Message
 BasicBot::sendMessage( const std::string &text,
                        const std::string &reply_markup,
                        const ParseMode    parse_mode,
@@ -103,22 +119,22 @@ BasicBot::sendMessage( const std::string &text,
                        const bool         disable_notification,
                        const int_fast32_t reply_to_message_id )
 {
-    std::string parseMode = "";
+    std::string parse_mode_string = "";
 
     if ( parse_mode == ParseMode::HTML )
     {
-        parseMode = "HTML";
+        parse_mode_string = "HTML";
     }
     else if ( parse_mode == ParseMode::Markdown )
     {
-        parseMode = "Markdown";
+        parse_mode_string = "Markdown";
     }
 
     auto response = executeRequest(
             "sendMessage",
             cpr::Parameters{{"chat_id", chat_id},
                             {"text", text},
-                            {"parse_mode", parseMode},
+                            {"parse_mode", parse_mode_string},
                             {"disable_web_page_preview", to_string( disable_web_page_preview )},
                             {"disable_notification", to_string( disable_notification )},
                             {"reply_to_message_id", to_string( reply_to_message_id )},
@@ -133,7 +149,7 @@ BasicBot::sendMessage( const std::string &text,
     return Message( valroot["result"] );
 }
 
-Message
+const Message
 BasicBot::editMessageText( const uint_fast32_t message_id,
                            const string &      text,
                            const string &      reply_markup,
@@ -204,7 +220,7 @@ BasicBot::editMessageText( const string &  inline_message_id,
     return valroot["result"].asBool();
 }
 
-Message
+const Message
 BasicBot::editMessageCaption( const uint_fast32_t message_id,
                               const string &      caption,
                               const string &      reply_markup )
@@ -241,7 +257,7 @@ BasicBot::editMessageCaption( const string &inline_message_id,
     return valroot["result"].asBool();
 }
 
-Message
+const Message
 BasicBot::editMessageReplyMarkup( const uint_fast32_t message_id, const string &reply_markup )
 {
     auto response = executeRequest( "editMessageReplyMarkup",
@@ -309,36 +325,38 @@ BasicBot::processUpdate( const Update &update )
         {
             chat_id = to_string( update.message->chat.id );
             processMessage( *this, std::move( update.message.value() ) );
-            break;
         }
+        break;
         case UpdateType::eCallbackQuery:
         {
             chat_id           = to_string( update.callback_query->message->chat.id );
             callback_query_id = update.callback_query->id;
             processCallbackQuery( *this, std::move( update.callback_query.value() ) );
             callback_query_id = "";
-            break;
         }
+        break;
         case UpdateType::eEditedMessage:
         {
             chat_id = to_string( update.edited_message->chat.id );
             processEditedMessage( *this, std::move( update.edited_message.value() ) );
-            break;
         }
+        break;
         case UpdateType::eInlineQuery:
         {
             chat_id         = to_string( update.inline_query->from.id );
             inline_query_id = update.inline_query->id;
             processInlineQuery( *this, std::move( update.inline_query.value() ) );
             inline_query_id = "";
-            break;
         }
+        break;
         case UpdateType::eChosenInlineResult:
         {
             chat_id = to_string( update.chosen_inline_result->from.id );
             processChosenInlineResult( *this, std::move( update.chosen_inline_result.value() ) );
-            break;
         }
+        break;
+        case UpdateType::eChannelPost: break;
+        case UpdateType::eEditedChannelPost: break;
     }
 }
 
@@ -366,4 +384,3 @@ void
 cppgram::defaultProcessChosenInlineResult( class BasicBot &bot, const ChosenInlineResult & )
 {
 }
-
