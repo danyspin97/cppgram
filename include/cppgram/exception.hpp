@@ -5,43 +5,52 @@
 
 namespace cppgram
 {
-/*! \class ThreadException
+/**
+ * \class ThreadException
  * \inherits std::exception
- * \brief raises if thread could not start (fatal)
+ * \brief raises if thread could not start (*fatal*).
  */
 class ThreadException : public std::exception
 {
     public:
-    /*! \fn ThreadException::what() const throw()
-     * \return exception message
-     */
-    virtual const char *what() const throw();
+    virtual const char *what() const throw() { return "Thread could not started correctly"; }
 };
 
-/*! \class JsonParseError
+/**
+ * \class JsonParseError
  * \inherits std::exception
- * \brief raises if jsoncpp can't parse the JSON document (critical)
+ * \brief If jsoncpp can't parse the JSON document (*critical*).
  */
 class JsonParseError : public std::exception
 {
     public:
-    /*! \fn JsonParseError::what() const throw()
-     * \return exception message
-     */
-    virtual const char *what() const throw();
+    virtual const char *what() const throw() { return "Error while parsing JSON document"; }
 };
 
-/*! \class InlineKeyboardNotValid
+/**
+ * \class InlineKeyboardNotValid
  * \inherits std::exception
- * \brief raises if InlineKeyboard is not valid (critical)
+ * \brief raises if InlineKeyboard is not valid (*critical*).
  */
 class InlineKeyboardNotValid : public std::exception
 {
     public:
-    /*! \fn InlineKeyboardNotValid::what() const throw()
-     * \return exception message
-     */
-    virtual const char *what() const throw();
+    virtual const char *what() const throw() { return "Inline keyboard contains not valid data"; }
+};
+
+/**
+ * \class MessageNotCreated
+ * \inherits std::exception
+ * \brief Could not create message.
+ * \description Could not create message to return for api methods.
+ */
+class MessageNotCreated : public std::exception
+{
+    public:
+    virtual const char *what() const throw()
+    {
+        return "Could not create message to return for api methods.";
+    }
 };
 }
 

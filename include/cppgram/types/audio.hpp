@@ -36,7 +36,7 @@ class Audio
             mime_type;
 
     /** \brief <i>Optional</i>. File size */
-    std::experimental::optional<int_fast32_t> file_size;
+    std::experimental::optional<uint_fast32_t> file_size;
 
     Audio( Json::Value &json_audio )
         : file_id( json_audio["file_id"].asString() )

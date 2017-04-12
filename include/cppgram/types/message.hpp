@@ -11,6 +11,7 @@
 #include "chat.hpp"
 #include "contact.hpp"
 #include "document.hpp"
+#include "game.hpp"
 #include "location.hpp"
 #include "message_entity.hpp"
 #include "message_entity.hpp"
@@ -76,6 +77,8 @@ class Message
     /** \brief <i>Optional</i>. Message is a general file, information about the file */
     std::experimental::optional<Document> document;
 
+    std::experimental::optional<Game> game;
+
     /** \brief <i>Optional</i>. Message is a photo, available sizes of the photo */
     std::vector<PhotoSize> photo;
 
@@ -99,6 +102,14 @@ class Message
 
     /** \brief <i>Optional</i>. Caption for the document, photo or video, 0-200 characters */
     std::experimental::optional<std::string> caption;
+
+    std::experimental::optional<User>          new_chat_member;
+    std::experimental::optional<User>          left_chat_member;
+    std::experimental::optional<std::string>   new_chat_title;
+    std::vector<PhotoSize>                     new_chat_photo;
+    ServiceMessage                             service_message;
+    std::experimental::optional<uint_fast64_t> migrate_to_chat_id, migrate_from_chat_id;
+    std::shared_ptr<Message>                   pinned_message;
 
     Message( Json::Value &json_message )
         : message_id( json_message["message_id"].asUInt() )
@@ -137,13 +148,14 @@ class Message
             text.emplace( json_message["text"].asString() );
         }
 
-        /*if (!json_message["entities"].isNull())
+        entities.reserve( json_message["entities"].size() );
+        if ( !json_message["entities"].isNull() )
         {
-            for (Json::Value &entity: json_message["entities"])
+            for ( Json::Value &json_entity : json_message["entities"] )
             {
-                entities.push_back(new struct messageEntity(entity));
+                entities.push_back( MessageEntity( json_entity ) );
             }
-        } */
+        }
 
         if ( !json_message["audio"].isNull() )
         {
@@ -153,11 +165,16 @@ class Message
         {
             document.emplace( Document( json_message["document"] ) );
         }
+        else if ( !json_message["game"].isNull() )
+        {
+            game.emplace( Game( json_message["game"] ) );
+        }
         else if ( !json_message["photo"].isNull() )
         {
-            for ( Json::Value &photo_json : json_message["photo"] )
+            photo.reserve( json_message["photo"].size() );
+            for ( Json::Value &json_photo : json_message["photo"] )
             {
-                photo.push_back( PhotoSize( photo_json ) );
+                photo.push_back( PhotoSize( json_photo ) );
             }
         }
         else if ( !json_message["sticker"].isNull() )
@@ -189,9 +206,60 @@ class Message
         {
             caption = json_message["caption"].asString();
         }
-    }
 
-    Message(){};
+        if ( !json_message["new_chat_member"].isNull() )
+        {
+            new_chat_member.emplace( User( json_message["new_chat_member"] ) );
+            ;
+        }
+
+        if ( !json_message["left_chat_member"].isNull() )
+        {
+            left_chat_member.emplace( User( json_message["left_chat_member"] ) );
+        }
+
+        if ( !json_message["new_chat_photo"].empty() )
+        {
+            new_chat_photo.reserve( json_message["new_chat_photo"].size() );
+            for ( Json::Value &json_photo : json_message["new_chat_photo"] )
+            {
+                new_chat_photo.push_back(PhotoSize(json_photo));
+            }
+        }
+
+        if (!json_message["delete_chat_photo"].isNull())
+        {
+            service_message = ServiceMessage::delete_chat_photo;
+        }
+        else if (!json_message["group_chat_created"].isNull())
+
+        {
+            service_message = ServiceMessage::group_chat_created;
+        }
+        else if (!json_message["supergroup_chat_created"].isNull())
+        {
+            service_message = ServiceMessage::supergroup_chat_created;
+        }
+        else if (!json_message["channel_chat_created"].isNull())
+        {
+            service_message = ServiceMessage::channel_chat_created;
+        }
+
+        if (!json_message["migrate_to_chat_id"].isNull())
+        {
+            migrate_to_chat_id.emplace(json_message["migrate_to_chat_id"].asInt64());
+        }
+
+        if (!json_message["migrate_from_chat_id"].isNull())
+        {
+            migrate_from_chat_id.emplace(json_message["migrate_from_chat_id"].asInt64());
+        }
+
+        if (!json_message["pinned_message"].isNull())
+        {
+            pinned_message = std::make_shared<Message>(Message(json_message["pinned_message"]));
+        }
+    }
 };
 }
 

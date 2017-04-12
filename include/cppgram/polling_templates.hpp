@@ -154,7 +154,7 @@ template <class T>
 void
 cppgram::Polling<T>::initLogging()
 {
-    spdlog::set_async_mode( 4096 );
+    spdlog::set_async_mode( 8192 );
     auto sink = std::make_shared<spdlog::sinks::simple_file_sink_mt>( "bot.log" );
     for ( auto bot : bots )
     {

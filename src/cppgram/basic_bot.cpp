@@ -7,6 +7,7 @@
 #include "cppgram/basic_bot.hpp"
 #include "cppgram/defines.hpp"
 #include "cppgram/types/update.hpp"
+#include "cppgram/exception.hpp"
 
 using std::string;
 using std::thread;
@@ -19,6 +20,9 @@ using cppgram::Update;
 using cppgram::Update;
 using cppgram::Message;
 using cppgram::ParseMode;
+
+using cppgram::JsonParseError;
+using cppgram::MessageNotCreated;
 
 BasicBot::BasicBot( string &token ) { api_url = TELEGRAM_API_URL + token + "/"; }
 BasicBot::BasicBot( const BasicBot &b )
@@ -70,7 +74,7 @@ BasicBot::checkMethodError( const cpr::Response &response, Json::Value &val )
     if ( !reader.parse( response.text, val ) )
     {
         // log( Log::Error, "JSON Parser: Error while parsing JSON document!" );
-        throw cppgram::JsonParseError();
+        throw JsonParseError();
     }
 
     // Print method error
@@ -143,7 +147,7 @@ BasicBot::sendMessage( const std::string &text,
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
     {
-        return Message();
+        throw cppgram::MessageNotCreated();
     }
 
     return Message( valroot["result"] );
@@ -179,7 +183,7 @@ BasicBot::editMessageText( const uint_fast32_t message_id,
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
     {
-        return Message();
+        throw MessageNotCreated();
     }
 
     return Message( valroot["result"] );
@@ -233,7 +237,9 @@ BasicBot::editMessageCaption( const uint_fast32_t message_id,
 
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
-        return Message();
+    {
+        throw MessageNotCreated();
+    }
 
     return Message( valroot["result"] );
 }
@@ -267,7 +273,9 @@ BasicBot::editMessageReplyMarkup( const uint_fast32_t message_id, const string &
 
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
-        return Message();
+    {
+        throw MessageNotCreated();
+    }
 
     return Message( valroot["result"] );
 }

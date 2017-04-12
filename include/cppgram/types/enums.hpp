@@ -20,7 +20,7 @@ enum ChatType : short
     Supergroup = 2,
 
     /** Channel */
-    Channel = 3
+    Channel = 3,
 };
 
 /** \brief Type of the entity.
@@ -95,6 +95,15 @@ enum InlineKeyboardButtonType : short
 
     /** Add description of the game that will be launched when the user presses the button */
     CallbackGame = 4
+};
+
+enum ServiceMessage : short
+{
+    none,
+    delete_chat_photo,
+    group_chat_created,
+    supergroup_chat_created,
+    channel_chat_created
 };
 
 /** @} */
