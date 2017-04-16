@@ -161,23 +161,19 @@ defaultProcessCallbackQuery( BasicBot &bot, const CallbackQuery & );
 class BasicBot
 {
     public:
-    BasicBot( std::string &token );
+    BasicBot( std::string &token, std::string name );
     BasicBot( const BasicBot & );
 
-    BasicBot operator= (const BasicBot& b);
+    BasicBot operator=( const BasicBot &b );
 
-    void ( *processMessage )( BasicBot &, const Message & )         = &defaultProcessMessage;
-    void ( *processEditedMessage )( BasicBot &, const Message & )   = &defaultProcessEditedMessage;
-    void ( *processInlineQuery )( BasicBot &, const InlineQuery & ) = &defaultProcessInlineQuery;
-    void ( *processChosenInlineResult )( BasicBot &, const ChosenInlineResult & )
-            = &defaultProcessChosenInlineResult;
-    void ( *processCallbackQuery )( BasicBot &, const CallbackQuery & )
-            = &defaultProcessCallbackQuery;
-
-    void processUpdate( const cppgram::Update &update );
     inline std::string getChatID() { return chat_id; }
     inline void setChatID( std::string &chat_id ) { this->chat_id = chat_id; }
     inline void setChatID( uint_fast32_t &chat_id ) { this->chat_id = std::to_string( chat_id ); }
+    std::shared_ptr<spdlog::logger>       getLogger();
+    std::shared_ptr<spdlog::logger> setLogger( spdlog::sink_ptr sink );
+    std::shared_ptr<spdlog::logger> setLogger( std::vector<spdlog::sink_ptr>& sinks );
+    void setLogger( std::shared_ptr<spdlog::logger> new_logger );
+
     const cpr::Response executeRequest( const std::string &method, const cpr::Parameters &params );
 
     /*!
@@ -314,7 +310,7 @@ class BasicBot
      * @return On success, message_id of the message edited, 0 otherwise
      */
     const class cppgram::Message editMessageReplyMarkup( const uint_fast32_t message_id,
-                                                   const std::string & reply_markup = "" );
+                                                         const std::string & reply_markup = "" );
 
     /**
      * Edit only the reply markup of a message sent via the the bot (using
@@ -356,9 +352,15 @@ class BasicBot
 
     /** @} */
 
-    public:
-    spdlog::sink_ptr                sink = nullptr;
-    std::shared_ptr<spdlog::logger> logger;
+    void ( *processMessage )( BasicBot &, const Message & )         = &defaultProcessMessage;
+    void ( *processEditedMessage )( BasicBot &, const Message & )   = &defaultProcessEditedMessage;
+    void ( *processInlineQuery )( BasicBot &, const InlineQuery & ) = &defaultProcessInlineQuery;
+    void ( *processChosenInlineResult )( BasicBot &, const ChosenInlineResult & )
+            = &defaultProcessChosenInlineResult;
+    void ( *processCallbackQuery )( BasicBot &, const CallbackQuery & )
+            = &defaultProcessCallbackQuery;
+
+    void processUpdate( const cppgram::Update &update );
 
     protected:
     std::string chat_id;
@@ -366,9 +368,10 @@ class BasicBot
     std::string inline_query_id;
 
     private:
-    Json::Reader reader;
-    cpr::Session connection;
-    std::string  api_url;
+    Json::Reader                    reader;
+    cpr::Session                    connection;
+    std::shared_ptr<spdlog::logger> logger;
+    std::string                     api_url, bot_name;
 };
 }
 

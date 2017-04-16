@@ -18,7 +18,7 @@ template <class T> class Polling
     void run();
 
     private:
-    uint_fast32_t firstUpdateID( T &poller );
+    uint_fast32_t firstUpdateID( T& poller );
     void runMultithread();
     void runSinglethread();
     void setThreadAffinity( std::vector<std::thread> &threads );

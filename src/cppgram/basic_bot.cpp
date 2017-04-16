@@ -6,13 +6,17 @@
 
 #include "cppgram/basic_bot.hpp"
 #include "cppgram/defines.hpp"
-#include "cppgram/types/update.hpp"
 #include "cppgram/exception.hpp"
+#include "cppgram/types/update.hpp"
 
 using std::string;
-using std::thread;
-using std::vector;
 using std::to_string;
+
+using std::vector;
+using std::thread;
+
+using std::shared_ptr;
+using std::make_shared;
 
 using cppgram::BasicBot;
 using cppgram::Update;
@@ -24,16 +28,26 @@ using cppgram::ParseMode;
 using cppgram::JsonParseError;
 using cppgram::MessageNotCreated;
 
-BasicBot::BasicBot( string &token ) { api_url = TELEGRAM_API_URL + token + "/"; }
+BasicBot::BasicBot( string &token, string name )
+    : api_url( TELEGRAM_API_URL + token + "/" )
+    , bot_name( name )
+    , logger( nullptr )
+{
+}
+
 BasicBot::BasicBot( const BasicBot &b )
 {
+    api_url = b.api_url;
+
     processMessage            = b.processMessage;
     processEditedMessage      = b.processEditedMessage;
     processInlineQuery        = b.processInlineQuery;
     processChosenInlineResult = b.processChosenInlineResult;
     processCallbackQuery      = b.processCallbackQuery;
 
-    api_url = b.api_url;
+    bot_name = b.bot_name;
+
+    logger = b.logger;
 }
 
 BasicBot
@@ -47,10 +61,57 @@ BasicBot::operator=( const BasicBot &b )
     processChosenInlineResult = b.processChosenInlineResult;
     processCallbackQuery      = b.processCallbackQuery;
 
-    sink   = b.sink;
+    bot_name = b.bot_name;
+
     logger = b.logger;
 
     return *this;
+}
+
+shared_ptr<spdlog::logger>
+BasicBot::getLogger()
+{
+    return logger;
+}
+
+shared_ptr<spdlog::logger>
+BasicBot::setLogger( spdlog::sink_ptr sink )
+{
+    // Create a vector containing just a single sink
+    vector<spdlog::sink_ptr> sinks;
+    sinks.push_back(sink);
+    return setLogger(sinks);
+}
+
+shared_ptr<spdlog::logger>
+BasicBot::setLogger( vector<spdlog::sink_ptr>& sinks )
+{
+    try
+    {
+        // Create a logger to the given sinks
+        logger = make_shared<spdlog::logger>( bot_name, sinks.begin(), sinks.end() );
+
+        // Flush on error or severe messages
+        logger->flush_on(spdlog::level::err);
+
+        // Return created logger
+        return logger;
+    }
+    catch ( const spdlog::spdlog_ex &ex )
+    {
+        // catch the error
+        auto console = spdlog::get( "error_console" );
+        console->error( ex.what() );
+    }
+
+    // We could not create a logger, return a nullptr
+    return nullptr;
+}
+
+void
+BasicBot::setLogger( std::shared_ptr<spdlog::logger> new_logger )
+{
+    logger = new_logger;
 }
 
 const cpr::Response
@@ -67,22 +128,21 @@ BasicBot::checkMethodError( const cpr::Response &response, Json::Value &val )
     // If there was an error in the connection print it
     if ( response.error.code != cpr::ErrorCode::OK )
     {
-        // log( Log::Error, "HTTP Error:" + response.error.message );
+        logger->error( "HTTP Error:" + response.error.message );
         return false;
     }
 
     if ( !reader.parse( response.text, val ) )
     {
-        // log( Log::Error, "JSON Parser: Error while parsing JSON document!" );
+        logger->error( "JSON Parser: Error while parsing JSON document!" );
         throw JsonParseError();
     }
 
     // Print method error
     if ( response.status_code != 200 )
     {
-        // log( Log::Error,
-        //"Telegram Error: " + val["error_code"].asString() + ", Description: "
-        //+ val["description"].asString() );
+        logger->error( "Telegram Error: " + val["error_code"].asString() + ", Description: "
+                       + val["description"].asString() );
         return false;
     }
 

@@ -147,21 +147,24 @@ cppgram::Polling<T>::firstUpdateID( T &poller )
     std::vector<Update> first_update;
     while ( !poller.getUpdates( first_update, 0, 1 ) )
         ;
-    return first_update[0].update_id -1 ;
+    return first_update[0].update_id - 1;
 }
 
 template <class T>
 void
 cppgram::Polling<T>::initLogging()
 {
-    spdlog::set_async_mode( 8192 );
     auto sink = std::make_shared<spdlog::sinks::simple_file_sink_mt>( "bot.log" );
-    for ( auto bot : bots )
+
+    for ( auto &bot : bots )
     {
-        if ( bot.sink == nullptr )
+        if ( bot.getLogger() == nullptr )
         {
-            bot.sink   = sink;
-            bot.logger = std::make_shared<spdlog::logger>( "BotLog", sink );
+            bot.setLogger( sink );
         }
     }
+
+    // Set async mode for loggers, and put interval based flush
+    spdlog::set_async_mode(
+            8192, spdlog::async_overflow_policy::block_retry, nullptr, std::chrono::seconds( 300 ) );
 }
