@@ -1,5 +1,5 @@
-#ifndef __CPPGRAM_EXCEPTIONS_HPP
-#define __CPPGRAM_EXCEPTIONS_HPP
+#ifndef CPPGRAM_EXCEPTIONS_HPP
+#define CPPGRAM_EXCEPTIONS_HPP
 
 #include <exception>
 

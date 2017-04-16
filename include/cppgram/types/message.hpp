@@ -27,7 +27,9 @@ namespace cppgram
  * @{
  */
 
-/** \brief A message send by user.
+/**
+ * \class Message
+ * \brief A message send by user.
  * \details This object represents a message. (https://core.telegram.org/bots/api#message) */
 class Message
 {
@@ -103,13 +105,39 @@ class Message
     /** \brief <i>Optional</i>. Caption for the document, photo or video, 0-200 characters */
     std::experimental::optional<std::string> caption;
 
-    std::experimental::optional<User>          new_chat_member;
-    std::experimental::optional<User>          left_chat_member;
-    std::experimental::optional<std::string>   new_chat_title;
-    std::vector<PhotoSize>                     new_chat_photo;
-    ServiceMessage                             service_message;
-    std::experimental::optional<uint_fast64_t> migrate_to_chat_id, migrate_from_chat_id;
-    std::shared_ptr<Message>                   pinned_message;
+    /** \brief <i>Optional</i>. A new member was added to the group, information about them (this
+     * member may be the bot itself). */
+    std::experimental::optional<User> new_chat_member;
+
+    /** \brief <i>Optional</i>. A member was removed from the group, information about them (this
+     * member may be the bot itself). */
+    std::experimental::optional<User> left_chat_member;
+
+    /** \brief <i>Optional</i>. A chat title was changed to this value. */
+    std::experimental::optional<std::string> new_chat_title;
+
+    /** \brief <i>Optional</i>. A chat photo was change to this value. */
+    std::vector<PhotoSize> new_chat_photo;
+
+    /** \brief Service message. @see ServiceMessage */
+    ServiceMessage service_message;
+
+    /** \brief <i>Optional</i>. The group has been migrated to a supergroup with the specified
+     * identifier. This number may be greater than 32 bits and some programming languages may have
+     * difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64
+     * bit integer or double-precision float type are safe for storing this identifier. */
+    std::experimental::optional<uint_fast64_t> migrate_to_chat_id,
+
+            /*** \brief <i>Optional</i>. The supergroup has been migrated from a group with the
+               specified identifier. This number may be greater than 32 bits and some programming
+               languages may have difficulty/silent defects in interpreting it. But it is smaller
+               than 52 bits, so a signed 64 bit integer or double-precision float type are safe for
+               storing this identifier. */
+            migrate_from_chat_id;
+
+    /** \brief <i>Optional</i>. Specified message was pinned. Note that the Message object in this
+     * field will not contain further reply_to_message fields even if it is itself a reply. */
+    std::shared_ptr<Message> pinned_message;
 
     Message( Json::Value &json_message )
         : message_id( json_message["message_id"].asUInt() )
@@ -223,41 +251,41 @@ class Message
             new_chat_photo.reserve( json_message["new_chat_photo"].size() );
             for ( Json::Value &json_photo : json_message["new_chat_photo"] )
             {
-                new_chat_photo.push_back(PhotoSize(json_photo));
+                new_chat_photo.push_back( PhotoSize( json_photo ) );
             }
         }
 
-        if (!json_message["delete_chat_photo"].isNull())
+        if ( !json_message["delete_chat_photo"].isNull() )
         {
             service_message = ServiceMessage::delete_chat_photo;
         }
-        else if (!json_message["group_chat_created"].isNull())
+        else if ( !json_message["group_chat_created"].isNull() )
 
         {
             service_message = ServiceMessage::group_chat_created;
         }
-        else if (!json_message["supergroup_chat_created"].isNull())
+        else if ( !json_message["supergroup_chat_created"].isNull() )
         {
             service_message = ServiceMessage::supergroup_chat_created;
         }
-        else if (!json_message["channel_chat_created"].isNull())
+        else if ( !json_message["channel_chat_created"].isNull() )
         {
             service_message = ServiceMessage::channel_chat_created;
         }
 
-        if (!json_message["migrate_to_chat_id"].isNull())
+        if ( !json_message["migrate_to_chat_id"].isNull() )
         {
-            migrate_to_chat_id.emplace(json_message["migrate_to_chat_id"].asInt64());
+            migrate_to_chat_id.emplace( json_message["migrate_to_chat_id"].asInt64() );
         }
 
-        if (!json_message["migrate_from_chat_id"].isNull())
+        if ( !json_message["migrate_from_chat_id"].isNull() )
         {
-            migrate_from_chat_id.emplace(json_message["migrate_from_chat_id"].asInt64());
+            migrate_from_chat_id.emplace( json_message["migrate_from_chat_id"].asInt64() );
         }
 
-        if (!json_message["pinned_message"].isNull())
+        if ( !json_message["pinned_message"].isNull() )
         {
-            pinned_message = std::make_shared<Message>(Message(json_message["pinned_message"]));
+            pinned_message = std::make_shared<Message>( Message( json_message["pinned_message"] ) );
         }
     }
 };

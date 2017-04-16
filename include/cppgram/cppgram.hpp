@@ -1,5 +1,5 @@
-#ifndef __CPPGRAM__HPP
-#define __CPPGRAM__HPP
+#ifndef CPPGRAM__HPP
+#define CPPGRAM__HPP
 
 #include "basic_bot.hpp"
 #include "inline_keyboard.hpp"

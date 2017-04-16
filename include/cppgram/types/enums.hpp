@@ -97,12 +97,27 @@ enum InlineKeyboardButtonType : short
     CallbackGame = 4
 };
 
+/** \brief Service message received. */
 enum ServiceMessage : short
 {
+    /** No service message. */
     none,
+
+    /** The chat photo was deleted. */
     delete_chat_photo,
+
+    /** The group has been created. */
     group_chat_created,
+
+    /** The supergroup has been created. This field can‘t be received in a message coming through
+       updates, because bot can’t be a member of a supergroup when it is created. It can only be
+       found in reply_to_message if someone replies to a very first message in a directly created
+       supergroup. */
     supergroup_chat_created,
+
+    /** The channel has been created. This field can‘t be received in a message coming through
+       updates, because bot can’t be a member of a channel when it is created. It can only be found
+       in reply_to_message if someone replies to a very first message in a channel. */
     channel_chat_created
 };
 

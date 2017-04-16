@@ -13,7 +13,7 @@ using std::string;
 using std::to_string;
 
 using std::vector;
-using std::thread;
+using std::move;
 
 using std::shared_ptr;
 using std::make_shared;
@@ -79,12 +79,12 @@ BasicBot::setLogger( spdlog::sink_ptr sink )
 {
     // Create a vector containing just a single sink
     vector<spdlog::sink_ptr> sinks;
-    sinks.push_back(sink);
-    return setLogger(sinks);
+    sinks.push_back( sink );
+    return setLogger( sinks );
 }
 
 shared_ptr<spdlog::logger>
-BasicBot::setLogger( vector<spdlog::sink_ptr>& sinks )
+BasicBot::setLogger( vector<spdlog::sink_ptr> &sinks )
 {
     try
     {
@@ -92,7 +92,7 @@ BasicBot::setLogger( vector<spdlog::sink_ptr>& sinks )
         logger = make_shared<spdlog::logger>( bot_name, sinks.begin(), sinks.end() );
 
         // Flush on error or severe messages
-        logger->flush_on(spdlog::level::err);
+        logger->flush_on( spdlog::level::err );
 
         // Return created logger
         return logger;
@@ -155,6 +155,13 @@ BasicBot::getUpdates( std::vector<Update> &updates,
                       const uint_fast32_t  limit,
                       const uint_fast32_t  timeout )
 {
+    // If there are items in the vector
+    if ( updates.size() != 0 )
+    {
+        // clear it
+        updates.clear();
+    }
+
     auto response = executeRequest( "getUpdates",
                                     cpr::Parameters{{"timeout", to_string( timeout )},
                                                     {"limit", to_string( limit )},
@@ -163,19 +170,21 @@ BasicBot::getUpdates( std::vector<Update> &updates,
     Json::Value json_updates;
     if ( !checkMethodError( response, json_updates ) || json_updates["result"].empty() )
     {
-        updates = std::vector<Update>();
         return false;
     }
 
-    u_int8_t count = json_updates["result"].size();
-    for ( uint8_t i = 0; i != count; ++i )
+    // For each update
+    for ( auto &json_single_update : json_updates["result"] )
     {
-        updates.push_back( Update( json_updates["result"][i] ) );
+        // Construct them in place
+        updates.emplace_back( json_single_update );
     }
+
+    // We found updates
     return true;
 }
 
-const Message
+const Message &&
 BasicBot::sendMessage( const std::string &text,
                        const std::string &reply_markup,
                        const ParseMode    parse_mode,
@@ -210,10 +219,10 @@ BasicBot::sendMessage( const std::string &text,
         throw cppgram::MessageNotCreated();
     }
 
-    return Message( valroot["result"] );
+    return move( Message( valroot["result"] ) );
 }
 
-const Message
+const Message &&
 BasicBot::editMessageText( const uint_fast32_t message_id,
                            const string &      text,
                            const string &      reply_markup,
@@ -246,7 +255,7 @@ BasicBot::editMessageText( const uint_fast32_t message_id,
         throw MessageNotCreated();
     }
 
-    return Message( valroot["result"] );
+    return move( Message( valroot["result"] ) );
 }
 
 bool
@@ -284,7 +293,7 @@ BasicBot::editMessageText( const string &  inline_message_id,
     return valroot["result"].asBool();
 }
 
-const Message
+const Message &&
 BasicBot::editMessageCaption( const uint_fast32_t message_id,
                               const string &      caption,
                               const string &      reply_markup )
@@ -301,7 +310,7 @@ BasicBot::editMessageCaption( const uint_fast32_t message_id,
         throw MessageNotCreated();
     }
 
-    return Message( valroot["result"] );
+    return move( Message( valroot["result"] ) );
 }
 
 bool
@@ -323,7 +332,7 @@ BasicBot::editMessageCaption( const string &inline_message_id,
     return valroot["result"].asBool();
 }
 
-const Message
+const Message &&
 BasicBot::editMessageReplyMarkup( const uint_fast32_t message_id, const string &reply_markup )
 {
     auto response = executeRequest( "editMessageReplyMarkup",
@@ -337,7 +346,7 @@ BasicBot::editMessageReplyMarkup( const uint_fast32_t message_id, const string &
         throw MessageNotCreated();
     }
 
-    return Message( valroot["result"] );
+    return move( Message( valroot["result"] ) );
 }
 
 bool
@@ -392,35 +401,35 @@ BasicBot::processUpdate( const Update &update )
         case UpdateType::eMessage:
         {
             chat_id = to_string( update.message->chat.id );
-            processMessage( *this, std::move( update.message.value() ) );
+            processMessage( *this, move( update.message.value() ) );
         }
         break;
         case UpdateType::eCallbackQuery:
         {
             chat_id           = to_string( update.callback_query->message->chat.id );
             callback_query_id = update.callback_query->id;
-            processCallbackQuery( *this, std::move( update.callback_query.value() ) );
+            processCallbackQuery( *this, move( update.callback_query.value() ) );
             callback_query_id = "";
         }
         break;
         case UpdateType::eEditedMessage:
         {
             chat_id = to_string( update.edited_message->chat.id );
-            processEditedMessage( *this, std::move( update.edited_message.value() ) );
+            processEditedMessage( *this, move( update.edited_message.value() ) );
         }
         break;
         case UpdateType::eInlineQuery:
         {
             chat_id         = to_string( update.inline_query->from.id );
             inline_query_id = update.inline_query->id;
-            processInlineQuery( *this, std::move( update.inline_query.value() ) );
+            processInlineQuery( *this, move( update.inline_query.value() ) );
             inline_query_id = "";
         }
         break;
         case UpdateType::eChosenInlineResult:
         {
             chat_id = to_string( update.chosen_inline_result->from.id );
-            processChosenInlineResult( *this, std::move( update.chosen_inline_result.value() ) );
+            processChosenInlineResult( *this, move( update.chosen_inline_result.value() ) );
         }
         break;
         case UpdateType::eChannelPost: break;
