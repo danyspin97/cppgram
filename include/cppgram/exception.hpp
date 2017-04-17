@@ -37,21 +37,6 @@ class InlineKeyboardNotValid : public std::exception
     public:
     virtual const char *what() const throw() { return "Inline keyboard contains not valid data"; }
 };
-
-/**
- * \class MessageNotCreated
- * \inherits std::exception
- * \brief Could not create message.
- * \description Could not create message to return for api methods.
- */
-class MessageNotCreated : public std::exception
-{
-    public:
-    virtual const char *what() const throw()
-    {
-        return "Could not create message to return for api methods.";
-    }
-};
 }
 
 #endif

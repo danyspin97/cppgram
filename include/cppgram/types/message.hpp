@@ -288,6 +288,8 @@ class Message
             pinned_message = std::make_shared<Message>( Message( json_message["pinned_message"] ) );
         }
     }
+
+    Message() {}
 };
 }
 

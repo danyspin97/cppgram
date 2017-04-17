@@ -78,6 +78,8 @@ class Chat
             type = ChatType::Private;
         }
     }
+
+    Chat() {}
 };
 }
 

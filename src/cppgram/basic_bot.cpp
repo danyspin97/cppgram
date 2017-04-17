@@ -14,6 +14,7 @@ using std::to_string;
 
 using std::vector;
 using std::move;
+using std::experimental::optional;
 
 using std::shared_ptr;
 using std::make_shared;
@@ -26,7 +27,6 @@ using cppgram::Message;
 using cppgram::ParseMode;
 
 using cppgram::JsonParseError;
-using cppgram::MessageNotCreated;
 
 BasicBot::BasicBot( string &token, string name )
     : api_url( TELEGRAM_API_URL + token + "/" )
@@ -66,12 +66,6 @@ BasicBot::operator=( const BasicBot &b )
     logger = b.logger;
 
     return *this;
-}
-
-shared_ptr<spdlog::logger>
-BasicBot::getLogger()
-{
-    return logger;
 }
 
 shared_ptr<spdlog::logger>
@@ -184,7 +178,7 @@ BasicBot::getUpdates( std::vector<Update> &updates,
     return true;
 }
 
-const Message &&
+optional<const Message>
 BasicBot::sendMessage( const std::string &text,
                        const std::string &reply_markup,
                        const ParseMode    parse_mode,
@@ -216,13 +210,13 @@ BasicBot::sendMessage( const std::string &text,
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
     {
-        throw cppgram::MessageNotCreated();
+        return Message();
     }
 
-    return move( Message( valroot["result"] ) );
+    return Message( valroot["result"] );
 }
 
-const Message &&
+optional<const Message>
 BasicBot::editMessageText( const uint_fast32_t message_id,
                            const string &      text,
                            const string &      reply_markup,
@@ -252,10 +246,10 @@ BasicBot::editMessageText( const uint_fast32_t message_id,
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
     {
-        throw MessageNotCreated();
+        return Message();
     }
 
-    return move( Message( valroot["result"] ) );
+    return Message( valroot["result"] );
 }
 
 bool
@@ -293,7 +287,7 @@ BasicBot::editMessageText( const string &  inline_message_id,
     return valroot["result"].asBool();
 }
 
-const Message &&
+optional<const Message>
 BasicBot::editMessageCaption( const uint_fast32_t message_id,
                               const string &      caption,
                               const string &      reply_markup )
@@ -307,10 +301,10 @@ BasicBot::editMessageCaption( const uint_fast32_t message_id,
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
     {
-        throw MessageNotCreated();
+        return Message();
     }
 
-    return move( Message( valroot["result"] ) );
+    return Message( valroot["result"] );
 }
 
 bool
@@ -332,7 +326,7 @@ BasicBot::editMessageCaption( const string &inline_message_id,
     return valroot["result"].asBool();
 }
 
-const Message &&
+optional<const Message>
 BasicBot::editMessageReplyMarkup( const uint_fast32_t message_id, const string &reply_markup )
 {
     auto response = executeRequest( "editMessageReplyMarkup",
@@ -343,10 +337,10 @@ BasicBot::editMessageReplyMarkup( const uint_fast32_t message_id, const string &
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
     {
-        throw MessageNotCreated();
+        return Message();
     }
 
-    return move( Message( valroot["result"] ) );
+    return Message( valroot["result"] );
 }
 
 bool

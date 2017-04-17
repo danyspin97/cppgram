@@ -9,7 +9,8 @@
 #include "exception.hpp"
 #include "types/update.hpp"
 
-/*! \mainpage Reference
+/**
+ * \mainpage Reference
  * \section What What is CppGram
  *
  * CppGram is a wrapper for Telegram Messanger Bot API.
@@ -135,10 +136,9 @@
  *
  */
 
-/*! \namespace cppgram
- *
- * \brief main namespace for CppGram
- *
+/**
+ * @namespace cppgram
+ * @brief main namespace for CppGram
  */
 namespace cppgram
 {
@@ -147,40 +147,100 @@ defaultProcessMessage( class BasicBot &bot, const Message & );
 void
 defaultProcessEditedMessage( class BasicBot &bot, const Message & );
 void
+defaultProcessChannelPost( class BasicBot &bot, const Message & );
+void
+defaultProcessEditedChannelPost( class BasicBot &bot, const Message & );
+void
 defaultProcessInlineQuery( BasicBot &bot, const InlineQuery & );
 void
 defaultProcessChosenInlineResult( BasicBot &bot, const ChosenInlineResult & );
 void
 defaultProcessCallbackQuery( BasicBot &bot, const CallbackQuery & );
 
-/*! \class TelegramBot
- *
- *  \brief contains api methods, update handlers and listener
- *
+/**
+ * @brief contains api methods, update handlers and listener
  */
 class BasicBot
 {
     public:
-    BasicBot( std::string &token, std::string name );
-    BasicBot( const BasicBot & );
+    /**
+     * @brief Constuctor.
+     * @param token Bot token. Get a token from [BotFather](https://telegram.me/botfather).
+     * @param bot_name Name of the bot (for logging purposes).
+     */
+    BasicBot( std::string &token, std::string name = "Bot" );
 
+    /**
+     * @internal
+     * @brief Copy constructor.
+     * @param b Bot to copy.
+     */
+    BasicBot( const BasicBot &b );
+
+    /**
+     * @internal
+     * @brief Assigment operator.
+     * @param b Bot to copy.
+     */
     BasicBot operator=( const BasicBot &b );
 
+    /**
+     * @brief Get chat_id of the current user/group/channel.
+     * @return Chat_id.
+     */
     inline std::string getChatID() { return chat_id; }
+    /**
+     * @brief Set the chat id of the bot.
+     * @param chat_id New chat_id to set.
+     */
     inline void setChatID( std::string &chat_id ) { this->chat_id = chat_id; }
+    /**
+     * @see setChatID
+     */
     inline void setChatID( uint_fast32_t &chat_id ) { this->chat_id = std::to_string( chat_id ); }
-    std::shared_ptr<spdlog::logger>       getLogger();
+    /**
+     * @brief Returns current bot's logger.
+     * @return Pointer to the bot's logger.
+     */
+    std::shared_ptr<spdlog::logger> getLogger() { return logger; }
+    /**
+     * @brief Set the bot's logger by passing a sink.
+     * @details Logger will be automaticcaly created using the sink passed.
+     * @param sink Sink of the log to create.
+     * @return The logger created.
+     */
     std::shared_ptr<spdlog::logger> setLogger( spdlog::sink_ptr sink );
+
+    /**
+     * @brief Set the bot's logger by passing a vector of sinks.
+     * @details Logger will be automaticcaly created using the sinks passed.
+     * @param sinks Sink of the log to create.
+     * @return The logger created.
+     */
     std::shared_ptr<spdlog::logger> setLogger( std::vector<spdlog::sink_ptr> &sinks );
+
+    /**
+     * @brief Set the bot's logger by passing a logger.
+     * @param logger New logger to set.
+     */
     void setLogger( std::shared_ptr<spdlog::logger> new_logger );
 
+    /**
+     * @brief Execute an API method by passing method name and parameters.
+     * @details A curl call will be made using cpr::Session of the bot and url generated from API
+     * token.
+     * @param method Method name.
+     * @param params Parameters to pass along with the request.
+     * @return The server response.
+     */
     const cpr::Response executeRequest( const std::string &method, const cpr::Parameters &params );
 
-    /*!
-     * \brief parses response's JSON and checks for error codes
-     * \param response : the cpr::Response object
-     * \param val : the target Json::Value 's reference
-     * \return true if everything OK, else: false
+    /**
+     * @internal
+     * @brief parses response's JSON and checks for error codes
+     * @param response : the cpr::Response object
+     * @param val : the target Json::Value 's reference
+     * @return true if everything OK, else: false
      */
     bool checkMethodError( const cpr::Response &response, Json::Value &val );
 
@@ -189,9 +249,9 @@ class BasicBot
      */
 
     /**
-     * Receive incoming updates using polling (short or long polling based on
+     * @brief Receive incoming updates using polling (short or long polling based on
      * timeout)
-     * @param updates Fill a JSON with the updates received
+     * @param updates Pushes all the updates on the back of a vector.
      * @param offset Identifier of the first update to be returned. Must be
      * greater by one than the highest among the identifiers of previously
      * received updates. By default, updates starting with the earliest
@@ -199,7 +259,7 @@ class BasicBot
      * soon as getUpdates is called with an offset higher than its update_id.
      * The negative offset can be specified to retrieve updates starting from
      * -offset update from the end of the updates queue. All previous updates
-     * will forgotten.
+     * will be forgotten.
      * @param limit Limits the number of updates to be retrieved. Values between
      * 1—100 are accepted.
      * @param timeout Timeout in seconds for long polling.
@@ -211,61 +271,62 @@ class BasicBot
                      const uint_fast32_t           timeout = 60 );
 
     /**
-     * Send a message to a specified chat.
+     * @brief Send a message to a specified chat.
      * (https://core.telegram.org/bots/api#sendmessage)
      * @param id Unique identifier for the target chat or username of the target
      * channel (in the format <code>@channelusername</code>)
-     * @param text Text of the message to be sent
+     * @param text Text of the message to be sent.
      * @param reply_markup Additional interface options. Use InlineKeyboard
-     * class to create a reply markup
-     * @param parse_mode Send an enum of type ParseMode
+     * class to create a reply markup.
+     * @param parse_mode Send an enum of type ParseMode.
      * @param disable_web_page_preview Disables link previews for links in this
-     * message
+     * message.
      * @param disable_notification Sends the message silently.
-     * @param reply_to_message_id If the message is a reply, ID of the original
-     * message
-     * @return On success, message_id of the message sent, 0 otherwise
+     * @param reply_to_message_id If the message is a reply, ID of the original.
+     * message.
+     * @return On success, the message sent.
      */
-    const class cppgram::Message &&sendMessage( const std::string &      text,
-                                                const std::string &      reply_markup = "",
-                                                const cppgram::ParseMode parse_mode
-                                                = ParseMode::HTML,
-                                                const bool         disable_web_page_preview = true,
-                                                const bool         disable_notification     = false,
-                                                const int_fast32_t reply_to_message_id      = 0 );
+    std::experimental::optional<const class cppgram::Message>
+    sendMessage( const std::string &      text,
+                 const std::string &      reply_markup             = "",
+                 const cppgram::ParseMode parse_mode               = ParseMode::HTML,
+                 const bool               disable_web_page_preview = true,
+                 const bool               disable_notification     = false,
+                 const int_fast32_t       reply_to_message_id      = 0 );
 
     /**
-     * Edit text (and reply markup) of a message sent by the bot. Leaving
-     * reply_markup empty remove it from the message edited.
+     * @brief Edit text (and reply markup) of a message sent by the bot.
+     * @details Leaving reply_markup empty remove it from the message edited.
      * (https://core.telegram.org/bots/api#editmessagetext)
      * @param chat_id Unique identifier for the target chat or username of the
      * target channel (in the format <code>\@channelusername</code>)
-     * @param message_id Unique identifier of the sent message
-     * @param text New text of the message
-     * @param reply_markup Inline keyboard object
-     * @param parse_mode Send an enum of type ParseMode
+     * @param message_id Unique identifier of the sent message.
+     * @param text New text of the message.
+     * @param reply_markup Inline keyboard object.
+     * @param parse_mode Send an enum of type ParseMode.
      * @param disable_web_page_preview Disables link previews for links in this
-     * message
-     * @return On success, message_id of the message edited, 0 otherwise
+     * message.
+     * @return On success, the message edited.
      */
-    const class cppgram::Message &&editMessageText( const uint_fast32_t message_id,
-                                                    const std::string & text,
-                                                    const std::string & reply_markup = "",
-                                                    const ParseMode     parse_mode
-                                                    = static_cast<ParseMode>( 1 ),
-                                                    const bool disable_web_page_preview = true );
+    std::experimental::optional<const class cppgram::Message>
+    editMessageText( const uint_fast32_t message_id,
+                     const std::string & text,
+                     const std::string & reply_markup             = "",
+                     const ParseMode     parse_mode               = static_cast<ParseMode>( 1 ),
+                     const bool          disable_web_page_preview = true );
 
     /**
-     * Edit text (and reply markup) of a message sent via the bot (using inline
-     * queries). Leaving reply_markup empty remove it from the message edited.
+     * @brief Edit text (and reply markup) of a message sent via the bot (using inline
+     * queries).
+     * @details Leaving reply_markup empty remove it from the message edited.
      * (https://core.telegram.org/bots/api#editmessagetext)
-     * @param inline_message_id Identifier of the inline message
-     * @param text New text of the message
-     * @param reply_markup Inline keyboard object
-     * @param parse_mode Send an enum of type ParseMode
+     * @param inline_message_id Identifier of the inline message.
+     * @param text New text of the message.
+     * @param reply_markup Inline keyboard object.
+     * @param parse_mode Send an enum of type ParseMode.
      * @param disable_web_page_preview Disables link previews for links in this
-     * message
-     * @return True on success, false otherwise
+     * message.
+     * @return True on success, false otherwise.
      */
     bool editMessageText( const std::string &inline_message_id,
                           const std::string &text,
@@ -274,75 +335,76 @@ class BasicBot
                           const bool         disable_web_page_preview = true );
 
     /**
-     * Edit captions of messages sent by the bot. Leaving reply_markup empty
-     * remove it from the message edited.
+     * @brief Edit captions of messages sent by the bot.
+     * @details Leaving reply_markup empty remove it from the message edited.
      * (https://core.telegram.org/bots/api#editmessagecaption)
      * @param chat_id Unique identifier for the target chat or username of the
-     * target channel (in the format <code>\@channelusername</code>)
-     * @param caption New caption of the message
-     * @param reply_markup Inline keyboard object
-     * @return On success, message_id of the message edited, 0 otherwise
+     * target channel (in the format <code>\@channelusername</code>).
+     * @param caption New caption of the message.
+     * @param reply_markup Inline keyboard object.
+     * @return On success, the message edited.
      */
-    const class cppgram::Message &&editMessageCaption( const uint_fast32_t message_id,
-                                                       const std::string & caption,
-                                                       const std::string & reply_markup = "" );
+    std::experimental::optional<const class cppgram::Message>
+    editMessageCaption( const uint_fast32_t message_id,
+                        const std::string & caption,
+                        const std::string & reply_markup = "" );
 
     /**
-     * Edit captions of messages sent via the bot (using inline_queries).
-     * Leaving reply_markup empty remove it from the message edited.
+     * @brief Edit captions of messages sent via the bot (using inline_queries).
+     * @details Leaving reply_markup empty remove it from the message edited.
      * (https://core.telegram.org/bots/api#editmessagecaption)
-     * @param inline_message_id Identifier of the inline message
-     * @param caption New caption of the message
-     * @param reply_markup Inline Keyboard object
-     * @return True on success, false otherwise
+     * @param inline_message_id Identifier of the inline message.
+     * @param caption New caption of the message.
+     * @param reply_markup Inline Keyboard object.
+     * @return True on success, false otherwise.
      */
     bool editMessageCaption( const std::string &inline_message_id,
                              const std::string &caption,
                              const std::string &reply_markup = "" );
 
     /**
-     * Edit only the reply markup of a message sent by the the bot. Leaving
-     * reply_markup empty remove it from the message edited.
+     * @brief Edit only the reply markup of a message sent by the the bot.
+     * @details Leaving reply_markup empty remove it from the message edited.
      * (https://core.telegram.org/bots/api#editmessagereplymarkup)
      * @param chat_id Unique identifier for the target chat or username of the
-     * target channel (in the format <code>\@channelusername</code>)
-     * @param message_id Unique identifier of the sent message
-     * @param reply_markup New inline keyboard object
-     * @return On success, message_id of the message edited, 0 otherwise
+     * target channel (in the format <code>\@channelusername</code>).
+     * @param message_id Unique identifier of the sent message.
+     * @param reply_markup New inline keyboard object.
+     * @return On success, the message edited.
      */
-    const class cppgram::Message &&editMessageReplyMarkup( const uint_fast32_t message_id,
-                                                           const std::string & reply_markup = "" );
+    std::experimental::optional<const class cppgram::Message>
+    editMessageReplyMarkup( const uint_fast32_t message_id, const std::string &reply_markup = "" );
 
     /**
      * Edit only the reply markup of a message sent via the the bot (using
      * inline queries). Leaving reply_markup empty remove it from the message
      * edited. (https://core.telegram.org/bots/api#editmessagereplymarkup)
-     * @param inline_message_id Identifier of the inline message
-     * @param reply_markup New inline keyboard object
-     * @return True on success, false otherwise
+     * @param inline_message_id Identifier of the inline message.
+     * @param reply_markup New inline keyboard object.
+     * @return True on success, false otherwise.
      */
     bool editMessageReplyMarkup( const std::string &inline_message_id,
                                  const std::string &reply_markup = "" );
 
     /**
-     * Answer an inline query.
-     * (https://core.telegram.org/bots/api#answerinlinequery
+     * @brief Answer an inline query.
+     * (https://core.telegram.org/bots/api#answerinlinequery)
      * @param inline_query_id Unique identifier for the answered query
      * @param results JSON serialized array of the results for the inline query.
-     * Use InlineQuery to create them
+     * Use InlineQueryResults to create them.
      * @param cache_time The maximum amount of time in seconds that the result
-     * of the inline query may be cached on the server
+     * of the inline query may be cached on the server.
      * @param is_personal Pass True, if results may be cached on the server side
-     * only for the user that sent the query
+     * only for the user that sent the query.
      * @param next_offset Pass the offset that a client should send in the next
      * query with the same text to receive more results. Pass an empty string if
-     * there are no more results or if you don‘t support pagination
+     * there are no more results or if you don‘t support pagination.
      * @param switch_pm_text If passed, clients will display a button with
-     * specified text that switches the user to a private chat with the bot and
+     * specified text that switches the user to a private chat with the bot and.
      * sends the bot a start message with the parameter switch_pm_parameter
      * @param switch_pm_paramter Parameter for the start message sent to the bot
-     * when user presses the switch button
-     * @return True on success, false otherwise
+     * when user presses the switch button.
+     * @return True on success, false otherwise.
      */
     bool answerInlineQuery( const Json::Value & results,
                             const uint_fast16_t cache_time         = 300,
@@ -353,14 +415,46 @@ class BasicBot
 
     /** @} */
 
-    void ( *processMessage )( BasicBot &, const Message & )         = &defaultProcessMessage;
-    void ( *processEditedMessage )( BasicBot &, const Message & )   = &defaultProcessEditedMessage;
+    /**
+     * @addtogroup ProcessUpdates Respond to updates
+     * @brief Answer to updates coming from users.
+     * @{
+     */
+
+    /**
+     * @brief Pointer to the function that will be called on each message sent by the user.
+     */
+    void ( *processMessage )( BasicBot &, const Message & ) = &defaultProcessMessage;
+
+    /**
+     * @brief Pointer to the function that will be called on each message edited by the user.
+     */
+    void ( *processEditedMessage )( BasicBot &, const Message & ) = &defaultProcessEditedMessage;
+
+    /**
+     * @brief Pointer to the function that will be called on each inline query.
+     */
     void ( *processInlineQuery )( BasicBot &, const InlineQuery & ) = &defaultProcessInlineQuery;
+
+    /**
+     * @brief Pointer to the function that will be called on each inline query choosed by the user.
+     */
     void ( *processChosenInlineResult )( BasicBot &, const ChosenInlineResult & )
             = &defaultProcessChosenInlineResult;
+
+    /**
+     * @brief Pointer to the funciton that will be called on each callback query.
+     */
     void ( *processCallbackQuery )( BasicBot &, const CallbackQuery & )
             = &defaultProcessCallbackQuery;
 
+    /** @} */
+
+    /**
+     * @internal
+     * @brief Forward the update to the functions that will process it.
+     * @param Update Update to process.
+     */
     void processUpdate( const cppgram::Update &update );
 
     protected:
