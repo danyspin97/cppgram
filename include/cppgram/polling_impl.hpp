@@ -10,7 +10,6 @@ cppgram::Polling<T>::Polling( T             bot,
     : limit( limit )
     , timeout( timeout )
     , updates_queue( 150 )
-    , producer_token( updates_queue )
 {
     bots           = std::vector<T>( threads_number, bot );
     console_stdout = spdlog::stdout_color_mt( "console" );
@@ -23,7 +22,6 @@ cppgram::Polling<T>::Polling( std::vector<T> bots, uint_fast32_t limit, uint_fas
     , limit( limit )
     , timeout( timeout )
     , updates_queue( 150 )
-    , producer_token( updates_queue )
 {
 }
 
@@ -62,6 +60,9 @@ cppgram::Polling<T>::runMultithread()
     setThreadAffinity( threads );
 
     console_stdout->info( "Bots started." );
+
+    moodycamel::ProducerToken producer_token( updates_queue );
+
     std::vector<Update> updates;
     uint_fast32_t       updates_offset = firstUpdateID( poller );
     while ( 1 )

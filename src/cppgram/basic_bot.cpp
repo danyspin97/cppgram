@@ -216,6 +216,28 @@ BasicBot::sendMessage( const std::string &text,
     return Message( valroot["result"] );
 }
 
+bool
+BasicBot::answerCallbackQuery( const std::string &text,
+                               bool               show_alert,
+                               uint32_t           cache_time,
+                               const std::string &url )
+{
+    auto response = executeRequest( "answerCallbackQuery",
+                                    cpr::Parameters{{"callback_query", callback_query_id},
+                                                    {"text", text},
+                                                    {"show_alert", to_string( show_alert )},
+                                                    {"cache_time", to_string( cache_time )},
+                                                    {"url", url}} );
+
+    Json::Value valroot;
+    if ( !checkMethodError( response, valroot ) )
+    {
+        return false;
+    }
+
+    return true;
+}
+
 optional<const Message>
 BasicBot::editMessageText( const uint_fast32_t message_id,
                            const string &      text,

@@ -13,7 +13,7 @@
  * \mainpage Reference
  * \section What What is CppGram
  *
- * CppGram is a wrapper for Telegram Messanger Bot API.
+ * Cppgram is a wrapper for Telegram Messanger Bot API.
  * Designed to be fast and easy, ensures the developer to build a bot in less
  * time without having to learn Telegram Bot API.
  * The bot class (cppgram::TelegramBot) has a method for each API method, so the
@@ -295,6 +295,26 @@ class BasicBot
                  const int_fast32_t       reply_to_message_id      = 0 );
 
     /**
+     * @brief Use this method to send answers to callback queries sent from inline keyboards. The
+     * answer will be displayed to the user as a notification at the top of the chat screen or as an
+     * alert.
+     * @param text Text of the notification. If not specified, nothing will be shown to the user,
+     * 0-200 characters
+     * @param show_alert If true, an alert will be shown by the client instead of a notification at
+     * the top of the chat screen.
+     * @param cache_time The maximum amount of time in seconds that the result of the callback query
+     * may be cached client-side.
+     * @param URL that will be opened by the user's client. If you have created a Game and accepted
+     * the conditions via @Botfather, specify the URL that opens your game – note that this will
+     * only work if the query comes from a callback_game button.
+     * @return On success, True is returned.
+     */
+    bool answerCallbackQuery( const std::string &text,
+                              bool               show_alert = false,
+                              uint32_t           cache_time = 0,
+                              const std::string &url        = "" );
+
+    /**
      * @brief Edit text (and reply markup) of a message sent by the bot.
      * @details Leaving reply_markup empty remove it from the message edited.
      * (https://core.telegram.org/bots/api#editmessagetext)
@@ -458,15 +478,30 @@ class BasicBot
     void processUpdate( const cppgram::Update &update );
 
     protected:
+    /** @internal @brief Chat_id of the current user/group/channel. */
     std::string chat_id;
+
+    /** @internal @brief ID of the current callback query. */
     std::string callback_query_id;
+
+    /** @internal @brief ID of the current inline query. */
     std::string inline_query_id;
 
     private:
-    Json::Reader                    reader;
-    cpr::Session                    connection;
+    /** @internal @brief Json reader. */
+    Json::Reader reader;
+
+    /** @internal @brief Connection to API servers. */
+    cpr::Session connection;
+
+    /** @internal @brief Logger object. */
     std::shared_ptr<spdlog::logger> logger;
-    std::string                     api_url, bot_name;
+
+    /** @internal @brief Url endpoint for making requests. */
+    std::string api_url,
+
+            /** @internal @brief Name of the bot, for logging purposes. */
+            bot_name;
 };
 }
 
