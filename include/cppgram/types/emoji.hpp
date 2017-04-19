@@ -7,6 +7,8 @@
 
 namespace cppgram
 {
+namespace types
+{
 /**
  * \addtogroup Types
  * @{
@@ -43,6 +45,7 @@ class Emoji
     // monkeys
     static const std::string notSeeingMonkey, notHearingMonkey, notSpeakingMonkey;
 };
+}
 }
 
 #endif

@@ -85,7 +85,7 @@ template <class T> class Polling
     std::vector<T> bots;
 
     /** @brief Queue of the updates to process. */
-    moodycamel::BlockingConcurrentQueue<cppgram::Update> updates_queue;
+    moodycamel::BlockingConcurrentQueue<types::Update> updates_queue;
 
     /** @brief Logger that will print error messages to the console */
     std::shared_ptr<spdlog::logger> console_stderr;

@@ -1,5 +1,5 @@
-#ifndef CPPGRAM_VIDEO_H
-#define CPPGRAM_VIDEO_H
+#ifndef CPPGRAM_VIDEO_HPP
+#define CPPGRAM_VIDEO_HPP
 
 #include <experimental/optional>
 #include <string>
@@ -9,6 +9,8 @@
 #include "photo_size.hpp"
 
 namespace cppgram
+{
+namespace types
 {
 /** \addtogroup Types
  * @{
@@ -64,6 +66,7 @@ class Video
         }
     }
 };
+}
 }
 
 #endif

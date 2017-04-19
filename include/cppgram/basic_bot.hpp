@@ -143,25 +143,21 @@
 namespace cppgram
 {
 void
-defaultProcessMessage( class BasicBot &bot, const Message & );
+defaultProcessUpdate( class BasicBot &bot, const types::Message & );
 void
-defaultProcessEditedMessage( class BasicBot &bot, const Message & );
+defaultProcessUpdate( BasicBot &bot, const types::InlineQuery & );
 void
-defaultProcessChannelPost( class BasicBot &bot, const Message & );
+defaultProcessUpdate( BasicBot &bot, const types::ChosenInlineResult & );
 void
-defaultProcessEditedChannelPost( class BasicBot &bot, const Message & );
-void
-defaultProcessInlineQuery( BasicBot &bot, const InlineQuery & );
-void
-defaultProcessChosenInlineResult( BasicBot &bot, const ChosenInlineResult & );
-void
-defaultProcessCallbackQuery( BasicBot &bot, const CallbackQuery & );
+defaultProcessUpdate( BasicBot &bot, const types::CallbackQuery & );
 
 /**
  * @brief contains api methods, update handlers and listener
  */
 class BasicBot
 {
+    template <typename T> friend class Polling;
+
     public:
     /**
      * @brief Constuctor.
@@ -214,6 +210,7 @@ class BasicBot
     /**
      * @brief Set the bot's logger by passing a vector of sinks.
      * @details Logger will be automaticcaly created using the sinks passed.
+     *
      * @param sinks Sink of the log to create.
      * @return The logger created.
      */
@@ -265,10 +262,10 @@ class BasicBot
      * @param timeout Timeout in seconds for long polling.
      * @return True if there are new updates, false otherwise
      */
-    bool getUpdates( std::vector<cppgram::Update> &updates,
-                     const uint_fast32_t           offset  = 0,
-                     const uint_fast32_t           limit   = 100,
-                     const uint_fast32_t           timeout = 60 );
+    bool getUpdates( std::vector<types::Update> &updates,
+                     const uint_fast32_t         offset  = 0,
+                     const uint_fast32_t         limit   = 100,
+                     const uint_fast32_t         timeout = 60 );
 
     /**
      * @brief Send a message to a specified chat.
@@ -286,13 +283,13 @@ class BasicBot
      * message.
      * @return On success, the message sent.
      */
-    std::experimental::optional<const class cppgram::Message>
-    sendMessage( const std::string &      text,
-                 const std::string &      reply_markup             = "",
-                 const cppgram::ParseMode parse_mode               = ParseMode::HTML,
-                 const bool               disable_web_page_preview = true,
-                 const bool               disable_notification     = false,
-                 const int_fast32_t       reply_to_message_id      = 0 );
+    std::experimental::optional<const class types::Message>
+    sendMessage( const std::string &    text,
+                 const std::string &    reply_markup             = "",
+                 const EParseMode parse_mode               = EParseMode::HTML,
+                 const bool             disable_web_page_preview = true,
+                 const bool             disable_notification     = false,
+                 const int_fast32_t     reply_to_message_id      = 0 );
 
     /**
      * @brief Use this method to send answers to callback queries sent from inline keyboards. The
@@ -328,12 +325,12 @@ class BasicBot
      * message.
      * @return On success, the message edited.
      */
-    std::experimental::optional<const class cppgram::Message>
-    editMessageText( const uint_fast32_t message_id,
-                     const std::string & text,
-                     const std::string & reply_markup             = "",
-                     const ParseMode     parse_mode               = static_cast<ParseMode>( 1 ),
-                     const bool          disable_web_page_preview = true );
+    std::experimental::optional<const class types::Message>
+    editMessageText( const uint_fast32_t    message_id,
+                     const std::string &    text,
+                     const std::string &    reply_markup = "",
+                     const EParseMode parse_mode   = static_cast<EParseMode>( 1 ),
+                     const bool             disable_web_page_preview = true );
 
     /**
      * @brief Edit text (and reply markup) of a message sent via the bot (using inline
@@ -348,11 +345,11 @@ class BasicBot
      * message.
      * @return True on success, false otherwise.
      */
-    bool editMessageText( const std::string &inline_message_id,
-                          const std::string &text,
-                          const std::string &reply_markup             = "",
-                          const ParseMode    parse_mode               = static_cast<ParseMode>( 1 ),
-                          const bool         disable_web_page_preview = true );
+    bool editMessageText( const std::string &    inline_message_id,
+                          const std::string &    text,
+                          const std::string &    reply_markup = "",
+                          const EParseMode parse_mode   = static_cast<EParseMode>( 1 ),
+                          const bool             disable_web_page_preview = true );
 
     /**
      * @brief Edit captions of messages sent by the bot.
@@ -364,7 +361,7 @@ class BasicBot
      * @param reply_markup Inline keyboard object.
      * @return On success, the message edited.
      */
-    std::experimental::optional<const class cppgram::Message>
+    std::experimental::optional<const class types::Message>
     editMessageCaption( const uint_fast32_t message_id,
                         const std::string & caption,
                         const std::string & reply_markup = "" );
@@ -392,7 +389,7 @@ class BasicBot
      * @param reply_markup New inline keyboard object.
      * @return On success, the message edited.
      */
-    std::experimental::optional<const class cppgram::Message>
+    std::experimental::optional<const class types::Message>
     editMessageReplyMarkup( const uint_fast32_t message_id, const std::string &reply_markup = "" );
 
     /**
@@ -444,38 +441,39 @@ class BasicBot
     /**
      * @brief Pointer to the function that will be called on each message sent by the user.
      */
-    void ( *processMessage )( BasicBot &, const Message & ) = &defaultProcessMessage;
+    void ( *processMessage )( BasicBot &, const types::Message & ) = &defaultProcessUpdate;
 
     /**
      * @brief Pointer to the function that will be called on each message edited by the user.
      */
-    void ( *processEditedMessage )( BasicBot &, const Message & ) = &defaultProcessEditedMessage;
+    void ( *processEditedMessage )( BasicBot &, const types::Message & ) = &defaultProcessUpdate;
 
     /**
      * @brief Pointer to the function that will be called on each inline query.
      */
-    void ( *processInlineQuery )( BasicBot &, const InlineQuery & ) = &defaultProcessInlineQuery;
+    void ( *processInlineQuery )( BasicBot &, const types::InlineQuery & ) = &defaultProcessUpdate;
 
     /**
      * @brief Pointer to the function that will be called on each inline query choosed by the user.
      */
-    void ( *processChosenInlineResult )( BasicBot &, const ChosenInlineResult & )
-            = &defaultProcessChosenInlineResult;
+    void ( *processChosenInlineResult )( BasicBot &, const types::ChosenInlineResult & )
+            = &defaultProcessUpdate;
 
     /**
      * @brief Pointer to the funciton that will be called on each callback query.
      */
-    void ( *processCallbackQuery )( BasicBot &, const CallbackQuery & )
-            = &defaultProcessCallbackQuery;
+    void ( *processCallbackQuery )( BasicBot &, const types::CallbackQuery & )
+            = &defaultProcessUpdate;
 
     /** @} */
 
+    private:
     /**
      * @internal
      * @brief Forward the update to the functions that will process it.
      * @param Update Update to process.
      */
-    void processUpdate( const cppgram::Update &update );
+    void processUpdate( const types::Update &update );
 
     protected:
     /** @internal @brief Chat_id of the current user/group/channel. */

@@ -7,11 +7,13 @@
 
 #include "cppgram/inline_query_result.hpp"
 #include "cppgram/types/update.hpp"
+#include "cppgram/types/enums.hpp"
 
-
-using namespace cppgram;
 using std::string;
 using std::to_string;
+
+using cppgram::InlineQueryResult;
+using cppgram::EParseMode;
 
 InlineQueryResult::InlineQueryResult()
     : results( Json::Value() )
@@ -24,15 +26,15 @@ InlineQueryResult::newArticle( const std::string &title,
                                const std::string &message_text,
                                const Json::Value &reply_markup,
                                const std::string &description,
-                               const ParseMode    parse_mode,
+                               const EParseMode    parse_mode,
                                const bool         disable_web_page_preview )
 {
     string mode = "";
-    if ( parse_mode == ParseMode::HTML )
+    if ( parse_mode == EParseMode::HTML )
     {
         mode = "HTML";
     }
-    else if ( parse_mode == ParseMode::Markdown )
+    else if ( parse_mode == EParseMode::Markdown )
     {
         mode = "markdown";
     }

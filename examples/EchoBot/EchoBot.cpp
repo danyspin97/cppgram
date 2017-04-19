@@ -10,8 +10,8 @@ class EchoBot : public TelegramBot
     EchoBot() : TelegramBot(TOKEN) {}
     void processMessage(const struct message& message) override final
     {
-		 if(message.chat->type != ChatType::Private) 
-			sendMessage(message.chat->id, "Message: *"+message.text+"* sent by: *"+message.from->username+"*","" ,ParseMode::Markdown);
+		 if(message.chat->type != EChatType::Private)
+			sendMessage(message.chat->id, "Message: *"+message.text+"* sent by: *"+message.from->username+"*","" ,EParseMode::Markdown);
        else
 			sendMessage(message.chat->id, "Message: *"+message.text+"*", "",ParseMode::Markdown);
     }

@@ -3,7 +3,7 @@
 
 #include "cppgram/types/emoji.hpp"
 
-using cppgram::Emoji;
+using cppgram::types::Emoji;
 
 const std::string Emoji::smileGrinning
         = "\xF0\x9F\x98\x81",

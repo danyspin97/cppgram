@@ -10,6 +10,8 @@
 
 namespace cppgram
 {
+namespace types
+{
 /** \addtogroup Types
  * @{
  */
@@ -44,6 +46,7 @@ class Venue
         }
     }
 };
+}
 }
 
 #endif

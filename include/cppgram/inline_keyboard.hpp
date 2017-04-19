@@ -8,10 +8,12 @@
 
 namespace cppgram
 {
-enum InlineKeyboardButtonType : short;
-struct InlineKeyboardButton;
+namespace types
+{
+class InlineKeyboardButton;
+}
 
-enum InlineKeyboardButtonType : short;
+enum EButton : short;
 
 /**
  * \addtogroup Inline Keyboard
@@ -44,23 +46,21 @@ class InlineKeyboard
      * @param buttonType Type of the button
      * @return True on success
      */
-    bool addButton( const std::string &             text,
-                    const std::string &             data,
-                    const InlineKeyboardButtonType &button_type );
+    bool addButton( const std::string &text, const std::string &data, const EButton &button_type );
 
     /**
      * \brief Add a button by passing a InlineKeyboardButton
      * @param newButton The button to add
      * @return True on success
      */
-    bool addButton( const struct InlineKeyboardButton &new_button );
+    bool addButton( const types::InlineKeyboardButton &new_button );
 
     /**
      * \brief Add button by passing a vector of InlineKeyboardButton
      * @param newButtons
      * @return
      */
-    bool addButton( const std::vector<InlineKeyboardButton> &new_buttons );
+    bool addButton( const std::vector<types::InlineKeyboardButton> &new_buttons );
 
     /**
      * \brief The button will be added to the next row from now on
@@ -86,7 +86,7 @@ class InlineKeyboard
      * only non JSON-serialized value
      * @return The keyboard as JSON
      */
-    //inline Json::Value get() const { return inline_keyboard; };
+    // inline Json::Value get() const { return inline_keyboard; };
     private:
     Json::FastWriter writer;
     Json::Value      inline_keyboard;

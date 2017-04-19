@@ -8,6 +8,8 @@
 
 namespace cppgram
 {
+namespace types
+{
 /** \addtogroup Types
  * @{
  */
@@ -47,6 +49,7 @@ class User
         }
     }
 };
+}
 }
 
 #endif

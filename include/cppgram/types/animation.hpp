@@ -5,6 +5,8 @@
 
 namespace cppgram
 {
+namespace types
+{
 /** \class Animation
  * \brief This object represents an animation file to be displayed in the message containing a game.
  * [API reference](https://core.telegram.org/bots/api#animation)*/
@@ -47,6 +49,7 @@ class Animation
         }
     }
 };
+}
 }
 
 #endif

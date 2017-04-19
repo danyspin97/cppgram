@@ -10,6 +10,8 @@
 
 namespace cppgram
 {
+namespace types
+{
 /** \addtogroup Types
  * @{
  */
@@ -55,6 +57,7 @@ class ChosenInlineResult
         }
     }
 };
+}
 }
 
 #endif

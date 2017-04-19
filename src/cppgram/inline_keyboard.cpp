@@ -10,8 +10,8 @@ using std::string;
 using std::vector;
 
 using cppgram::InlineKeyboard;
-using cppgram::InlineKeyboardButton;
-using cppgram::InlineKeyboardButtonType;
+using cppgram::types::InlineKeyboardButton;
+using cppgram::EButton;
 
 InlineKeyboard::InlineKeyboard()
     : column( 0 )
@@ -28,9 +28,7 @@ InlineKeyboard::changeRow()
 }
 
 bool
-InlineKeyboard::addButton( const string &                  text,
-                           const string &                  data,
-                           const InlineKeyboardButtonType &button_type )
+InlineKeyboard::addButton( const string &text, const string &data, const EButton &button_type )
 {
     if ( text.empty() || data.empty() )
     {
@@ -44,11 +42,11 @@ InlineKeyboard::addButton( const string &                  text,
 
     inline_keyboard["inline_keyboard"][row][column]["text"] = text;
 
-    if ( button_type == InlineKeyboardButtonType::CallbackData )
+    if ( button_type == EButton::CallbackData )
     {
         inline_keyboard["inline_keyboard"][row][column]["callback_data"] = data;
     }
-    else if ( button_type == InlineKeyboardButtonType::URL )
+    else if ( button_type == EButton::URL )
     {
         inline_keyboard["inline_keyboard"][row][column]["url"] = data;
     }

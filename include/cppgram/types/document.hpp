@@ -10,6 +10,8 @@
 
 namespace cppgram
 {
+namespace types
+{
 /** \addtogroup Types
  * @{
  */
@@ -62,4 +64,6 @@ class Document
     }
 };
 }
+}
+
 #endif

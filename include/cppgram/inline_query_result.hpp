@@ -6,9 +6,9 @@
 
 namespace cppgram
 {
-enum ParseMode : short;
+enum EParseMode : short;
 
-/*! \class InlineQueryResult
+/**
  * \brief Create articles to send as inlineQuery result
  * \details Helper class to create articles and pass the results to
  * answerInlineQuery
@@ -36,22 +36,22 @@ class InlineQueryResult
      */
     short newArticle( const std::string &title,
                       const std::string &message_text,
-                      const Json::Value &reply_markup     = Json::Value(),
-                      const std::string &description      = "",
-                      const ParseMode parse_mode          = static_cast<ParseMode>( 1 ),
-                      const bool disable_web_page_preview = true );
+                      const Json::Value &reply_markup             = Json::Value(),
+                      const std::string &description              = "",
+                      const EParseMode   parse_mode               = static_cast<EParseMode>( 1 ),
+                      const bool         disable_web_page_preview = true );
 
     short newArticle( const std::string &title,
                       const std::string &message_text,
                       const std::string &description,
-                      const Json::Value &reply_markup     = Json::Value(),
-                      const ParseMode parse_mode          = static_cast<ParseMode>( 0 ),
-                      const bool disable_web_page_preview = true,
-                      const std::string &url              = "",
-                      const bool hide_url                 = false,
-                      const std::string &thumb_url        = "",
-                      const int_fast32_t thumb_width      = 0,
-                      const int_fast32_t thumb_height     = 0 );
+                      const Json::Value &reply_markup             = Json::Value(),
+                      const EParseMode   parse_mode               = static_cast<EParseMode>( 0 ),
+                      const bool         disable_web_page_preview = true,
+                      const std::string &url                      = "",
+                      const bool         hide_url                 = false,
+                      const std::string &thumb_url                = "",
+                      const int_fast32_t thumb_width              = 0,
+                      const int_fast32_t thumb_height             = 0 );
 
     /**
      * \brief Get results to send in answerInlineQuery
@@ -61,7 +61,8 @@ class InlineQueryResult
 
     private:
     Json::Value results;
-    short articleId;
+    short       articleId;
 };
 }
-#endif // CPPGRAM_INLINEQUERYRESULT_H
+
+#endif

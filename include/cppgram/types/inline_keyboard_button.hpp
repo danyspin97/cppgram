@@ -9,6 +9,8 @@
 
 namespace cppgram
 {
+namespace types
+{
 /** \addtogroup Types
  * @{
  */
@@ -28,7 +30,7 @@ class InlineKeyboardButton
             data;
 
     /** \brief Type of the json_button */
-    enum InlineKeyboardButtonType button_type;
+    EButton button_type;
 
     /**
      * \brief Constructor by parameters.
@@ -37,9 +39,9 @@ class InlineKeyboardButton
      * @param button_type Type of the json_button to create
      * @return Returns a new inlineKeyboardButton
      */
-    InlineKeyboardButton( const std::string &             text,
-                          const std::string &             data,
-                          const InlineKeyboardButtonType &button_type )
+    InlineKeyboardButton( const std::string &text,
+                          const std::string &data,
+                          const EButton &    button_type )
         : text( text )
         , data( data )
         , button_type( button_type )
@@ -57,20 +59,21 @@ class InlineKeyboardButton
         if ( !json_button["callback_data"].isNull() )
         {
             data        = json_button["callback_data"].asString();
-            button_type = InlineKeyboardButtonType::CallbackData;
+            button_type = EButton::CallbackData;
         }
         else if ( !json_button["url"].isNull() )
         {
             data        = json_button["url"].asString();
-            button_type = InlineKeyboardButtonType::URL;
+            button_type = EButton::URL;
         }
         else if ( !json_button["switch_inline_query"].isNull() )
         {
             data        = json_button["switch_inline_query"].asString();
-            button_type = InlineKeyboardButtonType::SwitchInlineQuery;
+            button_type = EButton::SwitchInlineQuery;
         }
     }
 };
+}
 }
 
 #endif

@@ -63,7 +63,7 @@ cppgram::Polling<T>::runMultithread()
 
     moodycamel::ProducerToken producer_token( updates_queue );
 
-    std::vector<Update> updates;
+    std::vector<cppgram::types::Update> updates;
     uint_fast32_t       updates_offset = firstUpdateID( poller );
     while ( 1 )
     {
@@ -92,7 +92,7 @@ cppgram::Polling<T>::runSinglethread()
     uint_fast32_t updates_offset = firstUpdateID( bot );
     while ( 1 )
     {
-        std::vector<Update> updates;
+        std::vector<cppgram::types::Update> updates;
         if ( bot.getUpdates( updates, updates_offset ) )
         {
             for ( auto update : updates )
@@ -133,7 +133,7 @@ template <class T>
 void
 cppgram::Polling<T>::loopBot( T bot )
 {
-    cppgram::Update new_update;
+    cppgram::types::Update new_update;
     while ( 1 )
     {
         updates_queue.wait_dequeue( new_update );
@@ -145,7 +145,7 @@ template <class T>
 uint_fast32_t
 cppgram::Polling<T>::firstUpdateID( T &poller )
 {
-    std::vector<Update> first_update;
+    std::vector<cppgram::types::Update> first_update;
     while ( !poller.getUpdates( first_update, 0, 1 ) )
         ;
     return first_update[0].update_id - 1;

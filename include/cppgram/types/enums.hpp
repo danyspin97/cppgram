@@ -8,7 +8,7 @@ namespace cppgram
  */
 
 /** \brief Type of the chat */
-enum ChatType : short
+enum EChat : short
 {
     /** Private chats with a user */
     Private = 0,
@@ -25,7 +25,7 @@ enum ChatType : short
 
 /** \brief Type of the entity.
  * \details (https://core.telegram.org/bots/api#messageentity) */
-enum MessageEntityType : short
+enum EMessageEntity : short
 {
     /** \@username */
     mention = 0,
@@ -63,7 +63,7 @@ enum MessageEntityType : short
 
 /** \brief Formattation options.
  * \details (https://core.telegram.org/bots/api#formatting-options) */
-enum ParseMode : short
+enum EParseMode : short
 {
     /** No formattation */
     None = 0,
@@ -77,7 +77,7 @@ enum ParseMode : short
 
 /** \brief Type of the inlineKeyboardButton to add in the reply markup
  * \details (https://core.telegram.org/bots/api#inlinekeyboardbutton) */
-enum InlineKeyboardButtonType : short
+enum EButton : short
 {
     /** The button will contain a clicable url */
     URL = 0,
@@ -98,7 +98,7 @@ enum InlineKeyboardButtonType : short
 };
 
 /** \brief Service message received. */
-enum ServiceMessage : short
+enum EServiceMessage : short
 {
     /** No service message. */
     none,
@@ -123,7 +123,7 @@ enum ServiceMessage : short
 
 /** @} */
 
-enum UpdateType : short
+enum EUpdate : short
 {
     eMessage            = 0,
     eEditedMessage      = 1,

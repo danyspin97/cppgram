@@ -23,6 +23,8 @@
 
 namespace cppgram
 {
+namespace types
+{
 /** \addtogroup Types
  * @{
  */
@@ -120,7 +122,7 @@ class Message
     std::vector<PhotoSize> new_chat_photo;
 
     /** \brief Service message. @see ServiceMessage */
-    ServiceMessage service_message;
+    EServiceMessage service_message;
 
     /** \brief <i>Optional</i>. The group has been migrated to a supergroup with the specified
      * identifier. This number may be greater than 32 bits and some programming languages may have
@@ -257,20 +259,20 @@ class Message
 
         if ( !json_message["delete_chat_photo"].isNull() )
         {
-            service_message = ServiceMessage::delete_chat_photo;
+            service_message = EServiceMessage::delete_chat_photo;
         }
         else if ( !json_message["group_chat_created"].isNull() )
 
         {
-            service_message = ServiceMessage::group_chat_created;
+            service_message = EServiceMessage::group_chat_created;
         }
         else if ( !json_message["supergroup_chat_created"].isNull() )
         {
-            service_message = ServiceMessage::supergroup_chat_created;
+            service_message = EServiceMessage::supergroup_chat_created;
         }
         else if ( !json_message["channel_chat_created"].isNull() )
         {
-            service_message = ServiceMessage::channel_chat_created;
+            service_message = EServiceMessage::channel_chat_created;
         }
 
         if ( !json_message["migrate_to_chat_id"].isNull() )
@@ -291,6 +293,7 @@ class Message
 
     Message() {}
 };
+}
 }
 
 #endif

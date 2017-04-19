@@ -1,5 +1,5 @@
-#ifndef CPPGRAM_VOICE_H
-#define CPPGRAM_VOICE_H
+#ifndef CPPGRAM_VOICE_HPP
+#define CPPGRAM_VOICE_HPP
 
 #include <experimental/optional>
 #include <string>
@@ -7,6 +7,8 @@
 #include <json/json.h>
 
 namespace cppgram
+{
+namespace types
 {
 /** \addtogroup Types
  * @{
@@ -46,5 +48,6 @@ class Voice
     };
 };
 }
+}
 
-#endif // CPPGRAM_VOICE_H
+#endif

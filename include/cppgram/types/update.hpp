@@ -12,6 +12,8 @@
 
 namespace cppgram
 {
+namespace types
+{
 /** \addtogroup Types
  * @{
  */
@@ -21,41 +23,41 @@ class Update
     /** @} */
 
     public:
-    enum UpdateType type;
+    EUpdate type;
     uint_fast32_t   update_id;
 
-    std::experimental::optional<cppgram::Message>            message;
-    std::experimental::optional<cppgram::Message>            edited_message;
-    std::experimental::optional<cppgram::InlineQuery>        inline_query;
-    std::experimental::optional<cppgram::ChosenInlineResult> chosen_inline_result;
-    std::experimental::optional<cppgram::CallbackQuery>      callback_query;
+    std::experimental::optional<Message>            message;
+    std::experimental::optional<Message>            edited_message;
+    std::experimental::optional<InlineQuery>        inline_query;
+    std::experimental::optional<ChosenInlineResult> chosen_inline_result;
+    std::experimental::optional<CallbackQuery>      callback_query;
 
     Update( Json::Value &json_update )
         : update_id( json_update["update_id"].asUInt() )
     {
         if ( !json_update["message"].isNull() )
         {
-            type = UpdateType::eMessage;
+            type = EUpdate::eMessage;
             message.emplace( Message( json_update["message"] ) );
         }
         else if ( !json_update["callback_query"].isNull() )
         {
-            type = UpdateType::eCallbackQuery;
+            type = EUpdate::eCallbackQuery;
             callback_query.emplace( CallbackQuery( json_update["callback_query"] ) );
         }
         else if ( !json_update["edited_message"].isNull() )
         {
-            type = UpdateType::eEditedMessage;
+            type = EUpdate::eEditedMessage;
             edited_message.emplace( Message( json_update["edited_message"] ) );
         }
         else if ( !json_update["inline_query"].isNull() )
         {
-            type = UpdateType::eInlineQuery;
+            type = EUpdate::eInlineQuery;
             inline_query.emplace( InlineQuery( json_update["inline_query"] ) );
         }
         else if ( !json_update["chosen_inline_result"].isNull() )
         {
-            type = UpdateType::eChosenInlineResult;
+            type = EUpdate::eChosenInlineResult;
             chosen_inline_result.emplace(
                     ChosenInlineResult( json_update["chosen_inline_result"] ) );
         }
@@ -97,6 +99,7 @@ class Update
         return *this;
     };
 };
+}
 }
 
 #endif

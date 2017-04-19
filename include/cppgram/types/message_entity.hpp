@@ -12,6 +12,8 @@
 
 namespace cppgram
 {
+namespace types
+{
 /** \addtogroup Types
  * @{
  */
@@ -25,7 +27,7 @@ class MessageEntity
 
     public:
     /** \brief Type of the entity. */
-    MessageEntityType type;
+    EMessageEntity type;
 
     /** \brief Offset in UTF-16 code units to the start of the entity */
     int offset,
@@ -62,7 +64,7 @@ class MessageEntity
             i--;
         }
 
-        type = static_cast<MessageEntityType>( i );
+        type = static_cast<EMessageEntity>( i );
 
         if ( !json_message_entity["url"].isNull() )
         {
@@ -86,6 +88,7 @@ class MessageEntity
         length = prev.length;
     }
 };
+}
 }
 
 #endif

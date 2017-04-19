@@ -1,6 +1,4 @@
 # CppGram
-[![Build Status](https://travis-ci.org/DanySpin97/cppgram.svg?branch=master)](https://travis-ci.org/DanySpin97/cppgram)
-
 CppGram is a lighweight framework for Telegram Bot API that provides support for the most important api methods and basic features a user need ensuring speed and stability.
 
 ## Usage

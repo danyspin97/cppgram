@@ -10,6 +10,8 @@
 
 namespace cppgram
 {
+namespace types
+{
 /** \addtogroup Types
  * @{
  */
@@ -25,7 +27,7 @@ class Chat
     int_fast64_t id;
 
     /** \brief Type of chat */
-    ChatType type;
+    EChat type;
 
     /** \brief <i>Optional</i>. Title, for supergroups, channels and group chats */
     std::experimental::optional<std::string> title,
@@ -71,16 +73,17 @@ class Chat
                 i--;
             }
 
-            type = static_cast<ChatType>( i );
+            type = static_cast<EChat>( i );
         }
         else
         {
-            type = ChatType::Private;
+            type = EChat::Private;
         }
     }
 
     Chat() {}
 };
+}
 }
 
 #endif

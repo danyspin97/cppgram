@@ -7,6 +7,8 @@
 
 namespace cppgram
 {
+namespace types
+{
 /** \addtogroup Types
  * @{
  */
@@ -31,6 +33,7 @@ class Location
     {
     }
 };
+}
 }
 
 #endif
