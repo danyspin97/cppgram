@@ -2,6 +2,7 @@
 #define CPPGRAM_BASIC_BOT_HPP
 
 #include <string>
+#include <functional>
 
 #include <cpr/cpr.h>
 #include <spdlog/spdlog.h>
@@ -143,13 +144,13 @@
 namespace cppgram
 {
 void
-defaultProcessUpdate( class BasicBot &bot, const types::Message & );
+defaultProcessMessage( class BasicBot &bot, const types::Message & );
 void
-defaultProcessUpdate( BasicBot &bot, const types::InlineQuery & );
+defaultProcessInlineQuery( BasicBot &bot, const types::InlineQuery & );
 void
-defaultProcessUpdate( BasicBot &bot, const types::ChosenInlineResult & );
+defaultProcessChosenInlineResult( BasicBot &bot, const types::ChosenInlineResult & );
 void
-defaultProcessUpdate( BasicBot &bot, const types::CallbackQuery & );
+defaultProcessCallbackQuery( BasicBot &bot, const types::CallbackQuery & );
 
 /**
  * @brief contains api methods, update handlers and listener
@@ -441,29 +442,29 @@ class BasicBot
     /**
      * @brief Pointer to the function that will be called on each message sent by the user.
      */
-    void ( *processMessage )( BasicBot &, const types::Message & ) = &defaultProcessUpdate;
+    std::function<void ( BasicBot &, const types::Message & )> processMessage = &defaultProcessMessage;
 
     /**
      * @brief Pointer to the function that will be called on each message edited by the user.
      */
-    void ( *processEditedMessage )( BasicBot &, const types::Message & ) = &defaultProcessUpdate;
+    void ( *processEditedMessage )( BasicBot &, const types::Message & ) = &defaultProcessMessage;
 
     /**
      * @brief Pointer to the function that will be called on each inline query.
      */
-    void ( *processInlineQuery )( BasicBot &, const types::InlineQuery & ) = &defaultProcessUpdate;
+    void ( *processInlineQuery )( BasicBot &, const types::InlineQuery & ) = &defaultProcessInlineQuery;
 
     /**
      * @brief Pointer to the function that will be called on each inline query choosed by the user.
      */
     void ( *processChosenInlineResult )( BasicBot &, const types::ChosenInlineResult & )
-            = &defaultProcessUpdate;
+            = &defaultProcessChosenInlineResult;
 
     /**
      * @brief Pointer to the funciton that will be called on each callback query.
      */
     void ( *processCallbackQuery )( BasicBot &, const types::CallbackQuery & )
-            = &defaultProcessUpdate;
+            = &defaultProcessCallbackQuery;
 
     /** @} */
 

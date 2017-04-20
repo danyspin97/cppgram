@@ -458,21 +458,21 @@ BasicBot::processUpdate( const Update &update )
 }
 
 void
-cppgram::defaultProcessUpdate( class BasicBot &bot, const Message & )
+cppgram::defaultProcessMessage( class BasicBot &bot, const Message & )
 {
 }
 
 void
-cppgram::defaultProcessUpdate( class BasicBot &bot, const InlineQuery & )
+cppgram::defaultProcessInlineQuery( class BasicBot &bot, const InlineQuery & )
 {
 }
 
 void
-cppgram::defaultProcessUpdate( class BasicBot &bot, const CallbackQuery & )
+cppgram::defaultProcessCallbackQuery( class BasicBot &bot, const CallbackQuery & )
 {
 }
 
 void
-cppgram::defaultProcessUpdate( class BasicBot &bot, const ChosenInlineResult & )
+cppgram::defaultProcessChosenInlineResult( class BasicBot &bot, const ChosenInlineResult & )
 {
 }

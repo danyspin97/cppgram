@@ -159,7 +159,7 @@ cppgram::Polling<T>::initLogging()
 
     for ( auto &bot : bots )
     {
-        if ( bot.getLogger() == nullptr )
+        if ( bot.logger == nullptr )
         {
             bot.setLogger( sink );
         }
