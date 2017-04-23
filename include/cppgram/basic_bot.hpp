@@ -1,14 +1,15 @@
 #ifndef CPPGRAM_BASIC_BOT_HPP
 #define CPPGRAM_BASIC_BOT_HPP
 
-#include <string>
 #include <functional>
+#include <string>
 
 #include <cpr/cpr.h>
 #include <spdlog/spdlog.h>
 
 #include "exception.hpp"
 #include "types/update.hpp"
+#include "command_handler.hpp"
 
 /**
  * \mainpage Reference
@@ -158,6 +159,7 @@ defaultProcessCallbackQuery( BasicBot &bot, const types::CallbackQuery & );
 class BasicBot
 {
     template <typename T> friend class Polling;
+    friend class commands::Command;
 
     public:
     /**
@@ -194,7 +196,11 @@ class BasicBot
     /**
      * @see setChatID
      */
-    inline void setChatID( uint_fast32_t &chat_id ) { this->chat_id = std::to_string( chat_id ); }
+    inline void setChatID( uint_fast32_t chat_id ) { this->chat_id = std::to_string( chat_id ); }
+    /**
+     * @see setChatID
+     */
+    inline void setChatID( int_fast64_t chat_id ) { this->chat_id = std::to_string( chat_id ); }
     /**
      * @brief Returns current bot's logger.
      * @return Pointer to the bot's logger.
@@ -285,12 +291,12 @@ class BasicBot
      * @return On success, the message sent.
      */
     std::experimental::optional<const class types::Message>
-    sendMessage( const std::string &    text,
-                 const std::string &    reply_markup             = "",
-                 const EParseMode parse_mode               = EParseMode::HTML,
-                 const bool             disable_web_page_preview = true,
-                 const bool             disable_notification     = false,
-                 const int_fast32_t     reply_to_message_id      = 0 );
+    sendMessage( const std::string &text,
+                 const std::string &reply_markup             = "",
+                 const EParseMode   parse_mode               = EParseMode::HTML,
+                 const bool         disable_web_page_preview = true,
+                 const bool         disable_notification     = false,
+                 const int_fast32_t reply_to_message_id      = 0 );
 
     /**
      * @brief Use this method to send answers to callback queries sent from inline keyboards. The
@@ -327,11 +333,11 @@ class BasicBot
      * @return On success, the message edited.
      */
     std::experimental::optional<const class types::Message>
-    editMessageText( const uint_fast32_t    message_id,
-                     const std::string &    text,
-                     const std::string &    reply_markup = "",
-                     const EParseMode parse_mode   = static_cast<EParseMode>( 1 ),
-                     const bool             disable_web_page_preview = true );
+    editMessageText( const uint_fast32_t message_id,
+                     const std::string & text,
+                     const std::string & reply_markup             = "",
+                     const EParseMode    parse_mode               = static_cast<EParseMode>( 1 ),
+                     const bool          disable_web_page_preview = true );
 
     /**
      * @brief Edit text (and reply markup) of a message sent via the bot (using inline
@@ -346,11 +352,11 @@ class BasicBot
      * message.
      * @return True on success, false otherwise.
      */
-    bool editMessageText( const std::string &    inline_message_id,
-                          const std::string &    text,
-                          const std::string &    reply_markup = "",
-                          const EParseMode parse_mode   = static_cast<EParseMode>( 1 ),
-                          const bool             disable_web_page_preview = true );
+    bool editMessageText( const std::string &inline_message_id,
+                          const std::string &text,
+                          const std::string &reply_markup = "",
+                          const EParseMode   parse_mode   = static_cast<EParseMode>( 1 ),
+                          const bool         disable_web_page_preview = true );
 
     /**
      * @brief Edit captions of messages sent by the bot.
@@ -442,7 +448,8 @@ class BasicBot
     /**
      * @brief Pointer to the function that will be called on each message sent by the user.
      */
-    std::function<void ( BasicBot &, const types::Message & )> processMessage = &defaultProcessMessage;
+    std::function<void( BasicBot &, const types::Message & )> processMessage
+            = &defaultProcessMessage;
 
     /**
      * @brief Pointer to the function that will be called on each message edited by the user.
@@ -452,7 +459,8 @@ class BasicBot
     /**
      * @brief Pointer to the function that will be called on each inline query.
      */
-    void ( *processInlineQuery )( BasicBot &, const types::InlineQuery & ) = &defaultProcessInlineQuery;
+    void ( *processInlineQuery )( BasicBot &, const types::InlineQuery & )
+            = &defaultProcessInlineQuery;
 
     /**
      * @brief Pointer to the function that will be called on each inline query choosed by the user.
@@ -468,6 +476,8 @@ class BasicBot
 
     /** @} */
 
+    CommandHandler commands;
+
     private:
     /**
      * @internal
@@ -476,7 +486,6 @@ class BasicBot
      */
     void processUpdate( const types::Update &update );
 
-    protected:
     /** @internal @brief Chat_id of the current user/group/channel. */
     std::string chat_id;
 
@@ -486,7 +495,6 @@ class BasicBot
     /** @internal @brief ID of the current inline query. */
     std::string inline_query_id;
 
-    private:
     /** @internal @brief Json reader. */
     Json::Reader reader;
 

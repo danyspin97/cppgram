@@ -204,7 +204,7 @@ class Message
             photo.reserve( json_message["photo"].size() );
             for ( Json::Value &json_photo : json_message["photo"] )
             {
-                photo.push_back( PhotoSize( json_photo ) );
+                photo.emplace_back( PhotoSize( json_photo ) );
             }
         }
         else if ( !json_message["sticker"].isNull() )

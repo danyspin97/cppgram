@@ -1,26 +1,46 @@
-#ifndef COMMAND_HPP
-#define COMMAND_HPP
+#ifndef CPPGRAM_COMMAND_HPP
+#define CPPGRAM_COMMAND_HPP
 
-#include <stdlib.h>
+#include <functional>
 #include <string>
 
+#include "cppgram/basic_bot.hpp"
+#include "cppgram/types/enums.hpp"
+
 namespace cppgram
+{
+namespace types
+{
+class Update;
+}
+
+namespace commands
 {
 class Command
 {
     public:
-    std::string command;
+    const EUpdate type;
 
-    uint_fast8_t length;
-
-    Command(){};
-
-    Command( std::string command )
-        : command( command )
-        , length( command.size() )
+    Command()
+        : type( EUpdate::eMessage )
     {
+    }
+
+    virtual void callClosure( BasicBot &, const types::Update & ) = 0;
+    virtual bool isValid( const types::Update & ) = 0;
+
+    protected:
+    void setInlineQueryID(std::string& inline_query_id, BasicBot& bot)
+    {
+        bot.inline_query_id = inline_query_id;
+    }
+
+    void setCallbackQueryID(std::string& callback_query_id, BasicBot& bot)
+    {
+        bot.callback_query_id = callback_query_id;
     }
 };
 }
+}
 
-#endif // COMMAND_H
+#endif

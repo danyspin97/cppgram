@@ -1,24 +1,49 @@
-#ifndef MESSAGECOMMANDS_H
-#define MESSAGECOMMANDS_H
+#ifndef CPPGRAM_MESSAGE_COMMAND_HPP
+#define CPPGRAM_MESSAGE_COMMAND_HPP
 
 #include "command.hpp"
+#include "cppgram/types/update.hpp"
 
 namespace cppgram
 {
-typedef void ( *MessageScript )( class TelegramBot *, const struct message * );
+namespace commands
+{
+typedef std::function<void( class BasicBot &, const types::Message )> MessageClosure;
 
 class MessageCommand : public Command
 {
     public:
-    MessageScript script;
+    const EUpdate type = EUpdate::eMessage;
+    std::string          command;
+    MessageClosure       script;
 
-    MessageCommand() { script = 0; }
-    MessageCommand( std::string &command, MessageScript script )
-        : Command( "/" + command )
+    MessageCommand( std::string &command, MessageClosure script )
+        : command( "/" + command )
         , script( script )
     {
     }
+
+    virtual void callClosure( BasicBot &bot, const types::Update &update )
+    {
+        bot.setChatID(update.message->chat.id);
+        script( bot, update.message.value() );
+    }
+
+    virtual bool isValid( const types::Update &update )
+    {
+        // If there is at least a command in the message
+        bool is_command = update.message->entities.size() != 0;
+
+        // and the command is found in the message
+        if ( is_command && update.message->text->find( command ) != std::string::npos)
+        {
+            return true;
+        }
+
+        return false;
+    }
 };
 }
+}
 
-#endif // MESSAGECOMMANDS_H
+#endif

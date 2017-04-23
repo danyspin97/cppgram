@@ -31,6 +31,7 @@ class MessageEntity
 
     /** \brief Offset in UTF-16 code units to the start of the entity */
     int offset,
+
             /** \brief Length of the entity in UTF-16 code units */
             length;
 

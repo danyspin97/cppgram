@@ -5,6 +5,7 @@
 #include <json/json.h>
 
 #include "cppgram/basic_bot.hpp"
+#include "cppgram/commands/command.hpp"
 #include "cppgram/defines.hpp"
 #include "cppgram/exception.hpp"
 #include "cppgram/types/update.hpp"
@@ -20,6 +21,7 @@ using std::shared_ptr;
 using std::make_shared;
 
 using cppgram::BasicBot;
+using cppgram::CommandHandler;
 
 using cppgram::types::Update;
 using cppgram::types::Message;
@@ -36,10 +38,12 @@ BasicBot::BasicBot( string &token, string name )
     : api_url( TELEGRAM_API_URL + token + "/" )
     , bot_name( name )
     , logger( nullptr )
+    , commands( this )
 {
 }
 
 BasicBot::BasicBot( const BasicBot &b )
+    : commands( CommandHandler( this, b.commands ) )
 {
     api_url = b.api_url;
 
@@ -68,6 +72,8 @@ BasicBot::operator=( const BasicBot &b )
     bot_name = b.bot_name;
 
     logger = b.logger;
+
+    commands = CommandHandler( this, b.commands );
 
     return *this;
 }
@@ -185,7 +191,7 @@ BasicBot::getUpdates( std::vector<Update> &updates,
 optional<const Message>
 BasicBot::sendMessage( const std::string &text,
                        const std::string &reply_markup,
-                       const EParseMode    parse_mode,
+                       const EParseMode   parse_mode,
                        const bool         disable_web_page_preview,
                        const bool         disable_notification,
                        const int_fast32_t reply_to_message_id )
@@ -246,7 +252,7 @@ optional<const Message>
 BasicBot::editMessageText( const uint_fast32_t message_id,
                            const string &      text,
                            const string &      reply_markup,
-                           const EParseMode     parse_mode,
+                           const EParseMode    parse_mode,
                            const bool          disable_web_page_preview )
 {
     string parseMode = "";
@@ -279,11 +285,11 @@ BasicBot::editMessageText( const uint_fast32_t message_id,
 }
 
 bool
-BasicBot::editMessageText( const string &  inline_message_id,
-                           const string &  text,
-                           const string &  reply_markup,
+BasicBot::editMessageText( const string &   inline_message_id,
+                           const string &   text,
+                           const string &   reply_markup,
                            const EParseMode parse_mode,
-                           const bool      disable_web_page_preview )
+                           const bool       disable_web_page_preview )
 {
     string parseMode = "";
 
@@ -416,6 +422,11 @@ BasicBot::answerInlineQuery( const Json::Value & results,
 void
 BasicBot::processUpdate( const Update &update )
 {
+    if(commands.processCommands(update))
+    {
+        return;
+    }
+
     switch ( update.type )
     {
         case EUpdate::eMessage:
