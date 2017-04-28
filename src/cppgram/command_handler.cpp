@@ -50,6 +50,7 @@ CommandHandler::setCommands( const CommandHandler &c )
 bool
 CommandHandler::processCommands( const Update &update )
 {
+    // For each command (valid for the current update)
     for ( Command* c : commands[update.type] )
     {
         if (c->isValid(update))

@@ -64,7 +64,7 @@ cppgram::Polling<T>::runMultithread()
     moodycamel::ProducerToken producer_token( updates_queue );
 
     std::vector<cppgram::types::Update> updates;
-    uint_fast32_t       updates_offset = firstUpdateID( poller );
+    uint_fast32_t                       updates_offset = firstUpdateID( poller );
     while ( 1 )
     {
         uint_fast32_t count;
@@ -159,7 +159,7 @@ cppgram::Polling<T>::initLogging()
 
     for ( auto &bot : bots )
     {
-        if ( bot.logger == nullptr )
+        if ( bot.logger_ptr == nullptr )
         {
             bot.setLogger( sink );
         }

@@ -1,5 +1,5 @@
-#ifndef __CPPGRAM_POLLING_HPP
-#define __CPPGRAM_POLLING_HPP
+#ifndef CPPGRAM_POLLING_HPP
+#define CPPGRAM_POLLING_HPP
 
 #include "concurrentqueue/blockingconcurrentqueue.h"
 #include "cppgram/basic_bot.hpp"

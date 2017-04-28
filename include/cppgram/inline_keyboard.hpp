@@ -1,5 +1,5 @@
-#ifndef INLINE_KEYBOARD_CPPGRAM_HPP
-#define INLINE_KEYBOARD_CPPGRAM_HPP
+#ifndef CPPGRAM_INLINE_KEYBOARD_HPP
+#define CPPGRAM_INLINE_KEYBOARD_HPP
 
 #include <string>
 #include <vector>

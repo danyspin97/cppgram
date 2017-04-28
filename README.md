@@ -1,10 +1,9 @@
 # CppGram
-CppGram is a lighweight framework for Telegram Bot API that provides support for the most important api methods and basic features a user need ensuring speed and stability.
+CppGram is a lighweight framework for Telegram Bot API that provides support for the most important api methods and basic features a user need, ensuring speed and stability.
 
 ## Usage
 
 ~~~c++
-
 ~~~
 
 ## Features

@@ -6,7 +6,6 @@
 
 #include "cppgram/basic_bot.hpp"
 #include "cppgram/commands/command.hpp"
-#include "cppgram/defines.hpp"
 #include "cppgram/exception.hpp"
 #include "cppgram/types/update.hpp"
 
@@ -35,15 +34,15 @@ using cppgram::EUpdate;
 using cppgram::JsonParseError;
 
 BasicBot::BasicBot( string &token, string name )
-    : api_url( TELEGRAM_API_URL + token + "/" )
+    : api_url( "https://api.telegram.org/bot" + token + "/" )
     , bot_name( name )
-    , logger( nullptr )
-    , commands( this )
+    , logger_ptr( nullptr )
+    , command_handler( this )
 {
 }
 
 BasicBot::BasicBot( const BasicBot &b )
-    : commands( CommandHandler( this, b.commands ) )
+    : command_handler( CommandHandler( this, b.command_handler ) )
 {
     api_url = b.api_url;
 
@@ -55,7 +54,7 @@ BasicBot::BasicBot( const BasicBot &b )
 
     bot_name = b.bot_name;
 
-    logger = b.logger;
+    logger_ptr = b.logger_ptr;
 }
 
 BasicBot
@@ -71,9 +70,9 @@ BasicBot::operator=( const BasicBot &b )
 
     bot_name = b.bot_name;
 
-    logger = b.logger;
+    logger_ptr = b.logger_ptr;
 
-    commands = CommandHandler( this, b.commands );
+    command_handler = CommandHandler( this, b.command_handler );
 
     return *this;
 }
@@ -93,13 +92,13 @@ BasicBot::setLogger( vector<spdlog::sink_ptr> &sinks )
     try
     {
         // Create a logger to the given sinks
-        logger = make_shared<spdlog::logger>( bot_name, sinks.begin(), sinks.end() );
+        logger_ptr = make_shared<spdlog::logger>( bot_name, sinks.begin(), sinks.end() );
 
         // Flush on error or severe messages
-        logger->flush_on( spdlog::level::err );
+        logger_ptr->flush_on( spdlog::level::err );
 
         // Return created logger
-        return logger;
+        return logger_ptr;
     }
     catch ( const spdlog::spdlog_ex &ex )
     {
@@ -115,7 +114,7 @@ BasicBot::setLogger( vector<spdlog::sink_ptr> &sinks )
 void
 BasicBot::setLogger( std::shared_ptr<spdlog::logger> new_logger )
 {
-    logger = new_logger;
+    logger_ptr = new_logger;
 }
 
 const cpr::Response
@@ -132,21 +131,21 @@ BasicBot::checkMethodError( const cpr::Response &response, Json::Value &val )
     // If there was an error in the connection print it
     if ( response.error.code != cpr::ErrorCode::OK )
     {
-        logger->error( "HTTP Error:" + response.error.message );
+        logger_ptr->error( "HTTP Error:" + response.error.message );
         return false;
     }
 
     if ( !reader.parse( response.text, val ) )
     {
-        logger->error( "JSON Parser: Error while parsing JSON document!" );
+        logger_ptr->error( "JSON Parser: Error while parsing JSON document!" );
         throw JsonParseError();
     }
 
     // Print method error
     if ( response.status_code != 200 )
     {
-        logger->error( "Telegram Error: " + val["error_code"].asString() + ", Description: "
-                       + val["description"].asString() );
+        logger_ptr->error( "Telegram Error: " + val["error_code"].asString() + ", Description: "
+                           + val["description"].asString() );
         return false;
     }
 
@@ -422,7 +421,7 @@ BasicBot::answerInlineQuery( const Json::Value & results,
 void
 BasicBot::processUpdate( const Update &update )
 {
-    if(commands.processCommands(update))
+    if ( command_handler.processCommands( update ) )
     {
         return;
     }

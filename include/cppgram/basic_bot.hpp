@@ -1,15 +1,14 @@
 #ifndef CPPGRAM_BASIC_BOT_HPP
 #define CPPGRAM_BASIC_BOT_HPP
 
-#include <functional>
 #include <string>
 
 #include <cpr/cpr.h>
 #include <spdlog/spdlog.h>
 
+#include "command_handler.hpp"
 #include "exception.hpp"
 #include "types/update.hpp"
-#include "command_handler.hpp"
 
 /**
  * \mainpage Reference
@@ -154,7 +153,8 @@ void
 defaultProcessCallbackQuery( BasicBot &bot, const types::CallbackQuery & );
 
 /**
- * @brief contains api methods, update handlers and listener
+ * @brief contains api methods, update handlers and listener.
+ * @details The basic bot that contains all basic features.
  */
 class BasicBot
 {
@@ -187,25 +187,32 @@ class BasicBot
      * @brief Get chat_id of the current user/group/channel.
      * @return Chat_id.
      */
-    inline std::string getChatID() { return chat_id; }
+    inline std::string chatId() { return chat_id; }
+
     /**
      * @brief Set the chat id of the bot.
      * @param chat_id New chat_id to set.
      */
-    inline void setChatID( std::string &chat_id ) { this->chat_id = chat_id; }
+    inline void setChatId( std::string &chat_id ) { this->chat_id = chat_id; }
     /**
-     * @see setChatID
+     * @see setChatId
      */
-    inline void setChatID( uint_fast32_t chat_id ) { this->chat_id = std::to_string( chat_id ); }
+    inline void setChatId( uint_fast32_t chat_id ) { this->chat_id = std::to_string( chat_id ); }
     /**
-     * @see setChatID
+     * @see setChatId
      */
-    inline void setChatID( int_fast64_t chat_id ) { this->chat_id = std::to_string( chat_id ); }
+    inline void setChatId( int_fast64_t chat_id ) { this->chat_id = std::to_string( chat_id ); }
+
+    /**
+     * @brief Get command handler object. */
+    inline CommandHandler commands() { return command_handler; }
+
     /**
      * @brief Returns current bot's logger.
      * @return Pointer to the bot's logger.
      */
-    std::shared_ptr<spdlog::logger> getLogger() { return logger; }
+    inline std::shared_ptr<spdlog::logger> logger() { return logger_ptr; }
+
     /**
      * @brief Set the bot's logger by passing a sink.
      * @details Logger will be automaticcaly created using the sink passed.
@@ -221,7 +228,7 @@ class BasicBot
      * @param sinks Sink of the log to create.
      * @return The logger created.
      */
-    std::shared_ptr<spdlog::logger> setLogger( std::vector<spdlog::sink_ptr> &sinks );
+    inline std::shared_ptr<spdlog::logger> setLogger( std::vector<spdlog::sink_ptr> &sinks );
 
     /**
      * @brief Set the bot's logger by passing a logger.
@@ -286,7 +293,7 @@ class BasicBot
      * @param disable_web_page_preview Disables link previews for links in this
      * message.
      * @param disable_notification Sends the message silently.
-     * @param reply_to_message_id If the message is a reply, ID of the original.
+     * @param reply_to_message_id If the message is a reply, Id of the original.
      * message.
      * @return On success, the message sent.
      */
@@ -476,8 +483,6 @@ class BasicBot
 
     /** @} */
 
-    CommandHandler commands;
-
     private:
     /**
      * @internal
@@ -489,10 +494,10 @@ class BasicBot
     /** @internal @brief Chat_id of the current user/group/channel. */
     std::string chat_id;
 
-    /** @internal @brief ID of the current callback query. */
+    /** @internal @brief Id of the current callback query. */
     std::string callback_query_id;
 
-    /** @internal @brief ID of the current inline query. */
+    /** @internal @brief Id of the current inline query. */
     std::string inline_query_id;
 
     /** @internal @brief Json reader. */
@@ -502,13 +507,16 @@ class BasicBot
     cpr::Session connection;
 
     /** @internal @brief Logger object. */
-    std::shared_ptr<spdlog::logger> logger;
+    std::shared_ptr<spdlog::logger> logger_ptr;
 
     /** @internal @brief Url endpoint for making requests. */
     std::string api_url,
 
             /** @internal @brief Name of the bot, for logging purposes. */
             bot_name;
+
+    /** @internal @brief Objects that hold all the commands. */
+    CommandHandler command_handler;
 };
 }
 
