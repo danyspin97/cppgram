@@ -1,5 +1,5 @@
-#ifndef CPPGRAM_InlineKeyboardButton_HPP
-#define CPPGRAM_InlineKeyboardButton_HPP
+#ifndef CPPGRAM_KEYBOARD_BUTTON_HPP
+#define CPPGRAM_KEYBOARD_BUTTON_HPP
 
 #include <string>
 
@@ -16,9 +16,9 @@ namespace types
  */
 
 /** \brief Class for creating Inline keyboard json_button
- * \details This object represents one json_button of an inline keyboard, used in InlineKeyboard.
+ * \details This object represents one json_button of an inline keyboard, used in Keyboard.
  * (https://core.telegram.org/bots/api#inlinekeyboardbutton) */
-class InlineKeyboardButton
+class KeyboardButton
 {
     /** @} */
 
@@ -39,9 +39,7 @@ class InlineKeyboardButton
      * @param button_type Type of the json_button to create
      * @return Returns a new inlineKeyboardButton
      */
-    InlineKeyboardButton( const std::string &text,
-                          const std::string &data,
-                          const EButton &    button_type )
+    KeyboardButton( const std::string &text, const std::string &data, const EButton &button_type )
         : text( text )
         , data( data )
         , button_type( button_type )
@@ -53,7 +51,7 @@ class InlineKeyboardButton
      * @param json_button JSON-serialized button
      * @return Returns a new inlineKeyboardButton
      */
-    InlineKeyboardButton( Json::Value &json_button )
+    KeyboardButton( Json::Value &json_button )
         : text( json_button["text"].asString() )
     {
         if ( !json_button["callback_data"].isNull() )

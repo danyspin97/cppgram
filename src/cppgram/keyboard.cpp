@@ -2,18 +2,18 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "cppgram/exception.hpp"
-#include "cppgram/inline_keyboard.hpp"
+#include "cppgram/keyboard.hpp"
 #include "cppgram/types/enums.hpp"
-#include "cppgram/types/inline_keyboard_button.hpp"
+#include "cppgram/types/keyboard_button.hpp"
 
 using std::string;
 using std::vector;
 
-using cppgram::InlineKeyboard;
-using cppgram::types::InlineKeyboardButton;
+using cppgram::Keyboard;
+using cppgram::types::KeyboardButton;
 using cppgram::EButton;
 
-InlineKeyboard::InlineKeyboard()
+Keyboard::Keyboard()
     : column( 0 )
     , row( 0 )
 {
@@ -21,18 +21,18 @@ InlineKeyboard::InlineKeyboard()
 }
 
 unsigned short
-InlineKeyboard::changeRow()
+Keyboard::changeRow()
 {
     column = 0;
     return row++;
 }
 
 bool
-InlineKeyboard::addButton( const string &text, const string &data, const EButton &button_type )
+Keyboard::addButton( const string &text, const string &data, const EButton &button_type )
 {
     if ( text.empty() || data.empty() )
     {
-        throw InlineKeyboardNotValid();
+        throw KeyboardNotValid();
     }
 
     if ( column == 8 )
@@ -61,15 +61,15 @@ InlineKeyboard::addButton( const string &text, const string &data, const EButton
 }
 
 bool
-InlineKeyboard::addButton( const struct InlineKeyboardButton &new_button )
+Keyboard::addButton( const struct KeyboardButton &new_button )
 {
     return addButton( new_button.text, new_button.data, new_button.button_type );
 }
 
 bool
-InlineKeyboard::addButton( const vector<InlineKeyboardButton> &new_buttons )
+Keyboard::addButton( const vector<KeyboardButton> &new_buttons )
 {
-    for ( const InlineKeyboardButton &button : new_buttons )
+    for ( const KeyboardButton &button : new_buttons )
     {
         if ( !addButton( button.text, button.data, button.button_type ) )
         {
@@ -80,7 +80,7 @@ InlineKeyboard::addButton( const vector<InlineKeyboardButton> &new_buttons )
 }
 
 void
-InlineKeyboard::get( string &reply_markup, const bool &clear_keyboard )
+Keyboard::get( string &reply_markup, const bool &clear_keyboard )
 {
     reply_markup = writer.write( inline_keyboard );
 

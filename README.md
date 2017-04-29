@@ -1,26 +1,56 @@
-# CppGram
-CppGram is a lighweight framework for Telegram Bot API that provides support for the most important api methods and basic features a user need, ensuring speed and stability.
+# Cppgram
+Cppgram is a lighweight framework for Telegram Bot API that provides support for the most important api methods and basic features a user need, ensuring speed and stability.
 
 ## Usage
 
 ~~~c++
+// Include the framework
+#include "cppgram/cppgram.hpp"
+
+// Answer all messages received
+void helloWorld(cppgram::BasicBot &bot,
+                    const cppgram::types::Message &message) {
+
+    // sending a "Hello World" message
+    bot.sendMessage("Hello World");
+}
+
+int main() {
+  std::string token = "token";
+  auto bot = cppgram::BasicBot(token, "BotName");
+  // Say the bot to answer all messages using our Hello World function
+  bot.processMessage = &helloWorld;
+  // Create a poll with 8 thread running
+  auto poll = cppgram::Polling<cppgram::BasicBot>(bot, 8);
+  poll.run();
+}
 ~~~
 
 ## Features
-- Designed to handle many updates at a time
-- getUpdates support
-- Update type based processing
-- Inline keyboard support
-- Inline query support
+- Easy to use
+- Receive updates using getUpdates
+- Use multithreading to process updates
+- A container for each telegram type
+- Commands support
+- Create inline keyboard
+- Create inline query
+- Use curl session to avoid re-connecting
+- Log warnings and errors
 - Highly documented
 
 ## Dependencies
 
-* jsoncpp (_included_)
-* cpr (downloaded if missing)
+* [cpr](https://github.com/whoshuu/cpr)
+* [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
+* [spdlog](https://github.com/gabime/spdlog)
+* [ConcurrentQueue](https://github.com/cameron314/concurrentqueue)
+
+All dependencies are already included and configured.
 
 ## Installation
-The primary way to include this library in your project is to use git submodule.
+To start using this library you can fork [this repository](https://github.com/DanySpin97/cppgram_example). It is an example project configured with the minimal boilerplate you need to make this library works.
+
+If you already have a project you can include this library using git submodules:
 
 ~~~
 git submodule add git://github.com/DanySpin97/cppgram.git
@@ -33,27 +63,19 @@ Then add the directory in your cmake configuration:
 add_subdirectory(cppgram)
 ~~~
 
-CppGram will be compiled, libraries and include needs to be included by the project:
+Cppgram will be compiled, headers and libraries needs to be included by the project:
 
 ~~~
 include_directories(${CPPGRAM_INCLUDE_DIRS})
 target_link_libraries( your_target_name ${CPPGRAM_LIBRARIES})
 ~~~
 
-## How do I link to my own bot?
-
-*assuming you are using g++ or clang++*
-
-~~~
-$ g++ mysrc.cpp -o mybot libcpr.a libjsoncpp.a libcppgram.a -lcurl
-~~~
 
 ## Documentation
-
-Documentation: [here](https://danyspin97.github.io/cppgram)
+You can find Doxygen documentation [here](https://danyspin97.github.io/cppgram).
 
 ## Authors
-CppGram is developed and mantained by [Danilo Spinella](github.com/DanySpin97).
+Cppgram is developed and mantained by [Danilo Spinella](github.com/DanySpin97).
 
 ## [License](https://www.gnu.org/licenses/lgpl-3.0.en.html)
-CppGram is released under GNU Lesser General Public License. You may copy, distribute and modify the software provided that modifications are described and licensed for free under LGPL-3. Derivatives works (including modifications) can only be redistributed under LGPL-3, but applications that use the framework don't have to be.
+Cppgram is released under GNU Lesser General Public License. You may copy, distribute and modify the software provided that modifications are described and licensed for free under LGPL-3. Derivatives works (including modifications) can only be redistributed under LGPL-3, but applications that use the framework don't have to be.

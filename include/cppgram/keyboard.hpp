@@ -10,7 +10,7 @@ namespace cppgram
 {
 namespace types
 {
-class InlineKeyboardButton;
+class KeyboardButton;
 }
 
 enum EButton : short;
@@ -19,7 +19,7 @@ enum EButton : short;
  * \addtogroup Inline Keyboard
  */
 
-/*! \class InlineKeyboard
+/*! \class Keyboard
  * \brief An helper class to create inline keyboard
  * \details Create inline keyboard, get the reply markup with getKeyboard and
  * pass this to api methods.
@@ -30,14 +30,14 @@ enum EButton : short;
  * row.
  * To change row manually call changeRow().
  */
-class InlineKeyboard
+class Keyboard
 {
     public:
     /**
      * \brief Default constructor for the function
      * @return An empty object
      */
-    InlineKeyboard();
+    Keyboard();
 
     /**
      * \brief Add a button by passing directly the data
@@ -49,18 +49,18 @@ class InlineKeyboard
     bool addButton( const std::string &text, const std::string &data, const EButton &button_type );
 
     /**
-     * \brief Add a button by passing a InlineKeyboardButton
+     * \brief Add a button by passing a KeyboardButton
      * @param newButton The button to add
      * @return True on success
      */
-    bool addButton( const types::InlineKeyboardButton &new_button );
+    bool addButton( const types::KeyboardButton &new_button );
 
     /**
-     * \brief Add button by passing a vector of InlineKeyboardButton
+     * \brief Add button by passing a vector of KeyboardButton
      * @param newButtons
      * @return
      */
-    bool addButton( const std::vector<types::InlineKeyboardButton> &new_buttons );
+    bool addButton( const std::vector<types::KeyboardButton> &new_buttons );
 
     /**
      * \brief The button will be added to the next row from now on

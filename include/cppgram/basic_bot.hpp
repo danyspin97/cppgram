@@ -8,85 +8,143 @@
 
 #include "command_handler.hpp"
 #include "exception.hpp"
+#include "keyboard.hpp"
 #include "types/update.hpp"
 
 /**
  * \mainpage Reference
- * \section What What is CppGram
+ * \section What What is Cppgram
  *
- * Cppgram is a wrapper for Telegram Messanger Bot API.
- * Designed to be fast and easy, ensures the developer to build a bot in less
- * time without having to learn Telegram Bot API.
- * The bot class (cppgram::TelegramBot) has a method for each API method, so the
- * only thing you have to do is extend this class and start developing you bot!
+ * Cppgram is a lighweight framework for Telegram Bot API that provides support for the most
+ * important api methods and basic features a user need, ensuring speed and stability.
+ *
+ * \subsection Usage
+ *
+ *     // Include the framework
+ *     #include "cppgram/cppgram.hpp"
+ *
+ *     // Answer all messages received
+ *     void helloWorld(cppgram::BasicBot &bot,
+ *                 const cppgram::types::Message &message) {
+ *
+ *         // sending a "Hello World" message
+ *         bot.sendMessage("Hello World");
+ *     }
+ *
+ *     int main() {
+ *         std::string token = "token";
+ *         auto bot = cppgram::BasicBot(token, "BotName");
+ *         // Say the bot to answer all messages using our Hello World function
+ *         bot.processMessage = &helloWorld;
+ *         // Create a poll with 8 thread running
+ *         auto poll = cppgram::Polling<cppgram::BasicBot>(bot, 8);
+ *         poll.run();
+ *     }
  *
  * \subsection Features
  *
- * - Getting udpdates using long or short polling (webhook support coming soon)
- * - Support for the most important API methods
- * - Multithread support
- * - Easy inline keyboard creation
- * - Article creation for inline query
+ * - Easy to use
+ * - Receive updates using getUpdates
+ * - Use multithreading to process updates
+ * - A container for each telegram type
+ * - Commands support
+ * - Create inline keyboard
+ * - Create inline query
+ * - Use curl session to avoid re-connecting
+ * - Log warnings and errors
  *
  * \section Install
+ * To start using this library you can fork [this
+ * repository](https://github.com/DanySpin97/cppgram_example). It is an example project configured
+ * with
+ * the minimal boilerplate you need to make this library works.
  *
- * \subsection Requirements
+ * If you already have a project you can include this library using git submodules:
  *
- * This library requires:
- *  - jsoncpp
- *  - cpr, curl
- *  - gcc
- * This wrapper has been tested using g++ version 6.2.1. This wrapper haven't
- * been tested with version below.
+ *     git submodule add git://github.com/DanySpin97/cppgram.git
+ *     git submodule update --init --recursive
  *
- * \subsection Cloning Cloning repository
+ * Then add the directory in your cmake configuration:
  *
- * This code will download CppGram, its dependency and will build it:
+ *     add_subdirectory(cppgram)
  *
- *     $ git clone https://gitlab.com/WiseDragonStd/cppgram.git
- *     $ cmake -Hcppgram -Bbuild-cppgram
- *     $ make -C build-cppgram
+ * Cppgram will be compiled, headers and libraries needs to be included by the project:
  *
- * Then link you own bot using:
- *
- *     $ g++ main.cpp lib/*.a -lcurl -o bot -Iinclude -std=c++14 -pthread
+ *     include_directories(${CPPGRAM_INCLUDE_DIRS})
+ *     target_link_libraries( your_target_name ${CPPGRAM_LIBRARIES})
  *
  * \section How How to use it
  *
- *     using namespace cppgram;
+ * \subsection Answer all messages
+ * Create a method that take a <code>cppgram::BasicBot</code> and a
+ * <code>cppgram::types::Message</code> as argument:
  *
- *     class MyBot : public TelegramBot {
- *         public:
- *         MyBot() : TelegramBot(TOKEN) {} // Inherit constructor
- *         void processMessage(const message &message) override final {}
- *         void processCallbackQuery(const callbackQuery &callbackQuery)
- * override final {}
- *     };
+ *     void processMessage(cppgram::BasicBot& bot, cppgram::types::Message);
  *
- *     int main() {
- *         MyBot bot; // Istantiate the bot
- *         bot.run(); // Start getting updates
- *         return 0;
+ * Then say the bot to use this funciton to process all messages received:
+ *
+ *     bot.processMessage = &processMessage;
+ *
+ * All the message received will be forwarded to this function.
+ * To each update type a different function pointer is called:
+ *
+ * - cppgram::BasicBot::processMessage -> message
+ * - cppgram::BasicBot::processEditedMessage -> edited_message
+ * - cppgram::BasicBot::processChannelPost -> channel_post
+ * - cppgram::BasicBot::processEditedChannelPost -> edited_channel_post
+ * - cppgram::BasicBot::processInlineQuery -> inline_query
+ * - cppgram::BasicBot::processChosenInlineResult -> chosen_inline_result
+ * - cppgram::BasicBot::processCallbackQuery -> callback_query
+ *
+ * Check the [bot API reference](https://core.telegram.org/bots/api#update) for more information.
+ *
+ * \section Commands
+ * Cppgram support commands, as of version 1.0.
+ *
+ * Commands are entities that have special conditions and they're called only if an update meet
+ * them.
+ *
+ * The validation check is done before the pointers listed above. If no command has been triggered,
+ * the bot will use the processUpdates pointers.
+ *
+ * \subsection MessageCommand Message Commands
+ * cppgram::commands::MessageCommand are commands triggered when a message contains a
+ * [MessageEntity](https://core.telegram.org/bots/api#messageentity) of type
+ * <code>bot_command</code> as first part of the text.
+ *
+ * If you want to put a greeting for user that click /start on the bot using MessageCommand:
+ *
+ *
+ *     // Define the function that will be called on each "/start" message received
+ *     void startCommand(cppgram::BasicBot &bot,
+ *                    const cppgram::types::Message &message) {
+ *         bot.sendMessage("This is a start message");
  *     }
  *
- * \subsection processMessage
+ *     int main() {
+ *         // Create the bot
+ *         ...
+ *         // The string that has to appear in the bot_command
+ *         // Do not include the "/"
+ *         std::string command_name = "start";
+ *         // Create the command
+ *         cppgram::commands::MessageCommand *command =
+ *                 // passing the command name and the function pointer
+ *                 new cppgram::commands::MessageCommand(command_name, &startCommand);
+ *         // Add it to the command handler
+ *         bot.commands.addCommand(command);
+ *         // Run the bot
+ *         ...
+ *     }
  *
- * This function will be called everytime your bot receive a message.
- * Override the function adding:
- *
- *     void processMessage(const cppgram::message &message) override;
- *
- * Put here what your bot answer to messages. Parameter message contains all
- * data about the message received.
- *
- * \subsection Inline Keyboards
+ * \section InlineKeyboards Inline Keyboards
  *
  * Inline keyboard represent a button below a message.
  * To send a message with a button use this sintax:
  *
  *     // Create the class and add a button
  *     auto keyboard = new InlineKeyboard();
- *     keyboard->addButton("CppGram Documentation",
+ *     keyboard->addButton("Cppgram Documentation",
  * "http://wisedragonstd.gitlab.io/cppgram/", InlineKeyboardButtonType::Url);
  *     // Get the keyboard
  *     string button_string;
@@ -139,7 +197,7 @@
 
 /**
  * @namespace cppgram
- * @brief main namespace for CppGram
+ * @brief main namespace for Cppgram
  */
 namespace cppgram
 {
@@ -204,8 +262,16 @@ class BasicBot
     inline void setChatId( int_fast64_t chat_id ) { this->chat_id = std::to_string( chat_id ); }
 
     /**
-     * @brief Get command handler object. */
-    inline CommandHandler commands() { return command_handler; }
+     * @brief Get command handler object.
+     * @return Reference to the object.
+     * */
+    inline CommandHandler &commands() { return command_handler; }
+
+    /**
+     * @brief Get the keyboard handler.
+     * @return Reference to the object.
+     */
+    inline Keyboard &keyboard() { return keyboard_obj; }
 
     /**
      * @brief Returns current bot's logger.
@@ -464,6 +530,17 @@ class BasicBot
     void ( *processEditedMessage )( BasicBot &, const types::Message & ) = &defaultProcessMessage;
 
     /**
+     * @brief Pointer to the function that will be called on each message received in a channel.
+     */
+    void ( *processChannelPost )( BasicBot &, const types::Message & ) = &defaultProcessMessage;
+
+    /**
+     * @brief Pointer to the function that will be called on each message modified in a channel.
+     */
+    void ( *processEditedChannelPost )( BasicBot &, const types::Message & )
+            = &defaultProcessMessage;
+
+    /**
      * @brief Pointer to the function that will be called on each inline query.
      */
     void ( *processInlineQuery )( BasicBot &, const types::InlineQuery & )
@@ -517,6 +594,9 @@ class BasicBot
 
     /** @internal @brief Objects that hold all the commands. */
     CommandHandler command_handler;
+
+    /** @internal @brief Inline keyboard handler. */
+    Keyboard keyboard_obj;
 };
 }
 

@@ -444,8 +444,8 @@ BasicBot::processUpdate( const Update &update )
         break;
         case EUpdate::eEditedMessage:
         {
-            chat_id = to_string( update.edited_message->chat.id );
-            processEditedMessage( *this, move( update.edited_message.value() ) );
+            chat_id = to_string( update.message->chat.id );
+            processEditedMessage( *this, move( update.message.value() ) );
         }
         break;
         case EUpdate::eInlineQuery:
@@ -462,8 +462,18 @@ BasicBot::processUpdate( const Update &update )
             processChosenInlineResult( *this, move( update.chosen_inline_result.value() ) );
         }
         break;
-        case EUpdate::eChannelPost: break;
-        case EUpdate::eEditedChannelPost: break;
+        case EUpdate::eChannelPost:
+        {
+            chat_id = to_string( update.message->chat.id );
+            processChannelPost( *this, move( update.message.value() ) );
+        }
+        break;
+        case EUpdate::eEditedChannelPost:
+        {
+            chat_id = to_string( update.message->chat.id );
+            processEditedChannelPost( *this, move( update.message.value() ) );
+        }
+        break;
     }
 }
 

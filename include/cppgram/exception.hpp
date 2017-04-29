@@ -28,11 +28,11 @@ class JsonParseError : public std::exception
 };
 
 /**
- * \class InlineKeyboardNotValid
+ * \class KeyboardNotValid
  * \inherits std::exception
- * \brief raises if InlineKeyboard is not valid (*critical*).
+ * \brief raises if Keyboard is not valid (*critical*).
  */
-class InlineKeyboardNotValid : public std::exception
+class KeyboardNotValid : public std::exception
 {
     public:
     virtual const char *what() const throw() { return "Inline keyboard contains not valid data"; }
