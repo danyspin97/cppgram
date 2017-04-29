@@ -33,16 +33,18 @@ using cppgram::EUpdate;
 
 using cppgram::JsonParseError;
 
-BasicBot::BasicBot( string &token, string name )
+template <class T>
+BasicBot<T>::BasicBot( string &token, string name )
     : api_url( "https://api.telegram.org/bot" + token + "/" )
     , bot_name( name )
     , logger_ptr( nullptr )
-    , command_handler( this )
+    , command_handler( dynamic_cast<T *>( this ) )
 {
 }
 
-BasicBot::BasicBot( const BasicBot &b )
-    : command_handler( CommandHandler( this, b.command_handler ) )
+template <class T>
+BasicBot<T>::BasicBot( const BasicBot &b )
+    : command_handler( CommandHandler<T>( dynamic_cast<T *>( this ), b.command_handler ) )
 {
     api_url = b.api_url;
 
@@ -57,8 +59,9 @@ BasicBot::BasicBot( const BasicBot &b )
     logger_ptr = b.logger_ptr;
 }
 
-BasicBot
-BasicBot::operator=( const BasicBot &b )
+template <class T>
+BasicBot<T>
+BasicBot<T>::operator=( const BasicBot &b )
 {
     api_url = b.api_url;
 
@@ -72,13 +75,14 @@ BasicBot::operator=( const BasicBot &b )
 
     logger_ptr = b.logger_ptr;
 
-    command_handler = CommandHandler( this, b.command_handler );
+    command_handler = CommandHandler<T>( dynamic_cast<T *>( this ), b.command_handler );
 
     return *this;
 }
 
+template <class T>
 shared_ptr<spdlog::logger>
-BasicBot::setLogger( spdlog::sink_ptr sink )
+BasicBot<T>::setLogger( spdlog::sink_ptr sink )
 {
     // Create a vector containing just a single sink
     vector<spdlog::sink_ptr> sinks;
@@ -86,8 +90,9 @@ BasicBot::setLogger( spdlog::sink_ptr sink )
     return setLogger( sinks );
 }
 
+template <class T>
 shared_ptr<spdlog::logger>
-BasicBot::setLogger( vector<spdlog::sink_ptr> &sinks )
+BasicBot<T>::setLogger( vector<spdlog::sink_ptr> &sinks )
 {
     try
     {
@@ -111,22 +116,25 @@ BasicBot::setLogger( vector<spdlog::sink_ptr> &sinks )
     return nullptr;
 }
 
+template <class T>
 void
-BasicBot::setLogger( std::shared_ptr<spdlog::logger> new_logger )
+BasicBot<T>::setLogger( std::shared_ptr<spdlog::logger> new_logger )
 {
     logger_ptr = new_logger;
 }
 
+template <class T>
 const cpr::Response
-BasicBot::executeRequest( const std::string &method, const cpr::Parameters &params )
+BasicBot<T>::executeRequest( const std::string &method, const cpr::Parameters &params )
 {
     connection.SetUrl( api_url + method );
     connection.SetParameters( params );
     return connection.Get();
 }
 
+template <class T>
 bool
-BasicBot::checkMethodError( const cpr::Response &response, Json::Value &val )
+BasicBot<T>::checkMethodError( const cpr::Response &response, Json::Value &val )
 {
     // If there was an error in the connection print it
     if ( response.error.code != cpr::ErrorCode::OK )
@@ -152,11 +160,12 @@ BasicBot::checkMethodError( const cpr::Response &response, Json::Value &val )
     return true;
 }
 
+template <class T>
 bool
-BasicBot::getUpdates( std::vector<Update> &updates,
-                      const uint_fast32_t  offset,
-                      const uint_fast32_t  limit,
-                      const uint_fast32_t  timeout )
+BasicBot<T>::getUpdates( std::vector<Update> &updates,
+                         const uint_fast32_t  offset,
+                         const uint_fast32_t  limit,
+                         const uint_fast32_t  timeout )
 {
     // If there are items in the vector
     if ( updates.size() != 0 )
@@ -187,13 +196,14 @@ BasicBot::getUpdates( std::vector<Update> &updates,
     return true;
 }
 
+template <class T>
 optional<const Message>
-BasicBot::sendMessage( const std::string &text,
-                       const std::string &reply_markup,
-                       const EParseMode   parse_mode,
-                       const bool         disable_web_page_preview,
-                       const bool         disable_notification,
-                       const int_fast32_t reply_to_message_id )
+BasicBot<T>::sendMessage( const std::string &text,
+                          const std::string &reply_markup,
+                          const EParseMode   parse_mode,
+                          const bool         disable_web_page_preview,
+                          const bool         disable_notification,
+                          const int_fast32_t reply_to_message_id )
 {
     std::string parse_mode_string = "";
 
@@ -225,11 +235,12 @@ BasicBot::sendMessage( const std::string &text,
     return Message( valroot["result"] );
 }
 
+template <class T>
 bool
-BasicBot::answerCallbackQuery( const std::string &text,
-                               bool               show_alert,
-                               uint32_t           cache_time,
-                               const std::string &url )
+BasicBot<T>::answerCallbackQuery( const std::string &text,
+                                  bool               show_alert,
+                                  uint32_t           cache_time,
+                                  const std::string &url )
 {
     auto response = executeRequest( "answerCallbackQuery",
                                     cpr::Parameters{{"callback_query", callback_query_id},
@@ -247,12 +258,13 @@ BasicBot::answerCallbackQuery( const std::string &text,
     return true;
 }
 
+template <class T>
 optional<const Message>
-BasicBot::editMessageText( const uint_fast32_t message_id,
-                           const string &      text,
-                           const string &      reply_markup,
-                           const EParseMode    parse_mode,
-                           const bool          disable_web_page_preview )
+BasicBot<T>::editMessageText( const uint_fast32_t message_id,
+                              const string &      text,
+                              const string &      reply_markup,
+                              const EParseMode    parse_mode,
+                              const bool          disable_web_page_preview )
 {
     string parseMode = "";
 
@@ -283,12 +295,13 @@ BasicBot::editMessageText( const uint_fast32_t message_id,
     return Message( valroot["result"] );
 }
 
+template <class T>
 bool
-BasicBot::editMessageText( const string &   inline_message_id,
-                           const string &   text,
-                           const string &   reply_markup,
-                           const EParseMode parse_mode,
-                           const bool       disable_web_page_preview )
+BasicBot<T>::editMessageText( const string &   inline_message_id,
+                              const string &   text,
+                              const string &   reply_markup,
+                              const EParseMode parse_mode,
+                              const bool       disable_web_page_preview )
 {
     string parseMode = "";
 
@@ -318,10 +331,11 @@ BasicBot::editMessageText( const string &   inline_message_id,
     return valroot["result"].asBool();
 }
 
+template <class T>
 optional<const Message>
-BasicBot::editMessageCaption( const uint_fast32_t message_id,
-                              const string &      caption,
-                              const string &      reply_markup )
+BasicBot<T>::editMessageCaption( const uint_fast32_t message_id,
+                                 const string &      caption,
+                                 const string &      reply_markup )
 {
     auto response = executeRequest( "editMessageCaption",
                                     cpr::Parameters{{"chat_id", chat_id},
@@ -338,10 +352,11 @@ BasicBot::editMessageCaption( const uint_fast32_t message_id,
     return Message( valroot["result"] );
 }
 
+template <class T>
 bool
-BasicBot::editMessageCaption( const string &inline_message_id,
-                              const string &caption,
-                              const string &reply_markup )
+BasicBot<T>::editMessageCaption( const string &inline_message_id,
+                                 const string &caption,
+                                 const string &reply_markup )
 {
     auto response = executeRequest( "editMessageCaption",
                                     cpr::Parameters{{"inline_message_id", inline_message_id},
@@ -357,8 +372,9 @@ BasicBot::editMessageCaption( const string &inline_message_id,
     return valroot["result"].asBool();
 }
 
+template <class T>
 optional<const Message>
-BasicBot::editMessageReplyMarkup( const uint_fast32_t message_id, const string &reply_markup )
+BasicBot<T>::editMessageReplyMarkup( const uint_fast32_t message_id, const string &reply_markup )
 {
     auto response = executeRequest( "editMessageReplyMarkup",
                                     cpr::Parameters{{"chat_id", chat_id},
@@ -374,8 +390,9 @@ BasicBot::editMessageReplyMarkup( const uint_fast32_t message_id, const string &
     return Message( valroot["result"] );
 }
 
+template <class T>
 bool
-BasicBot::editMessageReplyMarkup( const string &inline_message_id, const string &reply_markup )
+BasicBot<T>::editMessageReplyMarkup( const string &inline_message_id, const string &reply_markup )
 {
     auto response = executeRequest( "editMessageReplyMarkup",
                                     cpr::Parameters{{"inline_message_id", inline_message_id},
@@ -390,13 +407,14 @@ BasicBot::editMessageReplyMarkup( const string &inline_message_id, const string 
     return valroot["result"].asBool();
 }
 
+template <class T>
 bool
-BasicBot::answerInlineQuery( const Json::Value & results,
-                             const uint_fast16_t cache_time,
-                             const bool          is_personal,
-                             const string &      next_offset,
-                             const string &      switch_pm_text,
-                             const string &      switch_pm_paramter )
+BasicBot<T>::answerInlineQuery( const Json::Value & results,
+                                const uint_fast16_t cache_time,
+                                const bool          is_personal,
+                                const string &      next_offset,
+                                const string &      switch_pm_text,
+                                const string &      switch_pm_paramter )
 {
     Json::FastWriter writer;
 
@@ -418,8 +436,9 @@ BasicBot::answerInlineQuery( const Json::Value & results,
     return valroot["result"].asBool();
 }
 
+template <class T>
 void
-BasicBot::processUpdate( const Update &update )
+BasicBot<T>::processUpdate( const Update &update )
 {
     if ( command_handler.processCommands( update ) )
     {
@@ -430,8 +449,11 @@ BasicBot::processUpdate( const Update &update )
     {
         case EUpdate::eMessage:
         {
-            chat_id = to_string( update.message->chat.id );
-            processMessage( *this, move( update.message.value() ) );
+            if ( processMessage )
+            {
+                chat_id = to_string( update.message->chat.id );
+                processMessage( dynamic_cast<T &>( *this ), move( update.message.value() ) );
+            }
         }
         break;
         case EUpdate::eCallbackQuery:
@@ -444,8 +466,11 @@ BasicBot::processUpdate( const Update &update )
         break;
         case EUpdate::eEditedMessage:
         {
-            chat_id = to_string( update.message->chat.id );
-            processEditedMessage( *this, move( update.message.value() ) );
+            if ( processEditedMessage )
+            {
+                chat_id = to_string( update.message->chat.id );
+                processEditedMessage( *this, move( update.message.value() ) );
+            }
         }
         break;
         case EUpdate::eInlineQuery:
@@ -475,24 +500,4 @@ BasicBot::processUpdate( const Update &update )
         }
         break;
     }
-}
-
-void
-cppgram::defaultProcessMessage( class BasicBot &bot, const Message & )
-{
-}
-
-void
-cppgram::defaultProcessInlineQuery( class BasicBot &bot, const InlineQuery & )
-{
-}
-
-void
-cppgram::defaultProcessCallbackQuery( class BasicBot &bot, const CallbackQuery & )
-{
-}
-
-void
-cppgram::defaultProcessChosenInlineResult( class BasicBot &bot, const ChosenInlineResult & )
-{
 }

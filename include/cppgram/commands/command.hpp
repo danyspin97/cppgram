@@ -22,8 +22,11 @@ namespace commands
  * Inherit this class to implements behavior and condition that have to be met before triggering
  * the command.
  */
-class Command
+template <class T> class Command
 {
+    // static_assert( std::is_base_of<BasicBot<T>, T>::value,
+    //"You can only create a command for bot objects." );
+
     public:
     /** @brief type of the update for which the command will be triggered. */
     const EUpdate type;
@@ -41,7 +44,7 @@ class Command
      * Set also bot data(`chat_id`, `inline_query_id`, `callback_query_id`) or some api methods will
      * not work.
      */
-    virtual void callClosure( BasicBot &, const types::Update & ) = 0;
+    virtual void callClosure( T &, const types::Update & ) = 0;
 
     /**
      * @brief Does the update trigger this command?
@@ -56,7 +59,7 @@ class Command
      * @param inline_query_id The id of the inline query received.
      * @param bot Bot that is processing the update.
      */
-    void setInlineQueryId( std::string &inline_query_id, BasicBot &bot )
+    void setInlineQueryId( std::string &inline_query_id, T &bot )
     {
         bot.inline_query_id = inline_query_id;
     }
@@ -66,7 +69,7 @@ class Command
      * @param callback_query_id Id of the callback query received.
      * @param bot Bot that is processing the update.
      */
-    void setCallbackQueryId( std::string &callback_query_id, BasicBot &bot )
+    void setCallbackQueryId( std::string &callback_query_id, T &bot )
     {
         bot.callback_query_id = callback_query_id;
     }

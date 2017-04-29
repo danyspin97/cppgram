@@ -201,23 +201,14 @@
  */
 namespace cppgram
 {
-void
-defaultProcessMessage( class BasicBot &bot, const types::Message & );
-void
-defaultProcessInlineQuery( BasicBot &bot, const types::InlineQuery & );
-void
-defaultProcessChosenInlineResult( BasicBot &bot, const types::ChosenInlineResult & );
-void
-defaultProcessCallbackQuery( BasicBot &bot, const types::CallbackQuery & );
-
 /**
  * @brief contains api methods, update handlers and listener.
  * @details The basic bot that contains all basic features.
  */
-class BasicBot
+template <class T> class BasicBot
 {
-    template <typename T> friend class Polling;
-    friend class commands::Command;
+    template <typename V> friend class Polling;
+    template <class Z> friend class commands::Command;
 
     public:
     /**
@@ -233,6 +224,8 @@ class BasicBot
      * @param b Bot to copy.
      */
     BasicBot( const BasicBot &b );
+
+    virtual ~BasicBot() {}
 
     /**
      * @internal
@@ -252,10 +245,12 @@ class BasicBot
      * @param chat_id New chat_id to set.
      */
     inline void setChatId( std::string &chat_id ) { this->chat_id = chat_id; }
+
     /**
      * @see setChatId
      */
     inline void setChatId( uint_fast32_t chat_id ) { this->chat_id = std::to_string( chat_id ); }
+
     /**
      * @see setChatId
      */
@@ -265,7 +260,7 @@ class BasicBot
      * @brief Get command handler object.
      * @return Reference to the object.
      * */
-    inline CommandHandler &commands() { return command_handler; }
+    inline CommandHandler<T> &commands() { return command_handler; }
 
     /**
      * @brief Get the keyboard handler.
@@ -521,42 +516,37 @@ class BasicBot
     /**
      * @brief Pointer to the function that will be called on each message sent by the user.
      */
-    std::function<void( BasicBot &, const types::Message & )> processMessage
-            = &defaultProcessMessage;
+    std::function<void( T &, const types::Message & )> processMessage = nullptr;
 
     /**
      * @brief Pointer to the function that will be called on each message edited by the user.
      */
-    void ( *processEditedMessage )( BasicBot &, const types::Message & ) = &defaultProcessMessage;
+    void ( *processEditedMessage )( BasicBot &, const types::Message & ) = nullptr;
 
     /**
      * @brief Pointer to the function that will be called on each message received in a channel.
      */
-    void ( *processChannelPost )( BasicBot &, const types::Message & ) = &defaultProcessMessage;
+    void ( *processChannelPost )( BasicBot &, const types::Message & ) = nullptr;
 
     /**
      * @brief Pointer to the function that will be called on each message modified in a channel.
      */
-    void ( *processEditedChannelPost )( BasicBot &, const types::Message & )
-            = &defaultProcessMessage;
+    void ( *processEditedChannelPost )( BasicBot &, const types::Message & ) = nullptr;
 
     /**
      * @brief Pointer to the function that will be called on each inline query.
      */
-    void ( *processInlineQuery )( BasicBot &, const types::InlineQuery & )
-            = &defaultProcessInlineQuery;
+    void ( *processInlineQuery )( BasicBot &, const types::InlineQuery & ) = nullptr;
 
     /**
      * @brief Pointer to the function that will be called on each inline query choosed by the user.
      */
-    void ( *processChosenInlineResult )( BasicBot &, const types::ChosenInlineResult & )
-            = &defaultProcessChosenInlineResult;
+    void ( *processChosenInlineResult )( BasicBot &, const types::ChosenInlineResult & ) = nullptr;
 
     /**
      * @brief Pointer to the funciton that will be called on each callback query.
      */
-    void ( *processCallbackQuery )( BasicBot &, const types::CallbackQuery & )
-            = &defaultProcessCallbackQuery;
+    void ( *processCallbackQuery )( BasicBot &, const types::CallbackQuery & ) = nullptr;
 
     /** @} */
 
@@ -593,11 +583,13 @@ class BasicBot
             bot_name;
 
     /** @internal @brief Objects that hold all the commands. */
-    CommandHandler command_handler;
+    CommandHandler<T> command_handler;
 
     /** @internal @brief Inline keyboard handler. */
     Keyboard keyboard_obj;
 };
 }
+
+#include "basic_bot_impl.hpp"
 
 #endif

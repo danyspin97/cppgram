@@ -9,25 +9,29 @@ using cppgram::types::Update;
 
 using cppgram::commands::Command;
 
-CommandHandler::CommandHandler( BasicBot *bot )
+template <class T>
+CommandHandler<T>::CommandHandler( T *bot )
     : owner( bot )
 {
 }
 
-CommandHandler::CommandHandler( BasicBot *bot, const CommandHandler &c )
+template <class T>
+CommandHandler<T>::CommandHandler( T *bot, const CommandHandler &c )
     : owner( bot )
     , commands( c.commands )
 {
 }
 
-CommandHandler::CommandHandler( const CommandHandler &c )
+template <class T>
+CommandHandler<T>::CommandHandler( const CommandHandler &c )
     : owner( c.owner )
     , commands( c.commands )
 {
 }
 
-CommandHandler
-CommandHandler::operator=( const CommandHandler &c )
+template <class T>
+CommandHandler<T>
+CommandHandler<T>::operator=( const CommandHandler &c )
 {
     owner    = c.owner;
     commands = c.commands;
@@ -35,27 +39,30 @@ CommandHandler::operator=( const CommandHandler &c )
     return *this;
 }
 
+template <class T>
 void
-CommandHandler::addCommand( Command* new_command )
+CommandHandler<T>::addCommand( Command<T> *new_command )
 {
     commands[new_command->type].push_back( new_command );
 }
 
+template <class T>
 void
-CommandHandler::setCommands( const CommandHandler &c )
+CommandHandler<T>::setCommands( const CommandHandler &c )
 {
     commands = c.commands;
 }
 
+template <class T>
 bool
-CommandHandler::processCommands( const Update &update )
+CommandHandler<T>::processCommands( const Update &update )
 {
     // For each command (valid for the current update)
-    for ( Command* c : commands[update.type] )
+    for ( Command<T> *c : commands[update.type] )
     {
-        if (c->isValid(update))
+        if ( c->isValid( update ) )
         {
-            c->callClosure(*owner, update);
+            c->callClosure( *owner, update );
             return true;
         }
     }

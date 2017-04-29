@@ -8,11 +8,11 @@
 namespace cppgram
 {
 // Forward declarations
-class BasicBot;
+template <class T> class BasicBot;
 enum EUpdate : short;
 namespace commands
 {
-class Command;
+template <class T> class Command;
 }
 namespace types
 {
@@ -23,23 +23,26 @@ class Update;
  * @brief Handle bot commands.
  * @details Store commands and check if an update trigger a command.
  */
-class CommandHandler
+template <class T> class CommandHandler
 {
-    friend class BasicBot;
+    template <class Z> friend class BasicBot;
+
+    // static_assert( std::is_base_of<BasicBot<T>, T>::value,
+    //"You can only create a command for bot objects." );
 
     public:
     /**
      * @brief Construct this object with empty commands.
      * @param bot Pointer to the bot owner.
      */
-    CommandHandler( BasicBot *bot );
+    CommandHandler( T *bot );
 
     /**
      * @brief Construct this object.
      * @param bot Owner of this object.
      * @param c CommandHandler that owns the commands.
      */
-    CommandHandler( BasicBot *bot, const CommandHandler &c );
+    CommandHandler( T *bot, const CommandHandler &c );
 
     /**
      * @internal
@@ -59,7 +62,7 @@ class CommandHandler
      * @brief Add a bot command.
      * @param new_command Pointer to the command to add.
      */
-    void addCommand( commands::Command *new_command );
+    void addCommand( commands::Command<T> *new_command );
 
     /**
      * @brief copy commands of another object of type `CommandHandler`
@@ -80,7 +83,7 @@ class CommandHandler
      * @internal
      * @brief Bot owner of this object
      */
-    BasicBot *owner;
+    T *owner;
 
     /**
      * @internal
@@ -88,8 +91,10 @@ class CommandHandler
      * @details For each update type there is a vector containing pointers to objects of type
      * Command.
      */
-    std::unordered_map<const EUpdate, std::vector<commands::Command *>> commands;
+    std::unordered_map<const EUpdate, std::vector<commands::Command<T> *>> commands;
 };
 }
+
+#include "command_handler_impl.hpp"
 
 #endif

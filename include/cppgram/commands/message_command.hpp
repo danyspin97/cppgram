@@ -8,17 +8,17 @@ namespace cppgram
 {
 namespace commands
 {
-typedef std::function<void( class BasicBot &, const types::Message )> MessageClosure;
-
 /**
  * @brief Triggered by bot command in messages.
  * @details If the message contains a bot command and it is the same as this command, call the
  * underlying function.
  * This command will be triggered only if the command is the first to appear in the message.
  */
-class MessageCommand : public Command
+template <class T> class MessageCommand : public Command<T>
 {
     public:
+    typedef std::function<void( T &, const types::Message & )> MessageClosure;
+
     /**
      * @brief Construct a message command.
      * @param command String that has to appear in the bot command to trigger this object.
@@ -37,7 +37,7 @@ class MessageCommand : public Command
      * @param bot Object that will process the update.
      * @param update Update to process.
      */
-    virtual void callClosure( BasicBot &bot, const types::Update &update )
+    virtual void callClosure( T &bot, const types::Update &update )
     {
         bot.setChatId( update.message->chat.id );
         script( bot, update.message.value() );
