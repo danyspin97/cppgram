@@ -10,6 +10,12 @@ using cppgram::types::Update;
 using cppgram::commands::Command;
 
 template <class T>
+CommandHandler<T>::CommandHandler()
+    : owner( nullptr )
+{
+}
+
+template <class T>
 CommandHandler<T>::CommandHandler( T *bot )
     : owner( bot )
 {
@@ -30,11 +36,22 @@ CommandHandler<T>::CommandHandler( const CommandHandler &c )
 }
 
 template <class T>
-CommandHandler<T>
+CommandHandler<T> &
 CommandHandler<T>::operator=( const CommandHandler &c )
 {
-    owner    = c.owner;
+    // There is no owner as two CommandHandler objects cannot share the same owner
+    owner    = nullptr;
     commands = c.commands;
+
+    return *this;
+}
+
+template <class T>
+CommandHandler<T> &
+CommandHandler<T>::operator=( CommandHandler &&c )
+{
+    owner    = std::move( c.owner );
+    commands = std::move( c.commands );
 
     return *this;
 }
@@ -51,6 +68,16 @@ void
 CommandHandler<T>::setCommands( const CommandHandler &c )
 {
     commands = c.commands;
+}
+
+template <class T>
+void
+CommandHandler<T>::init( T *bot )
+{
+    if ( !owner )
+    {
+        owner = bot;
+    }
 }
 
 template <class T>

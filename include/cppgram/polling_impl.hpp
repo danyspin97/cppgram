@@ -35,7 +35,7 @@ cppgram::Polling<T>::run()
         return;
     }
 
-    initLogging();
+    init();
 
     if ( size == 1 )
     {
@@ -54,8 +54,11 @@ cppgram::Polling<T>::runMultithread()
     std::vector<std::thread> threads;
     for ( T &bot : bots )
     {
-        threads.push_back( std::thread( &Polling::loopBot, this, bot ) );
+        threads.push_back( std::thread( &Polling::loopBot, this, std::move( bot ) ) );
     }
+
+    // Array objects has been moved, clear it
+    bots.clear();
 
     setThreadAffinity( threads );
 
@@ -65,6 +68,8 @@ cppgram::Polling<T>::runMultithread()
 
     std::vector<cppgram::types::Update> updates;
     uint_fast32_t                       updates_offset = firstUpdateID( poller );
+
+    // Get the updates until the program has been stopped by the SIGINT
     while ( 1 )
     {
         uint_fast32_t count;
@@ -112,7 +117,7 @@ cppgram::Polling<T>::setThreadAffinity( std::vector<std::thread> &threads )
     u_int8_t cores = std::thread::hardware_concurrency();
     if ( threads.size() <= cores )
     {
-        for ( auto i = 0; i < threads.size(); i++ )
+        for ( uint_fast8_t i = 0; i < threads.size(); i++ )
         {
             cpu_set_t cpuset;
             CPU_ZERO( &cpuset );
@@ -153,7 +158,7 @@ cppgram::Polling<T>::firstUpdateID( T &poller )
 
 template <class T>
 void
-cppgram::Polling<T>::initLogging()
+cppgram::Polling<T>::init()
 {
     auto sink = std::make_shared<spdlog::sinks::simple_file_sink_mt>( "bot.log" );
 
@@ -162,6 +167,7 @@ cppgram::Polling<T>::initLogging()
         if ( bot.logger_ptr == nullptr )
         {
             bot.setLogger( sink );
+            bot.init();
         }
     }
 

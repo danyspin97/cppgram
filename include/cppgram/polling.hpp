@@ -79,7 +79,7 @@ template <class T> class Polling
      * @interal
      * @brief Init logger for each bot.
      */
-    void initLogging();
+    void init();
 
     /** @brief Vector of bots. */
     std::vector<T> bots;

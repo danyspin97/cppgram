@@ -215,15 +215,17 @@ template <class T> class BasicBot
      * @brief Constuctor.
      * @param token Bot token. Get a token from [BotFather](https://telegram.me/botfather).
      * @param bot_name Name of the bot (for logging purposes).
+     * @param obj_ptr Pointer to this object.
+     * Cannot use this as this is not the final object. Pointer to the derived class that is calling
+     * this parent constructor.
      */
-    BasicBot( std::string &token, std::string name = "Bot" );
+    BasicBot( std::string &token, std::string name = "Bot", T *obj_ptr = nullptr );
 
     /**
-     * @internal
      * @brief Copy constructor.
      * @param b Bot to copy.
      */
-    BasicBot( const BasicBot &b );
+    BasicBot( const BasicBot &b, T *base_ptr );
 
     virtual ~BasicBot() {}
 
@@ -238,7 +240,7 @@ template <class T> class BasicBot
      * @brief Get chat_id of the current user/group/channel.
      * @return Chat_id.
      */
-    inline std::string chatId() { return chat_id; }
+    inline const std::string chatId() { return chat_id; }
 
     /**
      * @brief Set the chat id of the bot.
@@ -296,6 +298,11 @@ template <class T> class BasicBot
      * @param logger New logger to set.
      */
     void setLogger( std::shared_ptr<spdlog::logger> new_logger );
+
+    /**
+     * @brief Init bot object.
+     */
+    virtual void init();
 
     /**
      * @brief Execute an API method by passing method name and parameters.

@@ -34,17 +34,15 @@ using cppgram::EUpdate;
 using cppgram::JsonParseError;
 
 template <class T>
-BasicBot<T>::BasicBot( string &token, string name )
+BasicBot<T>::BasicBot( string &token, string name, T *obj_ptr )
     : api_url( "https://api.telegram.org/bot" + token + "/" )
     , bot_name( name )
     , logger_ptr( nullptr )
-    , command_handler( dynamic_cast<T *>( this ) )
+    , command_handler( obj_ptr )
 {
 }
 
-template <class T>
-BasicBot<T>::BasicBot( const BasicBot &b )
-    : command_handler( CommandHandler<T>( dynamic_cast<T *>( this ), b.command_handler ) )
+template <class T> BasicBot<T>::BasicBot( const BasicBot &b, T *base_ptr )
 {
     api_url = b.api_url;
 
@@ -57,6 +55,8 @@ BasicBot<T>::BasicBot( const BasicBot &b )
     bot_name = b.bot_name;
 
     logger_ptr = b.logger_ptr;
+
+    command_handler = std::move( CommandHandler<T>( base_ptr, b.command_handler ) );
 }
 
 template <class T>
@@ -75,7 +75,10 @@ BasicBot<T>::operator=( const BasicBot &b )
 
     logger_ptr = b.logger_ptr;
 
-    command_handler = CommandHandler<T>( dynamic_cast<T *>( this ), b.command_handler );
+    // Create a new CommandHandler object, giving this object as owner and the commands of the
+    // rvalue, then move it in command_handler (to not lose owner ptr)
+    command_handler
+            = std::move( CommandHandler<T>( dynamic_cast<T *>( this ), b.command_handler ) );
 
     return *this;
 }
@@ -121,6 +124,13 @@ void
 BasicBot<T>::setLogger( std::shared_ptr<spdlog::logger> new_logger )
 {
     logger_ptr = new_logger;
+}
+
+template <class T>
+void
+BasicBot<T>::init()
+{
+    command_handler.init( dynamic_cast<T *>( this ) );
 }
 
 template <class T>

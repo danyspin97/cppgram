@@ -32,6 +32,11 @@ template <class T> class CommandHandler
 
     public:
     /**
+     * @brief Empty object.
+     */
+    CommandHandler();
+
+    /**
      * @brief Construct this object with empty commands.
      * @param bot Pointer to the bot owner.
      */
@@ -45,18 +50,27 @@ template <class T> class CommandHandler
     CommandHandler( T *bot, const CommandHandler &c );
 
     /**
-     * @internal
      * @brief Copy constructor.
      */
     CommandHandler( const CommandHandler &c );
 
     /**
-     * @internal
-     * @brief Assigment operator.
-     * @details Assign the exact pwner and all the commands to an other object using the
-     * assignation.
+     * @brief Assigment constructor.
+     * @details A CommandHandler will be initialized with the same commands as the rvalue, but the
+     * returned object will not have any owner as two CommandHandler objects cannot share the same
+     * owner.
+     * @param c rvalue.
+     * @return CommandHandler object with the same commands as the rvalue.
      */
-    CommandHandler operator=( const CommandHandler &c );
+    CommandHandler &operator=( const CommandHandler &c );
+
+    /**
+     * @brief Move assigment operator.
+     * @details Assign the exact owner and all the commands to an other object using the
+     * assignation.
+     * @param c rvalue.
+     */
+    CommandHandler &operator=( CommandHandler &&c );
 
     /**
      * @brief Add a bot command.
@@ -71,6 +85,12 @@ template <class T> class CommandHandler
     void setCommands( const CommandHandler &c );
 
     private:
+    /**
+     * @brief Check if this object has an owner and set it to bot if not.
+     * @param bot Pointer to the bot owner of this object.
+     */
+    void init( T *bot );
+
     /**
      * @internal
      * @brief Check if current update trigger a command.
