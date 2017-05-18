@@ -23,8 +23,16 @@
  *     // Include the framework
  *     #include "cppgram/cppgram.hpp"
  *
+ *     // Create your custom Bot class
+ *     class MyBot : public cppgram::BasicBot<MyBot> {
+ *         public:
+ *         MyBot(string &token) : BasicBot(token, "MyBotName", this) {}
+ *
+ *         MyBot(const MyBot &b) : BasicBot(b, this) {}
+ *     };
+ *
  *     // Answer all messages received
- *     void helloWorld(cppgram::BasicBot &bot,
+ *     void helloWorld(MyBot &bot,
  *                 const cppgram::types::Message &message) {
  *
  *         // sending a "Hello World" message
@@ -33,11 +41,11 @@
  *
  *     int main() {
  *         std::string token = "token";
- *         auto bot = cppgram::BasicBot(token, "BotName");
+ *         auto bot = MyBot(token);
  *         // Say the bot to answer all messages using our Hello World function
  *         bot.processMessage = &helloWorld;
  *         // Create a poll with 8 thread running
- *         auto poll = cppgram::Polling<cppgram::BasicBot>(bot, 8);
+ *         auto poll = cppgram::Polling<MyBot>(bot, 8);
  *         poll.run();
  *     }
  *
@@ -76,10 +84,10 @@
  * \section How How to use it
  *
  * \subsection Answer all messages
- * Create a method that take a <code>cppgram::BasicBot</code> and a
+ * Create a method that take a class derived from <code>cppgram::BasicBot</code> and a
  * <code>cppgram::types::Message</code> as argument:
  *
- *     void processMessage(cppgram::BasicBot& bot, cppgram::types::Message);
+ *     void processMessage(MyBot& bot, cppgram::types::Message);
  *
  * Then say the bot to use this funciton to process all messages received:
  *
@@ -116,7 +124,7 @@
  *
  *
  *     // Define the function that will be called on each "/start" message received
- *     void startCommand(cppgram::BasicBot &bot,
+ *     void startCommand(MyBot &bot,
  *                    const cppgram::types::Message &message) {
  *         bot.sendMessage("This is a start message");
  *     }
@@ -124,15 +132,19 @@
  *     int main() {
  *         // Create the bot
  *         ...
+ *
  *         // The string that has to appear in the bot_command
  *         // Do not include the "/"
  *         std::string command_name = "start";
+ *
  *         // Create the command
  *         cppgram::commands::MessageCommand *command =
  *                 // passing the command name and the function pointer
- *                 new cppgram::commands::MessageCommand(command_name, &startCommand);
+ *                 new cppgram::commands::MessageCommand<MyBot>(command_name, &startCommand);
+ *
  *         // Add it to the command handler
- *         bot.commands.addCommand(command);
+ *         bot.commands().addCommand(command);
+ *
  *         // Run the bot
  *         ...
  *     }
@@ -142,43 +154,22 @@
  * Inline keyboard represent a button below a message.
  * To send a message with a button use this sintax:
  *
- *     // Create the class and add a button
- *     auto keyboard = new InlineKeyboard();
- *     keyboard->addButton("Cppgram Documentation",
- * "http://wisedragonstd.gitlab.io/cppgram/", InlineKeyboardButtonType::Url);
- *     // Get the keyboard
+ *     // Create a button
+ *     bot.keyboard().addButton("Cppgram Documentation",
+ *             "http://DanySpin97.github.io/cppgram/", InlineKeyboardButtonType::Url);
+ *
+ *     // Get the keyboard JSON decoded to send it to telegram
  *     string button_string;
- *     keyboard->getKeyboard(button_string);
+ *     keyboard.getKeyboard(button_string);
+ *
  *     // Call the api to send a message
  *     sendMessage(chat_id, "Test bot for Cppgram wrapper", button_string);
  *
- * For a complete list of methods check the documentation.
+ * For a complete list of methods check the documentation about cppgram::Keyboard.
  *
  * \section Compile Compile Options
  *
- * \subsection CMake CMake Configure Options
- *
- * You can configure the project with various options
- *
- *     $ cmake $CPPGRAM_PATH $OPTIONS
- *
- * Availible options are:
- *
- * - -<code>DNOGET_DEPS="yes"/"no" (default: "no"): download dependencies
- * (jsoncpp, cpr)</code>
- * - -<code>DNATIVE="yes"/"no" (default: "no", reccomended: "yes"): build a
- * natively-built static library for your CPU (MAY NOT work on all cpu)</code>
- * - -<code>DARCH=/"-m32"/"-m64" (default: not defined): compile the library in
- * a particulary architecture</code>
- * - -<code>DOPTIMIZATION_LEVEL="2"/"3"/"4"/"fast" (default: not defined,
- * reccomended: "2"): set the compiler optmization</code>
- *
- * Sugggested building options
- *
- *     $ cmake ../cppgram -DCMAKE_CXX_COMPILER="/usr/bin/g++" -DNATIVE="yes"
- * -DOPTIMIZATION_LEVEL="2"
- *
- * \section Extra
+ * \section About
  *
  * \subsection Authors
  *
@@ -216,10 +207,10 @@ template <class T> class BasicBot
      * @param token Bot token. Get a token from [BotFather](https://telegram.me/botfather).
      * @param bot_name Name of the bot (for logging purposes).
      * @param obj_ptr Pointer to this object.
-     * Cannot use this as this is not the final object. Pointer to the derived class that is calling
-     * this parent constructor.
+     * Cannot use "this" keyboard in costructor as this is not the final object.
+     * Pointer to the derived class that is calling this parent constructor.
      */
-    BasicBot( std::string &token, std::string name = "Bot", T *obj_ptr = nullptr );
+    BasicBot( const std::string &token, std::string name = "Bot", T *obj_ptr = nullptr );
 
     /**
      * @brief Copy constructor.

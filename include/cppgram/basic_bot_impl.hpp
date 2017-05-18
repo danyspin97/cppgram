@@ -34,7 +34,7 @@ using cppgram::EUpdate;
 using cppgram::JsonParseError;
 
 template <class T>
-BasicBot<T>::BasicBot( string &token, string name, T *obj_ptr )
+BasicBot<T>::BasicBot( const string &token, string name, T *obj_ptr )
     : api_url( "https://api.telegram.org/bot" + token + "/" )
     , bot_name( name )
     , logger_ptr( nullptr )

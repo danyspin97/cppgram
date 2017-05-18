@@ -7,8 +7,16 @@ Cppgram is a lighweight framework for Telegram Bot API that provides support for
 // Include the framework
 #include "cppgram/cppgram.hpp"
 
+// Create your custom Bot class
+class MyBot : public cppgram::BasicBot<MyBot> {
+public:
+  MyBot(string &token) : BasicBot(token, "MyBotName", this) {}
+
+  MyBot(const MyBot &b) : BasicBot(b, this) {}
+};
+
 // Answer all messages received
-void helloWorld(cppgram::BasicBot &bot,
+void helloWorld(MyBot &bot,
                     const cppgram::types::Message &message) {
 
     // sending a "Hello World" message
@@ -17,11 +25,11 @@ void helloWorld(cppgram::BasicBot &bot,
 
 int main() {
   std::string token = "token";
-  auto bot = cppgram::BasicBot(token, "BotName");
+  auto bot = MyBot(token);
   // Say the bot to answer all messages using our Hello World function
   bot.processMessage = &helloWorld;
   // Create a poll with 8 thread running
-  auto poll = cppgram::Polling<cppgram::BasicBot>(bot, 8);
+  auto poll = cppgram::Polling<MyBot>(bot, 8);
   poll.run();
 }
 ~~~

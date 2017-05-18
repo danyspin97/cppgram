@@ -73,7 +73,7 @@ cppgram::Polling<T>::runMultithread()
     while ( 1 )
     {
         uint_fast32_t count;
-        if ( poller.getUpdates( updates, updates_offset ) )
+        if ( poller.getUpdates( updates, updates_offset, limit, timeout ) )
         {
             count = updates.size();
             updates_queue.enqueue_bulk( producer_token, updates.begin(), count );
@@ -151,7 +151,7 @@ uint_fast32_t
 cppgram::Polling<T>::firstUpdateID( T &poller )
 {
     std::vector<cppgram::types::Update> first_update;
-    while ( !poller.getUpdates( first_update, 0, 1 ) )
+    while ( !poller.getUpdates( first_update, 0, 1, timeout ) )
         ;
     return first_update[0].update_id - 1;
 }
