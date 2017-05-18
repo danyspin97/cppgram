@@ -63,7 +63,7 @@
  *
  * \section Install
  * To start using this library you can fork [this
- * repository](https://github.com/DanySpin97/cppgram_example). It is an example project configured
+ * repository](https://github.com/DanySpin97/cppgram-example). It is an example project configured
  * with
  * the minimal boilerplate you need to make this library works.
  *
