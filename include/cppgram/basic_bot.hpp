@@ -228,26 +228,16 @@ template <class T> class BasicBot
     BasicBot operator=( const BasicBot &b );
 
     /**
-     * @brief Get chat_id of the current user/group/channel.
-     * @return Chat_id.
-     */
-    inline const std::string chatId() { return chat_id; }
-
-    /**
      * @brief Set the chat id of the bot.
      * @param chat_id New chat_id to set.
      */
-    inline void setChatId( std::string &chat_id ) { this->chat_id = chat_id; }
+    inline void setChatId( uint_fast32_t chat_id ) { this->chat_id = chat_id; }
 
     /**
+     * @brief Set the chat id of the bot.
      * @see setChatId
      */
-    inline void setChatId( uint_fast32_t chat_id ) { this->chat_id = std::to_string( chat_id ); }
-
-    /**
-     * @see setChatId
-     */
-    inline void setChatId( int_fast64_t chat_id ) { this->chat_id = std::to_string( chat_id ); }
+    inline void setChatId( int_fast64_t chat_id ) { this->chat_id = chat_id; }
 
     /**
      * @brief Get command handler object.
@@ -343,8 +333,7 @@ template <class T> class BasicBot
     /**
      * @brief Send a message to a specified chat.
      * (https://core.telegram.org/bots/api#sendmessage)
-     * @param id Unique identifier for the target chat or username of the target
-     * channel (in the format <code>@channelusername</code>)
+     * @param chat_id Unique identifier for the target chat.
      * @param text Text of the message to be sent.
      * @param reply_markup Additional interface options. Use InlineKeyboard
      * class to create a reply markup.
@@ -355,6 +344,36 @@ template <class T> class BasicBot
      * @param reply_to_message_id If the message is a reply, Id of the original.
      * message.
      * @return On success, the message sent.
+     */
+    std::experimental::optional<const class types::Message>
+    sendMessage( const int_fast64_t chat_id,
+                 const std::string &text,
+                 const std::string &reply_markup             = "",
+                 const EParseMode   parse_mode               = EParseMode::HTML,
+                 const bool         disable_web_page_preview = true,
+                 const bool         disable_notification     = false,
+                 const int_fast32_t reply_to_message_id      = 0 );
+
+    /**
+     * @brief Send a message to a specified chat.
+     * (https://core.telegram.org/bots/api#sendmessage)
+     * @see sendMessage
+     */
+    std::experimental::optional<const class types::Message>
+    sendMessage( const std::string &chat_id,
+                 const std::string &text,
+                 const std::string &reply_markup             = "",
+                 const EParseMode   parse_mode               = EParseMode::HTML,
+                 const bool         disable_web_page_preview = true,
+                 const bool         disable_notification     = false,
+                 const int_fast32_t reply_to_message_id      = 0 );
+
+    /**
+     * @brief Send a message to a specified chat.
+     * @param chat_id Username of the target channel or group (in the format
+     * <code>\@channelusername</code>).
+     * (https://core.telegram.org/bots/api#sendmessage)
+     * @see sendMessage
      */
     std::experimental::optional<const class types::Message>
     sendMessage( const std::string &text,
@@ -386,17 +405,44 @@ template <class T> class BasicBot
 
     /**
      * @brief Edit text (and reply markup) of a message sent by the bot.
-     * @details Leaving reply_markup empty remove it from the message edited.
+     * @details Leaving reply_markup empty remove it from the edited message.
      * (https://core.telegram.org/bots/api#editmessagetext)
-     * @param chat_id Unique identifier for the target chat or username of the
-     * target channel (in the format <code>\@channelusername</code>)
+     * @param chat_id Unique identifier for the target chat.
      * @param message_id Unique identifier of the sent message.
      * @param text New text of the message.
      * @param reply_markup Inline keyboard object.
      * @param parse_mode Send an enum of type ParseMode.
      * @param disable_web_page_preview Disables link previews for links in this
      * message.
-     * @return On success, the message edited.
+     * @return On success, the edited message.
+     */
+    std::experimental::optional<const class types::Message>
+    editMessageText( const int_fast64_t  chat_id,
+                     const uint_fast32_t message_id,
+                     const std::string & text,
+                     const std::string & reply_markup             = "",
+                     const EParseMode    parse_mode               = static_cast<EParseMode>( 1 ),
+                     const bool          disable_web_page_preview = true );
+
+    /**
+     * @brief Edit text (and reply markup) of a message sent by the bot.
+     * @param chat_id Username of the target channel or group (in the format
+     * <code>\@channelusername</code>).
+     * @see editMessageText
+     */
+    std::experimental::optional<const class types::Message>
+    editMessageText( const std::string & chat_id,
+                     const uint_fast32_t message_id,
+                     const std::string & text,
+                     const std::string & reply_markup             = "",
+                     const EParseMode    parse_mode               = static_cast<EParseMode>( 1 ),
+                     const bool          disable_web_page_preview = true );
+
+    /**
+     * @brief Edit text (and reply markup) of a message sent by the bot.
+     * @details The chat selected will be the chat from where the current update was received.
+     * (https://core.telegram.org/bots/api#editmessagetext)
+     * @see editMessageText
      */
     std::experimental::optional<const class types::Message>
     editMessageText( const uint_fast32_t message_id,
@@ -404,11 +450,10 @@ template <class T> class BasicBot
                      const std::string & reply_markup             = "",
                      const EParseMode    parse_mode               = static_cast<EParseMode>( 1 ),
                      const bool          disable_web_page_preview = true );
-
     /**
      * @brief Edit text (and reply markup) of a message sent via the bot (using inline
      * queries).
-     * @details Leaving reply_markup empty remove it from the message edited.
+     * @details Leaving reply_markup empty remove it from the edited message.
      * (https://core.telegram.org/bots/api#editmessagetext)
      * @param inline_message_id Identifier of the inline message.
      * @param text New text of the message.
@@ -426,22 +471,44 @@ template <class T> class BasicBot
 
     /**
      * @brief Edit captions of messages sent by the bot.
-     * @details Leaving reply_markup empty remove it from the message edited.
+     * @details Leaving reply_markup empty remove it from the edited message.
      * (https://core.telegram.org/bots/api#editmessagecaption)
-     * @param chat_id Unique identifier for the target chat or username of the
-     * target channel (in the format <code>\@channelusername</code>).
+     * @param chat_id Unique identifier for the target chat.
      * @param caption New caption of the message.
      * @param reply_markup Inline keyboard object.
-     * @return On success, the message edited.
+     * @return On success, the edited message.
+     */
+    std::experimental::optional<const class types::Message>
+    editMessageCaption( const int_fast64_t  chat_id,
+                        const uint_fast32_t message_id,
+                        const std::string & caption      = "",
+                        const std::string & reply_markup = "" );
+
+    /**
+     * @brief Edit captions of messages sent by the bot.
+     * @param chat_id Username of the target channel or group (in the format
+     * <code>\@channelusername</code>).
+     * (https://core.telegram.org/bots/api#editmessagecaption)
+     */
+    std::experimental::optional<const class types::Message>
+    editMessageCaption( const std::string & chat_id,
+                        const uint_fast32_t message_id,
+                        const std::string & caption      = "",
+                        const std::string & reply_markup = "" );
+
+    /**
+     * @brief Edit captions of messages sent by the bot.
+     * @details The chat selected will be the chat from where the current update was received.
+     * (https://core.telegram.org/bots/api#editmessagecaption)
      */
     std::experimental::optional<const class types::Message>
     editMessageCaption( const uint_fast32_t message_id,
-                        const std::string & caption,
+                        const std::string & caption      = "",
                         const std::string & reply_markup = "" );
 
     /**
      * @brief Edit captions of messages sent via the bot (using inline_queries).
-     * @details Leaving reply_markup empty remove it from the message edited.
+     * @details Leaving reply_markup empty remove it from the edited message.
      * (https://core.telegram.org/bots/api#editmessagecaption)
      * @param inline_message_id Identifier of the inline message.
      * @param caption New caption of the message.
@@ -454,20 +521,42 @@ template <class T> class BasicBot
 
     /**
      * @brief Edit only the reply markup of a message sent by the the bot.
-     * @details Leaving reply_markup empty remove it from the message edited.
+     * @details Leaving reply_markup empty remove it from the edited message.
      * (https://core.telegram.org/bots/api#editmessagereplymarkup)
-     * @param chat_id Unique identifier for the target chat or username of the
-     * target channel (in the format <code>\@channelusername</code>).
+     * @param chat_id Unique identifier for the target chat.
      * @param message_id Unique identifier of the sent message.
      * @param reply_markup New inline keyboard object.
-     * @return On success, the message edited.
+     * @return On success, the edited message.
+     */
+    std::experimental::optional<const class types::Message>
+    editMessageReplyMarkup( const int_fast64_t  chat_id,
+                            const uint_fast32_t message_id,
+                            const std::string & reply_markup = "" );
+
+    /**
+     * @brief Edit only the reply markup of a message sent by the the bot.
+     * @param chat_id Username of the target channel or group (in the format
+     * <code>\@channelusername</code>).
+     * (https://core.telegram.org/bots/api#editmessagereplymarkup)
+     * @see editMessageReplyMarkup
+     */
+    std::experimental::optional<const class types::Message>
+    editMessageReplyMarkup( const std::string & chat_id,
+                            const uint_fast32_t message_id,
+                            const std::string & reply_markup = "" );
+
+    /**
+     * @brief Edit only the reply markup of a message sent by the the bot.
+     * @details The chat selected will be the chat from where the current update was received.
+     * (https://core.telegram.org/bots/api#editmessagereplymarkup)
+     * @see editMessageReplyMarkup
      */
     std::experimental::optional<const class types::Message>
     editMessageReplyMarkup( const uint_fast32_t message_id, const std::string &reply_markup = "" );
 
     /**
      * Edit only the reply markup of a message sent via the the bot (using
-     * inline queries). Leaving reply_markup empty remove it from the message
+     * inline queries). Leaving reply_markup empty remove keyboards from the message
      * edited. (https://core.telegram.org/bots/api#editmessagereplymarkup)
      * @param inline_message_id Identifier of the inline message.
      * @param reply_markup New inline keyboard object.
@@ -517,34 +606,34 @@ template <class T> class BasicBot
     std::function<void( T &, const types::Message & )> processMessage = nullptr;
 
     /**
-     * @brief Pointer to the function that will be called on each message edited by the user.
+     * @brief Pointer to the function that will be called on each edited message by the user.
      */
-    void ( *processEditedMessage )( BasicBot &, const types::Message & ) = nullptr;
+    void ( *processEditedMessage )( T &, const types::Message & ) = nullptr;
 
     /**
      * @brief Pointer to the function that will be called on each message received in a channel.
      */
-    void ( *processChannelPost )( BasicBot &, const types::Message & ) = nullptr;
+    void ( *processChannelPost )( T &, const types::Message & ) = nullptr;
 
     /**
      * @brief Pointer to the function that will be called on each message modified in a channel.
      */
-    void ( *processEditedChannelPost )( BasicBot &, const types::Message & ) = nullptr;
+    void ( *processEditedChannelPost )( T &, const types::Message & ) = nullptr;
 
     /**
      * @brief Pointer to the function that will be called on each inline query.
      */
-    void ( *processInlineQuery )( BasicBot &, const types::InlineQuery & ) = nullptr;
+    void ( *processInlineQuery )( T &, const types::InlineQuery & ) = nullptr;
 
     /**
      * @brief Pointer to the function that will be called on each inline query choosed by the user.
      */
-    void ( *processChosenInlineResult )( BasicBot &, const types::ChosenInlineResult & ) = nullptr;
+    void ( *processChosenInlineResult )( T &, const types::ChosenInlineResult & ) = nullptr;
 
     /**
      * @brief Pointer to the funciton that will be called on each callback query.
      */
-    void ( *processCallbackQuery )( BasicBot &, const types::CallbackQuery & ) = nullptr;
+    void ( *processCallbackQuery )( T &, const types::CallbackQuery & ) = nullptr;
 
     /** @} */
 
@@ -557,7 +646,7 @@ template <class T> class BasicBot
     void processUpdate( const types::Update &update );
 
     /** @internal @brief Chat_id of the current user/group/channel. */
-    std::string chat_id;
+    int_fast64_t chat_id;
 
     /** @internal @brief Id of the current callback query. */
     std::string callback_query_id;

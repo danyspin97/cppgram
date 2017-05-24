@@ -9,32 +9,8 @@
 #include "cppgram/exception.hpp"
 #include "cppgram/types/update.hpp"
 
-using std::string;
-using std::to_string;
-
-using std::vector;
-using std::move;
-using std::experimental::optional;
-
-using std::shared_ptr;
-using std::make_shared;
-
-using cppgram::BasicBot;
-using cppgram::CommandHandler;
-
-using cppgram::types::Update;
-using cppgram::types::Message;
-using cppgram::types::CallbackQuery;
-using cppgram::types::InlineQuery;
-using cppgram::types::ChosenInlineResult;
-
-using cppgram::EParseMode;
-using cppgram::EUpdate;
-
-using cppgram::JsonParseError;
-
 template <class T>
-BasicBot<T>::BasicBot( const string &token, string name, T *obj_ptr )
+BasicBot<T>::BasicBot( const std::string &token, std::string name, T *obj_ptr )
     : api_url( "https://api.telegram.org/bot" + token + "/" )
     , bot_name( name )
     , logger_ptr( nullptr )
@@ -76,7 +52,7 @@ BasicBot<T>::operator=( const BasicBot &b )
     logger_ptr = b.logger_ptr;
 
     // Create a new CommandHandler object, giving this object as owner and the commands of the
-    // rvalue, then move it in command_handler (to not lose owner ptr)
+    // rvalue, then std::move it in command_handler (to not lose owner ptr)
     command_handler
             = std::move( CommandHandler<T>( dynamic_cast<T *>( this ), b.command_handler ) );
 
@@ -84,23 +60,23 @@ BasicBot<T>::operator=( const BasicBot &b )
 }
 
 template <class T>
-shared_ptr<spdlog::logger>
+std::shared_ptr<spdlog::logger>
 BasicBot<T>::setLogger( spdlog::sink_ptr sink )
 {
     // Create a vector containing just a single sink
-    vector<spdlog::sink_ptr> sinks;
+    std::vector<spdlog::sink_ptr> sinks;
     sinks.push_back( sink );
     return setLogger( sinks );
 }
 
 template <class T>
-shared_ptr<spdlog::logger>
-BasicBot<T>::setLogger( vector<spdlog::sink_ptr> &sinks )
+std::shared_ptr<spdlog::logger>
+BasicBot<T>::setLogger( std::vector<spdlog::sink_ptr> &sinks )
 {
     try
     {
         // Create a logger to the given sinks
-        logger_ptr = make_shared<spdlog::logger>( bot_name, sinks.begin(), sinks.end() );
+        logger_ptr = std::make_shared<spdlog::logger>( bot_name, sinks.begin(), sinks.end() );
 
         // Flush on error or severe messages
         logger_ptr->flush_on( spdlog::level::err );
@@ -185,9 +161,9 @@ BasicBot<T>::getUpdates( std::vector<Update> &updates,
     }
 
     auto response = executeRequest( "getUpdates",
-                                    cpr::Parameters{{"timeout", to_string( timeout )},
-                                                    {"limit", to_string( limit )},
-                                                    {"offset", to_string( offset + 1 )}} );
+                                    cpr::Parameters{{"timeout", std::to_string( timeout )},
+                                                    {"limit", std::to_string( limit )},
+                                                    {"offset", std::to_string( offset + 1 )}} );
 
     Json::Value json_updates;
     if ( !checkMethodError( response, json_updates ) || json_updates["result"].empty() )
@@ -207,8 +183,28 @@ BasicBot<T>::getUpdates( std::vector<Update> &updates,
 }
 
 template <class T>
-optional<const Message>
-BasicBot<T>::sendMessage( const std::string &text,
+std::experimental::optional<const cppgram::types::Message>
+BasicBot<T>::sendMessage( const int_fast64_t chat_id,
+                          const std::string &text,
+                          const std::string &reply_markup,
+                          const EParseMode   parse_mode,
+                          const bool         disable_web_page_preview,
+                          const bool         disable_notification,
+                          const int_fast32_t reply_to_message_id )
+{
+    return sendMessage( std::to_string( chat_id ),
+                        text,
+                        reply_markup,
+                        parse_mode,
+                        disable_web_page_preview,
+                        disable_notification,
+                        reply_to_message_id );
+}
+
+template <class T>
+std::experimental::optional<const cppgram::types::Message>
+BasicBot<T>::sendMessage( const std::string &chat_id,
+                          const std::string &text,
                           const std::string &reply_markup,
                           const EParseMode   parse_mode,
                           const bool         disable_web_page_preview,
@@ -228,21 +224,40 @@ BasicBot<T>::sendMessage( const std::string &text,
 
     auto response = executeRequest(
             "sendMessage",
-            cpr::Parameters{{"chat_id", chat_id},
-                            {"text", text},
-                            {"parse_mode", parse_mode_string},
-                            {"disable_web_page_preview", to_string( disable_web_page_preview )},
-                            {"disable_notification", to_string( disable_notification )},
-                            {"reply_to_message_id", to_string( reply_to_message_id )},
-                            {"reply_markup", reply_markup}} );
+            cpr::Parameters{
+                    {"chat_id", chat_id},
+                    {"text", text},
+                    {"parse_mode", parse_mode_string},
+                    {"disable_web_page_preview", std::to_string( disable_web_page_preview )},
+                    {"disable_notification", std::to_string( disable_notification )},
+                    {"reply_to_message_id", std::to_string( reply_to_message_id )},
+                    {"reply_markup", reply_markup}} );
 
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
     {
-        return Message();
+        return cppgram::types::Message();
     }
 
-    return Message( valroot["result"] );
+    return cppgram::types::Message( valroot["result"] );
+}
+
+template <class T>
+std::experimental::optional<const cppgram::types::Message>
+BasicBot<T>::sendMessage( const std::string &text,
+                          const std::string &reply_markup,
+                          const EParseMode   parse_mode,
+                          const bool         disable_web_page_preview,
+                          const bool         disable_notification,
+                          const int_fast32_t reply_to_message_id )
+{
+    return sendMessage( std::to_string( chat_id ),
+                        text,
+                        reply_markup,
+                        parse_mode,
+                        disable_web_page_preview,
+                        disable_notification,
+                        reply_to_message_id );
 }
 
 template <class T>
@@ -255,8 +270,8 @@ BasicBot<T>::answerCallbackQuery( const std::string &text,
     auto response = executeRequest( "answerCallbackQuery",
                                     cpr::Parameters{{"callback_query", callback_query_id},
                                                     {"text", text},
-                                                    {"show_alert", to_string( show_alert )},
-                                                    {"cache_time", to_string( cache_time )},
+                                                    {"show_alert", std::to_string( show_alert )},
+                                                    {"cache_time", std::to_string( cache_time )},
                                                     {"url", url}} );
 
     Json::Value valroot;
@@ -269,14 +284,32 @@ BasicBot<T>::answerCallbackQuery( const std::string &text,
 }
 
 template <class T>
-optional<const Message>
-BasicBot<T>::editMessageText( const uint_fast32_t message_id,
-                              const string &      text,
-                              const string &      reply_markup,
+std::experimental::optional<const cppgram::types::Message>
+BasicBot<T>::editMessageText( const int_fast64_t  chat_id,
+                              const uint_fast32_t message_id,
+                              const std::string & text,
+                              const std::string & reply_markup,
                               const EParseMode    parse_mode,
                               const bool          disable_web_page_preview )
 {
-    string parseMode = "";
+    return sendMessage( std::to_string( chat_id ),
+                        message_id,
+                        text,
+                        reply_markup,
+                        parse_mode,
+                        disable_web_page_preview );
+}
+
+template <class T>
+std::experimental::optional<const cppgram::types::Message>
+BasicBot<T>::editMessageText( const std::string & chat_id,
+                              const uint_fast32_t message_id,
+                              const std::string & text,
+                              const std::string & reply_markup,
+                              const EParseMode    parse_mode,
+                              const bool          disable_web_page_preview )
+{
+    std::string parseMode = "";
 
     if ( parse_mode == EParseMode::HTML )
     {
@@ -287,33 +320,49 @@ BasicBot<T>::editMessageText( const uint_fast32_t message_id,
         parseMode = "Markdown";
     }
 
-    auto response = executeRequest(
-            "editMessageText",
-            cpr::Parameters{{"chat_id", chat_id},
-                            {"message_id", to_string( message_id )},
-                            {"text", text},
-                            {"parse_mode", parseMode},
-                            {"disable_web_page_preview", to_string( disable_web_page_preview )},
-                            {"reply_markup", reply_markup}} );
+    auto response = executeRequest( "editMessageText",
+                                    cpr::Parameters{{"chat_id", chat_id},
+                                                    {"message_id", std::to_string( message_id )},
+                                                    {"text", text},
+                                                    {"parse_mode", parseMode},
+                                                    {"disable_web_page_preview",
+                                                     std::to_string( disable_web_page_preview )},
+                                                    {"reply_markup", reply_markup}} );
 
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
     {
-        return Message();
+        return cppgram::types::Message();
     }
 
-    return Message( valroot["result"] );
+    return cppgram::types::Message( valroot["result"] );
+}
+
+template <class T>
+std::experimental::optional<const cppgram::types::Message>
+BasicBot<T>::editMessageText( const uint_fast32_t message_id,
+                              const std::string & text,
+                              const std::string & reply_markup,
+                              const EParseMode    parse_mode,
+                              const bool          disable_web_page_preview )
+{
+    return editMessageText( std::to_string( chat_id ),
+                            message_id,
+                            text,
+                            reply_markup,
+                            parse_mode,
+                            disable_web_page_preview );
 }
 
 template <class T>
 bool
-BasicBot<T>::editMessageText( const string &   inline_message_id,
-                              const string &   text,
-                              const string &   reply_markup,
-                              const EParseMode parse_mode,
-                              const bool       disable_web_page_preview )
+BasicBot<T>::editMessageText( const std::string &inline_message_id,
+                              const std::string &text,
+                              const std::string &reply_markup,
+                              const EParseMode   parse_mode,
+                              const bool         disable_web_page_preview )
 {
-    string parseMode = "";
+    std::string parseMode = "";
 
     if ( parse_mode == EParseMode::HTML )
     {
@@ -342,31 +391,51 @@ BasicBot<T>::editMessageText( const string &   inline_message_id,
 }
 
 template <class T>
-optional<const Message>
-BasicBot<T>::editMessageCaption( const uint_fast32_t message_id,
-                                 const string &      caption,
-                                 const string &      reply_markup )
+std::experimental::optional<const cppgram::types::Message>
+BasicBot<T>::editMessageCaption( const int_fast64_t  chat_id,
+                                 const uint_fast32_t message_id,
+                                 const std::string & caption,
+                                 const std::string & reply_markup )
+{
+    return editMessageCaption( std::to_string( chat_id ), message_id, caption, reply_markup );
+}
+
+template <class T>
+std::experimental::optional<const cppgram::types::Message>
+BasicBot<T>::editMessageCaption( const std::string & chat_id,
+                                 const uint_fast32_t message_id,
+                                 const std::string & caption,
+                                 const std::string & reply_markup )
 {
     auto response = executeRequest( "editMessageCaption",
                                     cpr::Parameters{{"chat_id", chat_id},
-                                                    {"message_id", to_string( message_id )},
+                                                    {"message_id", std::to_string( message_id )},
                                                     {"caption", caption},
                                                     {"reply_markup", reply_markup}} );
 
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
     {
-        return Message();
+        return cppgram::types::Message();
     }
 
-    return Message( valroot["result"] );
+    return cppgram::types::Message( valroot["result"] );
+}
+
+template <class T>
+std::experimental::optional<const cppgram::types::Message>
+BasicBot<T>::editMessageCaption( const uint_fast32_t message_id,
+                                 const std::string & caption,
+                                 const std::string & reply_markup )
+{
+    return editMessageCaption( std::to_string( chat_id ), message_id, caption, reply_markup );
 }
 
 template <class T>
 bool
-BasicBot<T>::editMessageCaption( const string &inline_message_id,
-                                 const string &caption,
-                                 const string &reply_markup )
+BasicBot<T>::editMessageCaption( const std::string &inline_message_id,
+                                 const std::string &caption,
+                                 const std::string &reply_markup )
 {
     auto response = executeRequest( "editMessageCaption",
                                     cpr::Parameters{{"inline_message_id", inline_message_id},
@@ -383,26 +452,46 @@ BasicBot<T>::editMessageCaption( const string &inline_message_id,
 }
 
 template <class T>
-optional<const Message>
-BasicBot<T>::editMessageReplyMarkup( const uint_fast32_t message_id, const string &reply_markup )
+std::experimental::optional<const cppgram::types::Message>
+BasicBot<T>::editMessageReplyMarkup( const int_fast64_t  chat_id,
+                                     const uint_fast32_t message_id,
+                                     const std::string & reply_markup )
+{
+    return editMessageReplyMarkup( std::to_string( chat_id ), message_id, reply_markup );
+}
+
+template <class T>
+std::experimental::optional<const cppgram::types::Message>
+BasicBot<T>::editMessageReplyMarkup( const std::string & chat_id,
+                                     const uint_fast32_t message_id,
+                                     const std::string & reply_markup )
 {
     auto response = executeRequest( "editMessageReplyMarkup",
                                     cpr::Parameters{{"chat_id", chat_id},
-                                                    {"message_id", to_string( message_id )},
+                                                    {"message_id", std::to_string( message_id )},
                                                     {"reply_markup", reply_markup}} );
 
     Json::Value valroot;
     if ( !checkMethodError( response, valroot ) )
     {
-        return Message();
+        return cppgram::types::Message();
     }
 
-    return Message( valroot["result"] );
+    return cppgram::types::Message( valroot["result"] );
+}
+
+template <class T>
+std::experimental::optional<const cppgram::types::Message>
+BasicBot<T>::editMessageReplyMarkup( const uint_fast32_t message_id,
+                                     const std::string & reply_markup )
+{
+    return editMessageReplyMarkup( std::to_string( chat_id ), message_id, reply_markup );
 }
 
 template <class T>
 bool
-BasicBot<T>::editMessageReplyMarkup( const string &inline_message_id, const string &reply_markup )
+BasicBot<T>::editMessageReplyMarkup( const std::string &inline_message_id,
+                                     const std::string &reply_markup )
 {
     auto response = executeRequest( "editMessageReplyMarkup",
                                     cpr::Parameters{{"inline_message_id", inline_message_id},
@@ -422,16 +511,16 @@ bool
 BasicBot<T>::answerInlineQuery( const Json::Value & results,
                                 const uint_fast16_t cache_time,
                                 const bool          is_personal,
-                                const string &      next_offset,
-                                const string &      switch_pm_text,
-                                const string &      switch_pm_paramter )
+                                const std::string & next_offset,
+                                const std::string & switch_pm_text,
+                                const std::string & switch_pm_paramter )
 {
     Json::FastWriter writer;
 
     auto response = executeRequest( "answerInlineQuery",
                                     cpr::Parameters{{"inline_query_id", inline_query_id},
                                                     {"results", writer.write( results )},
-                                                    {"cache_time", to_string( cache_time )},
+                                                    {"cache_time", std::to_string( cache_time )},
                                                     {"is_personal", is_personal},
                                                     {"next_offset", next_offset},
                                                     {"switch_pm_text", switch_pm_paramter},
@@ -455,22 +544,23 @@ BasicBot<T>::processUpdate( const Update &update )
         return;
     }
 
+    T &bot = dynamic_cast<T &>( *this );
     switch ( update.type )
     {
         case EUpdate::eMessage:
         {
             if ( processMessage )
             {
-                chat_id = to_string( update.message->chat.id );
-                processMessage( dynamic_cast<T &>( *this ), move( update.message.value() ) );
+                chat_id = update.message->chat.id;
+                processMessage( bot, std::move( update.message.value() ) );
             }
         }
         break;
         case EUpdate::eCallbackQuery:
         {
-            chat_id           = to_string( update.callback_query->message->chat.id );
+            chat_id           = update.callback_query->message->chat.id;
             callback_query_id = update.callback_query->id;
-            processCallbackQuery( *this, move( update.callback_query.value() ) );
+            processCallbackQuery( bot, std::move( update.callback_query.value() ) );
             callback_query_id = "";
         }
         break;
@@ -478,35 +568,35 @@ BasicBot<T>::processUpdate( const Update &update )
         {
             if ( processEditedMessage )
             {
-                chat_id = to_string( update.message->chat.id );
-                processEditedMessage( *this, move( update.message.value() ) );
+                chat_id = update.message->chat.id;
+                processEditedMessage( bot, std::move( update.message.value() ) );
             }
         }
         break;
         case EUpdate::eInlineQuery:
         {
-            chat_id         = to_string( update.inline_query->from.id );
+            chat_id         = update.inline_query->from.id;
             inline_query_id = update.inline_query->id;
-            processInlineQuery( *this, move( update.inline_query.value() ) );
+            processInlineQuery( bot, std::move( update.inline_query.value() ) );
             inline_query_id = "";
         }
         break;
         case EUpdate::eChosenInlineResult:
         {
-            chat_id = to_string( update.chosen_inline_result->from.id );
-            processChosenInlineResult( *this, move( update.chosen_inline_result.value() ) );
+            chat_id = update.chosen_inline_result->from.id;
+            processChosenInlineResult( bot, std::move( update.chosen_inline_result.value() ) );
         }
         break;
         case EUpdate::eChannelPost:
         {
-            chat_id = to_string( update.message->chat.id );
-            processChannelPost( *this, move( update.message.value() ) );
+            chat_id = update.message->chat.id;
+            processChannelPost( bot, std::move( update.message.value() ) );
         }
         break;
         case EUpdate::eEditedChannelPost:
         {
-            chat_id = to_string( update.message->chat.id );
-            processEditedChannelPost( *this, move( update.message.value() ) );
+            chat_id = update.message->chat.id;
+            processEditedChannelPost( bot, std::move( update.message.value() ) );
         }
         break;
     }
