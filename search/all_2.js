@@ -10,7 +10,6 @@ var searchData=
   ['channel_5fchat_5fcreated',['channel_chat_created',['../group__Types.html#gga84fa63cbcddbaa95b1b166dd3fa79089a9d11e80a50cf6d859ff79b8cfbac357a',1,'cppgram']]],
   ['chat',['Chat',['../classcppgram_1_1types_1_1Chat.html',1,'Chat'],['../classcppgram_1_1types_1_1Message.html#a4c2ffe3158b60005c15894f8685e586a',1,'cppgram::types::Message::chat()']]],
   ['chat_5finstance',['chat_instance',['../classcppgram_1_1types_1_1CallbackQuery.html#ada3123a48bb02c33958089cfb104e728',1,'cppgram::types::CallbackQuery']]],
-  ['chatid',['chatId',['../classcppgram_1_1BasicBot.html#a11d6635dacb827890f41ef124daf6011',1,'cppgram::BasicBot']]],
   ['choseninlineresult',['ChosenInlineResult',['../classcppgram_1_1types_1_1ChosenInlineResult.html',1,'cppgram::types']]],
   ['clearkeyboard',['clearKeyboard',['../classcppgram_1_1Keyboard.html#a205798f2b51ed4dc9b4a6afe66269afd',1,'cppgram::Keyboard']]],
   ['code',['code',['../group__Types.html#gga5af1677cc5b1ef14c29b6dd68f68908aa115e0ba3f72082647aef26afe1507108',1,'cppgram']]],

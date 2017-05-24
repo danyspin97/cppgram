@@ -8,11 +8,11 @@ var searchData=
   ['polling',['Polling',['../classcppgram_1_1Polling.html',1,'Polling&lt; T &gt;'],['../classcppgram_1_1Polling.html#a30157d40e1a07811e6eecd9d783aa150',1,'cppgram::Polling::Polling(T bot, uint_fast8_t threads_number, uint_fast32_t limit=100, uint_fast32_t timeout=60)'],['../classcppgram_1_1Polling.html#aa3ec34923cd1a8884df1ce2c29a7050b',1,'cppgram::Polling::Polling(std::vector&lt; T &gt; bots, uint_fast32_t limit=100, uint_fast32_t timeout=60)']]],
   ['pre',['pre',['../group__Types.html#gga5af1677cc5b1ef14c29b6dd68f68908aa7ee645a7f224bd0635fd8d9c07cb329e',1,'cppgram']]],
   ['private',['Private',['../group__Types.html#gga7d294bab9c0d875f37f72982235fbcf6aaa82165706f5dd0859648a09f1f64166',1,'cppgram']]],
-  ['processcallbackquery',['processCallbackQuery',['../group__ProcessUpdates.html#gae8aba151d0584ce3ca64fa36d66b688c',1,'cppgram::BasicBot']]],
-  ['processchannelpost',['processChannelPost',['../group__ProcessUpdates.html#gaa0c1a935fc1ab25fdd046f36e960fd19',1,'cppgram::BasicBot']]],
-  ['processchoseninlineresult',['processChosenInlineResult',['../group__ProcessUpdates.html#ga7af297788342a5e0326b442e4a6edacd',1,'cppgram::BasicBot']]],
-  ['processeditedchannelpost',['processEditedChannelPost',['../group__ProcessUpdates.html#gab1c39f5c59668c42cf39144a1da4580e',1,'cppgram::BasicBot']]],
-  ['processeditedmessage',['processEditedMessage',['../group__ProcessUpdates.html#ga3e3e6254742cced351efc680f8029b53',1,'cppgram::BasicBot']]],
-  ['processinlinequery',['processInlineQuery',['../group__ProcessUpdates.html#ga703254cdb11d4ab9885aca0f8e2f8b10',1,'cppgram::BasicBot']]],
+  ['processcallbackquery',['processCallbackQuery',['../group__ProcessUpdates.html#ga57860ae2923b6f0add3faf3b2c720a99',1,'cppgram::BasicBot']]],
+  ['processchannelpost',['processChannelPost',['../group__ProcessUpdates.html#ga1e2be9ca71436018a73ca5ef90632240',1,'cppgram::BasicBot']]],
+  ['processchoseninlineresult',['processChosenInlineResult',['../group__ProcessUpdates.html#ga308a0324d35333d749931b0d30f12aa9',1,'cppgram::BasicBot']]],
+  ['processeditedchannelpost',['processEditedChannelPost',['../group__ProcessUpdates.html#gac1f5d2822ce90e1a845032011a90a84c',1,'cppgram::BasicBot']]],
+  ['processeditedmessage',['processEditedMessage',['../group__ProcessUpdates.html#ga664a9806bf6afbc304c090cf7e2b6aec',1,'cppgram::BasicBot']]],
+  ['processinlinequery',['processInlineQuery',['../group__ProcessUpdates.html#ga4a221f99891dbe3bd444241bf9b1ca55',1,'cppgram::BasicBot']]],
   ['processmessage',['processMessage',['../group__ProcessUpdates.html#ga8b1c4aef10bedd083b9f77af55869d68',1,'cppgram::BasicBot']]]
 ];

@@ -81,24 +81,48 @@ Functions</h2></td></tr>
 <tr class="memitem:ga2b7517f1c2202db9ee606dbdfefe86b9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#ga2b7517f1c2202db9ee606dbdfefe86b9">getUpdates</a> (std::vector&lt; types::Update &gt; &amp;updates, const uint_fast32_t offset=0, const uint_fast32_t limit=100, const uint_fast32_t timeout=60)</td></tr>
 <tr class="memdesc:ga2b7517f1c2202db9ee606dbdfefe86b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive incoming updates using polling (short or long polling based on timeout)  <a href="#ga2b7517f1c2202db9ee606dbdfefe86b9">More...</a><br /></td></tr>
 <tr class="separator:ga2b7517f1c2202db9ee606dbdfefe86b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga36125ebb1d33eb422c375a2858fe8fd8"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#ga36125ebb1d33eb422c375a2858fe8fd8">sendMessage</a> (const std::string &amp;text, const std::string &amp;reply_markup=&quot;&quot;, const <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a> parse_mode=EParseMode::HTML, const bool disable_web_page_preview=true, const bool disable_notification=false, const int_fast32_t reply_to_message_id=0)</td></tr>
-<tr class="memdesc:ga36125ebb1d33eb422c375a2858fe8fd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a message to a specified chat. (<a href="https://core.telegram.org/bots/api#sendmessage">https://core.telegram.org/bots/api#sendmessage</a>)  <a href="#ga36125ebb1d33eb422c375a2858fe8fd8">More...</a><br /></td></tr>
-<tr class="separator:ga36125ebb1d33eb422c375a2858fe8fd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0fefd465e8bc29c94324b5c36b670a3a"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#ga0fefd465e8bc29c94324b5c36b670a3a">sendMessage</a> (const int_fast64_t chat_id, const std::string &amp;text, const std::string &amp;reply_markup=&quot;&quot;, const <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a> parse_mode=EParseMode::HTML, const bool disable_web_page_preview=true, const bool disable_notification=false, const int_fast32_t reply_to_message_id=0)</td></tr>
+<tr class="memdesc:ga0fefd465e8bc29c94324b5c36b670a3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a message to a specified chat. (<a href="https://core.telegram.org/bots/api#sendmessage">https://core.telegram.org/bots/api#sendmessage</a>)  <a href="#ga0fefd465e8bc29c94324b5c36b670a3a">More...</a><br /></td></tr>
+<tr class="separator:ga0fefd465e8bc29c94324b5c36b670a3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0753837ccb9998653f866078dd74303e"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#ga0753837ccb9998653f866078dd74303e">sendMessage</a> (const std::string &amp;chat_id, const std::string &amp;text, const std::string &amp;reply_markup=&quot;&quot;, const <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a> parse_mode=EParseMode::HTML, const bool disable_web_page_preview=true, const bool disable_notification=false, const int_fast32_t reply_to_message_id=0)</td></tr>
+<tr class="memdesc:ga0753837ccb9998653f866078dd74303e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a message to a specified chat. (<a href="https://core.telegram.org/bots/api#sendmessage">https://core.telegram.org/bots/api#sendmessage</a>)  <a href="#ga0753837ccb9998653f866078dd74303e">More...</a><br /></td></tr>
+<tr class="separator:ga0753837ccb9998653f866078dd74303e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1ed5dccce3b8b1c2ec67938ee2de673d"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#ga1ed5dccce3b8b1c2ec67938ee2de673d">sendMessage</a> (const std::string &amp;text, const std::string &amp;reply_markup=&quot;&quot;, const <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a> parse_mode=EParseMode::HTML, const bool disable_web_page_preview=true, const bool disable_notification=false, const int_fast32_t reply_to_message_id=0)</td></tr>
+<tr class="memdesc:ga1ed5dccce3b8b1c2ec67938ee2de673d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a message to a specified chat.  <a href="#ga1ed5dccce3b8b1c2ec67938ee2de673d">More...</a><br /></td></tr>
+<tr class="separator:ga1ed5dccce3b8b1c2ec67938ee2de673d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga142ecf4fff9b1b3115b904a357bf6748"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#ga142ecf4fff9b1b3115b904a357bf6748">answerCallbackQuery</a> (const std::string &amp;text, bool show_alert=false, uint32_t cache_time=0, const std::string &amp;<a class="el" href="group__Types.html#gga5af1677cc5b1ef14c29b6dd68f68908aa36b5fde1ed6de3e541119f5bde4c359f">url</a>=&quot;&quot;)</td></tr>
 <tr class="memdesc:ga142ecf4fff9b1b3115b904a357bf6748"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert.  <a href="#ga142ecf4fff9b1b3115b904a357bf6748">More...</a><br /></td></tr>
 <tr class="separator:ga142ecf4fff9b1b3115b904a357bf6748"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae4ced9f89a41663738b268bb9e9a0290"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#gae4ced9f89a41663738b268bb9e9a0290">editMessageText</a> (const int_fast64_t chat_id, const uint_fast32_t message_id, const std::string &amp;text, const std::string &amp;reply_markup=&quot;&quot;, const <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a> parse_mode=static_cast&lt; <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a> &gt;(1), const bool disable_web_page_preview=true)</td></tr>
+<tr class="memdesc:gae4ced9f89a41663738b268bb9e9a0290"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit text (and reply markup) of a message sent by the bot.  <a href="#gae4ced9f89a41663738b268bb9e9a0290">More...</a><br /></td></tr>
+<tr class="separator:gae4ced9f89a41663738b268bb9e9a0290"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2eb5d20499e0408cbb60936c988e32cc"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#ga2eb5d20499e0408cbb60936c988e32cc">editMessageText</a> (const std::string &amp;chat_id, const uint_fast32_t message_id, const std::string &amp;text, const std::string &amp;reply_markup=&quot;&quot;, const <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a> parse_mode=static_cast&lt; <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a> &gt;(1), const bool disable_web_page_preview=true)</td></tr>
+<tr class="memdesc:ga2eb5d20499e0408cbb60936c988e32cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit text (and reply markup) of a message sent by the bot.  <a href="#ga2eb5d20499e0408cbb60936c988e32cc">More...</a><br /></td></tr>
+<tr class="separator:ga2eb5d20499e0408cbb60936c988e32cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga271dd115debb35d4c3c88b26706f2475"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#ga271dd115debb35d4c3c88b26706f2475">editMessageText</a> (const uint_fast32_t message_id, const std::string &amp;text, const std::string &amp;reply_markup=&quot;&quot;, const <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a> parse_mode=static_cast&lt; <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a> &gt;(1), const bool disable_web_page_preview=true)</td></tr>
 <tr class="memdesc:ga271dd115debb35d4c3c88b26706f2475"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit text (and reply markup) of a message sent by the bot.  <a href="#ga271dd115debb35d4c3c88b26706f2475">More...</a><br /></td></tr>
 <tr class="separator:ga271dd115debb35d4c3c88b26706f2475"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8fc035ff781a0a3a23f34c2d1dde0096"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#ga8fc035ff781a0a3a23f34c2d1dde0096">editMessageText</a> (const std::string &amp;inline_message_id, const std::string &amp;text, const std::string &amp;reply_markup=&quot;&quot;, const <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a> parse_mode=static_cast&lt; <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a> &gt;(1), const bool disable_web_page_preview=true)</td></tr>
 <tr class="memdesc:ga8fc035ff781a0a3a23f34c2d1dde0096"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit text (and reply markup) of a message sent via the bot (using inline queries).  <a href="#ga8fc035ff781a0a3a23f34c2d1dde0096">More...</a><br /></td></tr>
 <tr class="separator:ga8fc035ff781a0a3a23f34c2d1dde0096"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4e83a2a3479ee7daf4447893edc5a7b3"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#ga4e83a2a3479ee7daf4447893edc5a7b3">editMessageCaption</a> (const uint_fast32_t message_id, const std::string &amp;caption, const std::string &amp;reply_markup=&quot;&quot;)</td></tr>
-<tr class="memdesc:ga4e83a2a3479ee7daf4447893edc5a7b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit captions of messages sent by the bot.  <a href="#ga4e83a2a3479ee7daf4447893edc5a7b3">More...</a><br /></td></tr>
-<tr class="separator:ga4e83a2a3479ee7daf4447893edc5a7b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabeba3a00145325f311dc77066fbf29fa"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#gabeba3a00145325f311dc77066fbf29fa">editMessageCaption</a> (const int_fast64_t chat_id, const uint_fast32_t message_id, const std::string &amp;caption=&quot;&quot;, const std::string &amp;reply_markup=&quot;&quot;)</td></tr>
+<tr class="memdesc:gabeba3a00145325f311dc77066fbf29fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit captions of messages sent by the bot.  <a href="#gabeba3a00145325f311dc77066fbf29fa">More...</a><br /></td></tr>
+<tr class="separator:gabeba3a00145325f311dc77066fbf29fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga946a47fba4239bae0437418d5ba6b06c"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#ga946a47fba4239bae0437418d5ba6b06c">editMessageCaption</a> (const std::string &amp;chat_id, const uint_fast32_t message_id, const std::string &amp;caption=&quot;&quot;, const std::string &amp;reply_markup=&quot;&quot;)</td></tr>
+<tr class="memdesc:ga946a47fba4239bae0437418d5ba6b06c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit captions of messages sent by the bot.  <a href="#ga946a47fba4239bae0437418d5ba6b06c">More...</a><br /></td></tr>
+<tr class="separator:ga946a47fba4239bae0437418d5ba6b06c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga072134bd4ea1d5c8d2f9349ce520e1c0"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#ga072134bd4ea1d5c8d2f9349ce520e1c0">editMessageCaption</a> (const uint_fast32_t message_id, const std::string &amp;caption=&quot;&quot;, const std::string &amp;reply_markup=&quot;&quot;)</td></tr>
+<tr class="memdesc:ga072134bd4ea1d5c8d2f9349ce520e1c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit captions of messages sent by the bot.  <a href="#ga072134bd4ea1d5c8d2f9349ce520e1c0">More...</a><br /></td></tr>
+<tr class="separator:ga072134bd4ea1d5c8d2f9349ce520e1c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaee8f7e220696c6b45b756f1cf0c857ce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#gaee8f7e220696c6b45b756f1cf0c857ce">editMessageCaption</a> (const std::string &amp;inline_message_id, const std::string &amp;caption, const std::string &amp;reply_markup=&quot;&quot;)</td></tr>
 <tr class="memdesc:gaee8f7e220696c6b45b756f1cf0c857ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit captions of messages sent via the bot (using inline_queries).  <a href="#gaee8f7e220696c6b45b756f1cf0c857ce">More...</a><br /></td></tr>
 <tr class="separator:gaee8f7e220696c6b45b756f1cf0c857ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga46de7660ca09b6ba96d476da5280047b"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#ga46de7660ca09b6ba96d476da5280047b">editMessageReplyMarkup</a> (const int_fast64_t chat_id, const uint_fast32_t message_id, const std::string &amp;reply_markup=&quot;&quot;)</td></tr>
+<tr class="memdesc:ga46de7660ca09b6ba96d476da5280047b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit only the reply markup of a message sent by the the bot.  <a href="#ga46de7660ca09b6ba96d476da5280047b">More...</a><br /></td></tr>
+<tr class="separator:ga46de7660ca09b6ba96d476da5280047b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadff4a0c813694294d2bc3b5be8837aa0"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#gadff4a0c813694294d2bc3b5be8837aa0">editMessageReplyMarkup</a> (const std::string &amp;chat_id, const uint_fast32_t message_id, const std::string &amp;reply_markup=&quot;&quot;)</td></tr>
+<tr class="memdesc:gadff4a0c813694294d2bc3b5be8837aa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit only the reply markup of a message sent by the the bot.  <a href="#gadff4a0c813694294d2bc3b5be8837aa0">More...</a><br /></td></tr>
+<tr class="separator:gadff4a0c813694294d2bc3b5be8837aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gab399f3e2f9212f63b4850002b92c2780"><td class="memItemLeft" align="right" valign="top">std::experimental::optional&lt; const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telegram.html#gab399f3e2f9212f63b4850002b92c2780">editMessageReplyMarkup</a> (const uint_fast32_t message_id, const std::string &amp;reply_markup=&quot;&quot;)</td></tr>
 <tr class="memdesc:gab399f3e2f9212f63b4850002b92c2780"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edit only the reply markup of a message sent by the the bot.  <a href="#gab399f3e2f9212f63b4850002b92c2780">More...</a><br /></td></tr>
 <tr class="separator:gab399f3e2f9212f63b4850002b92c2780"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -229,8 +253,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga4e83a2a3479ee7daf4447893edc5a7b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga4e83a2a3479ee7daf4447893edc5a7b3">&#9670;&nbsp;</a></span>editMessageCaption() <span class="overload">[1/2]</span></h2>
+<a id="gabeba3a00145325f311dc77066fbf29fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabeba3a00145325f311dc77066fbf29fa">&#9670;&nbsp;</a></span>editMessageCaption() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -238,6 +262,12 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">std::experimental::optional&lt;const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a>&gt; editMessageCaption </td>
           <td>(</td>
+          <td class="paramtype">const int_fast64_t&#160;</td>
+          <td class="paramname"><em>chat_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const uint_fast32_t&#160;</td>
           <td class="paramname"><em>message_id</em>, </td>
         </tr>
@@ -245,7 +275,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>caption</em>, </td>
+          <td class="paramname"><em>caption</em> = <code>&quot;&quot;</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -262,20 +292,105 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Edit captions of messages sent by the bot. </p>
-<p>Leaving reply_markup empty remove it from the message edited. (<a href="https://core.telegram.org/bots/api#editmessagecaption">https://core.telegram.org/bots/api#editmessagecaption</a>) </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Leaving reply_markup empty remove it from the edited message. (<a href="https://core.telegram.org/bots/api#editmessagecaption">https://core.telegram.org/bots/api#editmessagecaption</a>) </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">chat_id</td><td>Unique identifier for the target chat or username of the target channel (in the format <code>@channelusername</code>). </td></tr>
+    <tr><td class="paramname">chat_id</td><td>Unique identifier for the target chat. </td></tr>
     <tr><td class="paramname">caption</td><td>New caption of the message. </td></tr>
     <tr><td class="paramname">reply_markup</td><td>Inline keyboard object. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>On success, the message edited. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>On success, the edited message. </dd></dl>
+
+</div>
+</div>
+<a id="ga946a47fba4239bae0437418d5ba6b06c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga946a47fba4239bae0437418d5ba6b06c">&#9670;&nbsp;</a></span>editMessageCaption() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::experimental::optional&lt;const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a>&gt; editMessageCaption </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>chat_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint_fast32_t&#160;</td>
+          <td class="paramname"><em>message_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>caption</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>reply_markup</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Edit captions of messages sent by the bot. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chat_id</td><td>Username of the target channel or group (in the format <code>@channelusername</code>). (<a href="https://core.telegram.org/bots/api#editmessagecaption">https://core.telegram.org/bots/api#editmessagecaption</a>) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga072134bd4ea1d5c8d2f9349ce520e1c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga072134bd4ea1d5c8d2f9349ce520e1c0">&#9670;&nbsp;</a></span>editMessageCaption() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::experimental::optional&lt;const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a>&gt; editMessageCaption </td>
+          <td>(</td>
+          <td class="paramtype">const uint_fast32_t&#160;</td>
+          <td class="paramname"><em>message_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>caption</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>reply_markup</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Edit captions of messages sent by the bot. </p>
+<p>The chat selected will be the chat from where the current update was received. (<a href="https://core.telegram.org/bots/api#editmessagecaption">https://core.telegram.org/bots/api#editmessagecaption</a>) </p>
 
 </div>
 </div>
 <a id="gaee8f7e220696c6b45b756f1cf0c857ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaee8f7e220696c6b45b756f1cf0c857ce">&#9670;&nbsp;</a></span>editMessageCaption() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#gaee8f7e220696c6b45b756f1cf0c857ce">&#9670;&nbsp;</a></span>editMessageCaption() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -307,7 +422,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Edit captions of messages sent via the bot (using inline_queries). </p>
-<p>Leaving reply_markup empty remove it from the message edited. (<a href="https://core.telegram.org/bots/api#editmessagecaption">https://core.telegram.org/bots/api#editmessagecaption</a>) </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Leaving reply_markup empty remove it from the edited message. (<a href="https://core.telegram.org/bots/api#editmessagecaption">https://core.telegram.org/bots/api#editmessagecaption</a>) </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inline_message_id</td><td>Identifier of the inline message. </td></tr>
     <tr><td class="paramname">caption</td><td>New caption of the message. </td></tr>
@@ -319,8 +434,96 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga46de7660ca09b6ba96d476da5280047b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga46de7660ca09b6ba96d476da5280047b">&#9670;&nbsp;</a></span>editMessageReplyMarkup() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::experimental::optional&lt;const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a>&gt; editMessageReplyMarkup </td>
+          <td>(</td>
+          <td class="paramtype">const int_fast64_t&#160;</td>
+          <td class="paramname"><em>chat_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint_fast32_t&#160;</td>
+          <td class="paramname"><em>message_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>reply_markup</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Edit only the reply markup of a message sent by the the bot. </p>
+<p>Leaving reply_markup empty remove it from the edited message. (<a href="https://core.telegram.org/bots/api#editmessagereplymarkup">https://core.telegram.org/bots/api#editmessagereplymarkup</a>) </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chat_id</td><td>Unique identifier for the target chat. </td></tr>
+    <tr><td class="paramname">message_id</td><td>Unique identifier of the sent message. </td></tr>
+    <tr><td class="paramname">reply_markup</td><td>New inline keyboard object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>On success, the edited message. </dd></dl>
+
+</div>
+</div>
+<a id="gadff4a0c813694294d2bc3b5be8837aa0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gadff4a0c813694294d2bc3b5be8837aa0">&#9670;&nbsp;</a></span>editMessageReplyMarkup() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::experimental::optional&lt;const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a>&gt; editMessageReplyMarkup </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>chat_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint_fast32_t&#160;</td>
+          <td class="paramname"><em>message_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>reply_markup</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Edit only the reply markup of a message sent by the the bot. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chat_id</td><td>Username of the target channel or group (in the format <code>@channelusername</code>). (<a href="https://core.telegram.org/bots/api#editmessagereplymarkup">https://core.telegram.org/bots/api#editmessagereplymarkup</a>) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Telegram.html#ga46de7660ca09b6ba96d476da5280047b" title="Edit only the reply markup of a message sent by the the bot. ">editMessageReplyMarkup</a> </dd></dl>
+
+</div>
+</div>
 <a id="gab399f3e2f9212f63b4850002b92c2780"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gab399f3e2f9212f63b4850002b92c2780">&#9670;&nbsp;</a></span>editMessageReplyMarkup() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#gab399f3e2f9212f63b4850002b92c2780">&#9670;&nbsp;</a></span>editMessageReplyMarkup() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -346,20 +549,12 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Edit only the reply markup of a message sent by the the bot. </p>
-<p>Leaving reply_markup empty remove it from the message edited. (<a href="https://core.telegram.org/bots/api#editmessagereplymarkup">https://core.telegram.org/bots/api#editmessagereplymarkup</a>) </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">chat_id</td><td>Unique identifier for the target chat or username of the target channel (in the format <code>@channelusername</code>). </td></tr>
-    <tr><td class="paramname">message_id</td><td>Unique identifier of the sent message. </td></tr>
-    <tr><td class="paramname">reply_markup</td><td>New inline keyboard object. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>On success, the message edited. </dd></dl>
+<p>The chat selected will be the chat from where the current update was received. (<a href="https://core.telegram.org/bots/api#editmessagereplymarkup">https://core.telegram.org/bots/api#editmessagereplymarkup</a>) </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Telegram.html#ga46de7660ca09b6ba96d476da5280047b" title="Edit only the reply markup of a message sent by the the bot. ">editMessageReplyMarkup</a> </dd></dl>
 
 </div>
 </div>
 <a id="gaecfb0fafc45776a854f07d2f16c5cebc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaecfb0fafc45776a854f07d2f16c5cebc">&#9670;&nbsp;</a></span>editMessageReplyMarkup() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#gaecfb0fafc45776a854f07d2f16c5cebc">&#9670;&nbsp;</a></span>editMessageReplyMarkup() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -383,7 +578,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Edit only the reply markup of a message sent via the the bot (using inline queries). Leaving reply_markup empty remove it from the message edited. (<a href="https://core.telegram.org/bots/api#editmessagereplymarkup">https://core.telegram.org/bots/api#editmessagereplymarkup</a>) </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Edit only the reply markup of a message sent via the the bot (using inline queries). Leaving reply_markup empty remove keyboards from the message edited. (<a href="https://core.telegram.org/bots/api#editmessagereplymarkup">https://core.telegram.org/bots/api#editmessagereplymarkup</a>) </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inline_message_id</td><td>Identifier of the inline message. </td></tr>
     <tr><td class="paramname">reply_markup</td><td>New inline keyboard object. </td></tr>
@@ -394,8 +589,135 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="gae4ced9f89a41663738b268bb9e9a0290"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae4ced9f89a41663738b268bb9e9a0290">&#9670;&nbsp;</a></span>editMessageText() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::experimental::optional&lt;const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a>&gt; editMessageText </td>
+          <td>(</td>
+          <td class="paramtype">const int_fast64_t&#160;</td>
+          <td class="paramname"><em>chat_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint_fast32_t&#160;</td>
+          <td class="paramname"><em>message_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>text</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>reply_markup</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a>&#160;</td>
+          <td class="paramname"><em>parse_mode</em> = <code>static_cast&lt;&#160;<a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a>&#160;&gt;(1)</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>disable_web_page_preview</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Edit text (and reply markup) of a message sent by the bot. </p>
+<p>Leaving reply_markup empty remove it from the edited message. (<a href="https://core.telegram.org/bots/api#editmessagetext">https://core.telegram.org/bots/api#editmessagetext</a>) </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chat_id</td><td>Unique identifier for the target chat. </td></tr>
+    <tr><td class="paramname">message_id</td><td>Unique identifier of the sent message. </td></tr>
+    <tr><td class="paramname">text</td><td>New text of the message. </td></tr>
+    <tr><td class="paramname">reply_markup</td><td>Inline keyboard object. </td></tr>
+    <tr><td class="paramname">parse_mode</td><td>Send an enum of type ParseMode. </td></tr>
+    <tr><td class="paramname">disable_web_page_preview</td><td>Disables link previews for links in this message. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>On success, the edited message. </dd></dl>
+
+</div>
+</div>
+<a id="ga2eb5d20499e0408cbb60936c988e32cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2eb5d20499e0408cbb60936c988e32cc">&#9670;&nbsp;</a></span>editMessageText() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::experimental::optional&lt;const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a>&gt; editMessageText </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>chat_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint_fast32_t&#160;</td>
+          <td class="paramname"><em>message_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>text</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>reply_markup</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a>&#160;</td>
+          <td class="paramname"><em>parse_mode</em> = <code>static_cast&lt;&#160;<a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a>&#160;&gt;(1)</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>disable_web_page_preview</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Edit text (and reply markup) of a message sent by the bot. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chat_id</td><td>Username of the target channel or group (in the format <code>@channelusername</code>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Telegram.html#gae4ced9f89a41663738b268bb9e9a0290" title="Edit text (and reply markup) of a message sent by the bot. ">editMessageText</a> </dd></dl>
+
+</div>
+</div>
 <a id="ga271dd115debb35d4c3c88b26706f2475"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga271dd115debb35d4c3c88b26706f2475">&#9670;&nbsp;</a></span>editMessageText() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ga271dd115debb35d4c3c88b26706f2475">&#9670;&nbsp;</a></span>editMessageText() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -439,23 +761,12 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Edit text (and reply markup) of a message sent by the bot. </p>
-<p>Leaving reply_markup empty remove it from the message edited. (<a href="https://core.telegram.org/bots/api#editmessagetext">https://core.telegram.org/bots/api#editmessagetext</a>) </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">chat_id</td><td>Unique identifier for the target chat or username of the target channel (in the format <code>@channelusername</code>) </td></tr>
-    <tr><td class="paramname">message_id</td><td>Unique identifier of the sent message. </td></tr>
-    <tr><td class="paramname">text</td><td>New text of the message. </td></tr>
-    <tr><td class="paramname">reply_markup</td><td>Inline keyboard object. </td></tr>
-    <tr><td class="paramname">parse_mode</td><td>Send an enum of type ParseMode. </td></tr>
-    <tr><td class="paramname">disable_web_page_preview</td><td>Disables link previews for links in this message. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>On success, the message edited. </dd></dl>
+<p>The chat selected will be the chat from where the current update was received. (<a href="https://core.telegram.org/bots/api#editmessagetext">https://core.telegram.org/bots/api#editmessagetext</a>) </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Telegram.html#gae4ced9f89a41663738b268bb9e9a0290" title="Edit text (and reply markup) of a message sent by the bot. ">editMessageText</a> </dd></dl>
 
 </div>
 </div>
 <a id="ga8fc035ff781a0a3a23f34c2d1dde0096"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga8fc035ff781a0a3a23f34c2d1dde0096">&#9670;&nbsp;</a></span>editMessageText() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8fc035ff781a0a3a23f34c2d1dde0096">&#9670;&nbsp;</a></span>editMessageText() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -499,7 +810,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Edit text (and reply markup) of a message sent via the bot (using inline queries). </p>
-<p>Leaving reply_markup empty remove it from the message edited. (<a href="https://core.telegram.org/bots/api#editmessagetext">https://core.telegram.org/bots/api#editmessagetext</a>) </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Leaving reply_markup empty remove it from the edited message. (<a href="https://core.telegram.org/bots/api#editmessagetext">https://core.telegram.org/bots/api#editmessagetext</a>) </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inline_message_id</td><td>Identifier of the inline message. </td></tr>
     <tr><td class="paramname">text</td><td>New text of the message. </td></tr>
@@ -565,15 +876,21 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga36125ebb1d33eb422c375a2858fe8fd8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga36125ebb1d33eb422c375a2858fe8fd8">&#9670;&nbsp;</a></span>sendMessage()</h2>
+<a id="ga0fefd465e8bc29c94324b5c36b670a3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0fefd465e8bc29c94324b5c36b670a3a">&#9670;&nbsp;</a></span>sendMessage() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">optional&lt; const <a class="el" href="classcppgram_1_1types_1_1Message.html">Message</a> &gt; sendMessage </td>
+          <td class="memname">std::experimental::optional&lt;const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a>&gt; sendMessage </td>
           <td>(</td>
+          <td class="paramtype">const int_fast64_t&#160;</td>
+          <td class="paramname"><em>chat_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>text</em>, </td>
         </tr>
@@ -618,7 +935,7 @@ Functions</h2></td></tr>
 <p>Send a message to a specified chat. (<a href="https://core.telegram.org/bots/api#sendmessage">https://core.telegram.org/bots/api#sendmessage</a>) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">id</td><td>Unique identifier for the target chat or username of the target channel (in the format <code></code>) </td></tr>
+    <tr><td class="paramname">chat_id</td><td>Unique identifier for the target chat. </td></tr>
     <tr><td class="paramname">text</td><td>Text of the message to be sent. </td></tr>
     <tr><td class="paramname">reply_markup</td><td>Additional interface options. Use InlineKeyboard class to create a reply markup. </td></tr>
     <tr><td class="paramname">parse_mode</td><td>Send an enum of type ParseMode. </td></tr>
@@ -629,6 +946,128 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>On success, the message sent. </dd></dl>
+
+</div>
+</div>
+<a id="ga0753837ccb9998653f866078dd74303e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0753837ccb9998653f866078dd74303e">&#9670;&nbsp;</a></span>sendMessage() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::experimental::optional&lt;const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a>&gt; sendMessage </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>chat_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>text</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>reply_markup</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a>&#160;</td>
+          <td class="paramname"><em>parse_mode</em> = <code>EParseMode::HTML</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>disable_web_page_preview</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>disable_notification</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int_fast32_t&#160;</td>
+          <td class="paramname"><em>reply_to_message_id</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Send a message to a specified chat. (<a href="https://core.telegram.org/bots/api#sendmessage">https://core.telegram.org/bots/api#sendmessage</a>) </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Telegram.html#ga0fefd465e8bc29c94324b5c36b670a3a" title="Send a message to a specified chat. (https://core.telegram.org/bots/api#sendmessage) ...">sendMessage</a> </dd></dl>
+
+</div>
+</div>
+<a id="ga1ed5dccce3b8b1c2ec67938ee2de673d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1ed5dccce3b8b1c2ec67938ee2de673d">&#9670;&nbsp;</a></span>sendMessage() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::experimental::optional&lt;const class <a class="el" href="classcppgram_1_1types_1_1Message.html">types::Message</a>&gt; sendMessage </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>text</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>reply_markup</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group__Types.html#ga46f75754463d4139c5e9c7a0aa318800">EParseMode</a>&#160;</td>
+          <td class="paramname"><em>parse_mode</em> = <code>EParseMode::HTML</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>disable_web_page_preview</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>disable_notification</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int_fast32_t&#160;</td>
+          <td class="paramname"><em>reply_to_message_id</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Send a message to a specified chat. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chat_id</td><td>Username of the target channel or group (in the format <code>@channelusername</code>). (<a href="https://core.telegram.org/bots/api#sendmessage">https://core.telegram.org/bots/api#sendmessage</a>) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Telegram.html#ga0fefd465e8bc29c94324b5c36b670a3a" title="Send a message to a specified chat. (https://core.telegram.org/bots/api#sendmessage) ...">sendMessage</a> </dd></dl>
 
 </div>
 </div>
