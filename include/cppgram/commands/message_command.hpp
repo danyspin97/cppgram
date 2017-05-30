@@ -17,7 +17,7 @@ namespace commands
 template <class T> class MessageCommand : public Command<T>
 {
     public:
-    typedef std::function<void( T &, const types::Message & )> MessageClosure;
+    using MessageClosure = std::function<void( T &, const types::Message & )>;
 
     /**
      * @brief Construct a message command.

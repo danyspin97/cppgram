@@ -46,7 +46,7 @@ class Keyboard
      * @param buttonType Type of the button
      * @return True on success
      */
-    bool addButton( const std::string &text, const std::string &data, const EButton &button_type );
+    bool addButton( const std::string &text, const std::string &data, const EButton button_type );
 
     /**
      * \brief Add a button by passing a KeyboardButton

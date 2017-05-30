@@ -28,7 +28,7 @@ Keyboard::changeRow()
 }
 
 bool
-Keyboard::addButton( const string &text, const string &data, const EButton &button_type )
+Keyboard::addButton( const string &text, const string &data, const EButton button_type )
 {
     if ( text.empty() || data.empty() )
     {

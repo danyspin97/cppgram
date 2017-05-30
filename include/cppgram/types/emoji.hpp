@@ -1,5 +1,5 @@
-#ifndef __CPPGRAM_EMOJI_HPP
-#define __CPPGRAM_EMOJI_HPP
+#ifndef CPPGRAM_EMOJI_HPP
+#define CPPGRAM_EMOJI_HPP
 
 #include <string>
 
