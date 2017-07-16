@@ -7,8 +7,10 @@ Cppgram is a lighweight framework for Telegram Bot API that provides support for
 // Include the framework
 #include "cppgram/cppgram.hpp"
 
+using namespace cppgram;
+
 // Create your custom Bot class
-class MyBot : public cppgram::BasicBot<MyBot> {
+class MyBot : public BasicBot<MyBot> {
 public:
   MyBot(string &token) : BasicBot(token, "MyBotName", this) {}
 
@@ -17,7 +19,7 @@ public:
 
 // Answer all messages received
 void helloWorld(MyBot &bot,
-                    const cppgram::types::Message &message) {
+                    const types::Message &message) {
 
     // sending a "Hello World" message
     bot.sendMessage("Hello World");
@@ -29,10 +31,13 @@ int main() {
   // Say the bot to answer all messages using our Hello World function
   bot.processMessage = &helloWorld;
   // Create a poll with 8 thread running
-  auto poll = cppgram::Polling<MyBot>(bot, 8);
+  auto poll = Polling<MyBot>(bot, 8);
   poll.run();
 }
 ~~~
+
+## Documentation
+You can find Doxygen documentation [here](https://danyspin97.github.io/cppgram).
 
 ## Features
 - Easy to use
@@ -77,10 +82,6 @@ Cppgram will be compiled, headers and libraries needs to be included by the proj
 include_directories(${CPPGRAM_INCLUDE_DIRS})
 target_link_libraries( your_target_name ${CPPGRAM_LIBRARIES})
 ~~~
-
-
-## Documentation
-You can find Doxygen documentation [here](https://danyspin97.github.io/cppgram).
 
 ## Authors
 Cppgram is developed and mantained by [Danilo Spinella](github.com/DanySpin97).
